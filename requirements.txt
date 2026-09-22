@@ -1,0 +1,10 @@
+llama-index-core
+llama-index-embeddings-huggingface
+llama-index-llms-ollama
+sentence-transformers
+sentencepiece
+protobuf
+pytesseract
+pdf2image
+gradio
+python-dotenv
