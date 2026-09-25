@@ -1,0 +1,42 @@
+[
+  {
+    "question": "Thời gian rút bớt học phần đã đăng ký theo quy định mới là bao lâu?",
+    "dieu_dung": "7"
+  },
+  {
+    "question": "Khi nào sinh viên mới được phép chính thức bỏ lớp học phần sau khi xin rút?",
+    "dieu_dung": "7"
+  },
+  {
+    "question": "Một năm học theo quy định sửa đổi có thể tổ chức bao nhiêu học kỳ chính?",
+    "dieu_dung": "6"
+  },
+  {
+    "question": "Điểm B+ tương ứng với khoảng điểm số nào trên thang điểm 10?",
+    "dieu_dung": "9"
+  },
+  {
+    "question": "Điểm D+ tương ứng với khoảng điểm số nào trên thang điểm 10?",
+    "dieu_dung": "9"
+  },
+  {
+    "question": "Điểm C+ được quy đổi thành bao nhiêu điểm số trên thang điểm 4?",
+    "dieu_dung": "10"
+  },
+  {
+    "question": "Điểm chữ R được dùng để biểu thị trường hợp nào?",
+    "dieu_dung": "9"
+  },
+  {
+    "question": "Điểm chưa hoàn thiện do được phép hoãn thi, kiểm tra được ghi nhận bằng điểm chữ nào?",
+    "dieu_dung": "9"
+  },
+  {
+    "question": "Ký hiệu điểm chữ nào dùng cho học phần được miễn học và công nhận tín chỉ?",
+    "dieu_dung": "9"
+  },
+  {
+    "question": "Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào?",
+    "dieu_dung": "2 (QĐ 3183)"
+  }
+]
