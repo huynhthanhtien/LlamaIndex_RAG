@@ -2,6 +2,6 @@ venv/
 __pycache__/
 *.pyc
 storage/
-data/raw/*.pdf
+# data/raw/*.pdf
 .env
 *.log
