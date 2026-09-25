@@ -18,8 +18,10 @@ def get_rss_mb() -> float:
     with open("/proc/self/status") as f:
         for line in f:
             if line.startswith("VmRSS:"):
-                kb = int(re.search(r"\d+", line).group())
-                return kb / 1024
+                match = re.search(r"\d+", line)
+                if match:
+                    kb = int(match.group())
+                    return kb / 1024
     return -1.0
 
 
