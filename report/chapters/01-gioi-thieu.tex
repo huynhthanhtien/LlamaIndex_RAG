@@ -1,0 +1,40 @@
+\chapter{Giới thiệu đề tài}
+\label{ch:gioi-thieu}
+
+
+\section{Bối cảnh và động cơ}
+
+Quy chế đào tạo là văn bản mà sinh viên tra cứu thường xuyên trong suốt quá trình học: thời gian tối đa để hoàn thành khóa học, điều kiện dự thi, cách tính điểm học phần, điều kiện xét tốt nghiệp, thủ tục nghỉ học tạm thời hay chuyển ngành. Tại Trường Đại học Sài Gòn (SGU), các quy định này nằm trong những văn bản pháp quy dài, được ban hành dưới dạng file PDF. Một câu hỏi rất ngắn của sinh viên (ví dụ: ``nghỉ học bao nhiêu buổi thì bị cấm thi?'') thường buộc người hỏi phải đọc nhiều Điều khác nhau mới tìm được câu trả lời chính xác.
+
+Hai cách xử lý thông thường đều có hạn chế. Tìm kiếm theo từ khóa trong file PDF chỉ khớp khi người dùng dùng đúng thuật ngữ của văn bản; nếu người dùng diễn đạt khác (``cấm thi'' thay cho ``không đủ điều kiện dự thi'') thì không tìm thấy. Hỏi trực tiếp một mô hình ngôn ngữ lớn (LLM) thì câu trả lời nghe rất trôi chảy nhưng không có căn cứ vào quy chế của SGU, và mô hình có thể bịa ra số liệu hoặc điều khoản không tồn tại.
+
+Kỹ thuật \textbf{RAG} (Retrieval-Augmented Generation --- sinh văn bản có tăng cường truy hồi) giải quyết đúng khoảng trống này: trước khi trả lời, hệ thống tìm những đoạn quy chế liên quan nhất, rồi yêu cầu LLM chỉ trả lời dựa trên các đoạn đó. \textbf{LlamaIndex} là một framework mã nguồn mở cung cấp sẵn các thành phần cho toàn bộ chuỗi xử lý này (đọc dữ liệu, cắt đoạn, lập chỉ mục, truy hồi, tổng hợp câu trả lời), nên được chọn làm nền tảng của đồ án.
+
+\section{Mục tiêu của đề tài}
+
+Mục tiêu chung của đồ án là tìm hiểu LlamaIndex và vận dụng kỹ thuật RAG để xây dựng hệ thống hỏi đáp trên tài liệu đào tạo của SGU, chạy hoàn toàn với các mô hình cục bộ (không gửi dữ liệu ra dịch vụ bên ngoài). Cụ thể:
+
+\begin{enumerate}[(a)]
+  \item Nắm được vai trò và cách hoạt động của từng thành phần lõi trong LlamaIndex: \texttt{Document}, \texttt{Node}, \texttt{Index}, \texttt{Retriever}, \texttt{QueryEngine}/Response Synthesis.
+  \item Xây dựng bước nạp dữ liệu từ PDF bản scan tiếng Việt (OCR) thành các \texttt{Document} có metadata.
+  \item Xây dựng bước cắt văn bản theo cấu trúc pháp lý của quy chế (từng \emph{Điều}) thành các \texttt{Node} kèm số Điều.
+  \item Thiết lập kiến trúc dự án, cấu hình hai profile chạy (máy cá nhân và máy chủ GPU) và bộ câu hỏi kiểm thử để đánh giá về sau.
+\end{enumerate}
+
+\section{Phạm vi báo cáo}
+
+Báo cáo này bao gồm phần \emph{Bắt buộc lõi} của đồ án: kiến thức nền, thiết lập môi trường, kiến trúc, và các module đã có mã nguồn chạy được. Các phần \emph{chọn thêm} (như reranker, tinh chỉnh nâng cao) và bảng phủ kỹ thuật tổng hợp không nằm trong phạm vi tài liệu này. Ở thời điểm viết báo cáo, hai module \texttt{src/ingestion.py} và \texttt{src/node\_parser.py} đã chạy được; các module lập chỉ mục, truy hồi, tổng hợp câu trả lời và chạy đánh giá \textbf{chưa có mã nguồn} và được đánh dấu rõ trong báo cáo.
+
+\section{Phương pháp thực hiện}
+
+Đồ án làm theo từng giai đoạn nhỏ; mỗi giai đoạn phải chạy được và cho kết quả quan sát được trước khi sang giai đoạn kế tiếp. Số liệu trong Chương 3 và 4 đều lấy từ việc chạy thật các script trong repository, không dùng số liệu minh họa. Khi một module chưa tồn tại, báo cáo nói rõ là chưa triển khai thay vì mô tả như thể đã xong.
+
+\section{Bố cục báo cáo}
+
+\begin{itemize}
+  \item \textbf{Chương 1} --- Giới thiệu đề tài (chương này).
+  \item \textbf{Chương 2} --- Cơ sở lý thuyết: LLM và hạn chế, RAG, embedding, cắt đoạn, chỉ mục vector, tổng hợp câu trả lời, các khái niệm của LlamaIndex, OCR, và độ đo đánh giá truy hồi.
+  \item \textbf{Chương 3} --- Thiết lập môi trường và kiến trúc dự án.
+  \item \textbf{Chương 4} --- Bản chất công nghệ: mã nguồn thật và kết quả chạy thật của các module lõi.
+\end{itemize}
+

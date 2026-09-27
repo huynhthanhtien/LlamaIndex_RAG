@@ -1,0 +1,34 @@
+% Biên dịch: latexmk (XeLaTeX), xem latexmkrc. Trong VS Code: lưu file để tự build.
+\documentclass[12pt,a4paper]{report}
+
+\input{config/preamble}
+
+\title{\TenDeTai}
+\author{}
+\date{}
+
+% Chỉ biên dịch chương đang viết cho nhanh: bỏ dấu % ở dòng dưới
+% và sửa danh sách (dùng \include thay cho \input ở phần chương).
+%\includeonly{chapters/03-moi-truong-kien-truc}
+
+\begin{document}
+
+\input{frontmatter/cover}
+
+\pagenumbering{roman}
+{\linespread{1}\selectfont\tableofcontents}
+\clearpage
+\pagenumbering{arabic}
+
+\include{chapters/01-gioi-thieu}
+\include{chapters/02-co-so-ly-thuyet}
+\include{chapters/03-moi-truong-kien-truc}
+\include{chapters/04-cong-nghe-cot-loi}
+
+% \appendix
+% \include{appendices/a-ma-nguon}
+
+% Bỏ dấu % khi references.bib đã có mục và đã có \cite trong nội dung:
+% \printbibliography[title={Tài liệu tham khảo}]
+
+\end{document}

@@ -1,0 +1,106 @@
+% Macro, màu sắc, thiết lập listings / hyperref / header.
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\hypersetup{
+  urlcolor=blue, linkcolor=black, citecolor=black, colorlinks=true,
+  pdftitle={\TenDeTai}, pdfauthor={\TenKhoa, \TenTruong},
+}
+
+% --- Mã nguồn: XeLaTeX đọc UTF-8 trực tiếp nên không cần bảng literate ---
+\lstdefinelanguage{JavaScript}{
+  keywords={break,case,catch,const,continue,default,do,else,export,finally,for,function,if,import,let,new,return,switch,throw,try,var,while,async,await,class},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  morestring=[b]`,
+  sensitive=true
+}
+
+\lstset{
+  frame=tb,
+  language=JavaScript,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\fontsize{10.5}{12.6}\selectfont\ttfamily}, % code/listing: 10.5pt
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3,
+  numbersep=5pt,
+  escapeinside={(*@}{@*)},
+  captionpos=t
+}
+
+% --- Đánh số "Đoạn mã N.M" cho lstlisting, theo chương, giống Bảng/Hình ---
+% (listings tự đặt lại số theo chương khi lớp tài liệu có \thechapter)
+\renewcommand{\lstlistingname}{Đoạn mã}
+
+% --- Hộp ghi chú cho phần chưa triển khai ---
+\newcommand{\chuatrienkhai}[1]{%
+  \begin{mdframed}[backgroundcolor=yellow!15, linecolor=orange, linewidth=1pt]
+    \textbf{Chưa triển khai.} #1
+  \end{mdframed}}
+
+% --- Logo: bỏ qua êm nếu chưa có file figures/logoITSGU.png ---
+\newcommand{\logo}[1]{\IfFileExists{figures/logoITSGU.png}%
+  {\includegraphics[#1]{figures/logoITSGU.png}}{}}
+
+% --- Header / footer ---
+\setlength{\headheight}{40pt}
+\renewcommand{\headrule}{\vskip 2pt\hrule height 0.4pt\vskip 0pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{%
+  \begin{tabular}{rl}
+    \begin{picture}(25,15)(0,0)
+      \put(0,-8){\logo{width=8mm,height=8mm}}
+    \end{picture} &
+    \begin{tabular}[c]{l}
+      \normalfont\fontsize{11}{13}\selectfont \TenTruong \\ \TenKhoa % header: 11pt
+    \end{tabular}
+  \end{tabular}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+% Trang mở đầu chương dùng cùng kiểu header
+\fancypagestyle{plain}{\pagestyle{fancy}}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+% --- Tiêu đề chương: căn giữa, in hoa, đậm, một dòng "CHƯƠNG N. TÊN" ---
+\makeatletter
+\def\@makechapterhead#1{%
+  {\parindent\z@ \centering \normalfont\fontsize{17}{20}\selectfont\bfseries % tiêu đề chương: 17pt
+   \MakeUppercase{\chaptername\ \thechapter.\ #1}\par\nobreak
+   \vskip 18\p@}}
+\def\@makeschapterhead#1{%
+  {\parindent\z@ \centering \normalfont\fontsize{17}{20}\selectfont\bfseries % tiêu đề chương: 17pt
+   \MakeUppercase{#1}\par\nobreak
+   \vskip 18\p@}}
+\makeatother
+
+% --- \texttt cho phép xuống dòng sau / _ . để tên file không tràn lề ---
+\let\oldtexttt\texttt
+\ExplSyntaxOn
+\tl_new:N \l__tt_break_tl
+\RenewDocumentCommand{\texttt}{m}
+  {
+    \tl_set:Nn \l__tt_break_tl {#1}
+    \tl_replace_all:Nnn \l__tt_break_tl { \_ } { \_ \allowbreak }
+    \tl_replace_all:Nnn \l__tt_break_tl { / } { / \allowbreak }
+    \tl_replace_all:Nnn \l__tt_break_tl { . } { . \allowbreak }
+    \tl_replace_all:Nnn \l__tt_break_tl { - } { - \allowbreak }
+    \exp_args:NV \oldtexttt \l__tt_break_tl
+  }
+\ExplSyntaxOff
+\emergencystretch=2em

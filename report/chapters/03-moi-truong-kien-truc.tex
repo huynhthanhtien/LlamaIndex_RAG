@@ -1,0 +1,195 @@
+\chapter{Thiết lập môi trường và kiến trúc dự án}
+\label{ch:moi-truong}
+
+
+\section{Công cụ cần thiết}
+
+\subsection{Thư viện Python}
+
+File \texttt{requirements.txt} liệt kê tên gói mà không ghim phiên bản. Bảng dưới ghi phiên bản thực tế cài trong \texttt{venv} của repository tại thời điểm đo.
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{>{\hsize=1.5\hsize}X l >{\hsize=0.5\hsize}X}
+    \toprule
+    \textbf{Gói} & \textbf{Phiên bản đo được} & \textbf{Mục đích} \\
+    \midrule
+    \texttt{llama-index-core} & 0.14.24 & Framework RAG \\
+    \texttt{llama-index-embeddings-huggingface} & 0.8.0 & Nạp mô hình embedding \\
+    \texttt{llama-index-llms-ollama} & 0.11.0 & Kết nối LLM qua Ollama \\
+    \texttt{sentence-transformers} & 6.0.1 & Chạy embedding/reranker \\
+    \texttt{sentencepiece}, \texttt{protobuf} & 0.2.2, không đo & Phụ thuộc của tokenizer \\
+    \texttt{pytesseract} & 0.3.13 & Gọi Tesseract từ Python \\
+    \texttt{pdf2image} & 1.17.0 & Render PDF thành ảnh \\
+    \texttt{gradio} & 6.27.0 & Giao diện web (dự kiến) \\
+    \texttt{python-dotenv} & 1.2.3 & Đọc biến môi trường từ \texttt{.env} \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Thư viện Python trong \texttt{requirements.txt}.}
+\end{table}
+
+\subsection{Phụ thuộc hệ thống}
+
+\begin{itemize}
+  \item \textbf{Tesseract OCR} 5.5.3, đã xác nhận có gói ngôn ngữ \texttt{vie}.
+  \item \textbf{poppler-utils} (\texttt{pdftoppm} 26.01.0), cần cho \texttt{pdf2image}.
+  \item \textbf{Ollama} để chạy LLM cục bộ (script \texttt{pull\_models.sh} kiểm tra và báo lỗi nếu chưa cài).
+\end{itemize}
+
+\section{Cài đặt và Hello World}
+
+\subsection{Các bước cài đặt}
+
+Trình tự đã dùng trong dự án:
+
+\begin{enumerate}
+  \item Tạo và kích hoạt môi trường ảo Python (\texttt{venv}).
+  \item Cài các gói Python: \texttt{pip install -r requirements.txt}.
+  \item Cài Tesseract (kèm gói ngôn ngữ \texttt{vie}) và poppler-utils bằng trình quản lý gói của hệ điều hành.
+  \item Cài Ollama, chạy \texttt{ollama serve}, rồi tải mô hình bằng \texttt{scripts/pull\_models.sh [local|server]}.
+\end{enumerate}
+
+\subsection{Hello World}
+
+Script \texttt{scripts/hello\_world.py} kiểm tra nhanh rằng LlamaIndex cài đúng: tạo một \texttt{Document}, dựng \texttt{SummaryIndex} và đếm số Document trong \texttt{docstore}. Script này không cần LLM hay mô hình embedding nên chạy được ngay sau khi cài thư viện.
+
+\begin{lstlisting}[language=Python, caption={Tạo \texttt{Document} và \texttt{SummaryIndex} với LlamaIndex (\texttt{scripts/hello\_world.py}).}, label={lst:hello-world}]
+from llama_index.core import Document, SummaryIndex
+
+doc = Document(text = "(*@Điều 15. Sinh viên nghỉ học quá 20\% số tiết sẽ không đủ điều kiện dự thi.@*)")
+print("(*@Document tạo thành công!@*)")
+print("(*@Nội dung:@*)", doc.text)
+print("(*@ID tự sinh:@*)", doc.doc_id)
+
+index = SummaryIndex.from_documents([doc])
+print("\n(*@Index build thành công!@*)")
+print("(*@Số Document trong Index:@*)", len(index.docstore.docs))
+\end{lstlisting}
+
+Kết quả chạy thật:
+
+\begin{lstlisting}[caption={Kết quả chạy \texttt{hello\_world.py}.}, label={lst:hello-world-output}]
+(*@Document tạo thành công!@*)
+(*@Nội dung: Điều 15. Sinh viên nghỉ học quá 20\% số tiết sẽ không đủ điều kiện dự thi.@*)
+(*@ID tự sinh: 3dc12976-3b4e-4711-8798-c7d0237d98a9@*)
+
+(*@Index build thành công!@*)
+(*@Số Document trong Index: 1@*)
+\end{lstlisting}
+
+Ý nghĩa: \texttt{doc\_id} được LlamaIndex tự sinh dạng UUID, và \texttt{SummaryIndex} lưu Document vào \texttt{docstore}. Câu ví dụ ``Điều 15'' trong script chỉ là văn bản minh họa tự viết, không phải nội dung trích từ quy chế.
+
+\section{Cấu trúc thư mục dự án}
+
+\begin{lstlisting}[caption={Cấu trúc thư mục dự án.}, label={lst:cau-truc-thu-muc}]
+.
+|-- app/            # Giao dien Gradio (dang xay dung, moi co app/assets)
+|-- data/
+|   |-- raw/        # PDF goc
+|   |-- ocr/        # Ket qua OCR dang Markdown
+|   `-- processed/  # Du lieu tien xu ly
+|-- docs/           # Tai lieu, giao trinh
+|-- eval/
+|   |-- test_questions_01.json   # 31 cau hoi kiem thu
+|   `-- results/
+|-- scripts/        # hello_world.py, test_ocr.py, check_model_memory.py, pull_models.sh
+|-- src/            # config.py, ingestion.py, node_parser.py
+|-- storage/vector_index/        # noi luu chi muc (hien chua co)
+`-- requirements.txt
+\end{lstlisting}
+
+\section{Cấu hình tập trung và hai profile}
+
+Toàn bộ tham số RAG nằm trong \texttt{src/config.py} dưới dạng một \texttt{dataclass} \texttt{RAGConfig}. Có hai profile sẵn: \texttt{local} (máy cá nhân, mô hình nhỏ) và \texttt{server} (máy chủ GPU, mô hình lớn hơn và có reranker). Profile được chọn bằng biến môi trường \texttt{RAG\_PROFILE}, mặc định là \texttt{local}; giá trị không hợp lệ làm hàm \texttt{get\_config()} ném \texttt{ValueError}.
+
+\begin{lstlisting}[language=Python, caption={Khai báo \texttt{dataclass RAGConfig} trong \texttt{src/config.py}.}, label={lst:ragconfig}]
+@dataclass
+class RAGConfig:
+    embed_model_name: str
+    embed_device: str  # "cpu" or "cuda"
+    llm_model_name: str
+    ollama_base_url: str
+    request_timeout: float = 180.0
+    reranker_model_name: str | None = None
+    reranker_top_n: int = 3
+    similarity_top_k: int = 10
+    response_mode: str = "compact"
+    streaming: bool = True
+    persist_dir: str = "storage/vector_index"
+\end{lstlisting}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l X X}
+    \toprule
+    \textbf{Tham số} & \textbf{Profile \texttt{local}} & \textbf{Profile \texttt{server}} \\
+    \midrule
+    Embedding & \texttt{bkai-foundation-models/ vietnamese-bi-encoder} & \texttt{AITeamVN/Vietnamese\_Embedding} \\
+    Thiết bị embedding & \texttt{cuda} & \texttt{cuda} \\
+    LLM (Ollama) & \texttt{qwen3:4b} & \texttt{qwen3:8b} \\
+    Reranker & không dùng & \texttt{AITeamVN/Vietnamese\_Reranker} \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Hai profile cấu hình trong \texttt{src/config.py}.}
+\end{table}
+
+Một điểm cần lưu ý trong mã hiện tại: \texttt{corpus\_sources} mặc định của \texttt{config.py} trỏ tới các file \texttt{quy\_che\_dao\_tao\_2021.pdf} và \texttt{qd\_sua\_doi\_2025.pdf}, trong khi \texttt{ingestion.py} tự khai báo danh sách nguồn riêng và trong \texttt{data/raw} chỉ có \texttt{4. QuyCheDaoTaoDHSG 2021.pdf}. Hai nơi khai báo chưa thống nhất; đây là việc cần dọn ở các bước sau.
+
+\section{Các script hỗ trợ}
+
+\begin{itemize}
+  \item \texttt{scripts/test\_ocr.py}: render toàn bộ một PDF và OCR ra file Markdown trong \texttt{data/ocr/}, kèm số trang và tổng số ký tự. Đây là script tạo ra bản OCR mà \texttt{node\_parser.py} dùng để kiểm tra.
+  \item \texttt{scripts/check\_model\_memory.py}: đo RAM/VRAM khi nạp một mô hình embedding hoặc reranker (nhận \texttt{repo\_id}, \texttt{--type}, \texttt{--device}), giúp chọn mô hình vừa với phần cứng.
+  \item \texttt{scripts/pull\_models.sh}: tải LLM qua Ollama và tải embedding/reranker từ HuggingFace theo profile, đồng bộ với \texttt{config.py}; dừng với thông báo lỗi nếu thiếu \texttt{ollama}, daemon chưa chạy hoặc thiếu \texttt{huggingface\_hub}.
+\end{itemize}
+
+\section{Minh chứng kiến trúc}
+
+Chuỗi xử lý của đồ án gồm sáu giai đoạn. Hình \ref{fig:pipeline} thể hiện chuỗi này; ô nét liền là module đã có mã chạy được, ô nét đứt là chưa có mã nguồn.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      node distance=6mm,
+      done/.style={rectangle, draw, rounded corners, minimum width=2.6cm, minimum height=1.1cm, align=center, font=\small},
+      todo/.style={rectangle, draw, dashed, rounded corners, minimum width=2.6cm, minimum height=1.1cm, align=center, font=\small},
+      arr/.style={-{Stealth}, thick}
+    ]
+    \node[done] (n1) {1. Ingestion\\ \scriptsize ingestion.py};
+    \node[done, right=of n1] (n2) {2. Node\\ \scriptsize node\_parser.py};
+    \node[todo, right=of n2] (n3) {3. Index\\ \scriptsize (chưa có)};
+    \node[todo, below=8mm of n1] (n4) {4. Retriever\\ \scriptsize (chưa có)};
+    \node[todo, right=of n4] (n5) {5. Synthesis\\ \scriptsize (chưa có)};
+    \node[todo, right=of n5] (n6) {6. Evaluation\\ \scriptsize (mới có bộ câu hỏi)};
+    \draw[arr] (n1) -- (n2);
+    \draw[arr] (n2) -- (n3);
+    \draw[arr] (n3.south) -- ++(0,-3mm) -| ([yshift=0mm]n4.north);
+    \draw[arr] (n4) -- (n5);
+    \draw[arr] (n5) -- (n6);
+  \end{tikzpicture}
+  \caption{Sáu giai đoạn của pipeline RAG; nét liền: đã có mã chạy được, nét đứt: chưa triển khai.}
+  \label{fig:pipeline}
+\end{figure}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l l X l}
+    \toprule
+    \textbf{Giai đoạn} & \textbf{Mức} & \textbf{File hiện có} & \textbf{Chạy được} \\
+    \midrule
+    1. Ingestion & Bắt buộc lõi & \texttt{src/ingestion.py} & Có \\
+    2. Node & Bắt buộc lõi & \texttt{src/node\_parser.py} & Có \\
+    3. Index & Bắt buộc lõi & không có & --- \\
+    4. Retriever & Bắt buộc lõi & không có & --- \\
+    5. Response Synthesis & Bắt buộc lõi & không có (chỉ có tham số trong \texttt{config.py}) & --- \\
+    6. Evaluation & Bắt buộc lõi & chỉ có \texttt{eval/test\_questions\_01.json} & Chưa có code chạy \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Trạng thái mã nguồn của từng giai đoạn.}
+\end{table}
+
+\chuatrienkhai{Index, Retriever, Response Synthesis (\texttt{QueryEngine}) và bộ chạy đánh giá chưa có file mã nguồn. Thư mục \texttt{storage/vector\_index} hiện chưa chứa chỉ mục nào.}
+
