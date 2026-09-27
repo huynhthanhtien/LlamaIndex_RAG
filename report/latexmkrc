@@ -1,0 +1,7 @@
+# Build bằng XeLaTeX; file trung gian và PDF nằm trong build/
+# Cờ -pdf (VS Code / LaTeX Workshop) ép latexmk gọi $pdflatex, nên trỏ
+# $pdflatex sang xelatex để luôn dùng đúng engine dù bị gọi kiểu nào.
+$pdf_mode = 1;
+$pdflatex = 'xelatex -synctex=1 -interaction=nonstopmode -file-line-error %O %S';
+$out_dir = 'build';
+$bibtex_use = 1.5;

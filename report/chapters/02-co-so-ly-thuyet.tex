@@ -1,0 +1,167 @@
+\chapter{Cơ sở lý thuyết}
+\label{ch:co-so-ly-thuyet}
+
+
+\section{Mô hình ngôn ngữ lớn và những hạn chế khi hỏi đáp tài liệu riêng}
+
+Mô hình ngôn ngữ lớn (Large Language Model, LLM) là mạng nơ-ron được huấn luyện trên lượng văn bản rất lớn để dự đoán token tiếp theo. Nhờ đó LLM có khả năng hiểu câu hỏi, diễn đạt lại, tóm tắt và suy luận đơn giản. Tuy nhiên, khi dùng LLM để trả lời về một văn bản nội bộ như quy chế của SGU, có bốn hạn chế cần xử lý:
+
+\begin{enumerate}
+  \item \textbf{Thiếu tri thức riêng.} Quy chế của một trường cụ thể, nhất là bản ban hành gần đây, hầu như không nằm trong dữ liệu huấn luyện, hoặc chỉ xuất hiện rất mờ nhạt.
+  \item \textbf{Tri thức bị đóng băng.} Kiến thức của mô hình dừng ở thời điểm huấn luyện; khi quy chế được sửa đổi, mô hình không tự cập nhật.
+  \item \textbf{Ảo giác (hallucination).} Mô hình có xu hướng sinh ra câu trả lời nghe hợp lý nhưng sai, ví dụ bịa số tín chỉ hoặc số Điều.
+  \item \textbf{Khó kiểm chứng.} Câu trả lời không kèm nguồn nên người dùng không biết đối chiếu ở đâu.
+\end{enumerate}
+
+Có thể khắc phục bằng cách tinh chỉnh (fine-tuning) mô hình trên văn bản quy chế, nhưng cách này tốn kém, phải huấn luyện lại mỗi khi văn bản đổi, và vẫn không loại bỏ hoàn toàn ảo giác. RAG đi theo hướng khác: giữ nguyên mô hình, đưa tri thức cần thiết vào \emph{ngữ cảnh} (prompt) tại thời điểm hỏi.
+
+\section{Retrieval-Augmented Generation (RAG)}
+
+\subsection{Ý tưởng}
+
+RAG tách bài toán thành hai bước: (1) \emph{truy hồi} --- từ kho tài liệu, tìm ra một số ít đoạn liên quan nhất tới câu hỏi; (2) \emph{sinh} --- đưa câu hỏi cùng các đoạn đó cho LLM và yêu cầu trả lời dựa trên chúng. Nếu ký hiệu $q$ là câu hỏi, $\mathcal{D}$ là tập các đoạn văn bản trong kho, thì:
+
+\begin{equation}
+  C = \operatorname{Retrieve}(q, \mathcal{D}, k), \qquad
+  a = \operatorname{LLM}\big(\text{prompt}(q, C)\big),
+\end{equation}
+
+trong đó $C \subset \mathcal{D}$ là $k$ đoạn được chọn và $a$ là câu trả lời. Vì $C$ lấy trực tiếp từ quy chế nên câu trả lời có căn cứ, và hệ thống có thể trích dẫn nguồn (số Điều, số trang) cho người dùng kiểm tra.
+
+\subsection{Hai pha của một hệ RAG}
+
+Một hệ RAG hoạt động theo hai pha có tần suất chạy khác nhau:
+
+\begin{itemize}
+  \item \textbf{Pha chuẩn bị (offline), chạy khi tài liệu thay đổi:} nạp tài liệu $\rightarrow$ cắt thành các đoạn $\rightarrow$ biến mỗi đoạn thành vector embedding $\rightarrow$ lưu vào chỉ mục.
+  \item \textbf{Pha truy vấn (online), chạy mỗi câu hỏi:} embedding câu hỏi $\rightarrow$ tìm $k$ đoạn gần nhất $\rightarrow$ ghép prompt $\rightarrow$ LLM sinh câu trả lời.
+\end{itemize}
+
+Chất lượng của hệ thống bị giới hạn bởi \emph{đoạn văn tìm được}: nếu bước truy hồi bỏ sót Điều đúng thì LLM dù tốt đến đâu cũng không thể trả lời đúng. Vì vậy phần lớn công sức của đồ án tập trung vào các bước chuẩn bị dữ liệu (nạp, cắt đoạn) và truy hồi.
+
+\section{Embedding và độ tương đồng vector}
+
+\subsection{Vector embedding}
+
+Embedding là phép ánh xạ một đoạn văn bản thành một vector số thực $\mathbf{v} \in \mathbb{R}^d$ sao cho các đoạn có nghĩa gần nhau nằm gần nhau trong không gian vector. Với mô hình dạng bi-encoder, câu hỏi và đoạn văn được mã hóa \emph{độc lập} bởi cùng một bộ mã hóa; nhờ vậy vector của toàn bộ kho tài liệu có thể tính trước và lưu lại, khi có câu hỏi chỉ cần mã hóa riêng câu hỏi.
+
+\subsection{Độ đo cosine}
+
+Độ tương đồng giữa vector câu hỏi $\mathbf{q}$ và vector đoạn văn $\mathbf{d}$ thường được đo bằng cosine:
+
+\begin{equation}
+  \operatorname{sim}(\mathbf{q}, \mathbf{d})
+  = \frac{\mathbf{q}\cdot\mathbf{d}}{\lVert\mathbf{q}\rVert\,\lVert\mathbf{d}\rVert}
+  = \frac{\sum_{i=1}^{d} q_i d_i}{\sqrt{\sum_{i=1}^{d} q_i^2}\,\sqrt{\sum_{i=1}^{d} d_i^2}} .
+\end{equation}
+
+Giá trị càng gần 1 thì hai đoạn càng gần nhau về ngữ nghĩa. Khác với tìm theo từ khóa, so khớp vector cho phép ``cấm thi'' tìm được đoạn viết ``không đủ điều kiện dự thi'' vì hai cụm có embedding gần nhau.
+
+\subsection{Mô hình embedding tiếng Việt được chọn}
+
+Chất lượng truy hồi phụ thuộc mạnh vào việc mô hình embedding có được huấn luyện cho tiếng Việt hay không. Theo cấu hình trong \texttt{src/config.py}, đồ án dự kiến dùng:
+
+\begin{itemize}
+  \item Profile chạy cục bộ: \texttt{bkai-foundation-models/vietnamese-bi-encoder};
+  \item Profile máy chủ: \texttt{AITeamVN/Vietnamese\_Embedding}.
+\end{itemize}
+
+Cả hai đều được nạp qua \texttt{llama-index-embeddings-huggingface}. Ở thời điểm viết báo cáo, các mô hình này mới được khai báo trong cấu hình, chưa có module nào gọi chúng để tạo embedding.
+
+\section{Cắt đoạn văn bản (chunking)}
+
+\subsection{Vì sao phải cắt}
+
+Có hai lý do phải cắt tài liệu thành các đoạn nhỏ. Thứ nhất, cửa sổ ngữ cảnh của LLM có hạn, và càng nhét nhiều văn bản không liên quan thì câu trả lời càng dễ lệch. Thứ hai, một vector embedding cho cả tài liệu sẽ ``pha loãng'' mọi ý; mỗi đoạn nên xoay quanh một chủ đề để vector của nó đại diện đúng.
+
+\subsection{Các chiến lược cắt}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l X X}
+    \toprule
+    \textbf{Chiến lược} & \textbf{Ưu điểm} & \textbf{Nhược điểm} \\
+    \midrule
+    Cắt theo độ dài cố định & Đơn giản, kích thước đều & Có thể cắt ngang câu hoặc ngang điều khoản \\
+    Cắt theo câu (sentence splitter) & Không gãy câu, có chồng lấp (overlap) & Vẫn không biết ranh giới điều khoản \\
+    Cắt theo cấu trúc văn bản & Mỗi đoạn là một đơn vị nghĩa trọn vẹn & Phụ thuộc định dạng văn bản, cần quy tắc riêng \\
+    \bottomrule
+  \end{tabularx}
+  \caption{So sánh ba chiến lược cắt đoạn.}
+\end{table}
+
+Quy chế đào tạo có cấu trúc rất rõ: văn bản chia thành các \emph{Điều}, mỗi Điều chia thành khoản và điểm. Vì vậy đồ án chọn \textbf{cắt theo Điều} làm chiến lược chính; riêng những Điều dài vượt ngưỡng thì cắt tiếp theo câu. Cách này giữ trọn ngữ cảnh pháp lý và cho phép gắn số Điều vào metadata để trích dẫn nguồn.
+
+\section{Chỉ mục vector và truy hồi top-$k$}
+
+Sau khi có vector cho mọi đoạn, hệ thống cần lưu chúng theo cách tìm kiếm nhanh. \emph{Chỉ mục vector} (vector index) lưu các cặp (vector, đoạn văn, metadata). Khi có câu hỏi, bộ truy hồi (retriever) tính độ tương đồng giữa vector câu hỏi và các vector trong chỉ mục rồi trả về $k$ đoạn có điểm cao nhất (top-$k$). Với kho nhỏ như một quy chế (vài chục đến vài trăm đoạn), việc so sánh vét cạn với mọi vector là đủ nhanh; các cấu trúc tìm kiếm xấp xỉ chỉ cần khi kho rất lớn.
+
+Tham số $k$ là sự đánh đổi: $k$ nhỏ dễ bỏ sót đoạn cần thiết, $k$ lớn đưa nhiều nhiễu vào prompt. Cấu hình hiện có trong \texttt{src/config.py} đặt \texttt{similarity\_top\_k = 10}.
+
+\section{Tổng hợp câu trả lời (Response Synthesis)}
+
+Sau truy hồi, các đoạn tìm được phải được đưa cho LLM để sinh câu trả lời. LlamaIndex gọi bước này là \emph{response synthesis} và cung cấp nhiều chế độ (\texttt{response\_mode}). Các chế độ thường gặp:
+
+\begin{itemize}
+  \item \texttt{refine}: gọi LLM lần lượt từng đoạn, mỗi lần tinh chỉnh câu trả lời cũ bằng đoạn mới; chính xác nhưng tốn nhiều lượt gọi.
+  \item \texttt{compact}: gộp nhiều đoạn vào cùng một prompt sao cho vừa cửa sổ ngữ cảnh rồi mới gọi LLM, giảm số lượt gọi so với \texttt{refine}.
+  \item \texttt{tree\_summarize}: tóm tắt theo cấu trúc cây, phù hợp câu hỏi tổng hợp trên nhiều đoạn.
+  \item \texttt{simple\_summarize}: cắt bớt để nhét mọi đoạn vào một lần gọi.
+\end{itemize}
+
+Đồ án đặt sẵn \texttt{response\_mode = "compact"} và \texttt{streaming = True} trong cấu hình. Vì đây mới là giá trị cấu hình, báo cáo không khẳng định gì về chất lượng của chế độ này.
+
+\section{Các khái niệm cốt lõi của LlamaIndex}
+
+LlamaIndex mô hình hóa chuỗi RAG bằng một số đối tượng có tên rõ ràng. Bảng dưới đây tóm tắt và chỉ ra chúng nằm ở đâu trong đồ án.
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l X X}
+    \toprule
+    \textbf{Khái niệm} & \textbf{Vai trò} & \textbf{Trong đồ án} \\
+    \midrule
+    \texttt{Document} & Một nguồn dữ liệu thô kèm metadata & \texttt{ingestion.py} (mỗi trang PDF một Document) \\
+    \texttt{Node} / \texttt{TextNode} & Đơn vị nhỏ hơn sinh từ Document, là đơn vị được lập chỉ mục & \texttt{node\_parser.py} (mỗi Điều một Node) \\
+    \texttt{Index} & Cấu trúc lưu Node để truy hồi (ví dụ \texttt{VectorStoreIndex}) & Chưa triển khai \\
+    \texttt{Retriever} & Lấy các Node liên quan tới câu hỏi & Chưa triển khai \\
+    Response synthesizer & Ghép Node vào prompt và gọi LLM & Chưa triển khai \\
+    \texttt{QueryEngine} & Gộp retriever và synthesizer thành một lệnh hỏi--đáp & Chưa triển khai \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Các đối tượng chính của LlamaIndex và vị trí trong đồ án.}
+\end{table}
+
+Điểm mạnh của thiết kế này là mỗi khâu độc lập: có thể đổi mô hình embedding, đổi cách cắt đoạn hoặc đổi chế độ tổng hợp mà không phải viết lại toàn bộ hệ thống.
+
+\section{Nhận dạng ký tự quang học (OCR)}
+
+Bản PDF của Quy chế đào tạo SGU là bản scan: mỗi trang là một ảnh, không có lớp văn bản (text layer). Khi đọc bằng bộ đọc PDF thông thường, hệ thống gần như không lấy được chữ nào. Để có văn bản, cần OCR.
+
+\textbf{Tesseract} là công cụ OCR mã nguồn mở, có gói ngôn ngữ tiếng Việt (\texttt{vie}); trong Python được gọi qua thư viện \texttt{pytesseract}. Vì Tesseract nhận ảnh làm đầu vào, mỗi trang PDF trước hết được render thành ảnh bằng \texttt{pdf2image} (dựa trên \texttt{poppler}). Độ phân giải càng cao thì nhận dạng càng tốt nhưng chậm hơn; đồ án dùng 300 dpi.
+
+OCR tiếng Việt luôn có sai sót, nhất là với dấu thanh và chữ in mờ (ví dụ nhầm ``NHÂN'' thành ``NHẦN''). Điều này ảnh hưởng đến các bước sau, đặc biệt khi quy tắc cắt đoạn dựa vào việc nhận đúng từ ``Điều''. Phần \ref{sec:ingestion} sẽ nêu các lỗi cụ thể quan sát được.
+
+\section{Mô hình chạy cục bộ: Ollama và Qwen3}
+
+Để dữ liệu không rời máy, LLM được chạy cục bộ qua \textbf{Ollama}, một trình phục vụ mô hình mở với API HTTP (mặc định tại \texttt{http://localhost:11434}). Đồ án dự kiến dùng họ mô hình Qwen3: \texttt{qwen3:4b} cho profile chạy cục bộ và \texttt{qwen3:8b} cho profile máy chủ. LlamaIndex kết nối tới Ollama qua gói \texttt{llama-index-llms-ollama}. Thời gian chờ mặc định trong cấu hình là 180 giây do mô hình chạy trên phần cứng cá nhân có thể trả lời chậm.
+
+\section{Đánh giá chất lượng truy hồi}
+
+Do chất lượng RAG phụ thuộc đầu tiên vào việc tìm đúng đoạn, đồ án đánh giá riêng bước truy hồi trước khi đánh giá câu trả lời. Bộ câu hỏi kiểm thử \texttt{eval/test\_questions\_01.json} gồm 31 câu, mỗi câu có hai trường: \texttt{question} và \texttt{dieu\_dung} (số Điều chứa đáp án). Nhờ có nhãn này, có thể dùng hai độ đo phổ biến:
+
+\begin{itemize}
+  \item \textbf{Hit rate@$k$}: tỷ lệ câu hỏi mà trong $k$ Node đầu tiên có ít nhất một Node thuộc Điều đúng:
+  \begin{equation}
+    \text{Hit@}k = \frac{1}{N}\sum_{i=1}^{N} \mathbb{1}\big[\exists\, j \le k : \text{dieu}(n_{i,j}) = \text{dieu\_dung}_i\big].
+  \end{equation}
+  \item \textbf{MRR} (Mean Reciprocal Rank): trung bình nghịch đảo thứ hạng của Node đúng đầu tiên:
+  \begin{equation}
+    \text{MRR} = \frac{1}{N}\sum_{i=1}^{N} \frac{1}{\text{rank}_i}.
+  \end{equation}
+\end{itemize}
+
+Đây là kế hoạch đánh giá; module chạy đánh giá chưa được viết nên chưa có số liệu nào.
+

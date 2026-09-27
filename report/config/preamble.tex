@@ -1,0 +1,56 @@
+% Preamble dùng chung. Biên dịch bằng XeLaTeX (xem latexmkrc).
+
+% --- Ngôn ngữ và phông chữ (Unicode, không cần hack cho tiếng Việt) ---
+\usepackage{fontspec}
+\usepackage[vietnamese]{babel}
+% Times New Roman (cài qua msttcore-fonts). Không có font này thì đổi sang
+% Liberation Serif (kích thước tương đương, đủ dấu tiếng Việt).
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Courier New}[Scale=MatchLowercase]
+
+% --- Cỡ chữ cố định theo bảng quy ước báo cáo/luận văn ---
+% Thân bài 13pt · Mục lớn (section) 14pt · Mục con (subsection) 13pt đậm
+% · Chú thích/footnote 10-12pt. Chương và header/listing đặt trực tiếp
+% bằng \fontsize tại nơi dùng (xem macros.tex).
+\makeatletter
+\renewcommand\normalsize{\@setfontsize\normalsize{13}{15.6}} % thân bài: 13pt
+\renewcommand\small{\@setfontsize\small{12}{14.4}}           % chú thích bảng/hình: 12pt
+\renewcommand\footnotesize{\@setfontsize\footnotesize{10}{12}} % footnote: 10pt
+\renewcommand\large{\@setfontsize\large{13}{15.6}}           % tiêu đề mục con (subsection): 13pt
+\renewcommand\Large{\@setfontsize\Large{14}{16.8}}           % tiêu đề mục lớn (section): 14pt
+\makeatother
+\linespread{1.3}  % giãn dòng khoảng 1.5 (chuẩn báo cáo/luận văn)
+\setlength{\parindent}{1cm}
+\setlength{\parskip}{3pt}
+
+% --- Bố cục: lề trái rộng hơn để đóng gáy ---
+\usepackage[a4paper, left=3cm, right=2cm, top=2.5cm, bottom=2.5cm,
+            headheight=40pt, headsep=1.0cm]{geometry}
+\usepackage{fancyhdr}
+
+% --- Toán, bảng, hình ---
+\usepackage{amsmath}
+\usepackage{unicode-math}
+\setmathfont{Latin Modern Math}  % font toán OpenType, chạy mọi cỡ chữ
+\usepackage{booktabs, array, tabularx}
+\usepackage{graphicx, float, caption}
+\captionsetup{font=small} % chú thích bảng/hình: 12pt (dùng cỡ \small đã đặt lại ở trên)
+\usepackage{xcolor}
+\usepackage{enumerate}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+
+% --- Mã nguồn ---
+\usepackage{listings}
+
+% --- Trích dẫn ---
+\usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
+\addbibresource{references.bib}
+
+% --- Siêu liên kết (nạp sau cùng) ---
+\usepackage{hyperref}
+
+\input{config/metadata}
+\input{config/macros}

@@ -1,0 +1,185 @@
+\chapter{Bản chất công nghệ --- Bắt buộc lõi}
+\label{ch:cong-nghe-cot-loi}
+
+
+\section{Nạp dữ liệu (Ingestion)}
+\label{sec:ingestion}
+
+\subsection{Cơ chế}
+
+Nhiệm vụ của giai đoạn này là biến file PDF quy chế thành danh sách \texttt{Document} của LlamaIndex. Vì PDF là bản scan nên module \texttt{src/ingestion.py} không dùng \texttt{SimpleDirectoryReader} để đọc chữ mà đi qua ba bước: (1) render từng trang thành ảnh bằng \texttt{pdf2image} ở 300 dpi; (2) OCR từng ảnh bằng \texttt{pytesseract} với \texttt{lang="vie"}; (3) đóng gói văn bản mỗi trang thành một \texttt{Document} kèm metadata \texttt{nguon} (tên nguồn), \texttt{trang} (số trang) và \texttt{file\_goc} (tên file).
+
+Ngoài ra module có:
+\begin{itemize}
+  \item lớp ngoại lệ \texttt{ScannedPDFLoadError} cho lỗi không tìm thấy file hoặc không render được PDF;
+  \item hàm \texttt{has\_text\_layer()} thử đọc PDF bằng \texttt{SimpleDirectoryReader} để biết PDF có text layer không (hàm này định nghĩa sẵn nhưng \texttt{load\_corpus} hiện chưa gọi tới);
+  \item hàm \texttt{load\_corpus()} lặp qua danh sách nguồn \texttt{CORPUS\_SOURCES}, bỏ qua nguồn lỗi và ghi log thay vì dừng toàn bộ chương trình.
+\end{itemize}
+
+\subsection{Mã nguồn}
+
+Trích hàm OCR từng trang (phần xử lý lỗi từng trang là điểm đáng chú ý: một trang lỗi chỉ bị ghi log và thay bằng chuỗi rỗng, không làm hỏng cả file):
+
+\begin{lstlisting}[language=Python, caption={Vòng lặp OCR từng trang trong \texttt{src/ingestion.py}.}, label={lst:ocr-loop}]
+    documents: list[Document] = []
+    failed_pages: list[int] = []
+
+    for i, page in enumerate(pages, start=1):
+        try:
+            text = pytesseract.image_to_string(page, lang=lang)
+        except Exception as e:
+            logger.error(f"(*@OCR lỗi ở trang@*) {i} (*@của@*) {pdf_path}: {e}")
+            failed_pages.append(i)
+            text = ""
+
+        documents.append(Document(
+            text=text,
+            metadata={"nguon": source_name, "trang": i, "file_goc": path.name},
+        ))
+\end{lstlisting}
+
+Hàm \texttt{load\_corpus} gọi hàm trên cho từng nguồn:
+
+\begin{lstlisting}[language=Python, caption={Hàm \texttt{load\_corpus()} nạp nhiều nguồn PDF.}, label={lst:load-corpus}]
+def load_corpus(sources: list[tuple[str, str]] | None = None) -> list[Document]:
+    sources = sources or CORPUS_SOURCES
+    all_documents: list[Document] = []
+
+    for pdf_path, source_name in sources:
+        try:
+            docs = load_scanned_pdf(pdf_path, source_name)
+            all_documents.extend(docs)
+        except ScannedPDFLoadError as e:
+            logger.error(f"(*@Bỏ qua nguồn@*) '{source_name}' (*@do lỗi:@*) {e}")
+            continue
+\end{lstlisting}
+
+\subsection{Kết quả chạy thật}
+
+Chạy \texttt{python src/ingestion.py} với file \texttt{4.\ QuyCheDaoTaoDHSG 2021.pdf} mất khoảng 28 giây và cho kết quả:
+
+\begin{lstlisting}[caption={Kết quả chạy \texttt{src/ingestion.py}.}, label={lst:ingestion-output}]
+[INFO] (*@Hoàn tất OCR 4. QuyCheDaoTaoDHSG 2021.pdf: 17 trang, tổng 34276 ký tự@*)
+[INFO] (*@Tổng cộng nạp được 17 Document từ 1 nguồn.@*)
+\end{lstlisting}
+
+Tức là 17 trang thành 17 \texttt{Document}, tổng 34\,276 ký tự (trung bình khoảng 2\,000 ký tự mỗi trang). Ba trang đầu được in ra làm mẫu, ví dụ trang 1 bắt đầu bằng phần quốc hiệu và tiêu đề của quyết định ban hành.
+
+\subsection{Nhận xét chất lượng OCR}
+
+Kiểm tra các trích đoạn in ra cho thấy OCR chưa hoàn hảo. Trang 1 nhận ra ``NHẦN DẦN'' và ``HỖ CHÍ MINH'' (đúng phải là ``NHÂN DÂN'', ``HỒ CHÍ MINH''), còn trang 2 có dòng ``THANH PHO HO CHI MINH'' mất dấu hoàn toàn. Những lỗi này nằm ở phần quốc hiệu, tiêu đề, không phải phần thân của các Điều, nhưng chúng cho thấy: (1) văn bản sau OCR cần được kiểm tra bằng mắt trước khi tin tưởng; (2) quy tắc cắt theo Điều phải chịu được lỗi OCR ở các từ khóa.
+
+\subsection{Vị trí trong đồ án}
+
+Đây là giai đoạn 1 của pipeline. Đầu ra là danh sách \texttt{Document} theo trang, mang metadata nguồn để về sau có thể trích dẫn ``Quy chế đào tạo 2021, trang $N$''. Một hạn chế cần ghi nhận: đầu ra theo trang có thể chia đôi một Điều nằm giữa hai trang, và hiện chưa có bước nối các trang lại trước khi cắt Điều.
+
+\section{Cắt đoạn theo Điều (Node)}
+
+\subsection{Cơ chế}
+
+Module \texttt{src/node\_parser.py} chuyển \texttt{Document} thành \texttt{TextNode} theo đơn vị Điều. Hàm \texttt{parse\_by\_dieu()} làm như sau:
+
+\begin{enumerate}
+  \item Dùng biểu thức chính quy \texttt{DIEU\_PATTERN} để tìm từng đoạn bắt đầu bằng ``Điều $N$.'' hoặc ``Điều $N$:'' và kéo dài tới ngay trước Điều kế tiếp (hoặc hết văn bản).
+  \item Với mỗi đoạn, trích số Điều bằng \texttt{extract\_dieu\_number()} và gắn vào \texttt{metadata['dieu']}, giữ nguyên metadata gốc của Document.
+  \item Nếu số từ của Điều (đếm gần đúng bằng tách theo khoảng trắng) vượt \texttt{max\_chunk\_tokens} (mặc định 1024), cắt tiếp bằng \texttt{SentenceSplitter} với \texttt{chunk\_overlap = 50} và gắn thêm \texttt{metadata['phan']}.
+  \item Document không khớp mẫu nào được giữ nguyên thành một Node với \texttt{dieu = "khong\_co\_dieu"}, đồng thời ghi cảnh báo.
+\end{enumerate}
+
+Hàm \texttt{validate\_nodes()} thống kê chất lượng: tổng số Node, số Node không rõ Điều, tỷ lệ và độ dài trung bình.
+
+\subsection{Mã nguồn}
+
+Biểu thức chính quy và hàm trích số Điều:
+
+\begin{lstlisting}[language=Python, caption={Biểu thức chính quy tách Điều và hàm trích số Điều.}, label={lst:dieu-pattern}]
+DIEU_PATTERN = re.compile(r"((*@Điều@*)\s+\d+[.:].*?)(?=(*@Điều@*)\s+\d+[.:]|\Z)", re.DOTALL)
+DIEU_NUMBER_PATTERN = re.compile(r"(*@Điều@*)\s+(\d+)")
+
+def extract_dieu_number(text: str) -> str:
+    """(*@Trích xuất số thứ tự của Điều từ đoạn văn bản.@*)"""
+    match = DIEU_NUMBER_PATTERN.match(text.strip())
+    return match.group(1) if match else "khong_ro"
+\end{lstlisting}
+
+Giải thích biểu thức: \texttt{Điều\textbackslash s+\textbackslash d+[.:]} khớp phần đầu Điều (từ ``Điều'', khoảng trắng, chữ số, rồi dấu chấm hoặc hai chấm); \texttt{.*?} lấy nhỏ nhất có thể (lazy) với cờ \texttt{DOTALL} để qua nhiều dòng; \texttt{(?=...|\textbackslash Z)} là lookahead dừng ngay trước Điều kế tiếp hoặc cuối văn bản. Yêu cầu có dấu chấm/hai chấm sau số là điều kiện quan trọng: nhờ đó các tham chiếu chéo kiểu ``theo quy định tại Điều 5 của Quy chế này'' không bị nhầm thành tiêu đề Điều mới.
+
+Phần lõi của hàm cắt:
+
+\begin{lstlisting}[language=Python, caption={Vòng lặp cắt Node theo Điều trong \texttt{parse\_by\_dieu()}.}, label={lst:parse-by-dieu}]
+        for dieu_text in matches:
+            dieu_so = extract_dieu_number(dieu_text)
+            base_metadata = {"dieu": dieu_so, **doc.metadata}
+            estimated_tokens = len(dieu_text.split())
+
+            if estimated_tokens <= max_chunk_tokens:
+                all_nodes.append(TextNode(text=dieu_text.strip(), metadata=base_metadata))
+            else:
+                sub_texts = sub_splitter.split_text(dieu_text)
+                for j, sub_text in enumerate(sub_texts):
+                    all_nodes.append(
+                        TextNode(
+                            text=sub_text,
+                            metadata={**base_metadata, "phan": j + 1},
+                        )
+                    )
+\end{lstlisting}
+
+\subsection{Kết quả chạy thật}
+
+Khối \texttt{\_\_main\_\_} của \texttt{node\_parser.py} đọc bản OCR đã lưu \texttt{data/ocr/4.\ QuyCheDaoTaoDHSG 2021.md} (không phải đầu ra trực tiếp của \texttt{ingestion.py}), bọc thành một \texttt{Document} rồi cắt. Kết quả chạy thật:
+
+\begin{lstlisting}[caption={Kết quả chạy \texttt{node\_parser.py}.}, label={lst:node-parser-output}]
+- tong_so_node: 24
+- node_khong_ro_dieu: 0
+- ty_le_khong_ro: 0.0%
+- do_dai_trung_binh_ky_tu: 1400
+
+[Node 1] - Metadata: {'dieu': '1', 'source': '4. QuyCheDaoTaoDHSG 2021.md', 'doc_type': 'quy_che'}
+[Node 2] - Metadata: {'dieu': '2', ...}
+[Node 3] - Metadata: {'dieu': '3', ...}
+\end{lstlisting}
+
+Có 24 Node, không Node nào bị gán ``không rõ Điều'' (0\%), độ dài trung bình 1\,400 ký tự.
+
+\subsection{Phân tích kết quả}
+
+Kiểm tra thêm bằng cách in danh sách nhãn \texttt{dieu} của toàn bộ 24 Node cho thấy:
+
+\begin{itemize}
+  \item Văn bản OCR gồm hai phần nối nhau: \emph{Quyết định ban hành} (3 Điều) và \emph{Quy chế} (21 Điều). Do đó chuỗi nhãn là $1,2,3$ rồi $1,2,\dots,21$: \textbf{ba nhãn Điều 1, 2, 3 xuất hiện hai lần} (một lần của Quyết định, một lần của Quy chế).
+  \item Trong toàn bộ 24 Node không có Node nào bị cắt nhỏ (không có \texttt{phan}), tức không Điều nào vượt ngưỡng 1024 từ. Điều dài nhất khoảng 3\,238 ký tự.
+  \item Có 36 lần xuất hiện cụm ``Điều $N$'' trong văn bản nhưng chỉ 24 lần là tiêu đề Điều; 12 lần còn lại chủ yếu là tham chiếu chéo (không có dấu chấm sau số) và đã không bị tách nhầm, đúng như thiết kế.
+\end{itemize}
+
+\textbf{Hệ quả cần xử lý sau:} vì hai Điều mang cùng nhãn (ví dụ Điều 2 của Quyết định và Điều 2 của Quy chế) nên trường \texttt{dieu} một mình không phân biệt được chúng. Khi chấm truy hồi bằng \texttt{dieu\_dung} trong bộ câu hỏi, Node của Quyết định ban hành có thể bị tính nhầm là đúng. Cách khắc phục hợp lý là bổ sung metadata phân biệt phần (ví dụ tên văn bản hoặc chương) khi cắt.
+
+\subsection{Hạn chế đã biết}
+
+\begin{itemize}
+  \item Số ``token'' được đếm bằng số từ tách theo khoảng trắng, chỉ là xấp xỉ, không phải token của mô hình.
+  \item Nếu OCR làm mất dấu chấm sau số Điều (ví dụ ``Điều 12'' không có dấu chấm) thì tiêu đề đó không khớp mẫu và Điều bị gộp vào Điều trước.
+  \item Ngược lại, một câu tham chiếu kết thúc bằng dấu chấm ngay sau số Điều (``\ldots{}quy định tại Điều 5.'') có thể bị nhận nhầm là tiêu đề mới. Trong văn bản hiện có, trường hợp này chưa xảy ra.
+  \item Kiểm thử mới chạy trên một văn bản; chưa có \texttt{scripts/test\_node\_parser.py} và chưa có kiểm thử tự động.
+\end{itemize}
+
+\subsection{Vị trí trong đồ án}
+
+Đây là giai đoạn 2 của pipeline. Mỗi Node là một Điều với nhãn \texttt{dieu}, làm đơn vị cơ bản để lập chỉ mục và để trích dẫn nguồn khi trả lời.
+
+\section{Lập chỉ mục (Index)}
+
+Về mặt lý thuyết (xem Chương 2), bước này sẽ embedding từng Node bằng mô hình tiếng Việt đã chọn trong profile, lưu vào \texttt{VectorStoreIndex} và lưu xuống thư mục \texttt{storage/vector\_index} (giá trị \texttt{persist\_dir} trong \texttt{config.py}) để không phải embedding lại mỗi lần chạy.
+
+\chuatrienkhai{Module Index chưa triển khai: không có \texttt{src/index\_builder.py}, và thư mục \texttt{storage/vector\_index} hiện không chứa chỉ mục nào. Mô tả trên là thiết kế dự kiến theo cấu hình, chưa được kiểm chứng bằng cách chạy.}
+
+\section{Retriever và Response Synthesis}
+
+Khi có chỉ mục, retriever sẽ lấy top-$k$ Node (cấu hình hiện là $k=10$) và bộ tổng hợp câu trả lời sẽ ghép chúng vào prompt để LLM sinh câu trả lời ở chế độ \texttt{compact}, có streaming. Câu trả lời cần kèm nhãn \texttt{dieu} của các Node nguồn để người dùng kiểm chứng.
+
+\chuatrienkhai{Chưa có \texttt{src/retriever.py} và \texttt{src/query\_engine.py}. Hiện chỉ tồn tại các tham số cấu hình \texttt{similarity\_top\_k}, \texttt{response\_mode}, \texttt{streaming} trong \texttt{src/config.py}. Phần rerank (\texttt{reranker\_model\_name}, \texttt{reranker\_top\_n}) thuộc nhóm chọn thêm nên không trình bày trong báo cáo này.}
+
+\section{Tổng kết}
+
+Tại thời điểm viết báo cáo, hai giai đoạn đầu của pipeline đã chạy được trên Quy chế đào tạo SGU 2021: OCR ra 17 Document (34\,276 ký tự) và cắt theo Điều ra 24 Node với 0\% Node không rõ Điều. Đồng thời phân tích cho thấy hai việc cần làm tiếp: thống nhất nguồn dữ liệu giữa \texttt{config.py} và \texttt{ingestion.py}, và bổ sung metadata phân biệt hai văn bản trong cùng một file (Quyết định ban hành và Quy chế) vì nhãn Điều 1--3 bị trùng. Các giai đoạn Index, Retriever, Response Synthesis và Evaluation là phần còn lại phải xây dựng.
+
