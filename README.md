@@ -2,6 +2,28 @@
 
 Hệ thống hỏi-đáp RAG (Retrieval-Augmented Generation) cho các văn bản quy chế đào tạo của Trường Đại học Sài Gòn (SGU), xây dựng trên [LlamaIndex](https://www.llamaindex.ai/) với LLM chạy local qua [Ollama](https://ollama.com/).
 
+## Trạng thái hiện tại: pipeline cơ bản, 1 corpus (Quy chế đào tạo)
+
+Pipeline: `ingestion/OCR` → `node_parser` (tách theo Điều) → `index_builder` → `retriever` → `query_engine` (Ollama) → `pipeline` (hỏi-đáp terminal).
+
+## Chạy thử
+
+Chạy từ thư mục gốc của repo (đường dẫn trong code là tương đối so với thư mục gốc), cần Ollama đang chạy và đã pull model trong `src/config.py`:
+
+```bash
+RAG_PROFILE=local venv/bin/python src/index_builder.py   # build/load Index (thêm --rebuild để build lại)
+RAG_PROFILE=local venv/bin/python src/retriever.py       # thử truy hồi
+RAG_PROFILE=local venv/bin/python src/query_engine.py    # thử hỏi-đáp 1 câu
+RAG_PROFILE=local venv/bin/python eval/evaluate.py       # đo Recall@k
+RAG_PROFILE=local venv/bin/python src/pipeline.py        # hỏi-đáp qua terminal, gõ 'thoat' để dừng
+```
+
+## Giới hạn đã biết (chưa triển khai, để ở Chương 5 báo cáo sau)
+
+- Chưa có rerank (chỉ bật khi `reranker_model_name` được đặt trong `config.py`; profile `local` để trống)
+- Chỉ 1 corpus, chưa có Router
+- Chưa có giao diện Gradio
+
 ## Kiến trúc
 
 - **OCR**: chuyển PDF quy chế thành văn bản Markdown bằng `pytesseract` + `pdf2image` (hỗ trợ tiếng Việt).

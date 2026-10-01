@@ -8,6 +8,8 @@ from llama_index.core import Document
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
+ROOT = Path(__file__).resolve().parent.parent
+
 CORPUS_SOURCES = [
     ("data/raw/4. QuyCheDaoTaoDHSG 2021.pdf", "Quy chế đào tạo 2021"),
     # ("data/raw/qd_sua_doi_2025.pdf", "QĐ sửa đổi 2025"),
@@ -31,6 +33,8 @@ def has_text_layer(pdf_path: str, min_chars: int = 50) -> bool:
 
 def load_scanned_pdf(pdf_path: str, source_name: str, lang: str = "vie", dpi: int = 300) -> list[Document]:
     path = Path(pdf_path)
+    if not path.is_absolute():
+        path = ROOT / path
     if not path.exists():
         raise ScannedPDFLoadError(f"Không tìm thấy file: {pdf_path}")
 
