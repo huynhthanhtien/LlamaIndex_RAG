@@ -1,6 +1,9 @@
 import json
 import sys
 from pathlib import Path
+from typing import Any
+
+from llama_index.core.retrievers import BaseRetriever
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
@@ -12,7 +15,7 @@ QUESTIONS_FILE = ROOT / "eval" / "test_questions_01.json"
 K_VALUES = (1, 3, 5, 10)
 
 
-def evaluate(questions: list[dict], retriever) -> dict[int, float]:
+def evaluate(questions: list[dict[str, Any]], retriever: BaseRetriever) -> dict[int, float]:
     hits = {k: 0 for k in K_VALUES}
     for q in questions:
         retrieved = [n.node.metadata.get("dieu") for n in retriever.retrieve(q["question"])]

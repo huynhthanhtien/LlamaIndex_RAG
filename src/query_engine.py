@@ -2,6 +2,8 @@ import sys
 from pathlib import Path
 
 from llama_index.core import PromptTemplate, Settings, VectorStoreIndex
+from llama_index.core.base.response.schema import RESPONSE_TYPE, Response, StreamingResponse
+from llama_index.core.response_synthesizers import ResponseMode
 from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.llms.ollama import Ollama
 
@@ -32,14 +34,14 @@ def build_query_engine(index: VectorStoreIndex, cfg: RAGConfig) -> RetrieverQuer
     return RetrieverQueryEngine.from_args(
         retriever=get_retriever(index, cfg),
         llm=llm,
-        response_mode=cfg.response_mode,
+        response_mode=ResponseMode(cfg.response_mode),
         streaming=cfg.streaming,
         text_qa_template=QA_PROMPT,
         node_postprocessors=get_postprocessors(cfg),
     )
 
 
-def format_sources(response) -> str:
+def format_sources(response: RESPONSE_TYPE) -> str:
     dieu = []
     for n in response.source_nodes:
         d = n.node.metadata.get("dieu")
@@ -50,11 +52,11 @@ def format_sources(response) -> str:
 
 def ask(engine: RetrieverQueryEngine, question: str, cfg: RAGConfig) -> None:
     response = engine.query(question)
-    if cfg.streaming:
+    if isinstance(response, StreamingResponse):
         for token in response.response_gen:
             print(token, end="", flush=True)
         print()
-    else:
+    elif isinstance(response, Response):
         print(response.response)
     print(f"Nguồn: {format_sources(response)}")
 

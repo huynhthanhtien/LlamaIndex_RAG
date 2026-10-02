@@ -3,6 +3,7 @@ import re
 import sys
 from pathlib import Path
 
+import torch
 from llama_index.core import Document, Settings, StorageContext, VectorStoreIndex, load_index_from_storage
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
@@ -38,7 +39,13 @@ def load_documents() -> list[Document]:
 
 
 def setup_embedding(cfg: RAGConfig) -> None:
-    Settings.embed_model = HuggingFaceEmbedding(model_name=cfg.embed_model_name, device=cfg.embed_device)
+    fp16 = cfg.use_fp16 and cfg.embed_device == "cuda"
+    Settings.embed_model = HuggingFaceEmbedding(
+        model_name=cfg.embed_model_name,
+        device=cfg.embed_device,
+        embed_batch_size=4 if fp16 else 10,  # batch nhỏ để không tràn VRAM trên card 4 GB
+        model_kwargs={"torch_dtype": torch.float16} if fp16 else {},
+    )
 
 
 def build_or_load_index(cfg: RAGConfig, rebuild: bool = False) -> VectorStoreIndex:
@@ -47,7 +54,9 @@ def build_or_load_index(cfg: RAGConfig, rebuild: bool = False) -> VectorStoreInd
 
     if not rebuild and (persist_dir / "docstore.json").exists():
         logger.info(f"Load Index từ {persist_dir}")
-        return load_index_from_storage(StorageContext.from_defaults(persist_dir=str(persist_dir)))
+        index = load_index_from_storage(StorageContext.from_defaults(persist_dir=str(persist_dir)))
+        assert isinstance(index, VectorStoreIndex)
+        return index
 
     nodes = parse_by_dieu(load_documents())
     logger.info(f"Build Index mới từ {len(nodes)} node: {validate_nodes(nodes)}")

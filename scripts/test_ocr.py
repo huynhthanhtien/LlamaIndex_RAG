@@ -25,7 +25,7 @@ def ocr_full_to_md(pdf_path: str, dpi: int = 300, output_dir: str = "data/ocr"):
 
         for i, page in enumerate(pages, start=1):
             print(f"  Đang OCR trang {i}/{len(pages)}...")
-            text = pytesseract.image_to_string(page, lang="vie")
+            text = str(pytesseract.image_to_string(page, lang="vie"))
             tong_ky_tu += len(text)
 
             f.write(f"## Trang {i} ({len(text)} ký tự)\n\n")
