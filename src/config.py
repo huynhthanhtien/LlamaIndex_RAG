@@ -1,6 +1,6 @@
 import os 
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -24,6 +24,9 @@ class RAGConfig:
     # --- Reranker (tuỳ chọn — để trống nếu chưa dùng) ---
     reranker_model_name: str | None = None
     reranker_top_n: int = 3
+
+    # --- Model server (tuỳ chọn) — có URL thì gọi src/model_server.py thay vì nạp model tại chỗ ---
+    model_server_url: str | None = field(default_factory=lambda: os.environ.get("MODEL_SERVER_URL") or None)
 
     # --- Retriever ---
     similarity_top_k: int = 10

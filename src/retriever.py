@@ -1,9 +1,13 @@
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from llama_index.core import VectorStoreIndex
 from llama_index.core.postprocessor.types import BaseNodePostprocessor
 from llama_index.core.retrievers import BaseRetriever
+
+if TYPE_CHECKING:
+    from llama_index.core.postprocessor import SentenceTransformerRerank
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from config import RAGConfig, get_config
@@ -18,6 +22,13 @@ def get_postprocessors(cfg: RAGConfig) -> list[BaseNodePostprocessor]:
     """Rerank chỉ bật khi config đặt reranker_model_name."""
     if not cfg.reranker_model_name:
         return []
+    if cfg.model_server_url:
+        from remote_models import RemoteRerank
+        return [RemoteRerank(base_url=cfg.model_server_url, top_n=cfg.reranker_top_n)]
+    return [make_local_reranker(cfg)]
+
+
+def make_local_reranker(cfg: RAGConfig) -> "SentenceTransformerRerank":
     from llama_index.core.postprocessor import SentenceTransformerRerank
     fp16 = cfg.use_fp16 and cfg.embed_device == "cuda"
     reranker = SentenceTransformerRerank(
@@ -30,7 +41,7 @@ def get_postprocessors(cfg: RAGConfig) -> list[BaseNodePostprocessor]:
         # tránh việc bản fp32 chiếm VRAM cùng lúc với embedding (tràn card 4 GB).
         reranker._model.half().to(cfg.embed_device)  # pyright: ignore[reportPrivateUsage]
         reranker.device = cfg.embed_device
-    return [reranker]
+    return reranker
 
 
 if __name__ == "__main__":
