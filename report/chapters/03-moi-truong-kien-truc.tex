@@ -19,6 +19,7 @@ File \texttt{requirements.txt} liệt kê tên gói mà không ghim phiên bản
     \texttt{llama-index-embeddings-huggingface} & 0.8.0 & Nạp mô hình embedding \\
     \texttt{llama-index-llms-ollama} & 0.11.0 & Kết nối LLM qua Ollama \\
     \texttt{sentence-transformers} & 6.0.1 & Chạy embedding/reranker \\
+    \texttt{torch} (cài kèm) & 2.14.0 (CUDA 13.0) & Chạy mô hình trên GPU \\
     \texttt{sentencepiece}, \texttt{protobuf} & 0.2.2, không đo & Phụ thuộc của tokenizer \\
     \texttt{pytesseract} & 0.3.13 & Gọi Tesseract từ Python \\
     \texttt{pdf2image} & 1.17.0 & Render PDF thành ảnh \\
@@ -34,7 +35,8 @@ File \texttt{requirements.txt} liệt kê tên gói mà không ghim phiên bản
 \begin{itemize}
   \item \textbf{Tesseract OCR} 5.5.3, đã xác nhận có gói ngôn ngữ \texttt{vie}.
   \item \textbf{poppler-utils} (\texttt{pdftoppm} 26.01.0), cần cho \texttt{pdf2image}.
-  \item \textbf{Ollama} để chạy LLM cục bộ (script \texttt{pull\_models.sh} kiểm tra và báo lỗi nếu chưa cài).
+  \item \textbf{Ollama} để chạy LLM (script \texttt{pull\_models.sh} kiểm tra và báo lỗi nếu chưa cài).
+  \item Python 3.14.6 trong \texttt{venv}.
 \end{itemize}
 
 \section{Cài đặt và Hello World}
@@ -84,24 +86,36 @@ Kết quả chạy thật:
 
 \begin{lstlisting}[caption={Cấu trúc thư mục dự án.}, label={lst:cau-truc-thu-muc}]
 .
-|-- app/            # Giao dien Gradio (dang xay dung, moi co app/assets)
+|-- app/            # Giao dien Gradio (chua co ma, moi co app/assets)
 |-- data/
-|   |-- raw/        # PDF goc
-|   |-- ocr/        # Ket qua OCR dang Markdown
-|   `-- processed/  # Du lieu tien xu ly
-|-- docs/           # Tai lieu, giao trinh
+|   |-- raw/        # PDF goc: Quy che dao tao 2021, QD 3183/2025
+|   |-- ocr/        # Ban OCR dang Markdown cua Quy che 2021
+|   `-- processed/  # (trong)
 |-- eval/
-|   |-- test_questions_01.json   # 31 cau hoi kiem thu
+|   |-- evaluate.py              # Do Recall@k
+|   |-- test_questions_01.json   # 31 cau hoi
+|   |-- test_questions_02.json   # 10 cau hoi ve QD sua doi 3183/2025
 |   `-- results/
-|-- scripts/        # hello_world.py, test_ocr.py, check_model_memory.py, pull_models.sh
-|-- src/            # config.py, ingestion.py, node_parser.py
-|-- storage/vector_index/        # noi luu chi muc (hien chua co)
+|-- notebooks/      # Chay thu pipeline, chay tren GPU thue
+|-- scripts/        # hello_world.py, test_ocr.py, check_model_memory.py,
+|                   # pull_models.sh, manager.py
+|-- src/
+|   |-- config.py        # RAGConfig + 2 profile
+|   |-- ingestion.py     # OCR PDF -> Document
+|   |-- node_parser.py   # Document -> Node theo Dieu
+|   |-- index_builder.py # Node -> VectorStoreIndex (luu xuong dia)
+|   |-- retriever.py     # Retriever top-k + reranker (tuy chon)
+|   |-- query_engine.py  # Prompt + LLM (Ollama) + trich dan Dieu
+|   `-- pipeline.py      # Hoi dap qua dong lenh
+|-- storage/vector_index/        # Chi muc da lap (528 KB)
 `-- requirements.txt
 \end{lstlisting}
 
+Mọi script chạy từ thư mục gốc của repository, ví dụ \texttt{RAG\_PROFILE=server python src/pipeline.py}. Các module trong \texttt{src/} vừa là thư viện (được module sau \texttt{import}) vừa có khối \texttt{\_\_main\_\_} để chạy thử riêng từng giai đoạn.
+
 \section{Cấu hình tập trung và hai profile}
 
-Toàn bộ tham số RAG nằm trong \texttt{src/config.py} dưới dạng một \texttt{dataclass} \texttt{RAGConfig}. Có hai profile sẵn: \texttt{local} (máy cá nhân, mô hình nhỏ) và \texttt{server} (máy chủ GPU, mô hình lớn hơn và có reranker). Profile được chọn bằng biến môi trường \texttt{RAG\_PROFILE}, mặc định là \texttt{local}; giá trị không hợp lệ làm hàm \texttt{get\_config()} ném \texttt{ValueError}.
+Toàn bộ tham số RAG nằm trong \texttt{src/config.py} dưới dạng một \texttt{dataclass} \texttt{RAGConfig}. Có hai profile sẵn: \texttt{local} (máy cá nhân, mô hình nhỏ) và \texttt{server} (mô hình lớn hơn, có reranker, LLM chạy trên máy GPU thuê). Profile được chọn bằng biến môi trường \texttt{RAG\_PROFILE} (đọc cả từ file \texttt{.env}), mặc định là \texttt{local}; giá trị không hợp lệ làm hàm \texttt{get\_config()} ném \texttt{ValueError}.
 
 \begin{lstlisting}[language=Python, caption={Khai báo \texttt{dataclass RAGConfig} trong \texttt{src/config.py}.}, label={lst:ragconfig}]
 @dataclass
@@ -126,50 +140,60 @@ class RAGConfig:
     \toprule
     \textbf{Tham số} & \textbf{Profile \texttt{local}} & \textbf{Profile \texttt{server}} \\
     \midrule
-    Embedding & \texttt{bkai-foundation-models/ vietnamese-bi-encoder} & \texttt{AITeamVN/Vietnamese\_Embedding} \\
+    Embedding & \texttt{bkai-foundation-models/ vietnamese-bi-encoder} (768 chiều) & \texttt{AITeamVN/Vietnamese\_Embedding} (1024 chiều) \\
     Thiết bị embedding & \texttt{cuda} & \texttt{cuda} \\
-    LLM (Ollama) & \texttt{qwen3:4b} & \texttt{qwen3:8b} \\
-    Reranker & không dùng & \texttt{AITeamVN/Vietnamese\_Reranker} \\
+    LLM (Ollama) & \texttt{qwen3:4b}, \texttt{localhost:11434} & \texttt{qwen3:8b}, địa chỉ lấy từ \texttt{OLLAMA\_BASE\_URL} \\
+    Reranker & không dùng & \texttt{AITeamVN/Vietnamese\_Reranker}, giữ top 3 \\
+    Retriever & top-10 & top-10 \\
     \bottomrule
   \end{tabularx}
   \caption{Hai profile cấu hình trong \texttt{src/config.py}.}
 \end{table}
 
-Một điểm cần lưu ý trong mã hiện tại: \texttt{corpus\_sources} mặc định của \texttt{config.py} trỏ tới các file \texttt{quy\_che\_dao\_tao\_2021.pdf} và \texttt{qd\_sua\_doi\_2025.pdf}, trong khi \texttt{ingestion.py} tự khai báo danh sách nguồn riêng và trong \texttt{data/raw} chỉ có \texttt{4. QuyCheDaoTaoDHSG 2021.pdf}. Hai nơi khai báo chưa thống nhất; đây là việc cần dọn ở các bước sau.
+Hai profile dùng chung \texttt{persist\_dir = "storage/vector\_index"}. Vì hai mô hình embedding cho vector khác số chiều, chỉ mục đang lưu (lập bằng profile \texttt{server}, 1024 chiều) không dùng được cho profile \texttt{local}; muốn chuyển profile phải chạy \texttt{index\_builder.py --rebuild}, hoặc tách thư mục chỉ mục theo profile (việc nên làm).
+
+Một điểm chưa thống nhất còn lại: trường \texttt{corpus\_sources} của \texttt{RAGConfig} trỏ tới hai file \texttt{quy\_che\_dao\_tao\_2021.pdf} và \texttt{qd\_sua\_doi\_2025.pdf} không tồn tại, và hiện không module nào đọc trường này. Nguồn dữ liệu thực tế được khai báo cứng ở hai nơi: \texttt{OCR\_FILE} trong \texttt{index\_builder.py} và \texttt{CORPUS\_SOURCES} trong \texttt{ingestion.py}.
+
+\section{Phần cứng và bộ nhớ GPU}
+\label{sec:phan-cung}
+
+Máy phát triển dùng card rời NVIDIA RTX A2000 Laptop (4 GB VRAM, khoảng 3{,}7 GB khả dụng cho PyTorch). Kiểm tra bằng cách nạp mô hình qua đúng hàm của dự án và in thiết bị của các tham số cho thấy cả mô hình embedding lẫn reranker đều nằm trên \texttt{cuda:0}. LLM không chạy trên máy này: ở profile \texttt{server}, Ollama chạy trên máy GPU thuê từ dịch vụ ckey.vn, được quản lý bằng \texttt{scripts/manager.py}.
+
+Với mã nguồn hiện tại (nạp mô hình ở độ chính xác fp32), profile \texttt{server} \textbf{không nạp đồng thời} được embedding và reranker trên card 4 GB: khi đo, tiến trình đã chiếm khoảng 3{,}5 GB và báo \texttt{CUDA out of memory} lúc nạp mô hình thứ hai. Để chạy được phép đo có reranker ở Chương 5, embedding được đặt lên CPU và reranker trên GPU. Một nhánh phát triển khác của dự án đã thử nạp cả hai mô hình ở fp16: embedding còn khoảng 1{,}1 GB, cả hai cùng nằm trên GPU tổng khoảng 2{,}2 GB. Thay đổi này chưa được gộp vào nhánh chính nên không trình bày chi tiết ở đây.
 
 \section{Các script hỗ trợ}
 
 \begin{itemize}
-  \item \texttt{scripts/test\_ocr.py}: render toàn bộ một PDF và OCR ra file Markdown trong \texttt{data/ocr/}, kèm số trang và tổng số ký tự. Đây là script tạo ra bản OCR mà \texttt{node\_parser.py} dùng để kiểm tra.
+  \item \texttt{scripts/test\_ocr.py}: render toàn bộ một PDF và OCR ra file Markdown trong \texttt{data/ocr/}, kèm số trang và tổng số ký tự. Đây là script tạo ra bản OCR \texttt{data/ocr/4.\ QuyCheDaoTaoDHSG 2021.md} mà \texttt{index\_builder.py} dùng làm đầu vào.
   \item \texttt{scripts/check\_model\_memory.py}: đo RAM/VRAM khi nạp một mô hình embedding hoặc reranker (nhận \texttt{repo\_id}, \texttt{--type}, \texttt{--device}), giúp chọn mô hình vừa với phần cứng.
   \item \texttt{scripts/pull\_models.sh}: tải LLM qua Ollama và tải embedding/reranker từ HuggingFace theo profile, đồng bộ với \texttt{config.py}; dừng với thông báo lỗi nếu thiếu \texttt{ollama}, daemon chưa chạy hoặc thiếu \texttt{huggingface\_hub}.
+  \item \texttt{scripts/manager.py}: công cụ dòng lệnh gom các thao tác với dịch vụ GPU thuê (xem, thuê, khởi động lại, xóa máy; xem số dư), gọi thử Ollama và chạy một server embedding.
 \end{itemize}
 
 \section{Minh chứng kiến trúc}
 
-Chuỗi xử lý của đồ án gồm sáu giai đoạn. Hình \ref{fig:pipeline} thể hiện chuỗi này; ô nét liền là module đã có mã chạy được, ô nét đứt là chưa có mã nguồn.
+Chuỗi xử lý của đồ án gồm sáu giai đoạn. Hình \ref{fig:pipeline} thể hiện chuỗi này và file mã nguồn tương ứng; cả sáu giai đoạn đều đã có mã chạy được. Pha chuẩn bị (1--3) chạy một lần và lưu chỉ mục xuống đĩa; pha truy vấn (4--5) chạy mỗi câu hỏi; giai đoạn 6 dùng lại retriever của giai đoạn 4.
 
 \begin{figure}[H]
   \centering
   \begin{tikzpicture}[
       node distance=6mm,
       done/.style={rectangle, draw, rounded corners, minimum width=2.6cm, minimum height=1.1cm, align=center, font=\small},
-      todo/.style={rectangle, draw, dashed, rounded corners, minimum width=2.6cm, minimum height=1.1cm, align=center, font=\small},
       arr/.style={-{Stealth}, thick}
     ]
-    \node[done] (n1) {1. Ingestion\\ \scriptsize ingestion.py};
+    \node[done] (n1) {1. Ingestion\\ \scriptsize ingestion.py / OCR};
     \node[done, right=of n1] (n2) {2. Node\\ \scriptsize node\_parser.py};
-    \node[todo, right=of n2] (n3) {3. Index\\ \scriptsize (chưa có)};
-    \node[todo, below=8mm of n1] (n4) {4. Retriever\\ \scriptsize (chưa có)};
-    \node[todo, right=of n4] (n5) {5. Synthesis\\ \scriptsize (chưa có)};
-    \node[todo, right=of n5] (n6) {6. Evaluation\\ \scriptsize (mới có bộ câu hỏi)};
+    \node[done, right=of n2] (n3) {3. Index\\ \scriptsize index\_builder.py};
+    \node[done, below=8mm of n1] (n4) {4. Retriever\\ \scriptsize retriever.py};
+    \node[done, right=of n4] (n5) {5. Synthesis\\ \scriptsize query\_engine.py};
+    \node[done, right=of n5] (n6) {6. Evaluation\\ \scriptsize eval/evaluate.py};
     \draw[arr] (n1) -- (n2);
     \draw[arr] (n2) -- (n3);
     \draw[arr] (n3.south) -- ++(0,-3mm) -| ([yshift=0mm]n4.north);
     \draw[arr] (n4) -- (n5);
-    \draw[arr] (n5) -- (n6);
+    \draw[arr, dashed] (n4.south) -- ++(0,-4mm) -| (n6.south);
   \end{tikzpicture}
-  \caption{Sáu giai đoạn của pipeline RAG; nét liền: đã có mã chạy được, nét đứt: chưa triển khai.}
+  \caption{Sáu giai đoạn của pipeline RAG và file mã nguồn tương ứng; mũi tên nét đứt: bộ đánh giá gọi trực tiếp retriever.}
   \label{fig:pipeline}
 \end{figure}
 
@@ -178,18 +202,19 @@ Chuỗi xử lý của đồ án gồm sáu giai đoạn. Hình \ref{fig:pipelin
   \small
   \begin{tabularx}{\textwidth}{l l X l}
     \toprule
-    \textbf{Giai đoạn} & \textbf{Mức} & \textbf{File hiện có} & \textbf{Chạy được} \\
+    \textbf{Giai đoạn} & \textbf{Mức} & \textbf{File} & \textbf{Chạy được} \\
     \midrule
-    1. Ingestion & Bắt buộc lõi & \texttt{src/ingestion.py} & Có \\
+    1. Ingestion & Bắt buộc lõi & \texttt{src/ingestion.py}, \texttt{scripts/test\_ocr.py} & Có \\
     2. Node & Bắt buộc lõi & \texttt{src/node\_parser.py} & Có \\
-    3. Index & Bắt buộc lõi & không có & --- \\
-    4. Retriever & Bắt buộc lõi & không có & --- \\
-    5. Response Synthesis & Bắt buộc lõi & không có (chỉ có tham số trong \texttt{config.py}) & --- \\
-    6. Evaluation & Bắt buộc lõi & chỉ có \texttt{eval/test\_questions\_01.json} & Chưa có code chạy \\
+    3. Index & Bắt buộc lõi & \texttt{src/index\_builder.py} & Có \\
+    4. Retriever & Bắt buộc lõi & \texttt{src/retriever.py} & Có \\
+    5. Response Synthesis & Bắt buộc lõi & \texttt{src/query\_engine.py}, \texttt{src/pipeline.py} & Có \\
+    6. Evaluation & Bắt buộc lõi & \texttt{eval/evaluate.py} & Có (chỉ truy hồi) \\
+    Rerank & Chọn thêm & \texttt{src/retriever.py} & Có (profile \texttt{server}) \\
+    Giao diện web & Chọn thêm & \texttt{app/} (trống) & --- \\
     \bottomrule
   \end{tabularx}
   \caption{Trạng thái mã nguồn của từng giai đoạn.}
 \end{table}
 
-\chuatrienkhai{Index, Retriever, Response Synthesis (\texttt{QueryEngine}) và bộ chạy đánh giá chưa có file mã nguồn. Thư mục \texttt{storage/vector\_index} hiện chưa chứa chỉ mục nào.}
-
+\chuatrienkhai{Giao diện Gradio (thư mục \texttt{app/} mới có \texttt{assets}), việc nạp nhiều văn bản vào cùng chỉ mục, và bộ đánh giá tự động cho \emph{câu trả lời} của LLM (hiện chỉ đánh giá truy hồi).}

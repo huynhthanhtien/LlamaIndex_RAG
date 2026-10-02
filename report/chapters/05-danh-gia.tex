@@ -1,0 +1,154 @@
+\chapter{Đánh giá}
+\label{ch:danh-gia}
+
+
+Chương này đo chất lượng hệ thống theo hai tầng như đã nêu ở Chương 2: (1) \emph{truy hồi} --- đo tự động bằng bộ câu hỏi có nhãn; (2) \emph{câu trả lời} --- phân tích thủ công nhật ký hỏi đáp, đối chiếu từng câu trả lời với văn bản quy chế. Toàn bộ số liệu dưới đây là kết quả chạy thật trên máy phát triển (RTX A2000 Laptop 4 GB).
+
+\section{Đánh giá truy hồi}
+
+\subsection{Phương pháp}
+
+Script \texttt{eval/evaluate.py} nạp chỉ mục, lấy retriever của profile đang chọn, và với mỗi câu hỏi kiểm tra Điều đúng có nằm trong $k$ Node đầu tiên hay không:
+
+\begin{lstlisting}[language=Python, caption={Hàm tính Recall@$k$ trong \texttt{eval/evaluate.py}.}, label={lst:evaluate}]
+K_VALUES = (1, 3, 5, 10)
+
+def evaluate(questions: list[dict], retriever) -> dict[int, float]:
+    hits = {k: 0 for k in K_VALUES}
+    for q in questions:
+        retrieved = [n.node.metadata.get("dieu") for n in retriever.retrieve(q["question"])]
+        for k in K_VALUES:
+            if q["dieu_dung"] in retrieved[:k]:
+                hits[k] += 1
+        if q["dieu_dung"] not in retrieved:
+            print(f"MISS: {q['question']} | (*@đúng: Điều@*) {q['dieu_dung']} | (*@truy hồi:@*) {retrieved}")
+    return {k: hits[k] / len(questions) for k in K_VALUES}
+\end{lstlisting}
+
+Hàm so khớp bằng metadata \texttt{dieu} chứ không bằng nội dung văn bản, nên chỉ đúng khi mỗi số Điều chỉ xuất hiện một lần trong chỉ mục --- điều kiện đã được bảo đảm ở Mục \ref{sec:index} (21 Node, mỗi Điều một lần). \texttt{evaluate.py} chỉ đo retriever và chỉ đọc bộ câu hỏi thứ nhất. Để có thêm MRR, chạy bộ câu hỏi thứ hai và đo tác động của reranker, nhóm dùng thêm một script đo tạm (không lưu trong repository) gọi lại đúng các hàm \texttt{build\_or\_load\_index}, \texttt{get\_retriever} và \texttt{get\_postprocessors} của dự án, với cùng định nghĩa Recall@$k$.
+
+Ba cấu hình được đo:
+
+\begin{itemize}
+  \item \textbf{local}: \texttt{vietnamese-bi-encoder}, top-10, không rerank. Chỉ mục được lập riêng cho phép đo vì chỉ mục đang lưu là 1024 chiều.
+  \item \textbf{server}: \texttt{Vietnamese\_Embedding}, top-10, không rerank. Đây cũng là cấu hình mà \texttt{eval/evaluate.py} đo khi \texttt{RAG\_PROFILE=server}.
+  \item \textbf{server + rerank}: như trên, sau đó \texttt{Vietnamese\_Reranker} chấm lại 10 Node và giữ 3. Do card 4 GB không chứa đồng thời hai mô hình ở fp32 (Mục \ref{sec:phan-cung}), embedding chạy trên CPU và reranker trên GPU trong phép đo này.
+\end{itemize}
+
+\subsection{Kết quả}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l l *{5}{>{\centering\arraybackslash}X}}
+    \toprule
+    \textbf{Bộ câu hỏi} & \textbf{Cấu hình} & \textbf{R@1} & \textbf{R@3} & \textbf{R@5} & \textbf{R@10} & \textbf{MRR} \\
+    \midrule
+    Bộ 01 (31 câu)
+      & local           & 64,5\% & 87,1\%  & 90,3\%  & 100\% & 0,770 \\
+      & server          & 87,1\% & 100\%   & 100\%   & 100\% & 0,935 \\
+      & server + rerank & 87,1\% & 96,8\%  & ---     & ---   & 0,919 \\
+    \midrule
+    Bộ 02 (10 câu)
+      & local           & 20,0\% & 50,0\%  & 70,0\%  & 90,0\% & 0,433 \\
+      & server          & 70,0\% & 90,0\%  & 90,0\%  & 90,0\% & 0,800 \\
+      & server + rerank & 70,0\% & 90,0\%  & ---     & ---    & 0,800 \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Kết quả truy hồi. Với rerank, chỉ 3 Node được giữ lại nên R@5 và R@10 không có nghĩa.}
+  \label{tab:recall}
+\end{table}
+
+Thời gian truy hồi trung bình mỗi câu (đã nạp sẵn mô hình, trên GPU): khoảng 8 ms với profile \texttt{local} và 17--50 ms với profile \texttt{server}. Cấu hình có rerank mất khoảng 1{,}2 giây mỗi câu, nhưng con số này gồm cả việc embedding câu hỏi trên CPU nên không dùng để kết luận về chi phí riêng của reranker.
+
+\subsection{Phân tích}
+
+\paragraph{Mô hình embedding quyết định chất lượng truy hồi.} Trên bộ 01, chỉ đổi mô hình embedding đã nâng Recall@1 từ 64,5\% lên 87,1\% và MRR từ 0,770 lên 0,935. Với profile \texttt{server}, Điều đúng luôn nằm trong top 3 cho cả 31 câu. Với profile \texttt{local}, phải tới $k=10$ (tức gần một nửa trong 21 Điều) mới tìm thấy hết; bốn câu trượt khỏi top 3, ví dụ ``Một học phần được xếp lịch tối đa bao nhiêu giờ mỗi tuần?'' (đúng: Điều 6, nhận được Điều 4, 7, 3). Vì $k=10$ nên LLM vẫn thấy Điều đúng trong ngữ cảnh ở cả hai profile, nhưng với profile \texttt{local} nó lẫn giữa nhiều Điều không liên quan hơn.
+
+\paragraph{Reranker không cải thiện trên dữ liệu hiện tại.} Trên bộ 01, reranker giữ nguyên Recall@1 và \emph{làm tụt} một câu ra khỏi top 3: ``Đào tạo vừa làm vừa học kéo dài hơn chính quy bao nhiêu phần trăm?'' (đúng: Điều 2) bị xếp sau Điều 4, 20, 5 --- Điều 4 có tên ``Hình thức đào tạo'' và nói nhiều về vừa làm vừa học, nên cross-encoder đánh giá cao hơn. Trên bộ 02, kết quả không đổi. Lý do hợp lý là kho chỉ có 21 Node, retriever đã đặt Điều đúng vào top 3 ở hầu hết câu hỏi, nên reranker gần như không còn chỗ để cải thiện mà vẫn có thể làm hỏng. Reranker chỉ đáng giá khi kho lớn hơn nhiều (nhiều văn bản, Node nhỏ hơn); với dữ liệu hiện tại nó tốn thêm một mô hình trên GPU và loại bỏ 7 trong 10 Node mà không đem lại lợi ích đo được.
+
+\paragraph{Số liệu của bộ 02 cao hơn thực tế.} Bộ 02 hỏi về nội dung \emph{sửa đổi} bởi Quyết định 3183/2025: thời hạn rút học phần theo quy định mới, thang điểm chữ bổ sung B+, C+, D+\ldots{} Quyết định này \emph{chưa có trong chỉ mục}; văn bản Quy chế 2021 không hề chứa ``B+'', ``C+'' hay ``D+''. Nhãn \texttt{dieu\_dung} của bộ 02 là số Điều của Quy chế 2021 bị sửa đổi (ví dụ Điều 9 về thang điểm), nên retriever ``trúng'' Điều 9 của bản cũ được tính là đúng dù nội dung Node đó không chứa đáp án. Câu cuối của bộ 02 có nhãn ``2 (QĐ 3183)'' không thể khớp, nên Recall tối đa là 90\%. Như vậy bộ 02 hiện chỉ cho biết retriever tìm đúng \emph{Điều cần sửa đổi}; muốn trả lời được các câu này phải nạp Quyết định 3183/2025 vào chỉ mục (Mục \ref{sec:huong-phat-trien}).
+
+\section{Đánh giá câu trả lời}
+
+\subsection{Dữ liệu}
+
+Nhật ký \texttt{eval/results/test-basic.md} ghi lại một phiên chạy \texttt{src/pipeline.py} ở profile \texttt{server} (có reranker, nên mỗi câu trả lời dựa trên 3 Điều): 56 câu hỏi do nhóm tự đặt theo cách sinh viên thật sự hỏi --- nhiều câu viết tắt (``bao nhiêu chỉ''), sai chính tả (``xuất sắt'', ``dạt diều khiện trúng tiển''), câu hỏi nối tiếp (``còn kỹ sư''), và cả câu ngoài phạm vi (học phí, điểm rèn luyện) hoặc không phải câu hỏi (``chán''). Bộ câu hỏi này không có nhãn nên được chấm thủ công bằng cách đối chiếu với bản OCR của Quy chế.
+
+Trong 56 câu, hệ thống trả lời ``Không tìm thấy trong quy chế'' ở 29 câu (52\%) và đưa ra câu trả lời ở 27 câu.
+
+\subsection{Các trường hợp tiêu biểu}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{>{\hsize=0.95\hsize}X >{\hsize=0.95\hsize}X >{\hsize=1.1\hsize}X l}
+    \toprule
+    \textbf{Câu hỏi} & \textbf{Hệ thống trả lời} & \textbf{Quy chế 2021 quy định} & \textbf{Đánh giá} \\
+    \midrule
+    Học cử nhân cần bao nhiêu tín chỉ & Tối thiểu 120 tín chỉ & 120 tín chỉ (Điều 2) & Đúng \\
+    Muốn được B cần bao nhiêu điểm & Từ 7,0 đến 8,4 & B: 7,0--8,4 (Điều 9) & Đúng \\
+    Cảnh báo kỳ 1 và 3, kỳ 2 bình thường có bị buộc thôi học & Không, vì hai lần không liên tiếp & Buộc thôi học khi quá hai lần cảnh báo \emph{liên tiếp} (Điều 11) & Đúng \\
+    Mua bằng tiếng Anh giả nộp cho trường & Không được; buộc thôi học, thu hồi bằng & Như câu trả lời (Điều 19) & Đúng \\
+    \midrule
+    8,4 hệ 10 thì hệ 4 được bao nhiêu & 3,4 điểm & 8,4 là điểm B, B quy đổi thành 3 (Điều 9, 10) & Sai \\
+    Khối lượng học kỳ chính & Tối thiểu 30 tuần & 2 học kỳ chính \emph{cộng lại} tối thiểu 30 tuần (Điều 6) & Sai \\
+    Học bị F thì làm gì & Học lại; điểm lần học cuối là điểm chính thức & Điểm chính thức là điểm \emph{cao nhất} giữa các lần học (Điều 9) & Sai một phần \\
+    Học điểm P thì sao & P không tính vào điểm TB, ``quy đổi thành 0'' & P không được tính vào điểm TB (Điều 10 khoản 3), không quy đổi & Sai một phần \\
+    \midrule
+    Ra trường xuất sắc cần bao nhiêu điểm & Không tìm thấy & Từ 3,6 đến 4,0 (Điều 10), và Điều 10 \emph{có} trong 3 Điều nguồn & Từ chối sai \\
+    Còn kỹ sư (hỏi tiếp câu cử nhân) & Không tìm thấy & 150 tín chỉ; hỏi lại đầy đủ thì trả lời đúng & Từ chối sai \\
+    \midrule
+    Điểm rèn luyện là gì & Không tìm thấy & Không thuộc Quy chế đào tạo (văn bản riêng của CTSV) & Từ chối đúng \\
+    Bao nhiêu tiền một tín chỉ & Không tìm thấy & Không thuộc Quy chế đào tạo & Từ chối đúng \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Một số câu trả lời trong nhật ký, đối chiếu với văn bản Quy chế 2021.}
+  \label{tab:tra-loi}
+\end{table}
+
+\subsection{Phân tích}
+
+\paragraph{Prompt chống bịa hoạt động, nhưng hơi quá tay.} Với câu hỏi ngoài phạm vi (điểm rèn luyện, học phí, ``nên học lộ trình nào''), hệ thống từ chối thay vì bịa --- đúng mục tiêu đặt ra trong prompt. Nhưng tỷ lệ từ chối 52\% cao hơn tỷ lệ câu thật sự ngoài phạm vi: có những câu mà thông tin \emph{đã nằm trong ngữ cảnh} vẫn bị từ chối, như câu hỏi về điểm ra trường loại xuất sắc. Câu này viết sai chính tả (``xuất sắt''), cho thấy mô hình 8B dễ từ chối khi câu hỏi không khớp chữ với văn bản.
+
+\paragraph{Lỗi sai tập trung ở phép tính và chi tiết số.} Các câu trả lời sai đều có Điều đúng trong ngữ cảnh (truy hồi đúng), nhưng LLM đọc sai hoặc suy diễn thêm: tự ``quy đổi'' 8,4 thành 3,4 thay vì tra bảng quy đổi, đọc ``30 tuần cho 2 học kỳ'' thành ``30 tuần mỗi học kỳ'', hay nhớ quy tắc ``lấy điểm lần cuối'' (phổ biến ở nơi khác) thay cho ``lấy điểm cao nhất'' của SGU. Đây là loại lỗi nguy hiểm nhất vì câu trả lời vẫn trích dẫn đúng Điều nên trông rất đáng tin. Người dùng cần được nhắc đối chiếu Điều được trích, và nên thử prompt yêu cầu trích nguyên văn câu quy định trước khi kết luận.
+
+\paragraph{Không có ngữ cảnh hội thoại.} \texttt{pipeline.py} gửi từng câu hỏi độc lập cho \texttt{RetrieverQueryEngine}, nên câu nối tiếp ``còn kỹ sư'' (sau câu hỏi về cử nhân) không có đủ thông tin để truy hồi và bị từ chối; hỏi lại đầy đủ ``tôi học kỹ sư thì cần học bao nhiêu chỉ'' thì trả lời đúng 150 tín chỉ. Sinh viên thường hỏi nối tiếp như vậy, nên đây là hạn chế đáng kể.
+
+\paragraph{Câu trả lời không ổn định.} Cùng một câu hỏi ``tôi học rớt một môn nhưng các kỳ còn lại 4.0 thì có được xuất sắc không'' được hỏi hai lần, chỉ khác nhau một dấu hỏi chấm và khoảng trắng: lần đầu hệ thống từ chối, lần sau trả lời ``Không''. Câu trả lời ``Không'' này cũng chưa đúng với Quy chế: hạng tốt nghiệp xuất sắc chỉ bị hạ một mức khi khối lượng học lại vượt 5\% tổng tín chỉ hoặc người học bị kỷ luật (Điều 13), và điểm học lại được lấy theo lần cao nhất.
+
+\section{Hạn chế}
+
+\begin{itemize}
+  \item \textbf{Dữ liệu}: chỉ mục mới có một văn bản (Quy chế 2021). Các câu hỏi về quy định mới (Quyết định 3183/2025) và về công tác sinh viên (điểm rèn luyện, học bổng, học phí) chưa trả lời được.
+  \item \textbf{Đánh giá}: bộ câu hỏi có nhãn nhỏ (41 câu) và chỉ chấm truy hồi; câu trả lời mới được chấm thủ công trên một phiên. Bộ 02 cho số liệu cao hơn thực tế như đã phân tích.
+  \item \textbf{Hỏi đáp}: không nhớ ngữ cảnh hội thoại; LLM 8B sai ở các phép quy đổi số; câu trả lời chưa ổn định giữa các lần hỏi.
+  \item \textbf{Hạ tầng}: hai profile dùng chung thư mục chỉ mục dù khác số chiều vector; profile \texttt{server} ở fp32 không vừa card 4 GB khi bật reranker; LLM phụ thuộc máy GPU thuê.
+  \item \textbf{Giao diện}: mới có dòng lệnh, chưa có giao diện web.
+\end{itemize}
+
+\section{Hướng phát triển}
+\label{sec:huong-phat-trien}
+
+Một số việc đã được làm thử trên các nhánh phát triển khác của repository và chưa gộp vào nhánh chính:
+
+\begin{itemize}
+  \item Nạp embedding và reranker ở fp16 để cả hai cùng nằm trên card 4 GB (khoảng 2{,}2 GB).
+  \item Tách embedding và reranker thành một server HTTP (FastAPI) để nạp mô hình một lần, các tiến trình hỏi đáp và đánh giá chỉ gọi qua HTTP. Khi thử, vector do server trả về trùng với vector tính tại chỗ (cosine $\geq 0{,}99999$).
+  \item Tổ chức lại 305 tệp tài liệu đã thu thập từ website đào tạo, công tác sinh viên và các khoa thành năm nhóm (quy chế đào tạo, công tác sinh viên, chương trình đào tạo, khóa luận--thực tập, biểu mẫu), kèm file metadata ghi URL gốc và các bản trùng nội dung.
+\end{itemize}
+
+Các bước tiếp theo theo thứ tự ưu tiên:
+
+\begin{enumerate}
+  \item Nạp Quyết định 3183/2025 và gắn metadata tên văn bản, ngày hiệu lực vào Node; khi một Điều đã bị sửa đổi, ưu tiên nội dung mới. Sau đó sửa nhãn của bộ 02 để chấm theo văn bản, không chỉ theo số Điều.
+  \item Thay \texttt{RetrieverQueryEngine} bằng chat engine có viết lại câu hỏi theo lịch sử hội thoại (ví dụ chế độ \emph{condense question} của LlamaIndex) để xử lý câu hỏi nối tiếp.
+  \item Mở rộng sang các văn bản công tác sinh viên, kèm bộ định tuyến (router) chọn chỉ mục theo loại câu hỏi.
+  \item Xây bộ đánh giá câu trả lời có đáp án chuẩn, chấm tự động bằng LLM hoặc theo từ khóa số liệu.
+  \item Tách thư mục chỉ mục theo profile; gỡ trường \texttt{corpus\_sources} không dùng trong \texttt{config.py}.
+  \item Làm giao diện Gradio hiển thị câu trả lời kèm nguyên văn các Điều được trích.
+\end{enumerate}
+
+\section{Kết luận}
+
+Đồ án đã xây dựng được một hệ RAG hoàn chỉnh trên LlamaIndex cho Quy chế đào tạo SGU 2021, chạy bằng mô hình mở: OCR văn bản scan, cắt theo Điều, lập chỉ mục vector, truy hồi, sinh câu trả lời tiếng Việt có trích dẫn số Điều. Ở bước truy hồi, với mô hình \texttt{AITeamVN/Vietnamese\_Embedding}, Điều đúng nằm trong top 3 ở cả 31 câu của bộ 01 (Recall@1 87,1\%, MRR 0,935). Điểm yếu hiện nay không còn ở truy hồi mà ở dữ liệu (mới có một văn bản) và ở bước sinh: LLM 8B đôi khi đọc sai số liệu hoặc từ chối dù ngữ cảnh có đáp án. Đây là hai hướng cần tập trung tiếp theo.

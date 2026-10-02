@@ -18,16 +18,19 @@ Mục tiêu chung của đồ án là tìm hiểu LlamaIndex và vận dụng k�
   \item Nắm được vai trò và cách hoạt động của từng thành phần lõi trong LlamaIndex: \texttt{Document}, \texttt{Node}, \texttt{Index}, \texttt{Retriever}, \texttt{QueryEngine}/Response Synthesis.
   \item Xây dựng bước nạp dữ liệu từ PDF bản scan tiếng Việt (OCR) thành các \texttt{Document} có metadata.
   \item Xây dựng bước cắt văn bản theo cấu trúc pháp lý của quy chế (từng \emph{Điều}) thành các \texttt{Node} kèm số Điều.
-  \item Thiết lập kiến trúc dự án, cấu hình hai profile chạy (máy cá nhân và máy chủ GPU) và bộ câu hỏi kiểm thử để đánh giá về sau.
+  \item Lập chỉ mục vector bằng mô hình embedding tiếng Việt, truy hồi top-$k$ và sinh câu trả lời có trích dẫn số Điều bằng LLM chạy qua Ollama.
+  \item Đo chất lượng truy hồi bằng bộ câu hỏi có nhãn (Recall@$k$, MRR) và phân tích các lỗi của câu trả lời.
 \end{enumerate}
 
 \section{Phạm vi báo cáo}
 
-Báo cáo này bao gồm phần \emph{Bắt buộc lõi} của đồ án: kiến thức nền, thiết lập môi trường, kiến trúc, và các module đã có mã nguồn chạy được. Các phần \emph{chọn thêm} (như reranker, tinh chỉnh nâng cao) và bảng phủ kỹ thuật tổng hợp không nằm trong phạm vi tài liệu này. Ở thời điểm viết báo cáo, hai module \texttt{src/ingestion.py} và \texttt{src/node\_parser.py} đã chạy được; các module lập chỉ mục, truy hồi, tổng hợp câu trả lời và chạy đánh giá \textbf{chưa có mã nguồn} và được đánh dấu rõ trong báo cáo.
+Báo cáo bao gồm phần \emph{Bắt buộc lõi} của đồ án: kiến thức nền, thiết lập môi trường, kiến trúc, mã nguồn và kết quả chạy thật của cả sáu giai đoạn pipeline (nạp dữ liệu, cắt Node, lập chỉ mục, truy hồi, tổng hợp câu trả lời, đánh giá). Ở thời điểm viết, toàn bộ sáu giai đoạn đã có mã nguồn chạy được trên một văn bản là \emph{Quy chế đào tạo trình độ đại học của SGU năm 2021}; hệ thống hỏi đáp chạy được qua dòng lệnh (\texttt{src/pipeline.py}).
+
+Reranker là phần \emph{chọn thêm}: mã nguồn đã có (bật ở profile máy chủ) và báo cáo có đo tác động của nó lên truy hồi, nhưng không đi sâu. Những phần chưa làm --- giao diện web Gradio, mở rộng sang nhiều văn bản (Quyết định sửa đổi 3183/2025, các văn bản công tác sinh viên) và bộ định tuyến (router) giữa các nguồn --- được đánh dấu rõ là chưa triển khai.
 
 \section{Phương pháp thực hiện}
 
-Đồ án làm theo từng giai đoạn nhỏ; mỗi giai đoạn phải chạy được và cho kết quả quan sát được trước khi sang giai đoạn kế tiếp. Số liệu trong Chương 3 và 4 đều lấy từ việc chạy thật các script trong repository, không dùng số liệu minh họa. Khi một module chưa tồn tại, báo cáo nói rõ là chưa triển khai thay vì mô tả như thể đã xong.
+Đồ án làm theo từng giai đoạn nhỏ; mỗi giai đoạn phải chạy được và cho kết quả quan sát được trước khi sang giai đoạn kế tiếp. Số liệu trong Chương 3, 4 và 5 đều lấy từ việc chạy thật các script trong repository, không dùng số liệu minh họa. Khi một module chưa tồn tại, báo cáo nói rõ là chưa triển khai thay vì mô tả như thể đã xong.
 
 \section{Bố cục báo cáo}
 
@@ -35,6 +38,7 @@ Báo cáo này bao gồm phần \emph{Bắt buộc lõi} của đồ án: kiến
   \item \textbf{Chương 1} --- Giới thiệu đề tài (chương này).
   \item \textbf{Chương 2} --- Cơ sở lý thuyết: LLM và hạn chế, RAG, embedding, cắt đoạn, chỉ mục vector, tổng hợp câu trả lời, các khái niệm của LlamaIndex, OCR, và độ đo đánh giá truy hồi.
   \item \textbf{Chương 3} --- Thiết lập môi trường và kiến trúc dự án.
-  \item \textbf{Chương 4} --- Bản chất công nghệ: mã nguồn thật và kết quả chạy thật của các module lõi.
+  \item \textbf{Chương 4} --- Bản chất công nghệ: mã nguồn thật và kết quả chạy thật của sáu module lõi.
+  \item \textbf{Chương 5} --- Đánh giá: số liệu truy hồi trên hai bộ câu hỏi, so sánh hai profile và tác động của reranker, phân tích lỗi câu trả lời, hạn chế và hướng phát triển.
 \end{itemize}
 
