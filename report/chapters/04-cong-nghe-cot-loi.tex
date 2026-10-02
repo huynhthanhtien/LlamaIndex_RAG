@@ -71,7 +71,7 @@ Kiểm tra các trích đoạn in ra cho thấy OCR chưa hoàn hảo. Trang 1 n
 
 \subsection{Vị trí trong đồ án}
 
-Đây là giai đoạn 1 của pipeline. Đầu ra là danh sách \texttt{Document} theo trang, mang metadata nguồn để về sau có thể trích dẫn ``Quy chế đào tạo 2021, trang $N$''. Một hạn chế cần ghi nhận: đầu ra theo trang có thể chia đôi một Điều nằm giữa hai trang, và hiện chưa có bước nối các trang lại trước khi cắt Điều.
+Đây là giai đoạn 1 của pipeline. Đầu ra của \texttt{ingestion.py} là danh sách \texttt{Document} theo trang, mang metadata nguồn. Đầu ra theo trang có nhược điểm là một Điều nằm vắt qua hai trang sẽ bị chia đôi. Vì vậy, khi lập chỉ mục, hệ thống \emph{không} dùng trực tiếp đầu ra theo trang mà dùng hàm \texttt{load\_documents()} trong \texttt{index\_builder.py} (Mục \ref{sec:index}): hàm này đọc bản OCR đã lưu, nối toàn bộ các trang thành một \texttt{Document} duy nhất, và chỉ gọi lại \texttt{ingestion.py} để OCR từ PDF khi chưa có bản OCR.
 
 \section{Cắt đoạn theo Điều (Node)}
 
@@ -152,7 +152,7 @@ Kiểm tra thêm bằng cách in danh sách nhãn \texttt{dieu} của toàn bộ
   \item Có 36 lần xuất hiện cụm ``Điều $N$'' trong văn bản nhưng chỉ 24 lần là tiêu đề Điều; 12 lần còn lại chủ yếu là tham chiếu chéo (không có dấu chấm sau số) và đã không bị tách nhầm, đúng như thiết kế.
 \end{itemize}
 
-\textbf{Hệ quả cần xử lý sau:} vì hai Điều mang cùng nhãn (ví dụ Điều 2 của Quyết định và Điều 2 của Quy chế) nên trường \texttt{dieu} một mình không phân biệt được chúng. Khi chấm truy hồi bằng \texttt{dieu\_dung} trong bộ câu hỏi, Node của Quyết định ban hành có thể bị tính nhầm là đúng. Cách khắc phục hợp lý là bổ sung metadata phân biệt phần (ví dụ tên văn bản hoặc chương) khi cắt.
+\textbf{Hệ quả và cách đã xử lý:} vì hai Điều mang cùng nhãn (ví dụ Điều 2 của Quyết định và Điều 2 của Quy chế) nên trường \texttt{dieu} một mình không phân biệt được chúng; khi chấm truy hồi bằng \texttt{dieu\_dung}, Node của Quyết định ban hành có thể bị tính nhầm là đúng. Do Quyết định ban hành nằm trọn ở trang 1 của bản OCR và không chứa quy định nào cho sinh viên, hàm \texttt{load\_documents()} của bước lập chỉ mục bỏ trang 1 trước khi cắt. Kết quả là chỉ mục chỉ còn đúng 21 Điều của Quy chế, số Điều trong metadata khớp với số Điều trong văn bản (Mục \ref{sec:index}). Cách này chỉ đúng cho văn bản hiện tại; khi nạp thêm văn bản, cần thêm metadata tên văn bản vào Node.
 
 \subsection{Hạn chế đã biết}
 
@@ -160,7 +160,8 @@ Kiểm tra thêm bằng cách in danh sách nhãn \texttt{dieu} của toàn bộ
   \item Số ``token'' được đếm bằng số từ tách theo khoảng trắng, chỉ là xấp xỉ, không phải token của mô hình.
   \item Nếu OCR làm mất dấu chấm sau số Điều (ví dụ ``Điều 12'' không có dấu chấm) thì tiêu đề đó không khớp mẫu và Điều bị gộp vào Điều trước.
   \item Ngược lại, một câu tham chiếu kết thúc bằng dấu chấm ngay sau số Điều (``\ldots{}quy định tại Điều 5.'') có thể bị nhận nhầm là tiêu đề mới. Trong văn bản hiện có, trường hợp này chưa xảy ra.
-  \item Kiểm thử mới chạy trên một văn bản; chưa có \texttt{scripts/test\_node\_parser.py} và chưa có kiểm thử tự động.
+  \item Kiểm thử mới chạy trên một văn bản; chưa có kiểm thử tự động.
+  \item Khối \texttt{\_\_main\_\_} của \texttt{node\_parser.py} vẫn đọc cả file OCR (24 Node) để minh họa, trong khi pipeline thật đi qua \texttt{load\_documents()} (21 Node).
 \end{itemize}
 
 \subsection{Vị trí trong đồ án}
@@ -168,18 +169,177 @@ Kiểm tra thêm bằng cách in danh sách nhãn \texttt{dieu} của toàn bộ
 Đây là giai đoạn 2 của pipeline. Mỗi Node là một Điều với nhãn \texttt{dieu}, làm đơn vị cơ bản để lập chỉ mục và để trích dẫn nguồn khi trả lời.
 
 \section{Lập chỉ mục (Index)}
+\label{sec:index}
 
-Về mặt lý thuyết (xem Chương 2), bước này sẽ embedding từng Node bằng mô hình tiếng Việt đã chọn trong profile, lưu vào \texttt{VectorStoreIndex} và lưu xuống thư mục \texttt{storage/vector\_index} (giá trị \texttt{persist\_dir} trong \texttt{config.py}) để không phải embedding lại mỗi lần chạy.
+\subsection{Cơ chế}
 
-\chuatrienkhai{Module Index chưa triển khai: không có \texttt{src/index\_builder.py}, và thư mục \texttt{storage/vector\_index} hiện không chứa chỉ mục nào. Mô tả trên là thiết kế dự kiến theo cấu hình, chưa được kiểm chứng bằng cách chạy.}
+Module \texttt{src/index\_builder.py} làm ba việc:
 
-\section{Retriever và Response Synthesis}
+\begin{enumerate}
+  \item \textbf{Nạp văn bản} (\texttt{load\_documents()}): đọc bản OCR \texttt{data/ocr/4.\ QuyCheDaoTaoDHSG 2021.md}, cắt bỏ phần trước ``\texttt{\#\# Trang 2}'' (Quyết định ban hành), xóa các dòng tiêu đề trang ``\texttt{\#\# Trang N}'' và dòng phân cách \texttt{---} do \texttt{test\_ocr.py} chèn vào, rồi trả về \emph{một} \texttt{Document} với metadata \texttt{nguon} và \texttt{file\_goc}. Nhờ nối các trang, không Điều nào bị chia đôi ở ranh giới trang.
+  \item \textbf{Đặt mô hình embedding} (\texttt{setup\_embedding()}): gán \texttt{Settings.embed\_model} bằng \texttt{HuggingFaceEmbedding} theo profile. \texttt{Settings} là cấu hình toàn cục của LlamaIndex: mọi thành phần cần embedding (lập chỉ mục, retriever) tự lấy mô hình từ đây.
+  \item \textbf{Lập hoặc nạp lại chỉ mục} (\texttt{build\_or\_load\_index()}): nếu thư mục \texttt{persist\_dir} đã có \texttt{docstore.json} thì nạp chỉ mục từ đĩa, không phải embedding lại; ngược lại (hoặc khi chạy với \texttt{--rebuild}) thì cắt Node bằng \texttt{parse\_by\_dieu()}, dựng \texttt{VectorStoreIndex} và lưu xuống đĩa.
+\end{enumerate}
 
-Khi có chỉ mục, retriever sẽ lấy top-$k$ Node (cấu hình hiện là $k=10$) và bộ tổng hợp câu trả lời sẽ ghép chúng vào prompt để LLM sinh câu trả lời ở chế độ \texttt{compact}, có streaming. Câu trả lời cần kèm nhãn \texttt{dieu} của các Node nguồn để người dùng kiểm chứng.
+\subsection{Mã nguồn}
 
-\chuatrienkhai{Chưa có \texttt{src/retriever.py} và \texttt{src/query\_engine.py}. Hiện chỉ tồn tại các tham số cấu hình \texttt{similarity\_top\_k}, \texttt{response\_mode}, \texttt{streaming} trong \texttt{src/config.py}. Phần rerank (\texttt{reranker\_model\_name}, \texttt{reranker\_top\_n}) thuộc nhóm chọn thêm nên không trình bày trong báo cáo này.}
+\begin{lstlisting}[language=Python, caption={Lập hoặc nạp lại chỉ mục trong \texttt{src/index\_builder.py}.}, label={lst:build-index}]
+def setup_embedding(cfg: RAGConfig) -> None:
+    Settings.embed_model = HuggingFaceEmbedding(model_name=cfg.embed_model_name, device=cfg.embed_device)
+
+
+def build_or_load_index(cfg: RAGConfig, rebuild: bool = False) -> VectorStoreIndex:
+    setup_embedding(cfg)
+    persist_dir = ROOT / cfg.persist_dir
+
+    if not rebuild and (persist_dir / "docstore.json").exists():
+        logger.info(f"Load Index (*@từ@*) {persist_dir}")
+        return load_index_from_storage(StorageContext.from_defaults(persist_dir=str(persist_dir)))
+
+    nodes = parse_by_dieu(load_documents())
+    logger.info(f"Build Index (*@mới từ@*) {len(nodes)} node: {validate_nodes(nodes)}")
+    index = VectorStoreIndex(nodes, show_progress=True)
+    persist_dir.mkdir(parents=True, exist_ok=True)
+    index.storage_context.persist(persist_dir=str(persist_dir))
+    return index
+\end{lstlisting}
+
+Điểm đáng chú ý: \texttt{VectorStoreIndex} được dựng thẳng từ danh sách \texttt{TextNode} đã cắt sẵn chứ không từ \texttt{Document}. Nếu truyền \texttt{Document}, LlamaIndex sẽ tự cắt bằng \texttt{SentenceSplitter} mặc định và làm mất ranh giới Điều. Hàm \texttt{setup\_embedding()} được gọi \emph{cả} khi nạp lại chỉ mục, vì câu hỏi lúc truy vấn vẫn phải được embedding bằng đúng mô hình đã dùng khi lập chỉ mục.
+
+\subsection{Kết quả chạy thật}
+
+Với profile \texttt{server}, nạp Node qua \texttt{load\_documents()} cho:
+
+\begin{lstlisting}[caption={Thống kê Node đưa vào chỉ mục.}, label={lst:index-nodes}]
+tong_so_node: 21 | node_khong_ro_dieu: 0 | ty_le_khong_ro: 0.0% | do_dai_trung_binh_ky_tu: 1538
+dieu: 1, 2, 3, ..., 21   (moi Dieu xuat hien dung 1 lan)
+\end{lstlisting}
+
+Chỉ mục lưu tại \texttt{storage/vector\_index} gồm 21 vector 1024 chiều (mô hình \texttt{AITeamVN/Vietnamese\_Embedding}), tổng dung lượng 528 KB, trong đó \texttt{default\_\_vector\_store.json} (vector) 436 KB và \texttt{docstore.json} (nội dung và metadata Node) 85 KB. Chạy \texttt{python src/index\_builder.py} ở chế độ nạp lại in ra:
+
+\begin{lstlisting}[caption={Kết quả chạy \texttt{src/index\_builder.py}.}, label={lst:index-output}]
+[INFO] Load Index (*@từ@*) .../storage/vector_index
+(*@Số node trong Index: 21 | số node từ node\_parser: 21 | khớp: True@*)
+\end{lstlisting}
+
+Dòng cuối là phép kiểm tra nhất quán: số Node trong chỉ mục đã lưu bằng số Node mà \texttt{node\_parser} cắt ra từ dữ liệu hiện tại, tức chỉ mục không bị cũ so với dữ liệu. So với Mục trước (24 Node khi cắt cả file), ba Node của Quyết định ban hành đã bị loại và không còn nhãn Điều trùng. Điều dài nhất 3\,180 ký tự, không Điều nào vượt ngưỡng phải cắt nhỏ. Thời gian nạp lại (gồm nạp mô hình embedding lên GPU) khoảng 15--18 giây.
+
+\subsection{Vị trí trong đồ án}
+
+Đây là giai đoạn 3, ranh giới giữa pha chuẩn bị và pha truy vấn. Nhờ lưu xuống đĩa, các lần chạy sau (hỏi đáp, đánh giá) chỉ nạp lại chỉ mục mà không phải OCR hay embedding lại.
+
+\section{Truy hồi (Retriever) và xếp hạng lại}
+\label{sec:retriever}
+
+\subsection{Cơ chế}
+
+Module \texttt{src/retriever.py} có hai hàm:
+
+\begin{itemize}
+  \item \texttt{get\_retriever()}: gọi \texttt{index.as\_retriever(similarity\_top\_k=10)}. Retriever embedding câu hỏi bằng \texttt{Settings.embed\_model}, tính cosine với 21 vector trong chỉ mục và trả về 10 Node điểm cao nhất (\texttt{NodeWithScore}).
+  \item \texttt{get\_postprocessors()}: trả về danh sách rỗng nếu profile không đặt reranker; ngược lại trả về một \texttt{SentenceTransformerRerank} chấm lại 10 Node bằng cross-encoder và giữ 3 Node đầu.
+\end{itemize}
+
+\subsection{Mã nguồn}
+
+\begin{lstlisting}[language=Python, caption={Retriever và reranker trong \texttt{src/retriever.py}.}, label={lst:retriever}]
+def get_retriever(index: VectorStoreIndex, cfg: RAGConfig) -> BaseRetriever:
+    return index.as_retriever(similarity_top_k=cfg.similarity_top_k)
+
+
+def get_postprocessors(cfg: RAGConfig) -> list:
+    """Rerank (*@chỉ bật khi config đặt@*) reranker_model_name."""
+    if not cfg.reranker_model_name:
+        return []
+    from llama_index.core.postprocessor import SentenceTransformerRerank
+    return [SentenceTransformerRerank(model=cfg.reranker_model_name, top_n=cfg.reranker_top_n)]
+\end{lstlisting}
+
+Reranker được trả về dưới dạng \emph{node postprocessor} chứ không gộp vào retriever: \texttt{RetrieverQueryEngine} gọi retriever trước, rồi lần lượt đưa kết quả qua các postprocessor. Nhờ tách như vậy, bộ đánh giá (Chương 5) có thể đo riêng retriever, và việc bật/tắt reranker chỉ phụ thuộc vào cấu hình.
+
+\subsection{Kết quả chạy thật}
+
+Chạy \texttt{python src/retriever.py} (profile \texttt{server}, không qua reranker) với câu hỏi mẫu ``Một năm học có bao nhiêu học kỳ?'':
+
+\begin{lstlisting}[caption={Kết quả chạy \texttt{src/retriever.py} (rút gọn nội dung Node).}, label={lst:retriever-output}]
+[1] score=0.4470 | (*@Điều@*) 6  | '(*@Điều 6. Kế hoạch giảng dạy và học tập ...@*)'
+[2] score=0.3872 | (*@Điều@*) 10 | '(*@Điều 10. Đánh giá kết quả học tập theo học kì, nắm học ...@*)'
+[3] score=0.3763 | (*@Điều@*) 7  | '(*@Điều 7. Tổ chức đăng ký học tập ...@*)'
+[4] score=0.3140 | (*@Điều@*) 9  | '(*@Điều 9. Đánh giá và tính điểm học phần ...@*)'
+...
+[10] score=0.2578 | (*@Điều@*) 17 | '(*@Điều 17. Học cùng lúc hai chương trình ...@*)'
+\end{lstlisting}
+
+Điều đúng (Điều 6, khoản 2: ``mỗi năm học có 02 học kì chính \ldots{} và 01 học kì phụ'') đứng đầu. Hai nhận xét: (1) điểm cosine tuyệt đối khá thấp (0,45) và cách biệt giữa hạng 1 và hạng 10 chỉ 0,19, vì mỗi Node là cả một Điều dài khoảng 1\,500 ký tự trong khi đáp án chỉ là một câu trong đó; (2) cùng lý do, nên lấy $k$ đủ rộng rồi để LLM (hoặc reranker) chọn, thay vì chỉ lấy Node đầu.
+
+\section{Tổng hợp câu trả lời (Query Engine)}
+
+\subsection{Cơ chế}
+
+Module \texttt{src/query\_engine.py} ghép retriever, reranker và LLM thành một \texttt{RetrieverQueryEngine}:
+
+\begin{itemize}
+  \item \textbf{LLM}: \texttt{Ollama(model=..., base\_url=..., thinking=False, context\_window=8192)}. Tắt chế độ suy nghĩ của Qwen3 để câu trả lời ngắn; cửa sổ ngữ cảnh 8\,192 token đủ chứa 10 Điều.
+  \item \textbf{Prompt riêng} (\texttt{QA\_PROMPT}) thay cho prompt tiếng Anh mặc định của LlamaIndex: nêu rõ ngữ cảnh là trích đoạn Quy chế SGU, yêu cầu \emph{chỉ} dựa vào trích đoạn, trả lời bằng tiếng Việt ngắn gọn, và nói ``không tìm thấy trong quy chế'' khi trích đoạn không có thông tin. Câu cuối là cơ chế chống bịa: cho mô hình một lối ra hợp lệ thay vì phải đoán.
+  \item \textbf{Trích dẫn nguồn}: \texttt{format\_sources()} đọc \texttt{metadata['dieu']} của các Node nguồn trong \texttt{response.source\_nodes} và in ``Nguồn: Điều X, Điều Y\ldots''. Nguồn được lấy từ metadata chứ không nhờ LLM tự ghi, nên luôn đúng với những gì đã đưa vào prompt.
+  \item \textbf{Streaming}: khi \texttt{streaming=True}, câu trả lời được in dần từng token qua \texttt{response.response\_gen}.
+\end{itemize}
+
+\texttt{src/pipeline.py} là vòng lặp hỏi đáp trên dòng lệnh: dựng chỉ mục và query engine một lần, sau đó đọc câu hỏi, gọi \texttt{ask()}, cho tới khi gõ \texttt{thoat}.
+
+\subsection{Mã nguồn}
+
+\begin{lstlisting}[language=Python, caption={Prompt và hàm dựng query engine trong \texttt{src/query\_engine.py}.}, label={lst:query-engine}]
+QA_PROMPT = PromptTemplate(
+    "(*@Dưới đây là các trích đoạn từ Quy chế đào tạo trình độ đại học Trường Đại học Sài Gòn.@*)\n"
+    "---------------------\n{context_str}\n---------------------\n"
+    "(*@Chỉ dựa vào các trích đoạn trên, trả lời câu hỏi bằng tiếng Việt, ngắn gọn và chính xác.@*) "
+    "(*@Nếu trích đoạn không có thông tin, hãy nói không tìm thấy trong quy chế.@*)\n"
+    "(*@Câu hỏi:@*) {query_str}\n"
+    "(*@Trả lời:@*) "
+)
+
+
+def build_query_engine(index: VectorStoreIndex, cfg: RAGConfig) -> RetrieverQueryEngine:
+    llm = Ollama(
+        model=cfg.llm_model_name,
+        base_url=cfg.ollama_base_url,
+        request_timeout=cfg.request_timeout,
+        thinking=False,
+        context_window=8192,
+    )
+    Settings.llm = llm
+    return RetrieverQueryEngine.from_args(
+        retriever=get_retriever(index, cfg),
+        llm=llm,
+        response_mode=cfg.response_mode,
+        streaming=cfg.streaming,
+        text_qa_template=QA_PROMPT,
+        node_postprocessors=get_postprocessors(cfg),
+    )
+\end{lstlisting}
+
+\subsection{Kết quả chạy thật}
+
+Nhóm đã chạy \texttt{src/pipeline.py} ở profile \texttt{server} (embedding và reranker trên máy cá nhân, \texttt{qwen3:8b} trên máy GPU thuê) và hỏi 56 câu tự do, nhiều câu viết tắt, sai chính tả hoặc ngoài phạm vi quy chế. Nhật ký phiên được lưu ở \texttt{eval/results/test-basic.md}. Một số trao đổi tiêu biểu:
+
+\begin{lstlisting}[caption={Trích nhật ký chạy \texttt{src/pipeline.py} (profile \texttt{server}).}, label={lst:pipeline-output}]
+(*@Câu hỏi: tôi học cử nhân thì cần học bao nhiêu chỉ@*)
+(*@Theo quy chế, chương trình đào tạo cấp bằng cử nhân yêu cầu người học tích lũy tối thiểu 120 tín chỉ.@*)
+(*@Nguồn: Điều 2, Điều 10, Điều 9@*)
+
+(*@Câu hỏi: kỳ 1 tôi bị cảnh báo, kỳ 2 bình thường, kỳ 3 bị cảnh báo thì có bị buộc thôi học không ?@*)
+(*@Theo quy chế, người học bị buộc thôi học nếu bị cảnh báo liên tiếp quá hai lần. Trong trường hợp@*)
+(*@của bạn ... đây là hai lần cảnh báo không liên tiếp, do đó không bị buộc thôi học.@*)
+(*@Nguồn: Điều 11, Điều 14, Điều 19@*)
+
+(*@Câu hỏi: Có những quy định nào về điẻm rèn luyện@*)
+(*@Không tìm thấy trong quy chế.@*)
+(*@Nguồn: Điều 3, Điều 12, Điều 2@*)
+\end{lstlisting}
+
+Câu thứ nhất và thứ hai đúng và có trích dẫn đúng Điều. Câu thứ hai đáng chú ý vì mô hình phải \emph{suy luận} trên quy định (phân biệt cảnh báo liên tiếp và không liên tiếp) chứ không chỉ chép lại. Câu thứ ba trả lời ``không tìm thấy'' là \emph{đúng}: điểm rèn luyện được quy định trong một văn bản riêng của công tác sinh viên, không nằm trong Quy chế đào tạo, và prompt đã giữ được mô hình không bịa. Chương 5 phân tích đầy đủ các câu trả lời sai.
 
 \section{Tổng kết}
 
-Tại thời điểm viết báo cáo, hai giai đoạn đầu của pipeline đã chạy được trên Quy chế đào tạo SGU 2021: OCR ra 17 Document (34\,276 ký tự) và cắt theo Điều ra 24 Node với 0\% Node không rõ Điều. Đồng thời phân tích cho thấy hai việc cần làm tiếp: thống nhất nguồn dữ liệu giữa \texttt{config.py} và \texttt{ingestion.py}, và bổ sung metadata phân biệt hai văn bản trong cùng một file (Quyết định ban hành và Quy chế) vì nhãn Điều 1--3 bị trùng. Các giai đoạn Index, Retriever, Response Synthesis và Evaluation là phần còn lại phải xây dựng.
-
+Tại thời điểm viết báo cáo, cả sáu giai đoạn của pipeline đã chạy được trên Quy chế đào tạo SGU 2021: OCR 17 trang (34\,276 ký tự), nối trang và bỏ phần Quyết định ban hành, cắt thành 21 Node đúng 21 Điều (0\% không rõ Điều), lập chỉ mục 21 vector lưu xuống đĩa, truy hồi top-10, xếp hạng lại còn top-3 (profile \texttt{server}), và sinh câu trả lời tiếng Việt có trích dẫn số Điều. Hai vấn đề nêu ở bản báo cáo trước --- Điều bị chia đôi giữa hai trang và nhãn Điều 1--3 bị trùng --- đã được xử lý trong \texttt{load\_documents()}. Việc còn lại chủ yếu nằm ở dữ liệu (mới có một văn bản) và ở chất lượng câu trả lời, được đánh giá trong Chương 5.
