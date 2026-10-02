@@ -18,6 +18,9 @@ class RAGConfig:
     ollama_base_url: str
     request_timeout: float = 180.0
 
+    # --- Thiết bị ---
+    use_fp16: bool = False  # nạp embedding + reranker ở fp16 (chỉ khi cuda) để vừa GPU 4 GB
+
     # --- Reranker (tuỳ chọn — để trống nếu chưa dùng) ---
     reranker_model_name: str | None = None
     reranker_top_n: int = 3
@@ -54,6 +57,7 @@ CONFIG_LOCAL = RAGConfig(
 CONFIG_SERVER = RAGConfig(
     embed_model_name="AITeamVN/Vietnamese_Embedding",
     embed_device="cuda",
+    use_fp16=True,
     llm_model_name="qwen3:8b",
     ollama_base_url=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434"),
     reranker_model_name="AITeamVN/Vietnamese_Reranker",
