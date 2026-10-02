@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 CORPUS_SOURCES = [
-    ("data/raw/4. QuyCheDaoTaoDHSG 2021.pdf", "Quy chế đào tạo 2021"),
+    ("data/raw/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/4. QuyCheDaoTaoDHSG 2021.pdf", "Quy chế đào tạo 2021"),
     # ("data/raw/qd_sua_doi_2025.pdf", "QĐ sửa đổi 2025"),
 ]
 
