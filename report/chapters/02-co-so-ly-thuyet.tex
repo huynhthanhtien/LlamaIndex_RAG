@@ -93,7 +93,7 @@ Có hai lý do phải cắt tài liệu thành các đoạn nhỏ. Thứ nhất,
 
 Quy chế đào tạo có cấu trúc rất rõ: văn bản chia thành các \emph{Điều}, mỗi Điều chia thành khoản và điểm. Vì vậy đồ án chọn \textbf{cắt theo Điều} làm chiến lược chính; riêng những Điều dài vượt ngưỡng thì cắt tiếp theo câu. Cách này giữ trọn ngữ cảnh pháp lý và cho phép gắn số Điều vào metadata để trích dẫn nguồn.
 
-\section{Chỉ mục vector và truy hồi top-$k$}
+\section{Chỉ mục vector và truy hồi top-\texorpdfstring{$k$}{k}}
 
 Sau khi có vector cho mọi đoạn, hệ thống cần lưu chúng theo cách tìm kiếm nhanh. \emph{Chỉ mục vector} (vector index) lưu các cặp (vector, đoạn văn, metadata). Khi có câu hỏi, bộ truy hồi (retriever) tính độ tương đồng giữa vector câu hỏi và các vector trong chỉ mục rồi trả về $k$ đoạn có điểm cao nhất (top-$k$). Với kho nhỏ như một quy chế (vài chục đến vài trăm đoạn), việc so sánh vét cạn với mọi vector là đủ nhanh; các cấu trúc tìm kiếm xấp xỉ chỉ cần khi kho rất lớn.
 
