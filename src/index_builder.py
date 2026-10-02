@@ -38,14 +38,25 @@ def load_documents() -> list[Document]:
     return load_corpus()
 
 
-def setup_embedding(cfg: RAGConfig) -> None:
+def make_local_embedding(cfg: RAGConfig) -> HuggingFaceEmbedding:
     fp16 = cfg.use_fp16 and cfg.embed_device == "cuda"
-    Settings.embed_model = HuggingFaceEmbedding(
+    return HuggingFaceEmbedding(
         model_name=cfg.embed_model_name,
         device=cfg.embed_device,
         embed_batch_size=4 if fp16 else 10,  # batch nhỏ để không tràn VRAM trên card 4 GB
         model_kwargs={"torch_dtype": torch.float16} if fp16 else {},
     )
+
+
+def setup_embedding(cfg: RAGConfig) -> None:
+    if cfg.model_server_url:
+        from remote_models import RemoteEmbedding, check_server
+        check_server(cfg.model_server_url, cfg.embed_model_name, cfg.reranker_model_name)
+        Settings.embed_model = RemoteEmbedding(
+            base_url=cfg.model_server_url, model_name=cfg.embed_model_name, embed_batch_size=32
+        )
+    else:
+        Settings.embed_model = make_local_embedding(cfg)
 
 
 def build_or_load_index(cfg: RAGConfig, rebuild: bool = False) -> VectorStoreIndex:
