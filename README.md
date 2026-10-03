@@ -2,26 +2,35 @@
 
 Hệ thống hỏi-đáp RAG (Retrieval-Augmented Generation) cho các văn bản quy chế đào tạo của Trường Đại học Sài Gòn (SGU), xây dựng trên [LlamaIndex](https://www.llamaindex.ai/) với LLM chạy local qua [Ollama](https://ollama.com/).
 
-## Trạng thái hiện tại: pipeline cơ bản, 1 corpus (Quy chế đào tạo)
+## Trạng thái hiện tại: 6 văn bản quy chế SGU đang áp dụng (Quy chế 2021 + QĐ sửa đổi 3183/2025 + 4 quy định)
 
-Pipeline: `ingestion/OCR` → `node_parser` (tách theo Điều) → `index_builder` → `retriever` → `query_engine` (Ollama) → `pipeline` (hỏi-đáp terminal).
+Chuẩn bị dữ liệu (chạy một lần cho mỗi thư mục `data/raw/...`):
+`scripts/extract_to_md.py` (PDF → Markdown thô `data/ocr/`) → sửa tay nếu cần → `scripts/clean_md.py` (→ Markdown sạch có heading `data/processed/`).
+
+Pipeline: `processed_loader` (mỗi Điều / mục sửa đổi một Node, gắn tên văn bản) → `index_builder` → `retriever` (+ rerank tuỳ chọn) → `query_engine` (Ollama) → `pipeline` (hỏi-đáp terminal).
 
 ## Chạy thử
 
 Chạy từ thư mục gốc của repo (đường dẫn trong code là tương đối so với thư mục gốc), cần Ollama đang chạy và đã pull model trong `src/config.py`:
 
 ```bash
-RAG_PROFILE=local venv/bin/python src/index_builder.py   # build/load Index (thêm --rebuild để build lại)
-RAG_PROFILE=local venv/bin/python src/retriever.py       # thử truy hồi
-RAG_PROFILE=local venv/bin/python src/query_engine.py    # thử hỏi-đáp 1 câu
-RAG_PROFILE=local venv/bin/python eval/evaluate.py       # đo Recall@k
-RAG_PROFILE=local venv/bin/python src/pipeline.py        # hỏi-đáp qua terminal, gõ 'thoat' để dừng
+RAG_PROFILE=server venv/bin/python src/index_builder.py            # build/load Index (thêm --rebuild để build lại)
+RAG_PROFILE=server venv/bin/python src/retriever.py "câu hỏi"      # thử truy hồi (thêm --rerank)
+RAG_PROFILE=server venv/bin/python src/query_engine.py             # thử hỏi-đáp 1 câu
+RAG_PROFILE=server venv/bin/python eval/evaluate.py [--rerank]     # Recall@k, MRR theo (văn bản, Điều), 2 bộ câu hỏi
+RAG_PROFILE=server venv/bin/python src/pipeline.py                 # hỏi-đáp qua terminal, gõ 'thoat' để dừng
 ```
+
+- Văn bản nạp vào index: `corpus_dir`, `corpus_files` và tên hiển thị `ten_van_ban` lấy mặc định từ `src/corpus.py` (`CORPUS_DIR`, dict `SGU_HIEU_LUC`).
+- Index lưu ở `storage/<profile>/<thư mục corpus>` kèm `corpus.json`; tự build lại khi văn bản, tên hiển thị hoặc model embedding đổi.
+- Rerank: `use_rerank` trong `src/config.py`, mặc định **tắt** — trên corpus hiện tại rerank làm giảm Recall@1 (xem `eval/evaluate.py --rerank`).
+- Notebook `notebooks/build_check_processed.ipynb`: build + đo RAM/VRAM + so sánh có/không rerank, gọi đúng code trên.
 
 ## Giới hạn đã biết (chưa triển khai, để ở Chương 5 báo cáo sau)
 
-- Chưa có rerank (chỉ bật khi `reranker_model_name` được đặt trong `config.py`; profile `local` để trống)
-- Chỉ 1 corpus, chưa có Router
+- Rerank có sẵn nhưng mặc định tắt (xem trên); profile `local` không có reranker
+- Profile `local` (`vietnamese-bi-encoder`) chỉ nhận 256 token và cần tách từ — Recall thấp hơn hẳn profile `server`
+- Chưa nhớ ngữ cảnh hội thoại (câu hỏi nối tiếp), chưa có Router giữa nhiều nhóm văn bản
 - Chưa có giao diện Gradio
 
 ## Kiến trúc
@@ -50,9 +59,14 @@ Cấu hình cho từng profile (`local` / `server`) được định nghĩa tậ
 ├── notebooks/          # Notebook thử nghiệm
 ├── scripts/            # Script tiện ích (OCR, thử nghiệm nhanh...)
 ├── src/
-│   └── config.py        # Cấu hình RAG (embedding, LLM, retriever...)
+│   ├── config.py           # Cấu hình RAG: profile, model, văn bản nạp vào index
+│   ├── processed_loader.py # Markdown tầng 2 -> Node
+│   ├── index_builder.py    # build/load index theo profile
+│   ├── retriever.py        # tìm kiếm + rerank
+│   ├── query_engine.py     # prompt + LLM + trích nguồn
+│   └── model_server.py     # (tuỳ chọn) server embedding + reranker, chạy riêng trên GPU
 ├── storage/
-│   └── vector_index/    # Vector index đã build (không commit)
+│   └── <profile>/...       # Vector index đã build (không commit)
 └── requirements.txt
 ```
 

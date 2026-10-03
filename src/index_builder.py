@@ -1,41 +1,21 @@
+import hashlib
+import json
 import logging
-import re
 import sys
 from pathlib import Path
 
 import torch
-from llama_index.core import Document, Settings, StorageContext, VectorStoreIndex, load_index_from_storage
+from llama_index.core import Settings, StorageContext, VectorStoreIndex, load_index_from_storage
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from config import RAGConfig, get_config
-from node_parser import parse_by_dieu, validate_nodes
+from processed_loader import corpus_files, load_corpus_nodes, ten_hien_thi
 
 logger = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parent.parent
-OCR_FILE = ROOT / "data" / "ocr" / "4. QuyCheDaoTaoDHSG 2021.md"
-SOURCE_NAME = "Quy chế đào tạo 2021"
-
-
-def load_documents() -> list[Document]:
-    """Nạp Quy chế dưới dạng 1 Document duy nhất để Điều không bị cắt ngang theo trang.
-
-    Ưu tiên bản OCR đã có (data/ocr). Bỏ trang 1 (Quyết định ban hành, có Điều 1-3 riêng
-    của Quyết định) để số Điều khớp với số Điều của Quy chế.
-    """
-    if OCR_FILE.exists():
-        text = OCR_FILE.read_text(encoding="utf-8")
-        start = text.find("## Trang 2")
-        if start != -1:
-            text = text[start:]
-        text = re.sub(r"^## Trang \d+.*$", "", text, flags=re.MULTILINE)
-        text = re.sub(r"^---\s*$", "", text, flags=re.MULTILINE)
-        return [Document(text=text, metadata={"nguon": SOURCE_NAME, "file_goc": OCR_FILE.name})]
-
-    from ingestion import load_corpus
-    logger.warning("Không thấy bản OCR sẵn, chạy OCR từ PDF (chậm)...")
-    return load_corpus()
+FINGERPRINT = "corpus.json"  # lưu cạnh index: index được build từ những file / model nào
 
 
 def make_local_embedding(cfg: RAGConfig) -> HuggingFaceEmbedding:
@@ -59,21 +39,33 @@ def setup_embedding(cfg: RAGConfig) -> None:
         Settings.embed_model = make_local_embedding(cfg)
 
 
+def corpus_fingerprint(cfg: RAGConfig) -> dict[str, str | dict[str, str]]:
+    """Model embedding + sha256 và tên hiển thị từng file tầng 2; khác đi thì index cũ không còn đúng
+    (tên hiển thị được ghép vào văn bản khi embedding)."""
+    files = {p.name: f"{hashlib.sha256(p.read_bytes()).hexdigest()} | {ten_hien_thi(cfg, p)}" for p in corpus_files(cfg)}
+    return {"embed_model": cfg.embed_model_name, "corpus_dir": cfg.corpus_dir, "files": files}
+
+
 def build_or_load_index(cfg: RAGConfig, rebuild: bool = False) -> VectorStoreIndex:
     setup_embedding(cfg)
     persist_dir = ROOT / cfg.persist_dir
+    fingerprint = corpus_fingerprint(cfg)
+    saved = persist_dir / FINGERPRINT
 
     if not rebuild and (persist_dir / "docstore.json").exists():
-        logger.info(f"Load Index từ {persist_dir}")
-        index = load_index_from_storage(StorageContext.from_defaults(persist_dir=str(persist_dir)))
-        assert isinstance(index, VectorStoreIndex)
-        return index
+        if saved.exists() and json.loads(saved.read_text(encoding="utf-8")) == fingerprint:
+            logger.info(f"Load Index từ {persist_dir}")
+            index = load_index_from_storage(StorageContext.from_defaults(persist_dir=str(persist_dir)))
+            assert isinstance(index, VectorStoreIndex)
+            return index
+        logger.warning("Corpus hoặc model embedding đã đổi so với index đã lưu — build lại")
 
-    nodes = parse_by_dieu(load_documents())
-    logger.info(f"Build Index mới từ {len(nodes)} node: {validate_nodes(nodes)}")
+    nodes = load_corpus_nodes(cfg)
+    logger.info(f"Build Index mới từ {len(nodes)} node ({len(fingerprint['files'])} văn bản)")
     index = VectorStoreIndex(nodes, show_progress=True)
     persist_dir.mkdir(parents=True, exist_ok=True)
     index.storage_context.persist(persist_dir=str(persist_dir))
+    saved.write_text(json.dumps(fingerprint, ensure_ascii=False, indent=1), encoding="utf-8")
     return index
 
 
@@ -82,5 +74,5 @@ if __name__ == "__main__":
     cfg = get_config()
     index = build_or_load_index(cfg, rebuild="--rebuild" in sys.argv)
     n_index = len(index.docstore.docs)
-    n_parser = len(parse_by_dieu(load_documents()))
-    print(f"Số node trong Index: {n_index} | số node từ node_parser: {n_parser} | khớp: {n_index == n_parser}")
+    n_loader = len(load_corpus_nodes(cfg))
+    print(f"Index: {cfg.persist_dir} | số node trong Index: {n_index} | từ processed_loader: {n_loader} | khớp: {n_index == n_loader}")
