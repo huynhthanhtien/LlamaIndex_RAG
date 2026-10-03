@@ -10,13 +10,15 @@ from llama_index.llms.ollama import Ollama
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from config import RAGConfig, get_config
 from index_builder import build_or_load_index
-from retriever import get_postprocessors, get_retriever
+from retriever import get_postprocessors, get_retriever, node_label
 
 QA_PROMPT = PromptTemplate(
-    "Dưới đây là các trích đoạn từ Quy chế đào tạo trình độ đại học Trường Đại học Sài Gòn.\n"
+    "Dưới đây là các trích đoạn từ các văn bản quy chế, quy định đào tạo của Trường Đại học Sài Gòn "
+    "(mỗi trích đoạn ghi rõ tên văn bản và Điều).\n"
     "---------------------\n{context_str}\n---------------------\n"
-    "Chỉ dựa vào các trích đoạn trên, trả lời câu hỏi bằng tiếng Việt, ngắn gọn và chính xác. "
-    "Nếu trích đoạn không có thông tin, hãy nói không tìm thấy trong quy chế.\n"
+    "Chỉ dựa vào các trích đoạn trên, trả lời câu hỏi bằng tiếng Việt, ngắn gọn và chính xác, nêu tên văn bản và Điều. "
+    "Nếu có văn bản sửa đổi thì dùng nội dung đã sửa đổi. "
+    "Nếu trích đoạn không có thông tin, hãy nói không tìm thấy trong các văn bản quy định.\n"
     "Câu hỏi: {query_str}\n"
     "Trả lời: "
 )
@@ -42,12 +44,7 @@ def build_query_engine(index: VectorStoreIndex, cfg: RAGConfig) -> RetrieverQuer
 
 
 def format_sources(response: RESPONSE_TYPE) -> str:
-    dieu = []
-    for n in response.source_nodes:
-        d = n.node.metadata.get("dieu")
-        if d not in dieu:
-            dieu.append(d)
-    return ", ".join(f"Điều {d}" for d in dieu)
+    return "; ".join(dict.fromkeys(node_label(n) for n in response.source_nodes))
 
 
 def ask(engine: RetrieverQueryEngine, question: str, cfg: RAGConfig) -> None:

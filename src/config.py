@@ -1,13 +1,18 @@
-import os 
-
+import os
 from dataclasses import dataclass, field
+from pathlib import PurePosixPath
+
 from dotenv import load_dotenv
+
+from corpus import CORPUS_DIR, PROCESSED_ROOT, SGU_HIEU_LUC
 
 load_dotenv()
 
 
 @dataclass
 class RAGConfig:
+    # --- Profile (tách thư mục index: mỗi model embedding có số chiều riêng) ---
+    name: str
 
     # --- Embedding ---
     embed_model_name: str
@@ -21,9 +26,10 @@ class RAGConfig:
     # --- Thiết bị ---
     use_fp16: bool = False  # nạp embedding + reranker ở fp16 (chỉ khi cuda) để vừa GPU 4 GB
 
-    # --- Reranker (tuỳ chọn — để trống nếu chưa dùng) ---
+    # --- Reranker (tuỳ chọn) — mặc định tắt: đã đo trên corpus hiện tại, rerank làm giảm Recall@1 ---
     reranker_model_name: str | None = None
     reranker_top_n: int = 3
+    use_rerank: bool = False
 
     # --- Model server (tuỳ chọn) — có URL thì gọi src/model_server.py thay vì nạp model tại chỗ ---
     model_server_url: str | None = field(default_factory=lambda: os.environ.get("MODEL_SERVER_URL") or None)
@@ -35,21 +41,26 @@ class RAGConfig:
     response_mode: str = "compact"
     streaming: bool = True
 
-    # --- Đường dẫn ---
-    persist_dir: str = "storage/vector_index"
-    corpus_sources: list[tuple[str, str]] | None = None
+    # --- Dữ liệu (tầng 2, sinh bởi scripts/clean_md.py) — sửa danh sách ở src/corpus.py ---
+    corpus_dir: str = CORPUS_DIR
+    corpus_files: tuple[str, ...] = tuple(SGU_HIEU_LUC)  # tiền tố tên file; rỗng = nạp hết
+    ten_van_ban: dict[str, str] = field(default_factory=lambda: dict(SGU_HIEU_LUC))  # tiền tố -> tên hiển thị
 
-    def __post_init__(self):
-        if self.corpus_sources is None:
-            self.corpus_sources = [
-                ("data/raw/quy_che_dao_tao_2021.pdf", "Quy chế đào tạo 2021"),
-                ("data/raw/qd_sua_doi_2025.pdf", "QĐ sửa đổi 2025"),
-            ]
+    # --- Đường dẫn index; để trống = storage/<name>/<corpus> ---
+    persist_dir: str = ""
+
+    def __post_init__(self) -> None:
+        if not self.persist_dir:
+            corpus = PurePosixPath(self.corpus_dir).relative_to(PROCESSED_ROOT)
+            self.persist_dir = f"storage/{self.name}/{corpus}"
+        if "://" not in self.ollama_base_url:  # .env hay ghi thiếu, vd "1.2.3.4:11434"
+            self.ollama_base_url = f"http://{self.ollama_base_url}"
 
 
 # ===== Định nghĩa 2 profile =====
 
 CONFIG_LOCAL = RAGConfig(
+    name="local",
     embed_model_name="bkai-foundation-models/vietnamese-bi-encoder",
     embed_device="cuda",
     llm_model_name="qwen3:4b",
@@ -58,6 +69,7 @@ CONFIG_LOCAL = RAGConfig(
 )
 
 CONFIG_SERVER = RAGConfig(
+    name="server",
     embed_model_name="AITeamVN/Vietnamese_Embedding",
     embed_device="cuda",
     use_fp16=True,
@@ -66,7 +78,7 @@ CONFIG_SERVER = RAGConfig(
     reranker_model_name="AITeamVN/Vietnamese_Reranker",
 )
 
-PROFILES = {
+PROFILES: dict[str, RAGConfig] = {
     "local": CONFIG_LOCAL,
     "server": CONFIG_SERVER,
 }

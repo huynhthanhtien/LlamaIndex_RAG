@@ -9,7 +9,8 @@ from query_engine import ask, build_query_engine
 if __name__ == "__main__":
     cfg = get_config()
     engine = build_query_engine(build_or_load_index(cfg), cfg)
-    print("Hỏi đáp Quy chế đào tạo SGU. Gõ 'thoat' để dừng.")
+    print(f"Hỏi đáp quy chế, quy định đào tạo SGU ({cfg.corpus_dir}, rerank: {'bật' if cfg.use_rerank else 'tắt'}). "
+          "Gõ 'thoat' để dừng.")
     while True:
         try:
             question = input("\nCâu hỏi: ").strip()

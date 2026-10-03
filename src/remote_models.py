@@ -3,16 +3,26 @@
 Chỉ override các phương thức `_...` mà lớp cha gọi tới; phần còn lại của LlamaIndex
 (index, retriever, query engine) dùng 2 class này y như HuggingFaceEmbedding / SentenceTransformerRerank.
 """
+import os
+
 import httpx
 from llama_index.core.base.embeddings.base import BaseEmbedding
 from llama_index.core.postprocessor.types import BaseNodePostprocessor
 from llama_index.core.schema import MetadataMode, NodeWithScore, QueryBundle
 
 
+def auth_headers() -> dict[str, str]:
+    """Token cho model server chạy trên máy cloud (src/model_server.py đọc cùng biến MODEL_SERVER_TOKEN)."""
+    token = os.environ.get("MODEL_SERVER_TOKEN")
+    return {"Authorization": f"Bearer {token}"} if token else {}
+
+
 def check_server(base_url: str, embed_model_name: str, reranker_model_name: str | None) -> None:
     """Server phải nạp đúng model của profile, nếu không vector sẽ lệch với index đã build."""
     try:
-        info = httpx.get(f"{base_url}/health", timeout=5).json()
+        r = httpx.get(f"{base_url}/health", headers=auth_headers(), timeout=5)
+        r.raise_for_status()
+        info = r.json()
     except httpx.HTTPError as e:
         raise RuntimeError(f"Không kết nối được model server {base_url}: {e}") from e
     if info["embed_model"] != embed_model_name:
@@ -31,12 +41,13 @@ class RemoteEmbedding(BaseEmbedding):
 
     # kind = "query" | "text": server áp đúng prompt tương ứng như HuggingFaceEmbedding
     def _post(self, texts: list[str], kind: str) -> list[list[float]]:
-        r = httpx.post(f"{self.base_url}/embed", json={"texts": texts, "kind": kind}, timeout=self.timeout)
+        r = httpx.post(f"{self.base_url}/embed", json={"texts": texts, "kind": kind},
+                       headers=auth_headers(), timeout=self.timeout)
         r.raise_for_status()
         return r.json()["embeddings"]
 
     async def _apost(self, texts: list[str], kind: str) -> list[list[float]]:
-        async with httpx.AsyncClient(timeout=self.timeout) as client:
+        async with httpx.AsyncClient(timeout=self.timeout, headers=auth_headers()) as client:
             r = await client.post(f"{self.base_url}/embed", json={"texts": texts, "kind": kind})
             r.raise_for_status()
             return r.json()["embeddings"]
@@ -78,6 +89,7 @@ class RemoteRerank(BaseNodePostprocessor):
         r = httpx.post(
             f"{self.base_url}/rerank",
             json={"query": query_bundle.query_str, "texts": texts},
+            headers=auth_headers(),
             timeout=self.timeout,
         )
         r.raise_for_status()
