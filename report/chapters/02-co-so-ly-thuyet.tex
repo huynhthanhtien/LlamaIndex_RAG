@@ -19,7 +19,7 @@ Có thể khắc phục bằng cách tinh chỉnh (fine-tuning) mô hình trên 
 
 \subsection{Ý tưởng}
 
-RAG tách bài toán thành hai bước: (1) \emph{truy hồi} --- từ kho tài liệu, tìm ra một số ít đoạn liên quan nhất tới câu hỏi; (2) \emph{sinh} --- đưa câu hỏi cùng các đoạn đó cho LLM và yêu cầu trả lời dựa trên chúng. Nếu ký hiệu $q$ là câu hỏi, $\mathcal{D}$ là tập các đoạn văn bản trong kho, thì:
+RAG~\cite{lewis2020rag,gao2023ragsurvey} tách bài toán thành hai bước: (1) \emph{truy hồi} --- từ kho tài liệu, tìm ra một số ít đoạn liên quan nhất tới câu hỏi; (2) \emph{sinh} --- đưa câu hỏi cùng các đoạn đó cho LLM và yêu cầu trả lời dựa trên chúng. Nếu ký hiệu $q$ là câu hỏi, $\mathcal{D}$ là tập các đoạn văn bản trong kho, thì:
 
 \begin{equation}
   C = \operatorname{Retrieve}(q, \mathcal{D}, k), \qquad
@@ -43,7 +43,7 @@ Chất lượng của hệ thống bị giới hạn bởi \emph{đoạn văn t�
 
 \subsection{Vector embedding}
 
-Embedding là phép ánh xạ một đoạn văn bản thành một vector số thực $\mathbf{v} \in \mathbb{R}^d$ sao cho các đoạn có nghĩa gần nhau nằm gần nhau trong không gian vector. Với mô hình dạng bi-encoder, câu hỏi và đoạn văn được mã hóa \emph{độc lập} bởi cùng một bộ mã hóa; nhờ vậy vector của toàn bộ kho tài liệu có thể tính trước và lưu lại, khi có câu hỏi chỉ cần mã hóa riêng câu hỏi.
+Embedding là phép ánh xạ một đoạn văn bản thành một vector số thực $\mathbf{v} \in \mathbb{R}^d$ sao cho các đoạn có nghĩa gần nhau nằm gần nhau trong không gian vector. Với mô hình dạng bi-encoder~\cite{reimers2019sentencebert}, câu hỏi và đoạn văn được mã hóa \emph{độc lập} bởi cùng một bộ mã hóa; nhờ vậy vector của toàn bộ kho tài liệu có thể tính trước và lưu lại, khi có câu hỏi chỉ cần mã hóa riêng câu hỏi. Chất lượng của mô hình embedding là yếu tố ảnh hưởng mạnh nhất tới kết quả truy hồi, và được xếp hạng công khai trên các benchmark như MTEB~\cite{muennighoff2022mteb}.
 
 \subsection{Độ đo cosine}
 
@@ -55,15 +55,15 @@ Embedding là phép ánh xạ một đoạn văn bản thành một vector số 
   = \frac{\sum_{i=1}^{d} q_i d_i}{\sqrt{\sum_{i=1}^{d} q_i^2}\,\sqrt{\sum_{i=1}^{d} d_i^2}} .
 \end{equation}
 
-Giá trị càng gần 1 thì hai đoạn càng gần nhau về ngữ nghĩa. Khác với tìm theo từ khóa, so khớp vector cho phép ``cấm thi'' tìm được đoạn viết ``không đủ điều kiện dự thi'' vì hai cụm có embedding gần nhau.
+Giá trị càng gần 1 thì hai đoạn càng gần nhau về ngữ nghĩa. Cách khác là so khớp theo từ khóa xác suất kiểu BM25~\cite{robertson2009bm25}: mạnh ở token hiếm và ký hiệu (``B+'', ``150 tín chỉ'') nhưng không hiểu diễn đạt khác nghĩa; vì hai cách sai ở hai chỗ khác nhau, chúng thường được trộn thành \emph{hybrid search}. Khác với tìm theo từ khóa, so khớp vector cho phép ``cấm thi'' tìm được đoạn viết ``không đủ điều kiện dự thi'' vì hai cụm có embedding gần nhau.
 
 \subsection{Mô hình embedding tiếng Việt được chọn}
 
 Chất lượng truy hồi phụ thuộc mạnh vào việc mô hình embedding có được huấn luyện cho tiếng Việt hay không. Theo cấu hình trong \texttt{src/config.py}, đồ án dùng:
 
 \begin{itemize}
-  \item Profile chạy cục bộ: \texttt{bkai-foundation-models/vietnamese-bi-encoder}, vector 768 chiều;
-  \item Profile máy chủ: \texttt{AITeamVN/Vietnamese\_Embedding}, vector 1024 chiều.
+  \item Profile chạy cục bộ: \texttt{bkai-foundation-models/vietnamese-bi-encoder}, vector 768 chiều~\cite{vietnamesebiencoder};
+  \item Profile máy chủ: \texttt{AITeamVN/Vietnamese\_Embedding}, vector 1024 chiều~\cite{vietnameseembedding}.
 \end{itemize}
 
 Cả hai đều được nạp qua \texttt{llama-index-embeddings-huggingface} (lớp \texttt{HuggingFaceEmbedding}, mặc định chuẩn hóa vector về độ dài 1 nên tích vô hướng chính là cosine). Vì hai mô hình cho vector khác số chiều, chỉ mục đã lập bằng mô hình này không dùng được với mô hình kia; đổi mô hình embedding đồng nghĩa phải lập lại chỉ mục. Chương 5 so sánh chất lượng truy hồi của hai mô hình trên cùng bộ câu hỏi.
@@ -72,7 +72,7 @@ Cả hai đều được nạp qua \texttt{llama-index-embeddings-huggingface} (
 
 \subsection{Vì sao phải cắt}
 
-Có hai lý do phải cắt tài liệu thành các đoạn nhỏ. Thứ nhất, cửa sổ ngữ cảnh của LLM có hạn, và càng nhét nhiều văn bản không liên quan thì câu trả lời càng dễ lệch. Thứ hai, một vector embedding cho cả tài liệu sẽ ``pha loãng'' mọi ý; mỗi đoạn nên xoay quanh một chủ đề để vector của nó đại diện đúng.
+Có hai lý do phải cắt tài liệu thành các đoạn nhỏ. Thứ nhất, cửa sổ ngữ cảnh của LLM có hạn, và càng nhét nhiều văn bản không liên quan thì câu trả lời càng dễ lệch --- mô hình còn có xu hướng bỏ qua thông tin nằm giữa ngữ cảnh dài~\cite{liu2023lostinthemiddle}. Thứ hai, một vector embedding cho cả tài liệu sẽ ``pha loãng'' mọi ý; mỗi đoạn nên xoay quanh một chủ đề để vector của nó đại diện đúng.
 
 \subsection{Các chiến lược cắt}
 
@@ -95,7 +95,7 @@ Quy chế đào tạo có cấu trúc rất rõ: văn bản chia thành các \em
 
 \section{Chỉ mục vector và truy hồi top-\texorpdfstring{$k$}{k}}
 
-Sau khi có vector cho mọi đoạn, hệ thống cần lưu chúng theo cách tìm kiếm nhanh. \emph{Chỉ mục vector} (vector index) lưu các cặp (vector, đoạn văn, metadata). Khi có câu hỏi, bộ truy hồi (retriever) tính độ tương đồng giữa vector câu hỏi và các vector trong chỉ mục rồi trả về $k$ đoạn có điểm cao nhất (top-$k$). Với kho nhỏ như một quy chế (vài chục đến vài trăm đoạn), việc so sánh vét cạn với mọi vector là đủ nhanh; các cấu trúc tìm kiếm xấp xỉ chỉ cần khi kho rất lớn.
+Sau khi có vector cho mọi đoạn, hệ thống cần lưu chúng theo cách tìm kiếm nhanh. \emph{Chỉ mục vector} (vector index) lưu các cặp (vector, đoạn văn, metadata). Khi có câu hỏi, bộ truy hồi (retriever) tính độ tương đồng giữa vector câu hỏi và các vector trong chỉ mục rồi trả về $k$ đoạn có điểm cao nhất (top-$k$)~\cite{karpukhin2020dpr}. Với kho nhỏ như một quy chế (vài chục đến vài trăm đoạn), việc so sánh vét cạn với mọi vector là đủ nhanh; các cấu trúc tìm kiếm xấp xỉ chỉ cần khi kho rất lớn.
 
 Tham số $k$ là sự đánh đổi: $k$ nhỏ dễ bỏ sót đoạn cần thiết, $k$ lớn đưa nhiều nhiễu vào prompt. Cấu hình hiện có trong \texttt{src/config.py} đặt \texttt{similarity\_top\_k = 10}.
 
@@ -116,11 +116,11 @@ Sau truy hồi, các đoạn tìm được phải được đưa cho LLM để s
 
 Mô hình embedding dạng bi-encoder mã hóa câu hỏi và đoạn văn \emph{riêng rẽ}, nên nhanh nhưng chỉ so khớp ở mức ``ý chính''. Mô hình \emph{cross-encoder} nhận \emph{cặp} (câu hỏi, đoạn văn) làm một đầu vào duy nhất và chấm một điểm liên quan; nhờ xem cả hai cùng lúc, nó thường đánh giá chính xác hơn, nhưng phải chạy lại cho từng cặp nên chậm hơn nhiều và không thể tính trước. Vì vậy cách dùng phổ biến là hai tầng: bi-encoder lấy nhanh top-$k$ ứng viên, rồi cross-encoder chấm lại và chỉ giữ top-$n$ ($n<k$) đưa vào prompt.
 
-Trong đồ án, reranker \texttt{AITeamVN/Vietnamese\_Reranker} chỉ bật ở profile máy chủ, với $k=10$ và $n=3$. Đây là phần chọn thêm; Chương 5 đo xem nó có cải thiện truy hồi trên dữ liệu của đồ án hay không.
+Trong đồ án, reranker \texttt{AITeamVN/Vietnamese\_Reranker}~\cite{vietnamesereranker} chỉ bật ở profile máy chủ, với $k=10$ và $n=3$; cấu hình này mặc định \emph{tắt} vì phép đo ở Chương~\ref{ch:danh-gia} cho thấy nó không cải thiện trên kho nhỏ. Đây là phần chọn thêm; Chương 5 đo xem nó có cải thiện truy hồi trên dữ liệu của đồ án hay không.
 
 \section{Các khái niệm cốt lõi của LlamaIndex}
 
-LlamaIndex mô hình hóa chuỗi RAG bằng một số đối tượng có tên rõ ràng. Bảng dưới đây tóm tắt và chỉ ra chúng nằm ở đâu trong đồ án.
+LlamaIndex~\cite{llamaindex2025docs} mô hình hóa chuỗi RAG bằng một số đối tượng có tên rõ ràng. Bảng dưới đây tóm tắt và chỉ ra chúng nằm ở đâu trong đồ án (tên file đã cập nhật theo mã nguồn hiện tại).
 
 \begin{table}[H]
   \centering
@@ -129,10 +129,10 @@ LlamaIndex mô hình hóa chuỗi RAG bằng một số đối tượng có tên
     \toprule
     \textbf{Khái niệm} & \textbf{Vai trò} & \textbf{Trong đồ án} \\
     \midrule
-    \texttt{Document} & Một nguồn dữ liệu thô kèm metadata & \texttt{ingestion.py} (mỗi trang PDF một Document) \\
-    \texttt{Node} / \texttt{TextNode} & Đơn vị nhỏ hơn sinh từ Document, là đơn vị được lập chỉ mục & \texttt{node\_parser.py} (mỗi Điều một Node) \\
+    \texttt{Document} & Một nguồn dữ liệu thô kèm metadata & \texttt{ingestion.py} (bản cũ, không còn dùng) \\
+    \texttt{Node} / \texttt{TextNode} & Đơn vị nhỏ hơn sinh từ Document, là đơn vị được lập chỉ mục & \texttt{processed\_loader.py} (mỗi Điều / mục sửa đổi một Node) \\
     \texttt{Index} & Cấu trúc lưu Node để truy hồi (ví dụ \texttt{VectorStoreIndex}) & \texttt{index\_builder.py} (lưu tại \texttt{storage/vector\_index}) \\
-    \texttt{Retriever} & Lấy các Node liên quan tới câu hỏi & \texttt{retriever.py} (top-$k$ theo cosine) \\
+    \texttt{Retriever} & Lấy các Node liên quan tới câu hỏi & \texttt{retriever.py} (cosine top-$k$, tuỳ chọn trộn BM25) \\
     Node postprocessor & Xử lý danh sách Node sau truy hồi (lọc, xếp hạng lại) & \texttt{retriever.py} (reranker, profile máy chủ) \\
     Response synthesizer & Ghép Node vào prompt và gọi LLM & \texttt{query\_engine.py} (chế độ \texttt{compact}) \\
     \texttt{QueryEngine} & Gộp retriever, postprocessor và synthesizer thành một lệnh hỏi--đáp & \texttt{query\_engine.py} (\texttt{RetrieverQueryEngine}) \\
@@ -145,15 +145,15 @@ LlamaIndex mô hình hóa chuỗi RAG bằng một số đối tượng có tên
 
 \section{Nhận dạng ký tự quang học (OCR)}
 
-Bản PDF của Quy chế đào tạo SGU là bản scan: mỗi trang là một ảnh, không có lớp văn bản (text layer). Khi đọc bằng bộ đọc PDF thông thường, hệ thống gần như không lấy được chữ nào. Để có văn bản, cần OCR.
+Bản PDF của Quy chế đào tạo SGU là bản scan: mỗi trang là một ảnh, không có lớp văn bản (text layer). Khi đọc bằng bộ đọc PDF thông thường, hệ thống gần như không lấy được chữ nào. Để có văn bản, cần OCR~\cite{tesseract}.
 
-\textbf{Tesseract} là công cụ OCR mã nguồn mở, có gói ngôn ngữ tiếng Việt (\texttt{vie}); trong Python được gọi qua thư viện \texttt{pytesseract}. Vì Tesseract nhận ảnh làm đầu vào, mỗi trang PDF trước hết được render thành ảnh bằng \texttt{pdf2image} (dựa trên \texttt{poppler}). Độ phân giải càng cao thì nhận dạng càng tốt nhưng chậm hơn; đồ án dùng 300 dpi.
+\textbf{Tesseract}~\cite{tesseract} là công cụ OCR mã nguồn mở, có gói ngôn ngữ tiếng Việt (\texttt{vie}); trong Python được gọi qua thư viện \texttt{pytesseract}. Vì Tesseract nhận ảnh làm đầu vào, mỗi trang PDF trước hết được render thành ảnh bằng \texttt{pdf2image} (dựa trên \texttt{poppler}). Độ phân giải càng cao thì nhận dạng càng tốt nhưng chậm hơn; đồ án dùng 300 dpi.
 
 OCR tiếng Việt luôn có sai sót, nhất là với dấu thanh và chữ in mờ (ví dụ nhầm ``NHÂN'' thành ``NHẦN''). Điều này ảnh hưởng đến các bước sau, đặc biệt khi quy tắc cắt đoạn dựa vào việc nhận đúng từ ``Điều''. Phần \ref{sec:ingestion} sẽ nêu các lỗi cụ thể quan sát được.
 
 \section{Mô hình chạy cục bộ: Ollama và Qwen3}
 
-Để dữ liệu không đi qua dịch vụ AI bên thứ ba, LLM được chạy qua \textbf{Ollama}, một trình phục vụ mô hình mở với API HTTP (mặc định tại \texttt{http://localhost:11434}); ở profile máy chủ, Ollama chạy trên một máy GPU thuê riêng và địa chỉ được đọc từ biến \texttt{OLLAMA\_BASE\_URL}. Đồ án dùng họ mô hình Qwen3: \texttt{qwen3:4b} cho profile chạy cục bộ và \texttt{qwen3:8b} cho profile máy chủ. LlamaIndex kết nối tới Ollama qua gói \texttt{llama-index-llms-ollama}. Thời gian chờ mặc định trong cấu hình là 180 giây do mô hình chạy trên phần cứng cá nhân có thể trả lời chậm. Qwen3 có chế độ ``suy nghĩ'' (sinh chuỗi lập luận trước câu trả lời); đồ án tắt chế độ này (\texttt{thinking=False}) để câu trả lời ngắn và nhanh.
+Để dữ liệu không đi qua dịch vụ AI bên thứ ba, LLM được chạy qua \textbf{Ollama}, một trình phục vụ mô hình mở với API HTTP (mặc định tại \texttt{http://localhost:11434}); ở profile máy chủ, Ollama chạy trên một máy GPU thuê riêng và địa chỉ được đọc từ biến \texttt{OLLAMA\_BASE\_URL}. Đồ án dùng họ mô hình Qwen3: \texttt{qwen3:4b} cho profile chạy cục bộ và \texttt{qwen3:8b} cho profile máy chủ. LlamaIndex kết nối tới Ollama~\cite{ollama} qua gói \texttt{llama-index-llms-ollama}; Qwen3 là dòng mô hình mở của Alibaba, bản 4B và 8B đủ nhỏ để chạy trên máy cá nhân~\cite{qwen3}. Thời gian chờ mặc định trong cấu hình là 180 giây do mô hình chạy trên phần cứng cá nhân có thể trả lời chậm. Qwen3 có chế độ ``suy nghĩ'' (sinh chuỗi lập luận trước câu trả lời); đồ án tắt chế độ này (\texttt{thinking=False}) để câu trả lời ngắn và nhanh.
 
 \section{Đánh giá chất lượng truy hồi}
 
@@ -177,4 +177,16 @@ Nhờ có nhãn, có thể dùng hai độ đo phổ biến. Gọi $n_{i,j}$ là
   \end{equation}
 \end{itemize}
 
-Recall@$k$ cho biết Điều đúng \emph{có lọt vào} ngữ cảnh đưa cho LLM hay không; MRR cho biết nó \emph{đứng cao} tới đâu. Hai độ đo này chỉ chấm bước truy hồi; chất lượng câu trả lời của LLM được phân tích riêng bằng cách đối chiếu thủ công với văn bản quy chế (Chương 5).
+Recall@$k$ cho biết Điều đúng \emph{có lọt vào} ngữ cảnh đưa cho LLM hay không; MRR cho biết nó \emph{đứng cao} tới đâu. Đây là các độ đo chuẩn của bài toán truy hồi~\cite{thakur2021beir}.
+
+\subsection{Đánh giá câu trả lời}
+
+Chấm truy hồi là chưa đủ: một câu trả lời có thể dẫn đúng Điều nhưng đọc sai số liệu. Cách đánh giá hiện đại tách câu trả lời thành ba khía cạnh và để một LLM khác chấm theo thang nhị phân, gọi là \emph{LLM-as-a-judge}~\cite{zheng2023judging}:
+
+\begin{itemize}
+  \item \textbf{Faithfulness}: mọi khẳng định trong câu trả lời có suy ra được từ ngữ cảnh truy hồi không (đo mức độ bịa).
+  \item \textbf{Relevancy}: câu trả lời có trả lời đúng câu hỏi đã hỏi không.
+  \item \textbf{Correctness}: câu trả lời có khớp với đáp án chuẩn do người viết không.
+\end{itemize}
+
+Bộ khung RAGAS~\cite{es2023ragas} phổ biến cách đánh giá này. LlamaIndex cài sẵn các evaluator tương ứng, và đồ án dùng chúng ở \texttt{eval/evaluate\_answers.py} (Chương~\ref{ch:danh-gia}).

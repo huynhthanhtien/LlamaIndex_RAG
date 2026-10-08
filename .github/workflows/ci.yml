@@ -1,0 +1,19 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # Chỉ cài phần tối thiểu để chạy kiểm thử offline: không torch, không model, không Ollama.
+      - name: Cài phụ thuộc tối thiểu
+        run: pip install "llama-index-core==0.14.24" "python-dotenv==1.2.3"
+      - name: Kiểm thử
+        run: python -m unittest discover -s tests -t . -v

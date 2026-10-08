@@ -1,0 +1,822 @@
+{
+ "ket_qua": [
+  {
+   "bo_cau_hoi": "test_questions_01.json",
+   "cau_hinh": "bm25",
+   "cau_hinh_chi_tiet": {
+    "baseline": "bm25"
+   },
+   "so_cau": 31,
+   "hang": [
+    null,
+    1,
+    4,
+    1,
+    2,
+    3,
+    1,
+    1,
+    1,
+    6,
+    1,
+    2,
+    1,
+    1,
+    2,
+    4,
+    1,
+    1,
+    2,
+    1,
+    3,
+    1,
+    1,
+    1,
+    1,
+    5,
+    1,
+    2,
+    2,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    0.5,
+    0.27,
+    0.28,
+    0.23,
+    0.24,
+    0.19,
+    0.22,
+    0.24,
+    0.22,
+    0.24,
+    0.22,
+    0.18,
+    0.21,
+    0.21,
+    0.22,
+    0.19,
+    0.23,
+    0.21,
+    0.21,
+    0.25,
+    0.21,
+    0.22,
+    0.22,
+    0.24,
+    0.26,
+    0.22,
+    0.3,
+    0.24,
+    0.24,
+    0.21,
+    0.21
+   ],
+   "thoi_gian_trung_binh_ms": 0.2,
+   "thoi_gian_p95_ms": 0.3,
+   "top1_van_ban": {
+    "Quy chế đào tạo trình độ đại học SGU 202": 24,
+    "QĐ 810 về học cùng lúc hai chương trình": 4,
+    "QĐ 2375/2022 về chuyển chương trình, ngà": 2,
+    "Quy định khối lượng đào tạo hệ chính quy": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Chương trình đào tạo cử nhân hệ chính quy học trong bao lâu?",
+     "dung": "2",
+     "top3": [
+      "Quy định khối lượng đào tạo hệ chính quy theo tín chỉ",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 7",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 4"
+     ]
+    },
+    {
+     "cau_hoi": "Đào tạo vừa làm vừa học kéo dài hơn chính quy bao nhiêu phần trăm?",
+     "dung": "2",
+     "top3": [
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 7",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 15",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 14"
+     ]
+    },
+    {
+     "cau_hoi": "Sinh viên được phép học trực tuyến tối đa bao nhiêu phần trăm chương trình?",
+     "dung": "8",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 9",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 7"
+     ]
+    },
+    {
+     "cau_hoi": "Điểm trung bình bao nhiêu thì được xếp loại Giỏi?",
+     "dung": "10",
+     "top3": [
+      "QĐ 810 về học cùng lúc hai chương trình – Điều 3",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 9",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 17"
+     ]
+    },
+    {
+     "cau_hoi": "Điều kiện để được chuyển ngành đào tạo là gì?",
+     "dung": "15",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 3",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 4",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.5806,
+    "R@3": 0.8387,
+    "R@5": 0.9355,
+    "R@10": 0.9677,
+    "R@1_ci95": [
+     0.5806,
+     0.4194,
+     0.7419
+    ],
+    "R@3_ci95": [
+     0.8387,
+     0.7097,
+     0.9677
+    ],
+    "R@5_ci95": [
+     0.9355,
+     0.8387,
+     1.0
+    ],
+    "R@10_ci95": [
+     0.9677,
+     0.9032,
+     1.0
+    ],
+    "MRR": 0.7269,
+    "MRR@3": 0.6989,
+    "nDCG@1": 0.5806,
+    "nDCG@3": 0.735,
+    "nDCG@10": 0.7868
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_02.json",
+   "cau_hinh": "bm25",
+   "cau_hinh_chi_tiet": {
+    "baseline": "bm25"
+   },
+   "so_cau": 10,
+   "hang": [
+    2,
+    1,
+    4,
+    8,
+    6,
+    3,
+    1,
+    1,
+    1,
+    null
+   ],
+   "thoi_gian_ms": [
+    0.42,
+    0.3,
+    0.3,
+    0.22,
+    0.2,
+    0.23,
+    0.21,
+    0.25,
+    0.27,
+    0.28
+   ],
+   "thoi_gian_trung_binh_ms": 0.3,
+   "thoi_gian_p95_ms": 0.4,
+   "top1_van_ban": {
+    "Quy chế đào tạo trình độ đại học SGU 202": 6,
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 4
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Một năm học theo quy định sửa đổi có thể tổ chức bao nhiêu học kỳ chính?",
+     "dung": "6",
+     "top3": [
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 6",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 5",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 1"
+     ]
+    },
+    {
+     "cau_hoi": "Điểm B+ tương ứng với khoảng điểm số nào trên thang điểm 10?",
+     "dung": "9",
+     "top3": [
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 9",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 13",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 21"
+     ]
+    },
+    {
+     "cau_hoi": "Điểm D+ tương ứng với khoảng điểm số nào trên thang điểm 10?",
+     "dung": "9",
+     "top3": [
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 9",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 21"
+     ]
+    },
+    {
+     "cau_hoi": "Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào?",
+     "dung": "2 (QĐ 3183)",
+     "top3": [
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 9",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 5"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.4,
+    "R@3": 0.6,
+    "R@5": 0.7,
+    "R@10": 0.9,
+    "R@1_ci95": [
+     0.4,
+     0.1,
+     0.7
+    ],
+    "R@3_ci95": [
+     0.6,
+     0.3,
+     0.9
+    ],
+    "R@5_ci95": [
+     0.7,
+     0.4,
+     1.0
+    ],
+    "R@10_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "MRR": 0.5375,
+    "MRR@3": 0.4833,
+    "nDCG@1": 0.4,
+    "nDCG@3": 0.5131,
+    "nDCG@10": 0.6233
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_01.json",
+   "cau_hinh": "khong-xep-hang",
+   "cau_hinh_chi_tiet": {
+    "baseline": "khong-xep-hang"
+   },
+   "so_cau": 31,
+   "hang": [
+    12,
+    12,
+    12,
+    13,
+    14,
+    16,
+    16,
+    17,
+    17,
+    18,
+    19,
+    19,
+    19,
+    19,
+    20,
+    20,
+    20,
+    21,
+    21,
+    22,
+    23,
+    23,
+    23,
+    24,
+    24,
+    25,
+    26,
+    27,
+    27,
+    29,
+    29
+   ],
+   "thoi_gian_ms": [
+    0.05,
+    0.05,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.05,
+    0.04,
+    0.04,
+    0.05,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.05,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04
+   ],
+   "thoi_gian_trung_binh_ms": 0.0,
+   "thoi_gian_p95_ms": 0.1,
+   "top1_van_ban": {
+    "QĐ 2375/2022 về chuyển chương trình, ngà": 31
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Chương trình đào tạo cử nhân hệ chính quy học trong bao lâu?",
+     "dung": "2",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Thời gian tối đa để hoàn thành khóa học là bao lâu?",
+     "dung": "2",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Đào tạo vừa làm vừa học kéo dài hơn chính quy bao nhiêu phần trăm?",
+     "dung": "2",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Nếu không đạt một học phần bắt buộc thì phải làm gì?",
+     "dung": "3",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Giờ học chính quy được tổ chức trong khung giờ nào, ngày nào trong tuần?",
+     "dung": "4",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Một năm học có bao nhiêu học kỳ?",
+     "dung": "6",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Một học phần được xếp lịch tối đa bao nhiêu giờ mỗi tuần?",
+     "dung": "6",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Khối lượng học tập tối thiểu và tối đa mỗi học kỳ chính là bao nhiêu?",
+     "dung": "7",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Muốn rút bớt học phần đã đăng ký thì trong thời hạn bao lâu?",
+     "dung": "7",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Sinh viên được phép học trực tuyến tối đa bao nhiêu phần trăm chương trình?",
+     "dung": "8",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Mỗi học phần được đánh giá qua tối thiểu bao nhiêu điểm thành phần?",
+     "dung": "9",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Điểm A tương ứng với khoảng điểm số nào?",
+     "dung": "9",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Vắng thi không có lý do chính đáng thì bị điểm bao nhiêu?",
+     "dung": "9",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Học cải thiện điểm thì điểm chính thức được tính như thế nào?",
+     "dung": "9",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Điểm chữ A quy đổi thành bao nhiêu điểm số để tính trung bình?",
+     "dung": "10",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Điểm trung bình bao nhiêu thì được xếp loại Giỏi?",
+     "dung": "10",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Sinh viên năm thứ hai được xác định dựa trên tiêu chí nào?",
+     "dung": "10",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Điểm trung bình học kỳ dưới bao nhiêu thì bị cảnh báo học tập?",
+     "dung": "11",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Sinh viên bị buộc thôi học trong những trường hợp nào?",
+     "dung": "11",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Tín chỉ được công nhận chuyển đổi tối đa bao nhiêu phần trăm chương trình?",
+     "dung": "12",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Điều kiện để được xét công nhận tốt nghiệp là gì?",
+     "dung": "13",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Sau khi đủ điều kiện tốt nghiệp, trong bao lâu thì được cấp bằng?",
+     "dung": "13",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Trường hợp nào làm giảm một mức xếp hạng tốt nghiệp loại xuất sắc?",
+     "dung": "13",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Sinh viên được nghỉ học tạm thời trong những trường hợp nào?",
+     "dung": "14",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Sau khi hết hạn nghỉ học tạm thời mà không làm thủ tục quay lại thì sao?",
+     "dung": "14",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Điều kiện để được chuyển ngành đào tạo là gì?",
+     "dung": "15",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Trao đổi sinh viên với cơ sở đào tạo khác được tối đa bao nhiêu phần trăm chương trình?",
+     "dung": "16",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Muốn đăng ký học chương trình thứ hai thì cần đạt điều kiện gì?",
+     "dung": "17",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Sớm nhất khi nào sinh viên được đăng ký học chương trình thứ hai?",
+     "dung": "17",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Thi hộ người khác thì bị xử lý kỷ luật như thế nào?",
+     "dung": "19",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Sử dụng bằng cấp giả để trúng tuyển thì bị xử lý ra sao?",
+     "dung": "19",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.0,
+    "R@3": 0.0,
+    "R@5": 0.0,
+    "R@10": 0.0,
+    "R@1_ci95": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "R@3_ci95": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "R@5_ci95": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "R@10_ci95": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "MRR": 0.0527,
+    "MRR@3": 0.0,
+    "nDCG@1": 0.0,
+    "nDCG@3": 0.0,
+    "nDCG@10": 0.0
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_02.json",
+   "cau_hinh": "khong-xep-hang",
+   "cau_hinh_chi_tiet": {
+    "baseline": "khong-xep-hang"
+   },
+   "so_cau": 10,
+   "hang": [
+    48,
+    48,
+    47,
+    49,
+    49,
+    51,
+    49,
+    49,
+    49,
+    52
+   ],
+   "thoi_gian_ms": [
+    0.06,
+    0.05,
+    0.05,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04,
+    0.04
+   ],
+   "thoi_gian_trung_binh_ms": 0.0,
+   "thoi_gian_p95_ms": 0.1,
+   "top1_van_ban": {
+    "QĐ 2375/2022 về chuyển chương trình, ngà": 10
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Thời gian rút bớt học phần đã đăng ký theo quy định mới là bao lâu?",
+     "dung": "7",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Khi nào sinh viên mới được phép chính thức bỏ lớp học phần sau khi xin rút?",
+     "dung": "7",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Một năm học theo quy định sửa đổi có thể tổ chức bao nhiêu học kỳ chính?",
+     "dung": "6",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Điểm B+ tương ứng với khoảng điểm số nào trên thang điểm 10?",
+     "dung": "9",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Điểm D+ tương ứng với khoảng điểm số nào trên thang điểm 10?",
+     "dung": "9",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Điểm C+ được quy đổi thành bao nhiêu điểm số trên thang điểm 4?",
+     "dung": "10",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Điểm chữ R được dùng để biểu thị trường hợp nào?",
+     "dung": "9",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Điểm chưa hoàn thiện do được phép hoãn thi, kiểm tra được ghi nhận bằng điểm chữ nào?",
+     "dung": "9",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Ký hiệu điểm chữ nào dùng cho học phần được miễn học và công nhận tín chỉ?",
+     "dung": "9",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào?",
+     "dung": "2 (QĐ 3183)",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.0,
+    "R@3": 0.0,
+    "R@5": 0.0,
+    "R@10": 0.0,
+    "R@1_ci95": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "R@3_ci95": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "R@5_ci95": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "R@10_ci95": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "MRR": 0.0204,
+    "MRR@3": 0.0,
+    "nDCG@1": 0.0,
+    "nDCG@3": 0.0,
+    "nDCG@10": 0.0
+   }
+  }
+ ]
+}

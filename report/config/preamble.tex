@@ -46,8 +46,13 @@
 \usepackage{listings}
 
 % --- Trích dẫn ---
+%% Ghi chú: biblatex khuyến nghị csquotes, nhưng máy chạy lại không cài gói này;
+%% thiếu nó chỉ sinh cảnh báo, không ảnh hưởng nội dung.
 \usepackage[backend=biber, style=numeric, sorting=none]{biblatex}
 \addbibresource{references.bib}
+% biblatex không hỗ trợ tiếng Việt: ánh xạ sang tiếng Anh để các chuỗi
+% "In:", "et al.", "and" hiện đúng thay vì rơi vào định nghĩa dự phòng hỏng.
+\DeclareLanguageMapping{vietnamese}{english}
 
 % --- Siêu liên kết (nạp sau cùng) ---
 \usepackage{hyperref}

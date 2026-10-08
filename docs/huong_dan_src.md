@@ -39,15 +39,17 @@ Traceback có `response_synthesizers` / `llms/ollama` là lỗi ở bước 2 (L
 | File | Vai trò | Chạy trực tiếp |
 |---|---|---|
 | `corpus.py` | **Nội dung đầu vào**: `PROCESSED_ROOT`, `CORPUS_DIR`, dict `SGU_HIEU_LUC` (tiền tố tên file → tên hiển thị) | — |
-| `config.py` | `RAGConfig` + 2 profile `local` / `server`, chọn qua `RAG_PROFILE`; đọc `.env` | `python src/config.py` in config đang dùng |
+| `config.py` | `RAGConfig` + 2 profile `local` / `server`, chọn qua `RAG_PROFILE`; `resolve_device()` tự hạ cấp về CPU khi không có CUDA; `mo_ta()` để ghi kèm kết quả đo | `python src/config.py` in config đang dùng |
 | `processed_loader.py` | Đọc Markdown tầng 2 → `TextNode` | in số Node theo file / phần |
 | `index_builder.py` | Chọn embedding (local hoặc model server), build/load index, kiểm tra fingerprint | `--rebuild` để build lại |
-| `retriever.py` | Retriever top-k, reranker (local hoặc remote), `search()`, `node_label()` | `"câu hỏi" [--rerank]` |
+| `retriever.py` | Retriever top-k, tuỳ chọn hybrid BM25 (`--hybrid`), ngưỡng tương đồng, reranker (local hoặc remote), `search()`, `node_label()` | `"câu hỏi" [--rerank] [--hybrid]` |
 | `query_engine.py` | Prompt `QA_PROMPT`, LLM Ollama, `ask()` in câu trả lời + nguồn | hỏi thử 1 câu cố định |
 | `pipeline.py` | Vòng lặp hỏi-đáp terminal, gõ `thoat` để dừng | ✓ |
+| `bm25.py` | BM25 Okapi thuần Python + `BM25Retriever` (BaseRetriever) cho hybrid search | tự chạy thử với 2 Node mẫu |
 | `remote_models.py` | Client HTTP: `RemoteEmbedding`, `RemoteRerank`, `check_server` | — |
 | `model_server.py` | Server FastAPI giữ embedding + reranker trên GPU (`/health`, `/embed`, `/rerank`). **Độc lập**, chép riêng lên máy GPU được | qua `uvicorn` |
-| `ingestion.py`, `node_parser.py` | **Bản cũ** (OCR trực tiếp + cắt theo regex "Điều X") — pipeline hiện tại không dùng | — |
+| `ingestion.py`, `node_parser.py` | **Bản cũ** (OCR trực tiếp + cắt theo regex "Điều X") — pipeline hiện tại không dùng, giữ lại để đối chiếu trong báo cáo | — |
+| `ingestion.py` (đầu vào OCR) | `scripts/extract_to_md.py` → `scripts/clean_md.py` (tầng 1 → tầng 2) | — |
 
 ### 2.1 `corpus.py` — thêm / bớt văn bản
 
@@ -82,6 +84,8 @@ Biến môi trường (`.env`):
 | `OLLAMA_BASE_URL` | Chỉ profile `server` đọc. Thiếu `http://` thì tự thêm |
 | `MODEL_SERVER_URL` | Có giá trị thì embedding/rerank gọi model server thay vì nạp lên GPU local. **Phải có `http://`** |
 | `MODEL_SERVER_TOKEN` | Tuỳ chọn; trùng với token đặt khi chạy server |
+| `RAG_EMBED_DEVICE` | Ép thiết bị embedding/reranker (`cpu` khi máy không có GPU) |
+| `RAG_TEMPERATURE`, `RAG_SEED` | Ghi đè độ ngẫu nhiên của LLM (mặc định `0.0` và `42`) |
 
 ### 2.3 `processed_loader.py` — cắt Node
 
@@ -89,13 +93,15 @@ Heading do `clean_md.py` dựng: `#` văn bản → `##` Chương → `###` Đi�
 
 - Mỗi `###` / `####` là một Node. Nội dung nằm ngay dưới `#` / `##` chỉ thành Node khi dài ≥ `MIN_TU_NOI_DUNG` (30 từ), dành cho văn bản không chia Điều.
 - Node dài hơn `MAX_TU` (1024 từ) được cắt bằng `SentenceSplitter`, metadata thêm `phan_doan`.
-- Metadata: `van_ban`, `chuong`, `dieu`, `sua_doi_dieu`, `phan` (`chinh` / `sua_doi` / `ban_hanh` / `noi_dung`), `file`, `file_goc`, `url`.
-- `file`, `file_goc`, `url`, `phan` **không** đưa vào embedding và prompt (`KHONG_EMBED`). Nhờ vậy "Điều 9" của hai văn bản khác nhau vẫn cho vector khác nhau, vì `van_ban` có mặt trong embedding.
+- Metadata: `van_ban`, `chuong`, `dieu`, `sua_doi_dieu`, `phan` (`chinh` / `sua_doi` / `ban_hanh` / `noi_dung`), `file`, `file_goc`, `url`, và `nguon_trich`.
+- **Metadata rỗng bị loại bỏ** khỏi Node (trước đây Node nào cũng mang `chuong: `, `dieu: `, `sua_doi_dieu: ` rỗng gây nhiễu vector).
+- **Chỉ `nguon_trich`** ("Điều 9 — Quy chế ... 2021") được đưa vào embedding; `file`, `file_goc`, `url`, `phan` không vào prompt (`KHONG_LLM`). Nhờ vậy "Điều 9" của hai văn bản khác nhau vẫn cho vector khác nhau mà vector không bị pha tạp bởi khóa kỹ thuật.
+- `LOADER_VERSION`, `MAX_TU`, `MIN_TU_NOI_DUNG` được ghi vào fingerprint của index.
 
 ### 2.4 `index_builder.py` — khi nào build lại
 
-`corpus.json` lưu cạnh index gồm: tên model embedding, `corpus_dir`, và sha256 + tên hiển thị của từng file.
-Fingerprint khác thì tự build lại. Fingerprint **không** bao gồm code của `processed_loader.py` (`MAX_TU`, cách cắt, metadata), nên khi sửa loader phải chạy `--rebuild`.
+`corpus.json` lưu cạnh index gồm: tên model embedding, `corpus_dir`, `loader` (`phien_ban`, `max_tu`, `min_tu_noi_dung`), và sha256 + tên hiển thị của từng file.
+Fingerprint khác thì tự build lại — kể cả khi chỉ đổi `MAX_TU`/`MIN_TU_NOI_DUNG`. Khi sửa **logic** cắt trong `processed_loader.py` mà không đổi `LOADER_VERSION` thì vẫn phải chạy `--rebuild`.
 
 ### 2.5 `retriever.py` / `query_engine.py`
 
@@ -141,6 +147,19 @@ MODEL_SERVER_URL=http://<IP>:<cổng map tới 8001>
 
 Khi khởi động, client gọi `/health` và báo lỗi nếu server chạy embedding hoặc reranker **khác** profile. Index đã build không cần build lại vì cùng tên model.
 
+## 3.5. Kiểm thử và đánh giá
+
+| Lệnh | Việc |
+|---|---|
+| `make test` | 26 kiểm thử offline (`unittest`) cho `processed_loader`, `bm25`, `metrics`, `config`, corpus thật |
+| `make eval` | Đo truy hồi 4 cấu hình (vector / +rerank / hybrid / hybrid+rerank), ghi `eval/results/truy-hoi.{json,md}` |
+| `make baseline` | Baseline BM25 và "không xếp hạng" — sàn so sánh cho báo cáo |
+| `make eval-answers` | Chấm câu trả lời bằng `FaithfulnessEvaluator`, `RelevancyEvaluator`, `CorrectnessEvaluator` của LlamaIndex (cần Ollama) |
+| `make report` | Build PDF báo cáo |
+
+Chỉ số truy hồi do `eval/metrics.py` tính: Recall@k, MRR, nDCG, khoảng tin cậy bootstrap, kiểm định McNemar
+cho so sánh cặp. `eval/evaluate.py --kiem-chung` chấm chéo bằng `RetrieverEvaluator` của thư viện.
+
 ## 4. Lệnh thường dùng
 
 ```bash
@@ -164,4 +183,4 @@ Thêm văn bản mới: `extract_to_md.py <thư mục raw>` → sửa tay ở `d
 | `401 Sai hoặc thiếu token` | Server có đặt `MODEL_SERVER_TOKEN` nhưng `.env` local thiếu hoặc sai |
 | `corpus_files không khớp file nào` | Tiền tố trong `SGU_HIEU_LUC` không khớp file `.md` nào trong `CORPUS_DIR` |
 | `Không thấy data/processed/...` | Chưa chạy `extract_to_md.py` → `clean_md.py`, hoặc không chạy từ thư mục gốc repo |
-| Sửa `processed_loader.py` mà kết quả không đổi | Fingerprint không theo dõi code, cần chạy `index_builder.py --rebuild` |
+| Sửa logic `processed_loader.py` mà kết quả không đổi | Fingerprint theo dõi `LOADER_VERSION` và các ngưỡng, nhưng không theo dõi toàn bộ mã: đổi cách cắt thì tăng `LOADER_VERSION` hoặc chạy `index_builder.py --rebuild` |

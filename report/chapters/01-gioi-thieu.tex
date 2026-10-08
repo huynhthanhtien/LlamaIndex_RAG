@@ -8,7 +8,7 @@ Quy chế đào tạo là văn bản mà sinh viên tra cứu thường xuyên t
 
 Hai cách xử lý thông thường đều có hạn chế. Tìm kiếm theo từ khóa trong file PDF chỉ khớp khi người dùng dùng đúng thuật ngữ của văn bản; nếu người dùng diễn đạt khác (``cấm thi'' thay cho ``không đủ điều kiện dự thi'') thì không tìm thấy. Hỏi trực tiếp một mô hình ngôn ngữ lớn (LLM) thì câu trả lời nghe rất trôi chảy nhưng không có căn cứ vào quy chế của SGU, và mô hình có thể bịa ra số liệu hoặc điều khoản không tồn tại.
 
-Kỹ thuật \textbf{RAG} (Retrieval-Augmented Generation --- sinh văn bản có tăng cường truy hồi) giải quyết đúng khoảng trống này: trước khi trả lời, hệ thống tìm những đoạn quy chế liên quan nhất, rồi yêu cầu LLM chỉ trả lời dựa trên các đoạn đó. \textbf{LlamaIndex} là một framework mã nguồn mở cung cấp sẵn các thành phần cho toàn bộ chuỗi xử lý này (đọc dữ liệu, cắt đoạn, lập chỉ mục, truy hồi, tổng hợp câu trả lời), nên được chọn làm nền tảng của đồ án.
+Kỹ thuật \textbf{RAG} (Retrieval-Augmented Generation --- sinh văn bản có tăng cường truy hồi)~\cite{lewis2020rag,gao2023ragsurvey} giải quyết đúng khoảng trống này: trước khi trả lời, hệ thống tìm những đoạn quy chế liên quan nhất, rồi yêu cầu LLM chỉ trả lời dựa trên các đoạn đó. \textbf{LlamaIndex} là một framework mã nguồn mở cung cấp sẵn các thành phần cho toàn bộ chuỗi xử lý này (đọc dữ liệu, cắt đoạn, lập chỉ mục, truy hồi, tổng hợp câu trả lời)~\cite{llamaindex2025docs,llamaindexrepo}, nên được chọn làm nền tảng của đồ án.
 
 \section{Mục tiêu của đề tài}
 
@@ -19,18 +19,24 @@ Mục tiêu chung của đồ án là tìm hiểu LlamaIndex và vận dụng k�
   \item Xây dựng bước nạp dữ liệu từ PDF bản scan tiếng Việt (OCR) thành các \texttt{Document} có metadata.
   \item Xây dựng bước cắt văn bản theo cấu trúc pháp lý của quy chế (từng \emph{Điều}) thành các \texttt{Node} kèm số Điều.
   \item Lập chỉ mục vector bằng mô hình embedding tiếng Việt, truy hồi top-$k$ và sinh câu trả lời có trích dẫn số Điều bằng LLM chạy qua Ollama.
-  \item Đo chất lượng truy hồi bằng bộ câu hỏi có nhãn (Recall@$k$, MRR) và phân tích các lỗi của câu trả lời.
+  \item Đo chất lượng truy hồi bằng bộ câu hỏi có nhãn (Recall@$k$, MRR, nDCG) \emph{kèm khoảng tin cậy}, so với baseline không dùng embedding.
+  \item Chấm chất lượng câu trả lời bằng các evaluator có sẵn của LlamaIndex (faithfulness, relevancy, correctness) thay vì chỉ đọc thủ công.
+  \item Viết kiểm thử tự động và ghim phiên bản thư viện để mọi số liệu trong báo cáo tái lập được bằng một lệnh.
 \end{enumerate}
 
 \section{Phạm vi báo cáo}
 
-Báo cáo bao gồm phần \emph{Bắt buộc lõi} của đồ án: kiến thức nền, thiết lập môi trường, kiến trúc, mã nguồn và kết quả chạy thật của cả sáu giai đoạn pipeline (nạp dữ liệu, cắt Node, lập chỉ mục, truy hồi, tổng hợp câu trả lời, đánh giá). Ở thời điểm viết, toàn bộ sáu giai đoạn đã có mã nguồn chạy được trên một văn bản là \emph{Quy chế đào tạo trình độ đại học của SGU năm 2021}; hệ thống hỏi đáp chạy được qua dòng lệnh (\texttt{src/pipeline.py}).
+Báo cáo bao gồm phần \emph{Bắt buộc lõi} của đồ án: kiến thức nền, thiết lập môi trường, kiến trúc, mã nguồn và kết quả chạy thật của cả sáu giai đoạn pipeline (chuẩn bị dữ liệu, cắt Node, lập chỉ mục, truy hồi, tổng hợp câu trả lời, đánh giá). Ở thời điểm viết, toàn bộ sáu giai đoạn đã có mã nguồn chạy được trên \textbf{6 văn bản quy chế đang áp dụng} (Quy chế 2021, Quyết định sửa đổi 3183/2025 và bốn quy định khác), tổng 54 Node; hệ thống hỏi đáp chạy được qua dòng lệnh (\texttt{src/pipeline.py}) và qua giao diện Gradio chạy thử (\texttt{app/app.py}).
 
-Reranker là phần \emph{chọn thêm}: mã nguồn đã có (bật ở profile máy chủ) và báo cáo có đo tác động của nó lên truy hồi, nhưng không đi sâu. Những phần chưa làm --- giao diện web Gradio, mở rộng sang nhiều văn bản (Quyết định sửa đổi 3183/2025, các văn bản công tác sinh viên) và bộ định tuyến (router) giữa các nguồn --- được đánh dấu rõ là chưa triển khai.
+Các phần \emph{chọn thêm} đã có mã và đã đo: hybrid BM25 + vector, xếp hạng lại bằng cross-encoder, ngưỡng tương đồng, model server HTTP cho embedding/reranker. Những phần \textbf{chưa} làm được đánh dấu rõ: bộ định tuyến theo nhóm văn bản, lọc metadata theo hiệu lực và khóa tuyển sinh, vector store ngoài, chat engine có viết lại câu hỏi theo lịch sử hội thoại.
+
+\paragraph{Những gì đã sửa so với bản báo cáo trước.} Bản trước mô tả pipeline một văn bản với \texttt{src/ingestion.py} và \texttt{src/node\_parser.py}; hai module này nay không còn trong pipeline. Bản này đồng bộ lại toàn bộ Chương 3--5 với mã nguồn hiện tại, đo lại số liệu truy hồi trên corpus 6 văn bản, thêm chương trình kiểm thử, ghim phiên bản thư viện và bổ sung danh mục tài liệu tham khảo.
 
 \section{Phương pháp thực hiện}
 
-Đồ án làm theo từng giai đoạn nhỏ; mỗi giai đoạn phải chạy được và cho kết quả quan sát được trước khi sang giai đoạn kế tiếp. Số liệu trong Chương 3, 4 và 5 đều lấy từ việc chạy thật các script trong repository, không dùng số liệu minh họa. Khi một module chưa tồn tại, báo cáo nói rõ là chưa triển khai thay vì mô tả như thể đã xong.
+Đồ án làm theo từng giai đoạn nhỏ; mỗi giai đoạn phải chạy được và cho kết quả quan sát được trước khi sang giai đoạn kế tiếp. Số liệu trong Chương 3, 4 và 5 đều lấy từ việc chạy thật các script trong repository, không dùng số liệu minh họa.
+
+Để người đọc kiểm chứng lại: mọi thư viện đã được ghim phiên bản trong \texttt{requirements.txt}; \texttt{make test} chạy 26 kiểm thử offline (không cần GPU, không cần Ollama); \texttt{make eval} và \texttt{make baseline} sinh lại đúng các bảng số ở Chương~\ref{ch:danh-gia} thành JSON và Markdown trong \texttt{eval/results/}. Phiên bản thư viện, cấu hình và thời điểm đo được ghi kèm trong file kết quả (\texttt{RAGConfig.mo\_ta()}). Khi một module chưa tồn tại, báo cáo nói rõ là chưa triển khai thay vì mô tả như thể đã xong.
 
 \section{Bố cục báo cáo}
 
