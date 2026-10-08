@@ -1,10 +1,15 @@
-llama-index-core
-llama-index-embeddings-huggingface
-llama-index-llms-ollama
-sentence-transformers
-sentencepiece
-protobuf
-pytesseract
-pdf2image
-gradio
-python-dotenv
+# Ghim đúng phiên bản đã đo trong báo cáo (Chương 3) để kết quả tái lập được.
+# Nâng cấp: sửa số ở đây, chạy `make test` rồi `make eval` và cập nhật lại bảng trong báo cáo.
+llama-index-core==0.14.24
+llama-index-embeddings-huggingface==0.8.0
+llama-index-llms-ollama==0.11.0
+sentence-transformers==6.0.1
+sentencepiece==0.2.2
+protobuf==7.36.2
+torch==2.14.0          # bản CPU cũng chạy; máy GPU cài theo hướng dẫn của PyTorch
+pytesseract==0.3.13
+pdf2image==1.17.0
+gradio==6.27.0
+python-dotenv==1.2.3
+httpx==0.28.1          # app/app.py và eval/evaluate_answers.py gọi HTTP trực tiếp
+ollama==0.6.2          # app/app.py bắt lỗi qua ollama.ResponseError

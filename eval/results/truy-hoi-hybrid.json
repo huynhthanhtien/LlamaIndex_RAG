@@ -1,0 +1,476 @@
+{
+ "thoi_diem": "2026-10-05 16:31:06",
+ "ket_qua": [
+  {
+   "bo_cau_hoi": "test_questions_01.json",
+   "cau_hinh": "hybrid",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cpu",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": false,
+    "reranker_model": null,
+    "reranker_top_n": 3,
+    "use_hybrid": true,
+    "bm25_top_k": 10,
+    "fusion_mode": "reciprocal_rerank",
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc",
+    "persist_dir": "storage/server/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc"
+   },
+   "so_cau": 31,
+   "hang": [
+    4,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    4,
+    1,
+    2,
+    2,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    161.85,
+    143.87,
+    154.73,
+    130.0,
+    150.02,
+    127.63,
+    138.71,
+    135.25,
+    132.82,
+    134.49,
+    137.55,
+    113.54,
+    139.1,
+    133.09,
+    147.67,
+    140.2,
+    155.49,
+    163.13,
+    139.9,
+    167.48,
+    165.24,
+    176.54,
+    166.93,
+    165.04,
+    352.43,
+    189.44,
+    165.7,
+    149.7,
+    144.13,
+    143.94,
+    150.19
+   ],
+   "thoi_gian_trung_binh_ms": 155.3,
+   "thoi_gian_p95_ms": 189.4,
+   "top1_van_ban": {
+    "Quy chế đào tạo trình độ đại học SGU 202": 23,
+    "QĐ 2375/2022 về chuyển chương trình, ngà": 3,
+    "QĐ 810 về học cùng lúc hai chương trình": 3,
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 2
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Chương trình đào tạo cử nhân hệ chính quy học trong bao lâu?",
+     "dung": "2",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 4",
+      "Quy định số tín chỉ tối thiểu kỹ sư CNTT (khóa 2017 trở đi)",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Điều kiện để được chuyển ngành đào tạo là gì?",
+     "dung": "15",
+     "top3": [
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 4",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 3",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.7742,
+    "R@3": 0.9355,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.7742,
+     0.6129,
+     0.9032
+    ],
+    "R@3_ci95": [
+     0.9355,
+     0.8387,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.8656,
+    "MRR@3": 0.8495,
+    "nDCG@1": 0.7742,
+    "nDCG@3": 0.8717,
+    "nDCG@10": 0.8995
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_02.json",
+   "cau_hinh": "hybrid",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cpu",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": false,
+    "reranker_model": null,
+    "reranker_top_n": 3,
+    "use_hybrid": true,
+    "bm25_top_k": 10,
+    "fusion_mode": "reciprocal_rerank",
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc",
+    "persist_dir": "storage/server/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc"
+   },
+   "so_cau": 10,
+   "hang": [
+    1,
+    1,
+    2,
+    3,
+    3,
+    1,
+    1,
+    1,
+    1,
+    null
+   ],
+   "thoi_gian_ms": [
+    156.77,
+    161.11,
+    153.44,
+    156.02,
+    159.84,
+    167.91,
+    166.98,
+    178.84,
+    178.94,
+    179.24
+   ],
+   "thoi_gian_trung_binh_ms": 165.9,
+   "thoi_gian_p95_ms": 179.2,
+   "top1_van_ban": {
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 8,
+    "Quy chế đào tạo trình độ đại học SGU 202": 2
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào?",
+     "dung": "2 (QĐ 3183)",
+     "top3": [
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 9"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.6,
+    "R@3": 0.9,
+    "R@5": 0.9,
+    "R@10": 0.9,
+    "R@1_ci95": [
+     0.6,
+     0.3,
+     0.9
+    ],
+    "R@3_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@5_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@10_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "MRR": 0.7167,
+    "MRR@3": 0.7167,
+    "nDCG@1": 0.6,
+    "nDCG@3": 0.7631,
+    "nDCG@10": 0.7631
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_01.json",
+   "cau_hinh": "hybrid+rerank",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cpu",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "use_hybrid": true,
+    "bm25_top_k": 10,
+    "fusion_mode": "reciprocal_rerank",
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc",
+    "persist_dir": "storage/server/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc"
+   },
+   "so_cau": 31,
+   "hang": [
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    1,
+    3,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    2,
+    2,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    8867.09,
+    9548.82,
+    8451.77,
+    9091.92,
+    8509.9,
+    8065.67,
+    8338.33,
+    8437.97,
+    8092.38,
+    8163.98,
+    7451.51,
+    8494.15,
+    8715.79,
+    8747.94,
+    8357.56,
+    7842.59,
+    8127.22,
+    7834.51,
+    7897.54,
+    7402.3,
+    7304.67,
+    7543.83,
+    7728.44,
+    7524.45,
+    7409.74,
+    7290.38,
+    8477.08,
+    9246.67,
+    8958.11,
+    8144.11,
+    7900.42
+   ],
+   "thoi_gian_trung_binh_ms": 8192.5,
+   "thoi_gian_p95_ms": 9246.7,
+   "top1_van_ban": {
+    "Quy chế đào tạo trình độ đại học SGU 202": 25,
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 3,
+    "QĐ 810 về học cùng lúc hai chương trình": 2,
+    "QĐ 2375/2022 về chuyển chương trình, ngà": 1
+   },
+   "ngoai_top3": [],
+   "chi_so": {
+    "R@1": 0.8065,
+    "R@3": 1.0,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.8065,
+     0.6452,
+     0.9355
+    ],
+    "R@3_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.8925,
+    "MRR@3": 0.8925,
+    "nDCG@1": 0.8065,
+    "nDCG@3": 0.9201,
+    "nDCG@10": 0.9201
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_02.json",
+   "cau_hinh": "hybrid+rerank",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cpu",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "use_hybrid": true,
+    "bm25_top_k": 10,
+    "fusion_mode": "reciprocal_rerank",
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc",
+    "persist_dir": "storage/server/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc"
+   },
+   "so_cau": 10,
+   "hang": [
+    1,
+    2,
+    1,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1,
+    null
+   ],
+   "thoi_gian_ms": [
+    8174.15,
+    8518.04,
+    9018.96,
+    9285.09,
+    8104.18,
+    8751.11,
+    8924.27,
+    8995.1,
+    9664.75,
+    8674.04
+   ],
+   "thoi_gian_trung_binh_ms": 8811.0,
+   "thoi_gian_p95_ms": 9664.8,
+   "top1_van_ban": {
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 9,
+    "Quy chế đào tạo trình độ đại học SGU 202": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào?",
+     "dung": "2 (QĐ 3183)",
+     "top3": [
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.6,
+    "R@3": 0.9,
+    "R@5": 0.9,
+    "R@10": 0.9,
+    "R@1_ci95": [
+     0.6,
+     0.3,
+     0.9
+    ],
+    "R@3_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@5_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@10_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "MRR": 0.75,
+    "MRR@3": 0.75,
+    "nDCG@1": 0.6,
+    "nDCG@3": 0.7893,
+    "nDCG@10": 0.7893
+   }
+  }
+ ]
+}

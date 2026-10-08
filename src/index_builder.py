@@ -1,3 +1,4 @@
+"""Dựng / nạp lại VectorStoreIndex từ Node của processed_loader, có kiểm tra fingerprint."""
 import hashlib
 import json
 import logging
@@ -9,20 +10,28 @@ from llama_index.core import Settings, StorageContext, VectorStoreIndex, load_in
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from config import RAGConfig, get_config
-from processed_loader import corpus_files, load_corpus_nodes, ten_hien_thi
+from config import RAGConfig, get_config, resolve_device
+from processed_loader import (
+    LOADER_VERSION,
+    MAX_TU,
+    MIN_TU_NOI_DUNG,
+    corpus_files,
+    load_corpus_nodes,
+    ten_hien_thi,
+)
 
 logger = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parent.parent
-FINGERPRINT = "corpus.json"  # lưu cạnh index: index được build từ những file / model nào
+FINGERPRINT = "corpus.json"  # lưu cạnh index: index được build từ những file / model / loader nào
 
 
 def make_local_embedding(cfg: RAGConfig) -> HuggingFaceEmbedding:
-    fp16 = cfg.use_fp16 and cfg.embed_device == "cuda"
+    device = resolve_device(cfg.embed_device)
+    fp16 = cfg.use_fp16 and device == "cuda"
     return HuggingFaceEmbedding(
         model_name=cfg.embed_model_name,
-        device=cfg.embed_device,
+        device=device,
         embed_batch_size=4 if fp16 else 10,  # batch nhỏ để không tràn VRAM trên card 4 GB
         model_kwargs={"torch_dtype": torch.float16} if fp16 else {},
     )
@@ -31,6 +40,7 @@ def make_local_embedding(cfg: RAGConfig) -> HuggingFaceEmbedding:
 def setup_embedding(cfg: RAGConfig) -> None:
     if cfg.model_server_url:
         from remote_models import RemoteEmbedding, check_server
+
         check_server(cfg.model_server_url, cfg.embed_model_name, cfg.reranker_model_name)
         Settings.embed_model = RemoteEmbedding(
             base_url=cfg.model_server_url, model_name=cfg.embed_model_name, embed_batch_size=32
@@ -39,11 +49,19 @@ def setup_embedding(cfg: RAGConfig) -> None:
         Settings.embed_model = make_local_embedding(cfg)
 
 
-def corpus_fingerprint(cfg: RAGConfig) -> dict[str, str | dict[str, str]]:
-    """Model embedding + sha256 và tên hiển thị từng file tầng 2; khác đi thì index cũ không còn đúng
-    (tên hiển thị được ghép vào văn bản khi embedding)."""
+def corpus_fingerprint(cfg: RAGConfig) -> dict[str, object]:
+    """Model embedding + phiên bản loader + sha256 và tên hiển thị từng file tầng 2.
+
+    Trước đây fingerprint chỉ gồm tên model và nội dung file, nên sửa cách cắt Node trong
+    processed_loader.py mà quên `--rebuild` sẽ dùng index cũ (bẫy đã ghi trong huong_dan_src.md).
+    """
     files = {p.name: f"{hashlib.sha256(p.read_bytes()).hexdigest()} | {ten_hien_thi(cfg, p)}" for p in corpus_files(cfg)}
-    return {"embed_model": cfg.embed_model_name, "corpus_dir": cfg.corpus_dir, "files": files}
+    return {
+        "embed_model": cfg.embed_model_name,
+        "corpus_dir": cfg.corpus_dir,
+        "loader": {"phien_ban": LOADER_VERSION, "max_tu": MAX_TU, "min_tu_noi_dung": MIN_TU_NOI_DUNG},
+        "files": files,
+    }
 
 
 def build_or_load_index(cfg: RAGConfig, rebuild: bool = False) -> VectorStoreIndex:
@@ -58,10 +76,12 @@ def build_or_load_index(cfg: RAGConfig, rebuild: bool = False) -> VectorStoreInd
             index = load_index_from_storage(StorageContext.from_defaults(persist_dir=str(persist_dir)))
             assert isinstance(index, VectorStoreIndex)
             return index
-        logger.warning("Corpus hoặc model embedding đã đổi so với index đã lưu — build lại")
+        logger.warning("Corpus, model embedding hoặc loader đã đổi so với index đã lưu — build lại")
 
     nodes = load_corpus_nodes(cfg)
-    logger.info(f"Build Index mới từ {len(nodes)} node ({len(fingerprint['files'])} văn bản)")
+    files = fingerprint["files"]
+    assert isinstance(files, dict)
+    logger.info(f"Build Index mới từ {len(nodes)} node ({len(files)} văn bản)")
     index = VectorStoreIndex(nodes, show_progress=True)
     persist_dir.mkdir(parents=True, exist_ok=True)
     index.storage_context.persist(persist_dir=str(persist_dir))

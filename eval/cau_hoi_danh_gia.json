@@ -1,0 +1,15 @@
+[
+  {"question": "Học cử nhân cần bao nhiêu tín chỉ?", "pham_vi": "trong", "dap_an": "Tối thiểu 120 tín chỉ (Điều 2, Quy chế đào tạo SGU 2021)", "nguon": "bảng Ch.5 báo cáo + eval/results/test-basic.md"},
+  {"question": "Muốn được điểm B cần bao nhiêu điểm?", "pham_vi": "trong", "dap_an": "Từ 7,0 đến 8,4 trên thang điểm 10 (Điều 9)", "nguon": "bảng Ch.5 báo cáo"},
+  {"question": "Kỳ 1 tôi bị cảnh báo, kỳ 2 bình thường, kỳ 3 bị cảnh báo thì có bị buộc thôi học không?", "pham_vi": "trong", "dap_an": "Không, vì chỉ buộc thôi học khi bị cảnh báo quá hai lần liên tiếp (Điều 11)", "nguon": "bảng Ch.5 báo cáo"},
+  {"question": "Mua bằng tiếng Anh giả nộp cho trường thì bị xử lý thế nào?", "pham_vi": "trong", "dap_an": "Buộc thôi học và thu hồi bằng (Điều 19)", "nguon": "bảng Ch.5 báo cáo"},
+  {"question": "Điểm 8,4 hệ 10 thì hệ 4 được bao nhiêu?", "pham_vi": "trong", "dap_an": "8,4 là điểm B, quy đổi thành 3 điểm hệ 4 (Điều 9, 10)", "nguon": "bảng Ch.5 báo cáo (câu hệ thống trả lời sai)"},
+  {"question": "Khối lượng học kỳ chính tối thiểu bao nhiêu tuần?", "pham_vi": "trong", "dap_an": "Hai học kỳ chính cộng lại tối thiểu 30 tuần (Điều 6)", "nguon": "bảng Ch.5 báo cáo (câu hệ thống trả lời sai)"},
+  {"question": "Học bị điểm F thì điểm chính thức của học phần được lấy thế nào?", "pham_vi": "trong", "dap_an": "Lấy điểm cao nhất trong các lần học (Điều 9)", "nguon": "bảng Ch.5 báo cáo"},
+  {"question": "Điểm P có được tính vào điểm trung bình không?", "pham_vi": "trong", "dap_an": "Không tính vào điểm trung bình (Điều 10 khoản 3)", "nguon": "bảng Ch.5 báo cáo"},
+  {"question": "Ra trường loại xuất sắc cần bao nhiêu điểm?", "pham_vi": "trong", "dap_an": "Điểm trung bình tích lũy từ 3,6 đến 4,0 (Điều 10)", "nguon": "bảng Ch.5 báo cáo (câu hệ thống từ chối sai)"},
+  {"question": "Kỹ sư CNTT cần tối thiểu bao nhiêu tín chỉ?", "pham_vi": "trong", "dap_an": "150 tín chỉ (Quy định số tín chỉ tối thiểu kỹ sư CNTT)", "nguon": "eval/results/test-basic.md"},
+  {"question": "Điểm rèn luyện là gì?", "pham_vi": "ngoai", "dap_an": "Không thuộc Quy chế đào tạo (văn bản riêng của công tác sinh viên) — phải từ chối", "nguon": "bảng Ch.5 báo cáo"},
+  {"question": "Bao nhiêu tiền một tín chỉ?", "pham_vi": "ngoai", "dap_an": "Không thuộc Quy chế đào tạo — phải từ chối", "nguon": "bảng Ch.5 báo cáo"},
+  {"question": "IELTS 5.5 có được miễn học phần tiếng Anh không?", "pham_vi": "ngoai", "dap_an": "Corpus hiện chưa có văn bản quy đổi chuẩn tiếng Anh — phải từ chối", "nguon": "docs/bao_cao_cai_tien_rag.md mục 4"}
+]

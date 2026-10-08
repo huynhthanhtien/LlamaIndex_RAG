@@ -17,13 +17,18 @@ Chạy từ thư mục gốc của repo (đường dẫn trong code là tương 
 RAG_PROFILE=server venv/bin/python src/index_builder.py            # build/load Index (thêm --rebuild để build lại)
 RAG_PROFILE=server venv/bin/python src/retriever.py "câu hỏi"      # thử truy hồi (thêm --rerank)
 RAG_PROFILE=server venv/bin/python src/query_engine.py             # thử hỏi-đáp 1 câu
-RAG_PROFILE=server venv/bin/python eval/evaluate.py [--rerank]     # Recall@k, MRR theo (văn bản, Điều), 2 bộ câu hỏi
+RAG_PROFILE=server venv/bin/python eval/evaluate.py [--rerank]     # Recall@k, MRR, nDCG, CI bootstrap, 2 bộ câu hỏi
+RAG_PROFILE=server venv/bin/python eval/baselines.py              # baseline BM25 / không xếp hạng
+make test                                                          # 26 kiểm thử offline (không cần GPU/Ollama)
 RAG_PROFILE=server venv/bin/python src/pipeline.py                 # hỏi-đáp qua terminal, gõ 'thoat' để dừng
 ```
 
 - Văn bản nạp vào index: `corpus_dir`, `corpus_files` và tên hiển thị `ten_van_ban` lấy mặc định từ `src/corpus.py` (`CORPUS_DIR`, dict `SGU_HIEU_LUC`).
 - Index lưu ở `storage/<profile>/<thư mục corpus>` kèm `corpus.json`; tự build lại khi văn bản, tên hiển thị hoặc model embedding đổi.
-- Rerank: `use_rerank` trong `src/config.py`, mặc định **tắt** — trên corpus hiện tại rerank làm giảm Recall@1 (xem `eval/evaluate.py --rerank`).
+- Rerank: `use_rerank` trong `src/config.py`, mặc định **tắt** — trên corpus hiện tại rerank làm giảm Recall@1 (xem `make eval`).
+- Hybrid BM25 + vector: `use_hybrid` trong `src/config.py` (mặc định tắt), chạy thử bằng `eval/evaluate.py --cau-hinh hybrid`.
+- Trả lời tất định: `temperature=0`, `seed=42` trong `make_llm()`; đổi qua `RAG_TEMPERATURE`, `RAG_SEED`.
+- Máy không có GPU: `RAG_EMBED_DEVICE=cpu` hoặc để `resolve_device()` tự hạ cấp về CPU.
 - Notebook `notebooks/build_check_processed.ipynb`: build + đo RAM/VRAM + so sánh có/không rerank, gọi đúng code trên.
 
 ## Giới hạn đã biết (chưa triển khai, để ở Chương 5 báo cáo sau)
@@ -31,7 +36,7 @@ RAG_PROFILE=server venv/bin/python src/pipeline.py                 # hỏi-đáp
 - Rerank có sẵn nhưng mặc định tắt (xem trên); profile `local` không có reranker
 - Profile `local` (`vietnamese-bi-encoder`) chỉ nhận 256 token và cần tách từ — Recall thấp hơn hẳn profile `server`
 - Chưa nhớ ngữ cảnh hội thoại (câu hỏi nối tiếp), chưa có Router giữa nhiều nhóm văn bản
-- Chưa có giao diện Gradio
+- Giao diện Gradio mới ở mức chạy thử: `RAG_PROFILE=server venv/bin/python app/app.py` (http://127.0.0.1:7860)
 
 ## Kiến trúc
 
@@ -55,19 +60,26 @@ Cấu hình cho từng profile (`local` / `server`) được định nghĩa tậ
 ├── docs/
 │   └── giao_trinh/     # Tài liệu tham khảo, giáo trình
 ├── eval/
-│   └── results/        # Kết quả đánh giá hệ thống RAG
+│   ├── evaluate.py      # truy hồi: Recall@k, MRR, nDCG, CI bootstrap, McNemar
+│   ├── baselines.py     # baseline BM25 / không xếp hạng
+│   ├── evaluate_answers.py  # chấm câu trả lời bằng evaluator của LlamaIndex
+│   ├── metrics.py       # độ đo + kiểm định thống kê
+│   └── results/         # Kết quả đánh giá (JSON + Markdown)
 ├── notebooks/          # Notebook thử nghiệm
 ├── scripts/            # Script tiện ích (OCR, thử nghiệm nhanh...)
 ├── src/
-│   ├── config.py           # Cấu hình RAG: profile, model, văn bản nạp vào index
+│   ├── config.py           # Cấu hình RAG: profile, model, tham số truy hồi, văn bản nạp vào index
+│   ├── bm25.py             # BM25 thuần Python (không cần gói ngoài) cho hybrid search
 │   ├── processed_loader.py # Markdown tầng 2 -> Node
 │   ├── index_builder.py    # build/load index theo profile
 │   ├── retriever.py        # tìm kiếm + rerank
-│   ├── query_engine.py     # prompt + LLM + trích nguồn
+│   ├── query_engine.py     # prompt + LLM (temperature=0, seed) + trích nguồn
 │   └── model_server.py     # (tuỳ chọn) server embedding + reranker, chạy riêng trên GPU
 ├── storage/
 │   └── <profile>/...       # Vector index đã build (không commit)
-└── requirements.txt
+├── tests/              # kiểm thử offline (unittest)
+├── Makefile            # make test / eval / baseline / report
+└── requirements.txt    # đã ghim phiên bản
 ```
 
 ## Cài đặt
@@ -114,7 +126,11 @@ In ra profile đang dùng (`local`/`server`) và các thông số tương ứng.
 
 ## Trạng thái dự án
 
-Dự án đang trong giai đoạn xây dựng ban đầu: pipeline OCR đã hoạt động, các bước index hoá và pipeline truy vấn/RAG hoàn chỉnh đang được phát triển tiếp.
+Sáu giai đoạn của pipeline đã chạy được trên 6 văn bản quy chế đang áp dụng: `scripts/extract_to_md.py` +
+`scripts/clean_md.py` (dữ liệu) → `src/processed_loader.py` (Node) → `src/index_builder.py` (index) →
+`src/retriever.py` (vector, tuỳ chọn hybrid BM25) → `src/query_engine.py` (LLM + trích nguồn) →
+`eval/` (truy hồi, baseline, chấm câu trả lời). Phần chưa làm: router theo nhóm văn bản, lọc theo hiệu lực,
+bộ đánh giá có đáp án chuẩn đủ lớn. Xem `docs/bao_cao_cai_tien_rag.md` và báo cáo MD trong `docs/`.
 
 ## Giấy phép
 

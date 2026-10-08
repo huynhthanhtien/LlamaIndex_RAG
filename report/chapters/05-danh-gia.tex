@@ -1,83 +1,178 @@
 \chapter{Đánh giá}
 \label{ch:danh-gia}
 
+Chương này đo chất lượng hệ thống theo hai tầng: (1) \emph{truy hồi} --- đo tự động, có thể chạy lại
+bằng một lệnh; (2) \emph{câu trả lời} --- đối chiếu với văn bản quy chế. Cách đánh giá ở đây khác bản
+báo cáo trước ở ba điểm: mọi chỉ số đi kèm \textbf{khoảng tin cậy bootstrap}, có \textbf{baseline}
+để so (không chỉ số của chính hệ thống), và có \textbf{kiểm định cặp} để biết chênh lệch có ý nghĩa
+hay chỉ là nhiễu.
 
-Chương này đo chất lượng hệ thống theo hai tầng như đã nêu ở Chương 2: (1) \emph{truy hồi} --- đo tự động bằng bộ câu hỏi có nhãn; (2) \emph{câu trả lời} --- phân tích thủ công nhật ký hỏi đáp, đối chiếu từng câu trả lời với văn bản quy chế. Toàn bộ số liệu dưới đây là kết quả chạy thật trên máy phát triển (RTX A2000 Laptop 4 GB).
+\paragraph{Môi trường đo.} Toàn bộ số liệu dưới đây được sinh lại bằng \texttt{make eval},
+\texttt{make baseline} và \texttt{make test} trên máy chạy lại \textbf{không có GPU NVIDIA}, nên
+embedding và reranker chạy trên CPU (\texttt{resolve\_device()} tự hạ cấp). Điều này không ảnh hưởng
+tới các chỉ số chất lượng (vector fp32 trên CPU so với fp16 trên GPU chỉ khác nhau ở mức làm tròn),
+nhưng làm thời gian mỗi câu lớn hơn nhiều so với con số đo trên GPU ở bản báo cáo trước. Mọi kết quả
+được ghi kèm cấu hình và thời điểm đo trong \texttt{eval/results/*.json}.
+
 
 \section{Đánh giá truy hồi}
 
 \subsection{Phương pháp}
 
-Script \texttt{eval/evaluate.py} nạp chỉ mục, lấy retriever của profile đang chọn, và với mỗi câu hỏi kiểm tra Điều đúng có nằm trong $k$ Node đầu tiên hay không:
+Hai bộ câu hỏi có nhãn như Chương~\ref{ch:co-so-ly-thuyet}: bộ 01 (31 câu về Quy chế 2021) và bộ 02
+(10 câu về nội dung sửa đổi bởi Quyết định 3183/2025). Vì corpus có nhiều văn bản trùng số Điều, mỗi
+bộ có luật riêng xác định Node nào là ``đúng'' (ví dụ bộ 01 tính cả Node gốc của Quy chế và Node sửa
+đổi tương ứng của QĐ 3183).
 
-\begin{lstlisting}[language=Python, caption={Hàm tính Recall@$k$ trong \texttt{eval/evaluate.py}.}, label={lst:evaluate}]
-K_VALUES = (1, 3, 5, 10)
-
-def evaluate(questions: list[dict], retriever) -> dict[int, float]:
-    hits = {k: 0 for k in K_VALUES}
-    for q in questions:
-        retrieved = [n.node.metadata.get("dieu") for n in retriever.retrieve(q["question"])]
-        for k in K_VALUES:
-            if q["dieu_dung"] in retrieved[:k]:
-                hits[k] += 1
-        if q["dieu_dung"] not in retrieved:
-            print(f"MISS: {q['question']} | (*@đúng: Điều@*) {q['dieu_dung']} | (*@truy hồi:@*) {retrieved}")
-    return {k: hits[k] / len(questions) for k in K_VALUES}
-\end{lstlisting}
-
-Hàm so khớp bằng metadata \texttt{dieu} chứ không bằng nội dung văn bản, nên chỉ đúng khi mỗi số Điều chỉ xuất hiện một lần trong chỉ mục --- điều kiện đã được bảo đảm ở Mục \ref{sec:index} (21 Node, mỗi Điều một lần). \texttt{evaluate.py} chỉ đo retriever và chỉ đọc bộ câu hỏi thứ nhất. Để có thêm MRR, chạy bộ câu hỏi thứ hai và đo tác động của reranker, nhóm dùng thêm một script đo tạm (không lưu trong repository) gọi lại đúng các hàm \texttt{build\_or\_load\_index}, \texttt{get\_retriever} và \texttt{get\_postprocessors} của dự án, với cùng định nghĩa Recall@$k$.
-
-Ba cấu hình được đo:
+Bốn độ đo và hai loại kiểm định được cài trong \texttt{eval/metrics.py}:
 
 \begin{itemize}
-  \item \textbf{local}: \texttt{vietnamese-bi-encoder}, top-10, không rerank. Chỉ mục được lập riêng cho phép đo vì chỉ mục đang lưu là 1024 chiều.
-  \item \textbf{server}: \texttt{Vietnamese\_Embedding}, top-10, không rerank. Đây cũng là cấu hình mà \texttt{eval/evaluate.py} đo khi \texttt{RAG\_PROFILE=server}.
-  \item \textbf{server + rerank}: như trên, sau đó \texttt{Vietnamese\_Reranker} chấm lại 10 Node và giữ 3. Do card 4 GB không chứa đồng thời hai mô hình ở fp32 (Mục \ref{sec:phan-cung}), embedding chạy trên CPU và reranker trên GPU trong phép đo này.
+  \item \textbf{Recall@$k$}: tỷ lệ câu có Node đúng trong $k$ hạng đầu.
+  \item \textbf{MRR}: trung bình nghịch đảo hạng của Node đúng đầu tiên.
+  \item \textbf{nDCG@$k$}: như Recall nhưng tính cả vị trí, không chỉ ``có hay không''.
+  \item \textbf{Khoảng tin cậy bootstrap} (2\,000 lần lấy mẫu lại) cho mọi chỉ số --- bắt buộc khi bộ
+        câu hỏi chỉ có 10--31 câu.
+  \item \textbf{Kiểm định McNemar chính xác}: so hai cấu hình trên \emph{cùng} bộ câu hỏi, trả lời
+        câu hỏi ``chênh lệch này có thể chỉ do may mắn không''.
 \end{itemize}
+
+Ngoài ra \texttt{eval/evaluate.py --kiem-chung} chấm lại cùng bộ câu hỏi bằng
+\texttt{RetrieverEvaluator} của LlamaIndex (các metric \texttt{hit\_rate}, \texttt{mrr}) để đối chiếu
+cách đo tự viết với cách đo của thư viện.
 
 \subsection{Kết quả}
 
 \begin{table}[H]
   \centering
   \small
-  \begin{tabularx}{\textwidth}{l l *{5}{>{\centering\arraybackslash}X}}
+  \begin{tabularx}{\textwidth}{l l *{4}{>{\centering\arraybackslash}X} >{\centering\arraybackslash}X}
     \toprule
-    \textbf{Bộ câu hỏi} & \textbf{Cấu hình} & \textbf{R@1} & \textbf{R@3} & \textbf{R@5} & \textbf{R@10} & \textbf{MRR} \\
+    \textbf{Bộ} & \textbf{Cấu hình} & \textbf{R@1 (CI 95\%)} & \textbf{R@3} & \textbf{MRR} & \textbf{nDCG@1} & \textbf{ms/câu} \\
     \midrule
-    Bộ 01 (31 câu)
-      & local           & 64,5\% & 87,1\%  & 90,3\%  & 100\% & 0,770 \\
-      & server          & 87,1\% & 100\%   & 100\%   & 100\% & 0,935 \\
-      & server + rerank & 87,1\% & 96,8\%  & ---     & ---   & 0,919 \\
+    01 (31 câu) & vector (mặc định)          & 81\% [68--94] & 100\% & 0,892 & 0,806 & 165 \\
+                & + rerank                    & 81\% [65--94] & 100\% & 0,892 & 0,806 & 8\,487 \\
+                & hybrid (RRF, trọng số bằng) & 77\% [61--90] & 94\%  & 0,866 & 0,774 & 155 \\
+                & hybrid + rerank             & 81\% [65--94] & 100\% & 0,892 & 0,806 & 8\,193 \\
+                & hybrid ưu tiên vector 3:1   & 84\% [71--97] & 100\% & 0,914 & 0,839 & 148 \\
     \midrule
-    Bộ 02 (10 câu)
-      & local           & 20,0\% & 50,0\%  & 70,0\%  & 90,0\% & 0,433 \\
-      & server          & 70,0\% & 90,0\%  & 90,0\%  & 90,0\% & 0,800 \\
-      & server + rerank & 70,0\% & 90,0\%  & ---     & ---    & 0,800 \\
+    02 (10 câu) & vector (mặc định)          & 90\% [70--100] & 90\%  & 0,910 & 0,900 & 149 \\
+                & + rerank                    & 60\% [30--90]  & 100\% & 0,783 & 0,600 & 7\,854 \\
+                & hybrid (RRF, trọng số bằng) & 60\% [30--90]  & 90\%  & 0,717 & 0,600 & 166 \\
+                & hybrid + rerank             & 60\% [30--90]  & 90\%  & 0,750 & 0,600 & 8\,811 \\
+                & hybrid ưu tiên vector 3:1   & 80\% [50--100] & 90\%  & 0,850 & 0,800 & 137 \\
     \bottomrule
   \end{tabularx}
-  \caption{Kết quả truy hồi. Với rerank, chỉ 3 Node được giữ lại nên R@5 và R@10 không có nghĩa.}
+  \caption{Truy hồi trên corpus 6 văn bản / 54 Node, profile \texttt{server}
+  (\texttt{AITeamVN/Vietnamese\_Embedding}), đo trên CPU. Sinh lại bằng \texttt{make eval}.}
   \label{tab:recall}
 \end{table}
 
-Thời gian truy hồi trung bình mỗi câu (đã nạp sẵn mô hình, trên GPU): khoảng 8 ms với profile \texttt{local} và 17--50 ms với profile \texttt{server}. Cấu hình có rerank mất khoảng 1{,}2 giây mỗi câu, nhưng con số này gồm cả việc embedding câu hỏi trên CPU nên không dùng để kết luận về chi phí riêng của reranker.
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l l *{4}{>{\centering\arraybackslash}X} >{\centering\arraybackslash}X}
+    \toprule
+    \textbf{Bộ} & \textbf{Baseline} & \textbf{R@1 (CI 95\%)} & \textbf{R@3} & \textbf{R@10} & \textbf{MRR} & \textbf{ms/câu} \\
+    \midrule
+    01 (31 câu) & BM25 (tìm từ khóa)   & 58\% [42--74] & 84\% & 97\% & 0,727 & 0{,}2 \\
+                & không xếp hạng        & 0\%           & 0\%  & 0\%  & 0,053 & 0{,}05 \\
+    02 (10 câu) & BM25 (tìm từ khóa)   & 40\% [10--70] & 60\% & 90\% & 0,537 & 0{,}3 \\
+                & không xếp hạng        & 0\%           & 0\%  & 0\%  & 0,020 & 0{,}05 \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Baseline (sinh lại bằng \texttt{make baseline}). ``Không xếp hạng'' trả về Node theo thứ tự
+  docstore --- tức mốc sàn khi không có bước xếp hạng nào.}
+  \label{tab:baseline}
+\end{table}
 
 \subsection{Phân tích}
 
-\paragraph{Mô hình embedding quyết định chất lượng truy hồi.} Trên bộ 01, chỉ đổi mô hình embedding đã nâng Recall@1 từ 64,5\% lên 87,1\% và MRR từ 0,770 lên 0,935. Với profile \texttt{server}, Điều đúng luôn nằm trong top 3 cho cả 31 câu. Với profile \texttt{local}, phải tới $k=10$ (tức gần một nửa trong 21 Điều) mới tìm thấy hết; bốn câu trượt khỏi top 3, ví dụ ``Một học phần được xếp lịch tối đa bao nhiêu giờ mỗi tuần?'' (đúng: Điều 6, nhận được Điều 4, 7, 3). Vì $k=10$ nên LLM vẫn thấy Điều đúng trong ngữ cảnh ở cả hai profile, nhưng với profile \texttt{local} nó lẫn giữa nhiều Điều không liên quan hơn.
+\paragraph{1. Mô hình embedding là yếu tố quyết định, và thiết kế ``cắt theo Điều'' là điều kiện để nó phát huy.}
+Trên bộ 01, vector đạt R@1 = 81\% và R@3 = 100\%, trong khi BM25 --- đúng kiểu tìm kiếm từ khóa mà
+sinh viên đang dùng trên file PDF --- chỉ đạt R@1 = 58\% và R@3 = 84\%. Khoảng cách 23 điểm phần trăm
+ở R@1 là kết quả có ý nghĩa thực tiễn lớn nhất của đồ án: nó định lượng được cái mà phần mở đầu chỉ
+nói bằng lời, rằng ``cấm thi'' không tìm được ``không đủ điều kiện dự thi'' bằng từ khóa.
 
-\paragraph{Reranker không cải thiện trên dữ liệu hiện tại.} Trên bộ 01, reranker giữ nguyên Recall@1 và \emph{làm tụt} một câu ra khỏi top 3: ``Đào tạo vừa làm vừa học kéo dài hơn chính quy bao nhiêu phần trăm?'' (đúng: Điều 2) bị xếp sau Điều 4, 20, 5 --- Điều 4 có tên ``Hình thức đào tạo'' và nói nhiều về vừa làm vừa học, nên cross-encoder đánh giá cao hơn. Trên bộ 02, kết quả không đổi. Lý do hợp lý là kho chỉ có 21 Node, retriever đã đặt Điều đúng vào top 3 ở hầu hết câu hỏi, nên reranker gần như không còn chỗ để cải thiện mà vẫn có thể làm hỏng. Reranker chỉ đáng giá khi kho lớn hơn nhiều (nhiều văn bản, Node nhỏ hơn); với dữ liệu hiện tại nó tốn thêm một mô hình trên GPU và loại bỏ 7 trong 10 Node mà không đem lại lợi ích đo được.
+\paragraph{2. Xếp hạng lại (rerank) không cải thiện trên kho nhỏ, và có hại cho bộ 02.}
+Trên bộ 01, rerank giữ nguyên cả ba chỉ số (81\% / 100\% / 0,892) nhưng đổi thứ tự top-1 ở bốn câu
+(số câu lấy đúng Quy chế 2021 tăng từ 23 lên 25). Trên bộ 02, rerank \emph{làm R@1 tụt từ 90\% xuống
+60\%} và MRR từ 0,910 xuống 0,783, đổi lại R@3 tăng từ 90\% lên 100\%. Nguyên nhân hợp lý: các mục
+sửa đổi của QĐ 3183 rất ngắn và dùng chung từ vựng (``thang điểm'', ``điểm chữ''), nên cross-encoder
+đẩy mục sửa đổi ``na ná'' lên trên mục đúng; đổi lại nó kéo được Node đúng vào top-3. Về chi phí,
+trên CPU rerank làm mỗi câu từ 0,15\,s lên 8,5\,s --- chậm hơn khoảng 50 lần --- mà không đem lại chỉ
+số nào tốt hơn. Kết luận thực nghiệm: \textbf{giữ \texttt{use\_rerank=False}} trên quy mô 54 Node, và
+chỉ đo lại khi corpus lớn hơn nhiều (hàng trăm đến hàng nghìn Node).
 
-\paragraph{Số liệu của bộ 02 cao hơn thực tế.} Bộ 02 hỏi về nội dung \emph{sửa đổi} bởi Quyết định 3183/2025: thời hạn rút học phần theo quy định mới, thang điểm chữ bổ sung B+, C+, D+\ldots{} Quyết định này \emph{chưa có trong chỉ mục}; văn bản Quy chế 2021 không hề chứa ``B+'', ``C+'' hay ``D+''. Nhãn \texttt{dieu\_dung} của bộ 02 là số Điều của Quy chế 2021 bị sửa đổi (ví dụ Điều 9 về thang điểm), nên retriever ``trúng'' Điều 9 của bản cũ được tính là đúng dù nội dung Node đó không chứa đáp án. Câu cuối của bộ 02 có nhãn ``2 (QĐ 3183)'' không thể khớp, nên Recall tối đa là 90\%. Như vậy bộ 02 hiện chỉ cho biết retriever tìm đúng \emph{Điều cần sửa đổi}; muốn trả lời được các câu này phải nạp Quyết định 3183/2025 vào chỉ mục (Mục \ref{sec:huong-phat-trien}).
+\paragraph{3. Hybrid search: bản thân BM25 ở đây yếu, và cách trộn còn quan trọng hơn việc có trộn hay không.}
+Cấu hình hybrid mặc định (RRF, hai nguồn trọng số bằng nhau) \emph{làm giảm} chất lượng ở cả hai bộ:
+bộ 01 R@1 81\% $\to$ 77\%, R@3 100\% $\to$ 94\%; bộ 02 R@1 90\% $\to$ 60\%. Vì BM25 một mình chỉ đạt
+58\%/40\% ở R@1, việc cho nó trọng số ngang với vector kéo các Node khớp từ khóa nhưng sai ngữ nghĩa
+lên đầu. Để tách nguyên nhân, đồ án đo thêm biến thể \texttt{relative\_score} với trọng số ưu tiên
+vector 3:1: kết quả \emph{tốt nhất trên bộ 01} (R@1 84\%, MRR 0,914, nDCG@1 0,839) nhưng lại
+\emph{kém hơn vector} trên bộ 02 (R@1 80\% so với 90\%). Nói cách khác, chênh lệch giữa các biến thể
+hybrid nằm trong khoảng nhiễu của bộ câu hỏi, còn tham số trộn thì quyết định kết quả nhiều hơn cả
+việc ``có BM25 hay không''. Đây là lý do \texttt{use\_hybrid} mặc định vẫn là \texttt{False}: muốn
+bật phải chọn fusion mode và trọng số bằng đo trên chính corpus của mình.
+
+\paragraph{4. Kiểm định thống kê: bộ câu hỏi hiện tại chưa đủ mạnh để khẳng định các chênh lệch nhỏ.}
+Kiểm định McNemar chính xác trên R@1:
+\begin{itemize}
+  \item vector vs BM25, bộ 01: chỉ vector đúng 9 câu, chỉ BM25 đúng 2 câu, $p = 0{,}065$;
+  \item vector vs BM25, bộ 02: 5 câu so với 0 câu, $p = 0{,}062$;
+  \item vector vs hybrid ưu tiên vector, bộ 01: 0 câu so với 1 câu, $p = 1{,}000$.
+\end{itemize}
+Như vậy khoảng cách vector--BM25 rất lớn về độ lớn nhưng \emph{chưa đạt} ngưỡng $p<0{,}05$ với 31
+câu, còn chênh lệch +3 điểm phần trăm của biến thể hybrid tốt nhất hoàn toàn có thể là may mắn. Đây
+là hạn chế về \emph{độ mạnh thống kê} của bộ câu hỏi, không phải về hệ thống, và là lý do phải báo
+cáo khoảng tin cậy thay vì chỉ một con số.
+
+\paragraph{5. Kiểm chứng chéo bằng thư viện.} Chạy \texttt{eval/evaluate.py --kiem-chung}, chỉ số do
+\texttt{RetrieverEvaluator} của LlamaIndex tính khớp với chỉ số tự viết: bộ 01 \texttt{mrr}=0,892 và
+bộ 02 \texttt{mrr}=0,910 --- trùng đúng đến ba chữ số thập phân, còn \texttt{hit\_rate}=1,000 ở cả
+hai bộ (tương ứng Recall@10 = 100\%). Việc hai cách đo độc lập cho cùng kết quả là một kiểm tra tính
+đúng đắn của bộ đánh giá.
+
+\paragraph{6. Ca trượt còn lại và nguyên nhân.} Trên bộ 02, câu duy nhất nằm ngoài top-3 ở cấu hình
+vector là ``Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh
+nào?'' --- đáp án nằm ở Điều 2 (điều khoản hiệu lực) của QĐ 3183, nhưng truy hồi trả về các mục sửa
+đổi Điều 9 và 10 vì chúng chứa ký hiệu ``B+'' nhiều lần. Đây là dạng lỗi ``khớp bề mặt thắng khớp
+ngữ nghĩa'' đặc trưng của kho nhỏ, và là lý do nên bổ sung metadata hiệu lực (Mục~\ref{sec:huong-phat-trien}).
+
 
 \section{Đánh giá câu trả lời}
 
-\subsection{Dữ liệu}
+\subsection{Cách đánh giá}
 
-Nhật ký \texttt{eval/results/test-basic.md} ghi lại một phiên chạy \texttt{src/pipeline.py} ở profile \texttt{server} (có reranker, nên mỗi câu trả lời dựa trên 3 Điều): 56 câu hỏi do nhóm tự đặt theo cách sinh viên thật sự hỏi --- nhiều câu viết tắt (``bao nhiêu chỉ''), sai chính tả (``xuất sắt'', ``dạt diều khiện trúng tiển''), câu hỏi nối tiếp (``còn kỹ sư''), và cả câu ngoài phạm vi (học phí, điểm rèn luyện) hoặc không phải câu hỏi (``chán''). Bộ câu hỏi này không có nhãn nên được chấm thủ công bằng cách đối chiếu với bản OCR của Quy chế.
+Bản báo cáo trước chấm câu trả lời bằng tay trên một phiên hỏi đáp 56 câu. Bản này bổ sung
+\texttt{eval/evaluate\_answers.py} để chấm tự động bằng chính các evaluator của LlamaIndex, chạy hàng
+loạt qua \texttt{BatchEvalRunner}:
 
-Trong 56 câu, hệ thống trả lời ``Không tìm thấy trong quy chế'' ở 29 câu (52\%) và đưa ra câu trả lời ở 27 câu.
+\begin{itemize}
+  \item \texttt{FaithfulnessEvaluator} --- câu trả lời có suy ra được từ ngữ cảnh truy hồi không;
+  \item \texttt{RelevancyEvaluator} --- câu trả lời có đúng câu hỏi không;
+  \item \texttt{CorrectnessEvaluator} --- so với đáp án chuẩn trong \texttt{eval/cau\_hoi\_danh\_gia.json};
+  \item chế độ \texttt{closed-book} (LLM trả lời \emph{không} có ngữ cảnh) làm mốc so sánh RAG với
+        không RAG.
+\end{itemize}
 
-\subsection{Các trường hợp tiêu biểu}
+Bộ câu hỏi chấm câu trả lời gồm 13 câu, mỗi câu có trường \texttt{pham\_vi} (``trong'' / ``ngoai'')
+và đáp án chuẩn lấy từ bảng đã kiểm chứng thủ công ở bản báo cáo trước. Nhờ trường \texttt{pham\_vi},
+script tách \textbf{từ chối đúng} (câu ngoài phạm vi) khỏi \textbf{từ chối sai} (đáp án có trong ngữ
+cảnh nhưng hệ thống vẫn nói không tìm thấy) --- chính là hai loại đã bị gộp thành một con số ``52\%
+từ chối'' ở bản trước.
+
+\paragraph{Trạng thái chạy.} Script đã viết xong, kiểm thử import và logic nhận dạng từ chối, nhưng
+\textbf{chưa chạy được} trong môi trường chạy lại vì máy này không có Ollama. Vì vậy Mục~\ref{sec:tra-loi-thu-cong}
+dưới đây vẫn trình bày kết quả chấm tay của phiên chạy trước (có ghi rõ nguồn), còn các bảng điểm
+faithfulness/relevancy/correctness sẽ được điền khi chạy \texttt{make eval-answers} trên máy có LLM.
+
+\subsection{Kết quả chấm tay (phiên chạy 56 câu, profile \texttt{server} có rerank)}
+\label{sec:tra-loi-thu-cong}
+
+Nhật ký \texttt{eval/results/test-basic.md} ghi một phiên chạy \texttt{src/pipeline.py}: 56 câu hỏi do
+nhóm tự đặt theo cách sinh viên thật sự hỏi, gồm cả viết tắt (``bao nhiêu chỉ''), sai chính tả
+(``xuất sắt''), câu hỏi nối tiếp (``còn kỹ sư'') và câu ngoài phạm vi. Hệ thống trả lời ``không tìm
+thấy'' ở 29/56 câu (52\%) và đưa ra câu trả lời ở 27 câu.
 
 \begin{table}[H]
   \centering
@@ -103,52 +198,101 @@ Trong 56 câu, hệ thống trả lời ``Không tìm thấy trong quy chế'' �
     Bao nhiêu tiền một tín chỉ & Không tìm thấy & Không thuộc Quy chế đào tạo & Từ chối đúng \\
     \bottomrule
   \end{tabularx}
-  \caption{Một số câu trả lời trong nhật ký, đối chiếu với văn bản Quy chế 2021.}
+  \caption{Một số câu trả lời trong nhật ký phiên chạy trước, đối chiếu với văn bản Quy chế 2021.
+  Đây là số liệu chấm tay, không sinh lại được bằng lệnh.}
   \label{tab:tra-loi}
 \end{table}
 
 \subsection{Phân tích}
 
-\paragraph{Prompt chống bịa hoạt động, nhưng hơi quá tay.} Với câu hỏi ngoài phạm vi (điểm rèn luyện, học phí, ``nên học lộ trình nào''), hệ thống từ chối thay vì bịa --- đúng mục tiêu đặt ra trong prompt. Nhưng tỷ lệ từ chối 52\% cao hơn tỷ lệ câu thật sự ngoài phạm vi: có những câu mà thông tin \emph{đã nằm trong ngữ cảnh} vẫn bị từ chối, như câu hỏi về điểm ra trường loại xuất sắc. Câu này viết sai chính tả (``xuất sắt''), cho thấy mô hình 8B dễ từ chối khi câu hỏi không khớp chữ với văn bản.
+\paragraph{Prompt chống bịa hoạt động, nhưng hơi quá tay.} Với câu hỏi ngoài phạm vi, hệ thống từ chối
+thay vì bịa --- đúng mục tiêu. Nhưng tỷ lệ từ chối 52\% cao hơn tỷ lệ câu thật sự ngoài phạm vi: có
+câu mà thông tin \emph{đã nằm trong ngữ cảnh} vẫn bị từ chối, như câu hỏi về điểm ra trường loại xuất
+sắc (viết sai chính tả ``xuất sắt''). Đây chính là lý do phải tách ``từ chối đúng'' khỏi ``từ chối
+sai'' như thiết kế ở Mục 5.2.1.
 
-\paragraph{Lỗi sai tập trung ở phép tính và chi tiết số.} Các câu trả lời sai đều có Điều đúng trong ngữ cảnh (truy hồi đúng), nhưng LLM đọc sai hoặc suy diễn thêm: tự ``quy đổi'' 8,4 thành 3,4 thay vì tra bảng quy đổi, đọc ``30 tuần cho 2 học kỳ'' thành ``30 tuần mỗi học kỳ'', hay nhớ quy tắc ``lấy điểm lần cuối'' (phổ biến ở nơi khác) thay cho ``lấy điểm cao nhất'' của SGU. Đây là loại lỗi nguy hiểm nhất vì câu trả lời vẫn trích dẫn đúng Điều nên trông rất đáng tin. Người dùng cần được nhắc đối chiếu Điều được trích, và nên thử prompt yêu cầu trích nguyên văn câu quy định trước khi kết luận.
+\paragraph{Lỗi sai tập trung ở phép tính và chi tiết số.} Các câu trả lời sai đều có Điều đúng trong
+ngữ cảnh (truy hồi đúng), nhưng LLM đọc sai hoặc suy diễn thêm: tự ``quy đổi'' 8,4 thành 3,4 thay vì
+tra bảng, đọc ``30 tuần cho 2 học kỳ'' thành ``30 tuần mỗi học kỳ'', hay nhớ quy tắc ``lấy điểm lần
+cuối'' của trường khác thay cho ``lấy điểm cao nhất'' của SGU. Đây là loại lỗi nguy hiểm nhất vì câu
+trả lời vẫn trích dẫn đúng Điều. Bản này bổ sung hai ràng buộc trong \texttt{QA\_PROMPT} nhắm đúng
+loại lỗi này: \emph{trích nguyên văn câu quy định trước khi kết luận} và \emph{không tự quy đổi thang
+điểm, cần tra bảng thì chép đúng hàng của bảng}. Hiệu quả của hai ràng buộc này cần được đo bằng
+\texttt{make eval-answers} trên máy có LLM, và được ghi nhận là việc còn lại.
 
-\paragraph{Không có ngữ cảnh hội thoại.} \texttt{pipeline.py} gửi từng câu hỏi độc lập cho \texttt{RetrieverQueryEngine}, nên câu nối tiếp ``còn kỹ sư'' (sau câu hỏi về cử nhân) không có đủ thông tin để truy hồi và bị từ chối; hỏi lại đầy đủ ``tôi học kỹ sư thì cần học bao nhiêu chỉ'' thì trả lời đúng 150 tín chỉ. Sinh viên thường hỏi nối tiếp như vậy, nên đây là hạn chế đáng kể.
+\paragraph{Câu trả lời không ổn định --- đã xử lý ở mức mã nguồn.} Bản trước ghi nhận cùng một câu hỏi
+chỉ khác một dấu hỏi chấm mà lần đầu từ chối, lần sau trả lời ``Không''. Nguyên nhân là
+\texttt{Ollama(...)} không đặt \texttt{temperature}, nên mô hình lấy mẫu ngẫu nhiên. Bản này đặt
+\texttt{temperature=0} và \texttt{seed=42} trong \texttt{make\_llm()}; đây là sửa đổi đã kiểm tra ở
+mức mã nguồn nhưng cần một phiên chạy LLM mới để xác nhận bằng số.
 
-\paragraph{Câu trả lời không ổn định.} Cùng một câu hỏi ``tôi học rớt một môn nhưng các kỳ còn lại 4.0 thì có được xuất sắc không'' được hỏi hai lần, chỉ khác nhau một dấu hỏi chấm và khoảng trắng: lần đầu hệ thống từ chối, lần sau trả lời ``Không''. Câu trả lời ``Không'' này cũng chưa đúng với Quy chế: hạng tốt nghiệp xuất sắc chỉ bị hạ một mức khi khối lượng học lại vượt 5\% tổng tín chỉ hoặc người học bị kỷ luật (Điều 13), và điểm học lại được lấy theo lần cao nhất.
+\paragraph{Không có ngữ cảnh hội thoại.} \texttt{RetrieverQueryEngine} gửi từng câu hỏi độc lập, nên
+câu nối tiếp ``còn kỹ sư'' bị từ chối. Sinh viên thường hỏi nối tiếp, nên đây vẫn là hạn chế lớn nhất
+ở tầng sinh.
+
 
 \section{Hạn chế}
 
 \begin{itemize}
-  \item \textbf{Dữ liệu}: chỉ mục mới có một văn bản (Quy chế 2021). Các câu hỏi về quy định mới (Quyết định 3183/2025) và về công tác sinh viên (điểm rèn luyện, học bổng, học phí) chưa trả lời được.
-  \item \textbf{Đánh giá}: bộ câu hỏi có nhãn nhỏ (41 câu) và chỉ chấm truy hồi; câu trả lời mới được chấm thủ công trên một phiên. Bộ 02 cho số liệu cao hơn thực tế như đã phân tích.
-  \item \textbf{Hỏi đáp}: không nhớ ngữ cảnh hội thoại; LLM 8B sai ở các phép quy đổi số; câu trả lời chưa ổn định giữa các lần hỏi.
-  \item \textbf{Hạ tầng}: hai profile dùng chung thư mục chỉ mục dù khác số chiều vector; profile \texttt{server} ở fp32 không vừa card 4 GB khi bật reranker; LLM phụ thuộc máy GPU thuê.
-  \item \textbf{Giao diện}: mới có dòng lệnh, chưa có giao diện web.
+  \item \textbf{Độ mạnh thống kê của bộ câu hỏi.} 31 + 10 = 41 câu là ít; khoảng tin cậy rộng (bộ 02:
+        R@1 90\% với CI 70--100\%) và kiểm định vector--BM25 chưa đạt $p<0{,}05$. Cần mở rộng lên
+        khoảng 150--300 câu, phân tầng theo loại câu hỏi, và có hai người gán nhãn độc lập để báo cáo
+        độ đồng thuận.
+  \item \textbf{Corpus nhỏ.} 6 văn bản / 54 Node. Kết luận ``rerank và hybrid không giúp'' chỉ đúng ở
+        quy mô này; ở kho vài trăm Node trở lên, hai kỹ thuật đó cần được đo lại.
+  \item \textbf{Chất lượng OCR.} Văn bản quan trọng nhất (QĐ 3183/2025) có chất lượng OCR thấp nhất
+        (94,9\% âm tiết hợp lệ) và vẫn còn lỗi như ``Sửa đồi''.
+  \item \textbf{Metadata hiệu lực còn trống.} \texttt{\_metadata\_van\_ban.csv} chưa có số hiệu, ngày
+        ban hành, tình trạng hiệu lực, nên chưa áp dụng được lọc theo hiệu lực hay theo khóa.
+  \item \textbf{Đánh giá câu trả lời chưa chạy tự động.} Script đã có nhưng môi trường chạy lại không
+        có LLM; các bảng điểm tự động và hiệu quả của prompt mới chưa có số.
+  \item \textbf{Hạ tầng đo.} Số liệu trong chương này đo trên CPU; thời gian tuyệt đối không so sánh
+        được với các con số trên GPU ở bản báo cáo trước.
+  \item \textbf{Tầng sinh.} Không nhớ hội thoại, không có công cụ tra bảng/quy đổi điểm, chỉ một lượt
+        gọi LLM trên ngữ cảnh đã truy hồi.
 \end{itemize}
+
 
 \section{Hướng phát triển}
 \label{sec:huong-phat-trien}
 
-Một số việc đã được làm thử trên các nhánh phát triển khác của repository và chưa gộp vào nhánh chính:
+\paragraph{Đã xong trong bản này} (so với danh sách ``hướng phát triển'' của bản báo cáo trước):
+tách thư mục chỉ mục theo profile; fp16 cho embedding và reranker; model server HTTP cho
+embedding/reranker; mở rộng lên 6 văn bản; giao diện Gradio; ghim phiên bản thư viện; kiểm thử tự
+động; đánh giá có khoảng tin cậy, baseline và kiểm định cặp; câu trả lời tất định
+(\texttt{temperature=0}, \texttt{seed}).
 
-\begin{itemize}
-  \item Nạp embedding và reranker ở fp16 để cả hai cùng nằm trên card 4 GB (khoảng 2{,}2 GB).
-  \item Tách embedding và reranker thành một server HTTP (FastAPI) để nạp mô hình một lần, các tiến trình hỏi đáp và đánh giá chỉ gọi qua HTTP. Khi thử, vector do server trả về trùng với vector tính tại chỗ (cosine $\geq 0{,}99999$).
-  \item Tổ chức lại 305 tệp tài liệu đã thu thập từ website đào tạo, công tác sinh viên và các khoa thành năm nhóm (quy chế đào tạo, công tác sinh viên, chương trình đào tạo, khóa luận--thực tập, biểu mẫu), kèm file metadata ghi URL gốc và các bản trùng nội dung.
-\end{itemize}
-
-Các bước tiếp theo theo thứ tự ưu tiên:
-
+\paragraph{Còn lại, theo thứ tự ưu tiên:}
 \begin{enumerate}
-  \item Nạp Quyết định 3183/2025 và gắn metadata tên văn bản, ngày hiệu lực vào Node; khi một Điều đã bị sửa đổi, ưu tiên nội dung mới. Sau đó sửa nhãn của bộ 02 để chấm theo văn bản, không chỉ theo số Điều.
-  \item Thay \texttt{RetrieverQueryEngine} bằng chat engine có viết lại câu hỏi theo lịch sử hội thoại (ví dụ chế độ \emph{condense question} của LlamaIndex) để xử lý câu hỏi nối tiếp.
-  \item Mở rộng sang các văn bản công tác sinh viên, kèm bộ định tuyến (router) chọn chỉ mục theo loại câu hỏi.
-  \item Xây bộ đánh giá câu trả lời có đáp án chuẩn, chấm tự động bằng LLM hoặc theo từ khóa số liệu.
-  \item Tách thư mục chỉ mục theo profile; gỡ trường \texttt{corpus\_sources} không dùng trong \texttt{config.py}.
-  \item Làm giao diện Gradio hiển thị câu trả lời kèm nguyên văn các Điều được trích.
+  \item \textbf{Chạy} \texttt{make eval-answers} trên máy có Ollama để có số faithfulness/relevancy/
+        correctness, và so chế độ RAG với \texttt{closed-book}. Đây là việc còn thiếu duy nhất của
+        phần đánh giá.
+  \item \textbf{Mở rộng bộ câu hỏi} lên vài trăm câu, có nhãn loại câu (trong/ngoài phạm vi, viết tắt,
+        nối tiếp, cần tra bảng) và hai người gán nhãn độc lập.
+  \item \textbf{Điền metadata hiệu lực} (\texttt{so\_hieu}, \texttt{ngay\_ban\_hanh}, \texttt{tinh\_trang})
+        rồi dùng \texttt{MetadataFilters} để loại văn bản hết hiệu lực --- \texttt{processed\_loader}
+        đã sẵn sàng nhận các trường này từ front matter.
+  \item \textbf{Liên kết Điều gốc với mục sửa đổi} bằng \texttt{NodeRelationship}: khi truy hồi được
+        Điều 7 của Quy chế 2021 thì tự động kèm mục ``sửa đổi Điều 7'' của QĐ 3183, và ngược lại.
+  \item \textbf{Small-to-big}: cắt thêm Node con theo khoản, truy hồi trên Node con rồi đưa Điều cha
+        cho LLM (\texttt{HierarchicalNodeParser} + \texttt{AutoMergingRetriever}) --- nhắm đúng lỗi
+        ``đọc sai chi tiết số'' trong Điều dài.
+  \item \textbf{Chat engine có ngữ cảnh} (\texttt{CondensePlusContextChatEngine}) cho câu hỏi nối tiếp;
+        giao diện Gradio đã có sẵn lịch sử chat.
+  \item \textbf{Công cụ tra bảng quy đổi điểm} (\texttt{FunctionTool} + agent) thay vì để LLM tự tính.
+  \item \textbf{Vector store ngoài} (Chroma/Qdrant) khi corpus vượt vài trăm Node, để lọc metadata
+        phức tạp và cập nhật từng phần.
 \end{enumerate}
+
 
 \section{Kết luận}
 
-Đồ án đã xây dựng được một hệ RAG hoàn chỉnh trên LlamaIndex cho Quy chế đào tạo SGU 2021, chạy bằng mô hình mở: OCR văn bản scan, cắt theo Điều, lập chỉ mục vector, truy hồi, sinh câu trả lời tiếng Việt có trích dẫn số Điều. Ở bước truy hồi, với mô hình \texttt{AITeamVN/Vietnamese\_Embedding}, Điều đúng nằm trong top 3 ở cả 31 câu của bộ 01 (Recall@1 87,1\%, MRR 0,935). Điểm yếu hiện nay không còn ở truy hồi mà ở dữ liệu (mới có một văn bản) và ở bước sinh: LLM 8B đôi khi đọc sai số liệu hoặc từ chối dù ngữ cảnh có đáp án. Đây là hai hướng cần tập trung tiếp theo.
+Trên corpus 6 văn bản / 54 Node, hệ thống đạt Recall@1 = 81\% và Recall@3 = 100\% ở bộ 31 câu hỏi về
+Quy chế 2021, và Recall@1 = 90\% ở bộ 10 câu về nội dung sửa đổi --- trong khi baseline tìm từ khóa
+BM25 chỉ đạt 58\% và 40\% ở R@1. Chỉ số do hệ thống tự tính khớp với chỉ số do
+\texttt{RetrieverEvaluator} của LlamaIndex tính. Hai kỹ thuật ``nâng cao'' thường được khuyến nghị
+--- xếp hạng lại bằng cross-encoder và hybrid BM25 + vector --- \emph{không} cải thiện trên quy mô
+này và có thể làm giảm chất lượng nếu chọn sai tham số trộn, nên cả hai đều mặc định tắt và có công
+tắc đo lại bằng \texttt{make eval}. Điểm yếu hiện nay không nằm ở truy hồi vector mà ở ba chỗ: dữ
+liệu (54 Node, metadata hiệu lực trống), tầng sinh (LLM đọc sai số liệu, không nhớ hội thoại), và
+độ mạnh thống kê của bộ câu hỏi đánh giá.

@@ -69,7 +69,7 @@ else
         log "Ollama đã chạy tại cổng $OLLAMA_PORT"
     else
         log "Khởi động ollama serve (nghe 0.0.0.0:$OLLAMA_PORT)"
-        OLLAMA_HOST="0.0.0.0:$OLLAMA_PORT" nohup ollama serve >"$WORKDIR/ollama.log" 2>&1 &
+        OLLAMA_HOST="0.0.0.0:$OLLAMA_PORT" nohup ollama serve </dev/null >"$WORKDIR/ollama.log" 2>&1 &
         for _ in $(seq 60); do ollama_ok && break; sleep 1; done
         ollama_ok || { tail -20 "$WORKDIR/ollama.log"; die "Ollama không lên sau 60s"; }
     fi
@@ -234,7 +234,7 @@ fi
 log "Khởi động model server tại 0.0.0.0:$MODEL_SERVER_PORT (embedding: $EMBED_MODEL, rerank: ${RERANK_MODEL:-tắt})"
 EMBED_MODEL="$EMBED_MODEL" RERANK_MODEL="$RERANK_MODEL" MODEL_SERVER_TOKEN="$MODEL_SERVER_TOKEN" \
     nohup "$WORKDIR/venv/bin/python" -m uvicorn model_server:app --app-dir "$WORKDIR" \
-    --host 0.0.0.0 --port "$MODEL_SERVER_PORT" >"$WORKDIR/server.log" 2>&1 &
+    --host 0.0.0.0 --port "$MODEL_SERVER_PORT" </dev/null >"$WORKDIR/server.log" 2>&1 &
 echo $! >"$WORKDIR/server.pid"
 
 AUTH=()

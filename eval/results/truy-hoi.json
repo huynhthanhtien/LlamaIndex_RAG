@@ -1,0 +1,230 @@
+{
+ "thoi_diem": "2026-10-05 16:17:41",
+ "ket_qua": [
+  {
+   "bo_cau_hoi": "test_questions_01.json",
+   "cau_hinh": "vector",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cpu",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": false,
+    "reranker_model": null,
+    "reranker_top_n": 3,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc",
+    "persist_dir": "storage/server/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc"
+   },
+   "so_cau": 31,
+   "hang": [
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    1,
+    2,
+    3,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    176.46,
+    159.24,
+    170.09,
+    163.39,
+    174.4,
+    154.53,
+    166.82,
+    185.36,
+    292.05,
+    188.62,
+    162.51,
+    140.36,
+    158.98,
+    160.05,
+    165.55,
+    158.1,
+    167.28,
+    170.3,
+    157.72,
+    169.63,
+    161.99,
+    169.6,
+    146.48,
+    130.2,
+    145.24,
+    131.08,
+    147.57,
+    149.01,
+    146.41,
+    143.59,
+    144.83
+   ],
+   "thoi_gian_trung_binh_ms": 163.1,
+   "thoi_gian_p95_ms": 185.4,
+   "top1_van_ban": {
+    "Quy chế đào tạo trình độ đại học SGU 202": 23,
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 4,
+    "QĐ 810 về học cùng lúc hai chương trình": 3,
+    "QĐ 2375/2022 về chuyển chương trình, ngà": 1
+   },
+   "ngoai_top3": [],
+   "chi_so": {
+    "R@1": 0.8065,
+    "R@3": 1.0,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.8065,
+     0.6774,
+     0.9355
+    ],
+    "R@3_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.8925,
+    "MRR@3": 0.8925,
+    "nDCG@1": 0.8065,
+    "nDCG@3": 0.9201,
+    "nDCG@10": 0.9201
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_02.json",
+   "cau_hinh": "vector",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cpu",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": false,
+    "reranker_model": null,
+    "reranker_top_n": 3,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc",
+    "persist_dir": "storage/server/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc"
+   },
+   "so_cau": 10,
+   "hang": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    10
+   ],
+   "thoi_gian_ms": [
+    180.9,
+    179.97,
+    184.84,
+    182.94,
+    183.48,
+    181.94,
+    177.5,
+    197.12,
+    198.76,
+    225.89
+   ],
+   "thoi_gian_trung_binh_ms": 189.3,
+   "thoi_gian_p95_ms": 198.8,
+   "top1_van_ban": {
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 10
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào?",
+     "dung": "2 (QĐ 3183)",
+     "top3": [
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.9,
+    "R@3": 0.9,
+    "R@5": 0.9,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@3_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@5_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.91,
+    "MRR@3": 0.9,
+    "nDCG@1": 0.9,
+    "nDCG@3": 0.9,
+    "nDCG@10": 0.9289
+   }
+  }
+ ]
+}

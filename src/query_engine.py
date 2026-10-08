@@ -1,10 +1,11 @@
+"""Ghép retriever + LLM (Ollama) thành query engine và in câu trả lời kèm nguồn."""
 import sys
 from pathlib import Path
 
 from llama_index.core import PromptTemplate, Settings, VectorStoreIndex
 from llama_index.core.base.response.schema import RESPONSE_TYPE, Response, StreamingResponse
-from llama_index.core.response_synthesizers import ResponseMode
 from llama_index.core.query_engine import RetrieverQueryEngine
+from llama_index.core.response_synthesizers import ResponseMode
 from llama_index.llms.ollama import Ollama
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -16,22 +17,32 @@ QA_PROMPT = PromptTemplate(
     "Dưới đây là các trích đoạn từ các văn bản quy chế, quy định đào tạo của Trường Đại học Sài Gòn "
     "(mỗi trích đoạn ghi rõ tên văn bản và Điều).\n"
     "---------------------\n{context_str}\n---------------------\n"
-    "Chỉ dựa vào các trích đoạn trên, trả lời câu hỏi bằng tiếng Việt, ngắn gọn và chính xác, nêu tên văn bản và Điều. "
-    "Nếu có văn bản sửa đổi thì dùng nội dung đã sửa đổi. "
+    "Chỉ dựa vào các trích đoạn trên, trả lời câu hỏi bằng tiếng Việt, ngắn gọn và chính xác.\n"
+    "Bắt buộc trích nguyên văn câu quy định làm căn cứ trước khi kết luận, kèm tên văn bản và số Điều.\n"
+    "Không tự suy diễn, không tự quy đổi thang điểm hay đổi đơn vị; nếu cần tra bảng thì chép đúng "
+    "hàng của bảng có trong trích đoạn.\n"
+    "Nếu có văn bản sửa đổi thì dùng nội dung đã sửa đổi.\n"
     "Nếu trích đoạn không có thông tin, hãy nói không tìm thấy trong các văn bản quy định.\n"
     "Câu hỏi: {query_str}\n"
     "Trả lời: "
 )
 
 
-def build_query_engine(index: VectorStoreIndex, cfg: RAGConfig) -> RetrieverQueryEngine:
-    llm = Ollama(
+def make_llm(cfg: RAGConfig) -> Ollama:
+    """LLM tất định: temperature=0 và seed cố định (trước đây không đặt nên đáp án đổi giữa các lần hỏi)."""
+    return Ollama(
         model=cfg.llm_model_name,
         base_url=cfg.ollama_base_url,
         request_timeout=cfg.request_timeout,
+        temperature=cfg.temperature,
+        additional_kwargs={"seed": cfg.seed},
         thinking=False,
         context_window=8192,
     )
+
+
+def build_query_engine(index: VectorStoreIndex, cfg: RAGConfig) -> RetrieverQueryEngine:
+    llm = make_llm(cfg)
     Settings.llm = llm
     return RetrieverQueryEngine.from_args(
         retriever=get_retriever(index, cfg),

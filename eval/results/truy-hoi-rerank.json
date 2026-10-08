@@ -1,0 +1,221 @@
+{
+ "thoi_diem": "2026-10-05 16:38:19",
+ "ket_qua": [
+  {
+   "bo_cau_hoi": "test_questions_01.json",
+   "cau_hinh": "rerank",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cpu",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc",
+    "persist_dir": "storage/server/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc"
+   },
+   "so_cau": 31,
+   "hang": [
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    1,
+    3,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    2,
+    2,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    9128.78,
+    9650.79,
+    7759.68,
+    7510.19,
+    7594.71,
+    7627.46,
+    7698.87,
+    7550.18,
+    8160.66,
+    8132.07,
+    9124.73,
+    9084.82,
+    8704.44,
+    8453.14,
+    8318.2,
+    8057.06,
+    9394.07,
+    9473.91,
+    9463.68,
+    9026.64,
+    7611.34,
+    8870.6,
+    9071.61,
+    8394.48,
+    8719.41,
+    8673.85,
+    8210.73,
+    8708.14,
+    8027.88,
+    8595.75,
+    8306.11
+   ],
+   "thoi_gian_trung_binh_ms": 8487.2,
+   "thoi_gian_p95_ms": 9473.9,
+   "top1_van_ban": {
+    "Quy chế đào tạo trình độ đại học SGU 202": 25,
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 3,
+    "QĐ 810 về học cùng lúc hai chương trình": 2,
+    "QĐ 2375/2022 về chuyển chương trình, ngà": 1
+   },
+   "ngoai_top3": [],
+   "chi_so": {
+    "R@1": 0.8065,
+    "R@3": 1.0,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.8065,
+     0.6452,
+     0.9355
+    ],
+    "R@3_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.8925,
+    "MRR@3": 0.8925,
+    "nDCG@1": 0.8065,
+    "nDCG@3": 0.9201,
+    "nDCG@10": 0.9201
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_02.json",
+   "cau_hinh": "rerank",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cpu",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc",
+    "persist_dir": "storage/server/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc"
+   },
+   "so_cau": 10,
+   "hang": [
+    1,
+    2,
+    1,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1,
+    3
+   ],
+   "thoi_gian_ms": [
+    8799.67,
+    8125.6,
+    8293.44,
+    7748.23,
+    8133.58,
+    7979.81,
+    7396.8,
+    7100.21,
+    7491.52,
+    7468.7
+   ],
+   "thoi_gian_trung_binh_ms": 7853.8,
+   "thoi_gian_p95_ms": 8799.7,
+   "top1_van_ban": {
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 9,
+    "Quy chế đào tạo trình độ đại học SGU 202": 1
+   },
+   "ngoai_top3": [],
+   "chi_so": {
+    "R@1": 0.6,
+    "R@3": 1.0,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.6,
+     0.3,
+     0.9
+    ],
+    "R@3_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.7833,
+    "MRR@3": 0.7833,
+    "nDCG@1": 0.6,
+    "nDCG@3": 0.8393,
+    "nDCG@10": 0.8393
+   }
+  }
+ ]
+}

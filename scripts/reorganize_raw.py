@@ -15,6 +15,7 @@ import sys
 import unicodedata
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
@@ -131,7 +132,7 @@ def _form_or(default: str, form_dir: str):
     return lambda p, _row: form_dir if p.suffix.lower() in {".doc", ".docx"} else default
 
 
-def _ctdt_cycle(_p, row):
+def _ctdt_cycle(_p: Path, row: dict[str, str]) -> str:
     m = re.search(r"chu-k[iy]-(\d{4})-(\d{4})", row.get("trang", ""))
     return f"{CTDT}/chu_ky_{m[1]}_{m[2]}" if m else f"{CTDT}/khac"
 
@@ -171,7 +172,7 @@ def fix_mojibake(name: str) -> str:
     return unicodedata.normalize("NFC", name)
 
 
-def new_name(old: Path, row: dict) -> str:
+def new_name(old: Path, row: dict[str, str]) -> str:
     name = fix_mojibake(old.name)
     if not Path(name).suffix and RAW.joinpath(old).read_bytes()[:4] == b"%PDF":
         name += ".pdf"
@@ -186,7 +187,7 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def target_dir(old: str, row: dict) -> str:
+def target_dir(old: str, row: dict[str, str]) -> str:
     fixed = "/".join(fix_mojibake(part) for part in old.split("/"))
     if fixed in FILES:
         return FILES[fixed]
@@ -196,7 +197,7 @@ def target_dir(old: str, row: dict) -> str:
     return RULES[prefix](Path(old), row)
 
 
-def build_plan() -> list[dict]:
+def build_plan() -> list[dict[str, Any]]:
     manifest = {r["file"]: r for r in csv.DictReader(open(RAW / OLD_MANIFEST, encoding="utf-8")) if r["file"]}
     tracked = subprocess.run(
         ["git", "ls-files", "-z", "data/raw"], cwd=ROOT, capture_output=True, check=True
@@ -224,7 +225,7 @@ def build_plan() -> list[dict]:
     return plan
 
 
-def write_manifest(plan: list[dict]) -> None:
+def write_manifest(plan: list[dict[str, Any]]) -> None:
     by_hash = defaultdict(list)
     for p in plan:
         if p["sha256"]:

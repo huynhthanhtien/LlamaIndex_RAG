@@ -1,0 +1,17 @@
+# Cấu hình công cụ; dự án không đóng gói thành wheel nên không có [build-system].
+[project]
+name = "sgu-rag-llamaindex"
+version = "0.1.0"
+description = "Hỏi đáp quy chế đào tạo SGU bằng LlamaIndex + Ollama (báo cáo nghiên cứu công nghệ)"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 130
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E501"]
