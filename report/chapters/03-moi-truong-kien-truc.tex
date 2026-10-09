@@ -41,6 +41,18 @@ File \texttt{requirements.txt} đã được \textbf{ghim đúng phiên bản} m
   \item Python 3.14.6 trong \texttt{venv}.
 \end{itemize}
 
+\subsection{LLM chạy qua Ollama}
+
+Để dữ liệu không đi qua dịch vụ AI bên thứ ba, LLM được chạy qua \textbf{Ollama}, một trình phục vụ mô hình mở với API HTTP (mặc định tại \texttt{http://localhost:11434}); ở profile máy chủ, Ollama chạy trên một máy GPU thuê riêng và địa chỉ được đọc từ biến \texttt{OLLAMA\_BASE\_URL}. Đồ án dùng họ mô hình Qwen3: \texttt{qwen3:4b} cho profile chạy cục bộ và \texttt{qwen3:8b} cho profile máy chủ. LlamaIndex kết nối tới Ollama~\cite{ollama} qua gói \texttt{llama-index-llms-ollama}; Qwen3 là dòng mô hình mở của Alibaba, bản 4B và 8B đủ nhỏ để chạy trên máy cá nhân~\cite{qwen3}. Thời gian chờ mặc định trong cấu hình là 180 giây do mô hình chạy trên phần cứng cá nhân có thể trả lời chậm. Qwen3 có chế độ ``suy nghĩ'' (sinh chuỗi lập luận trước câu trả lời); đồ án tắt chế độ này (\texttt{thinking=False}) để câu trả lời ngắn và nhanh.
+
+
+\subsection{Phần cứng và bộ nhớ GPU}
+\label{sec:phan-cung}
+
+Máy phát triển dùng card rời NVIDIA RTX A2000 Laptop (4 GB VRAM, khoảng 3{,}7 GB khả dụng cho PyTorch). Kiểm tra bằng cách nạp mô hình qua đúng hàm của dự án và in thiết bị của các tham số cho thấy cả mô hình embedding lẫn reranker đều nằm trên \texttt{cuda:0}. LLM không chạy trên máy này: ở profile \texttt{server}, Ollama chạy trên máy GPU thuê từ dịch vụ ckey.vn, được quản lý bằng \texttt{scripts/manager.py}.
+
+Ở bản báo cáo trước, profile \texttt{server} \textbf{không nạp đồng thời} được embedding và reranker trên card 4 GB: tiến trình đã chiếm khoảng 3{,}5 GB và báo \texttt{CUDA out of memory} khi nạp mô hình thứ hai, nên phép đo phải đẩy embedding lên CPU. Bản hiện tại đã gộp thay đổi fp16: embedding còn khoảng 1{,}1 GB, cả hai mô hình cùng nằm trên GPU tổng khoảng 2{,}2 GB (xem \texttt{src/index\_builder.py} và \texttt{make\_local\_reranker()} trong \texttt{src/retriever.py}). Thêm nữa, \texttt{resolve\_device()} tự hạ cấp về CPU khi máy không có CUDA, nên cùng mã nguồn chạy được cả trên máy GPU, máy CPU và CI. Các số liệu ở Chương~\ref{ch:danh-gia} được đo lại trên \textbf{CPU} vì môi trường chạy lại không có driver NVIDIA; đây là lý do thời gian truy hồi trong báo cáo lớn hơn con số đo trên GPU ở bản trước.
+
 \section{Cài đặt và Hello World}
 
 \subsection{Các bước cài đặt}
@@ -84,7 +96,9 @@ Kết quả chạy thật:
 
 Ý nghĩa: \texttt{doc\_id} được LlamaIndex tự sinh dạng UUID, và \texttt{SummaryIndex} lưu Document vào \texttt{docstore}. Câu ví dụ ``Điều 15'' trong script chỉ là văn bản minh họa tự viết, không phải nội dung trích từ quy chế.
 
-\section{Cấu trúc thư mục dự án}
+\section{Minh chứng kiến trúc}
+
+\subsection{Cấu trúc thư mục dự án}
 
 \begin{lstlisting}[caption={Cấu trúc thư mục dự án.}, label={lst:cau-truc-thu-muc}]
 .
@@ -126,7 +140,7 @@ Kết quả chạy thật:
 
 Mọi script chạy từ thư mục gốc của repository, ví dụ \texttt{RAG\_PROFILE=server python src/pipeline.py}. Các module trong \texttt{src/} vừa là thư viện (được module sau \texttt{import}) vừa có khối \texttt{\_\_main\_\_} để chạy thử riêng từng giai đoạn.
 
-\section{Cấu hình tập trung và hai profile}
+\subsection{Cấu hình tập trung và hai profile}
 
 Toàn bộ tham số RAG nằm trong \texttt{src/config.py} dưới dạng một \texttt{dataclass} \texttt{RAGConfig}. Có hai profile sẵn: \texttt{local} (máy cá nhân, mô hình nhỏ) và \texttt{server} (mô hình lớn hơn, có reranker, LLM chạy trên máy GPU thuê). Profile được chọn bằng biến môi trường \texttt{RAG\_PROFILE} (đọc cả từ file \texttt{.env}), mặc định là \texttt{local}; giá trị không hợp lệ làm hàm \texttt{get\_config()} ném \texttt{ValueError}.
 
@@ -170,29 +184,30 @@ class RAGConfig:
   \caption{Hai profile cấu hình trong \texttt{src/config.py}.}
 \end{table}
 
-Từ bản này, \texttt{persist\_dir} được suy ra thành \texttt{storage/<profile>/<đường dẫn corpus>}, nên hai profile có số chiều vector khác nhau không còn ghi đè lên nhau (bản báo cáo trước ghi nhận đây là việc ``nên làm''). Vì số chiều vector gắn với mô hình, đổi mô hình embedding vẫn phải build lại chỉ mục --- \texttt{corpus.json} cạnh chỉ mục sẽ tự phát hiện.
+Chỉ mục được lưu tách theo profile và tự build lại khi cấu hình đổi (Chương~\ref{ch:persist}).
 
 Nguồn dữ liệu thực tế được khai báo ở \emph{một} chỗ: \texttt{src/corpus.py} (\texttt{CORPUS\_DIR} và dict \texttt{SGU\_HIEU\_LUC}). Trường \texttt{corpus\_sources} cũ cùng hai file PDF không tồn tại đã được gỡ bỏ, nên không còn tình trạng cấu hình trỏ vào file không có thật.
 
-\section{Phần cứng và bộ nhớ GPU}
-\label{sec:phan-cung}
-
-Máy phát triển dùng card rời NVIDIA RTX A2000 Laptop (4 GB VRAM, khoảng 3{,}7 GB khả dụng cho PyTorch). Kiểm tra bằng cách nạp mô hình qua đúng hàm của dự án và in thiết bị của các tham số cho thấy cả mô hình embedding lẫn reranker đều nằm trên \texttt{cuda:0}. LLM không chạy trên máy này: ở profile \texttt{server}, Ollama chạy trên máy GPU thuê từ dịch vụ ckey.vn, được quản lý bằng \texttt{scripts/manager.py}.
-
-Ở bản báo cáo trước, profile \texttt{server} \textbf{không nạp đồng thời} được embedding và reranker trên card 4 GB: tiến trình đã chiếm khoảng 3{,}5 GB và báo \texttt{CUDA out of memory} khi nạp mô hình thứ hai, nên phép đo phải đẩy embedding lên CPU. Bản hiện tại đã gộp thay đổi fp16: embedding còn khoảng 1{,}1 GB, cả hai mô hình cùng nằm trên GPU tổng khoảng 2{,}2 GB (xem \texttt{src/index\_builder.py} và \texttt{make\_local\_reranker()} trong \texttt{src/retriever.py}). Thêm nữa, \texttt{resolve\_device()} tự hạ cấp về CPU khi máy không có CUDA, nên cùng mã nguồn chạy được cả trên máy GPU, máy CPU và CI. Các số liệu ở Chương~\ref{ch:danh-gia} được đo lại trên \textbf{CPU} vì môi trường chạy lại không có driver NVIDIA; đây là lý do thời gian truy hồi trong báo cáo lớn hơn con số đo trên GPU ở bản trước.
-
-\section{Các script hỗ trợ}
+\subsection{Các script hỗ trợ}
 
 \begin{itemize}
   \item \texttt{scripts/test\_ocr.py}: render toàn bộ một PDF và OCR ra file Markdown trong \texttt{data/ocr/}, kèm số trang và tổng số ký tự. Đây là script tạo ra bản OCR \texttt{data/ocr/4.\ QuyCheDaoTaoDHSG 2021.md} mà \texttt{index\_builder.py} dùng làm đầu vào.
   \item \texttt{scripts/check\_model\_memory.py}: đo RAM/VRAM khi nạp một mô hình embedding hoặc reranker (nhận \texttt{repo\_id}, \texttt{--type}, \texttt{--device}), giúp chọn mô hình vừa với phần cứng.
   \item \texttt{scripts/pull\_models.sh}: tải LLM qua Ollama và tải embedding/reranker từ HuggingFace theo profile, đồng bộ với \texttt{config.py}; dừng với thông báo lỗi nếu thiếu \texttt{ollama}, daemon chưa chạy hoặc thiếu \texttt{huggingface\_hub}.
   \item \texttt{scripts/manager.py}: công cụ dòng lệnh gom các thao tác với dịch vụ GPU thuê (xem, thuê, khởi động lại, xóa máy; xem số dư), gọi thử Ollama và chạy một server embedding.
+  \item \texttt{scripts/setup\_server\_v2.sh}, \texttt{scripts/colab\_server.py}: dựng phần chạy trên GPU
+        (Ollama + model server embedding/reranker) trên Google Colab hoặc máy thuê, mở URL công khai
+        qua Cloudflare quick tunnel và in sẵn các dòng \texttt{OLLAMA\_BASE\_URL}, \texttt{MODEL\_SERVER\_URL}
+        để dán vào \texttt{.env} ở máy local. Thư viện của model server được ghim cùng phiên bản với
+        \texttt{requirements.txt}, để vector sinh trên Colab khớp với chỉ mục đã build ở local. Nhờ vậy
+        phần đánh giá câu trả lời --- vốn cần LLM --- chạy được mà không cần máy có GPU.
+  \item \texttt{eval/run\_batch\_cau\_hoi.py}: chạy hàng loạt danh sách câu hỏi trong
+        \texttt{eval/results/cau-hoi01.md} qua query engine, ghi câu trả lời kèm nguồn ra
+        \texttt{cau-hoi01-result.md} để chấm tay (Mục~\ref{sec:chay-lai-56-cau}).
   \item \texttt{Makefile}: gom \texttt{make test} (26 kiểm thử offline), \texttt{make eval} (đo 4 cấu hình truy hồi), \texttt{make baseline}, \texttt{make eval-answers} và \texttt{make report}.
   \item \texttt{.github/workflows/ci.yml}: CI cài đúng phần tối thiểu (không torch, không model) và chạy toàn bộ kiểm thử offline trên mỗi lần push.
 \end{itemize}
 
-\section{Minh chứng kiến trúc}
 
 Chuỗi xử lý của đồ án gồm sáu giai đoạn. Hình \ref{fig:pipeline} thể hiện chuỗi này và file mã nguồn tương ứng; cả sáu giai đoạn đều đã có mã chạy được. Pha chuẩn bị (1--3) chạy một lần và lưu chỉ mục xuống đĩa; pha truy vấn (4--5) chạy mỗi câu hỏi; giai đoạn 6 dùng lại retriever của giai đoạn 4.
 
@@ -242,4 +257,24 @@ Chuỗi xử lý của đồ án gồm sáu giai đoạn. Hình \ref{fig:pipelin
   \caption{Trạng thái mã nguồn của từng giai đoạn.}
 \end{table}
 
-\chuatrienkhai{Bộ định tuyến theo nhóm văn bản (router), lọc metadata theo hiệu lực/khóa tuyển sinh, vector store ngoài (Chroma/Qdrant), và chat engine có viết lại câu hỏi theo lịch sử hội thoại. Script chấm câu trả lời tự động (\texttt{eval/evaluate\_answers.py}) đã có nhưng chưa chạy được trong môi trường chạy lại vì không có Ollama.}
+\section{Kiểm chứng môi trường}
+\label{sec:kiem-chung-moi-truong}
+
+\paragraph{Chỉ mục khớp với loader.} Chạy \texttt{src/index\_builder.py} (profile \texttt{server}, CPU,
+ngày 09/10):
+
+\begin{lstlisting}[caption={Kiểm chứng số Node trong chỉ mục.}, label={lst:kiem-chung-index}]
+[INFO] Load Index từ storage/server/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc
+Index: storage/server/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc | số node trong Index: 54 | từ processed_loader: 54 | khớp: True
+\end{lstlisting}
+
+\paragraph{Kết nối Ollama.} Một câu trả lời thật trong nhật ký Gradio (\texttt{eval/results/questions\_log.jsonl},
+ngày 08/10, \texttt{qwen3:8b}) cho câu ``Sinh viên được rút học phần trong thời gian nào?'':
+
+\begin{lstlisting}[caption={Câu trả lời mẫu qua Ollama.}, label={lst:ollama-mau}]
+Theo quy định tại Điều 7 — Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi bởi
+QĐ 3183/2025), việc rút bớt học phần trong khối lượng học tập đã đăng ký được thực
+hiện trong 03 tuần đầu tiên của học kì.
+\end{lstlisting}
+
+Câu trả lời khớp khoản 4 mục sửa đổi Điều 7 của QĐ 3183/2025.

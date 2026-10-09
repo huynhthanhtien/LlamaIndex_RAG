@@ -20,15 +20,31 @@
 \clearpage
 \pagenumbering{arabic}
 
-\include{chapters/01-gioi-thieu}
-\include{chapters/02-co-so-ly-thuyet}
+\input{frontmatter/loi-mo-dau}
+
+\include{chapters/p1-01-gioi-thieu-llamaindex}
+\include{chapters/p1-02-vi-the}
+
 \include{chapters/03-moi-truong-kien-truc}
 \include{chapters/04-cong-nghe-cot-loi}
-\include{chapters/05-danh-gia}
+\include{chapters/05-node-parser}
+\include{chapters/06-persistent-index}
+\include{chapters/07-trich-dan-tu-choi}
+\include{chapters/08-nang-cao}
 
-% \appendix
-% \include{appendices/a-ma-nguon}
+\include{chapters/09-phan-tich-thiet-ke}
+\include{chapters/10-trien-khai}
+
+\include{chapters/11-danh-gia-nhin-lai}
+\include{chapters/12-huong-phat-trien}
 
 \printbibliography[heading=bibintoc, title={Tài liệu tham khảo}]
+
+\appendix
+\include{appendices/a-nhat-ky-tuan}
+% Tạm bỏ, bật lại khi có ảnh minh chứng:
+% \include{appendices/b-minh-chung-nhom}
+\include{appendices/c-tu-kiem}
+\include{appendices/d-thuc-nghiem}
 
 \end{document}

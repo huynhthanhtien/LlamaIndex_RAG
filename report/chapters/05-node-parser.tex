@@ -1,0 +1,95 @@
+\chapter{Custom node parser theo cấu trúc văn bản pháp quy}
+\label{ch:node-parser}
+
+\section{Vì sao chọn}
+
+Văn bản quy chế chia theo Chương --- Điều --- khoản, và văn bản sửa đổi (QĐ 3183) chia theo ``mục sửa
+đổi Điều $N$''. Câu trả lời và trích dẫn đều theo Điều, nên Node phải trùng ranh giới Điều. Bộ cắt mặc
+định của LlamaIndex (\texttt{SentenceSplitter}) không biết ranh giới này.
+
+Giai đoạn 1 của bản báo cáo trước dùng \texttt{src/ingestion.py}: OCR từng trang và đóng gói
+\emph{mỗi trang thành một \texttt{Document}}. Cách đó có hai nhược điểm đã đo được: (1) một Điều
+nằm vắt qua hai trang bị chia đôi; (2) phần ``Quyết định ban hành'' ở trang đầu sinh ra các Node
+trùng số Điều với phần Quy chế (Điều 1--3 xuất hiện hai lần), làm hỏng phép chấm truy hồi theo số
+Điều. Hai module \texttt{src/ingestion.py} và \texttt{src/node\_parser.py} được giữ lại trong
+repository để đối chiếu nhưng \textbf{không còn nằm trong pipeline}; dữ liệu vào Node ngày nay đi
+qua tầng 2 nêu trên.
+
+\section{Cơ chế}
+
+Cơ chế tách theo heading được mô tả ở Mục~\ref{sec:node}. Phần dưới là hai quyết định về metadata ---
+nơi custom parser khác hẳn parser mặc định.
+
+\paragraph{Loại metadata rỗng.} Bản trước gắn cho \emph{mọi} Node bốn khóa \texttt{van\_ban},
+\texttt{chuong}, \texttt{dieu}, \texttt{sua\_doi\_dieu}, kể cả khi giá trị rỗng. Vì LlamaIndex ghép
+metadata vào văn bản trước khi embedding, mỗi vector đều chứa các dòng vô nghĩa kiểu
+\texttt{chuong:}, \texttt{dieu:} trong khi kho chỉ có vài chục Node. Bản mới lọc bỏ mọi khóa rỗng.
+
+\paragraph{Chỉ một trường được embedding.} Bản mới sinh thêm khóa \texttt{nguon\_trich} và chỉ trường
+này được đưa vào embedding; các khóa kỹ thuật còn lại bị loại bằng
+\texttt{excluded\_embed\_metadata\_keys}. Văn bản đưa vào bộ mã hóa vì thế có dạng:
+
+\begin{lstlisting}[caption={Văn bản đưa vào embedding của một Node (in bằng \texttt{metadata\_mode="embed"}).}, label={lst:embed-text}]
+nguon_trich: Điều 9 — Quy chế đào tạo trình độ đại học SGU 2021
+
+<nguyên văn Điều 9>
+\end{lstlisting}
+
+Trước đây cùng Node này cho chuỗi \texttt{van\_ban: ...\textbackslash nchuong: \textbackslash ndieu: 9\textbackslash nsua\_doi\_dieu:} ---
+vừa nhiễu vừa chứa khóa tiếng Anh không dấu. Chỉ số \texttt{nguon\_trich} cũng chính là nhãn
+\texttt{node\_label()} dùng để in nguồn, nên phần hiển thị và phần embedding không còn lệch nhau.
+Đây là ví dụ cho thấy một quyết định nhỏ ở tầng Node ảnh hưởng trực tiếp tới chất lượng vector.
+
+\subsection{Mã nguồn}
+
+\begin{lstlisting}[language=Python, caption={Gắn metadata đã lọc rỗng và chọn trường đưa vào embedding (\texttt{src/processed\_loader.py}).}, label={lst:gan-metadata}]
+def _gan_metadata(node: TextNode, meta: dict[str, str | int]) -> TextNode:
+    """Gắn metadata đã lọc rỗng + `nguon_trich`, và đặt đúng trường nào được embed / vào prompt."""
+    sach = {k: v for k, v in meta.items() if str(v).strip()}
+    sach["nguon_trich"] = nguon_trich(sach)
+    node.metadata = sach
+    node.excluded_embed_metadata_keys = [k for k in sach if k != "nguon_trich"]
+    node.excluded_llm_metadata_keys = [k for k in KHONG_LLM if k in sach]
+    return node
+\end{lstlisting}
+
+\section{Đã làm gì}
+
+\begin{itemize}
+  \item Viết \texttt{src/processed\_loader.py} thay cho \texttt{node\_parser.py} (regex \texttt{DIEU\_PATTERN} trên
+        văn bản thô) --- nay dựa vào heading do \texttt{clean\_md.py} dựng.
+  \item Tách riêng phần ``Quyết định ban hành'' (\texttt{phan="ban\_hanh"}) để Điều 1--3 của quyết định không
+        trùng nhãn với Điều 1--3 của quy chế.
+  \item Gắn \texttt{LOADER\_VERSION} để chỉ mục tự build lại khi logic cắt đổi (Chương~\ref{ch:persist}).
+\end{itemize}
+
+\section{Số liệu}
+
+54 Node từ 6 văn bản (Mục~\ref{sec:ingestion-ket-qua}); chỉ mục và loader khớp 54/54
+(Mục~\ref{sec:kiem-chung-moi-truong}). Truy hồi đạt R@1 81\% trên bộ 01, cao hơn BM25 23 điểm phần trăm
+(Mục~\ref{sec:danh-gia-thuc-nghiem}).
+
+\chuatrienkhai{Bảng so sánh cách chunk (B1) --- xem Mục~\ref{sec:node}.}
+
+\section{Kiểm thử}
+
+\texttt{tests/test\_processed\_loader.py} khóa lại đúng những hành vi trên: số Node và nhãn Điều,
+việc loại metadata rỗng, việc chỉ \texttt{nguon\_trich} được embedding, và giá trị của
+\texttt{nguon\_trich} cho ba trường hợp (Điều thường, mục sửa đổi, phần ban hành).
+\texttt{tests/test\_corpus.py} kiểm tra trên corpus thật: mọi tiền tố trong danh sách văn bản khớp
+đúng một file, và mọi Node đều có \texttt{nguon\_trich}. Chạy \texttt{make test}: 26 kiểm thử, không
+cần GPU và không cần Ollama.
+
+\section{Hạn chế đã biết}
+
+\begin{itemize}
+  \item Cách cắt phụ thuộc \texttt{clean\_md.py} dựng heading đúng. Nếu một văn bản bị OCR làm mất
+        dòng ``Điều $N$.'' thì Điều đó bị gộp vào Điều trước hoặc vào Node Chương.
+  \item ``Token'' vẫn đếm bằng số từ tách theo khoảng trắng, chỉ là xấp xỉ.
+  \item Hai văn bản một trang cho mỗi văn bản đúng một Node dài, chưa cắt theo khoản.
+\end{itemize}
+
+\section{Dùng ở đâu trong đồ án}
+
+Mọi bước sau đều đi trên Node này: chỉ mục, truy hồi, nhãn nguồn \texttt{node\_label()}, và luật chấm
+đúng/sai theo (văn bản, Điều) của bộ đánh giá.

@@ -132,6 +132,14 @@ Sáu giai đoạn của pipeline đã chạy được trên 6 văn bản quy ch�
 `eval/` (truy hồi, baseline, chấm câu trả lời). Phần chưa làm: router theo nhóm văn bản, lọc theo hiệu lực,
 bộ đánh giá có đáp án chuẩn đủ lớn. Xem `docs/bao_cao_cai_tien_rag.md` và báo cáo MD trong `docs/`.
 
+## Chạy LLM + embedding trên colab 
+```bash
+!wget -q -O setup_server_v2.sh https://raw.githubusercontent.com/huynhthanhtien/LlamaIndex_RAG/nghien-cuu-llamaindex-cai-tien/scripts/setup_server_v2.sh
+!bash setup_server_v2.sh
+```
+
 ## Giấy phép
+
+
 
 Chưa xác định.

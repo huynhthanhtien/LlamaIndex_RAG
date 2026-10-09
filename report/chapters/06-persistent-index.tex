@@ -1,0 +1,54 @@
+\chapter{Persistent index và quản lý cấu hình}
+\label{ch:persist}
+
+\section{Vì sao chọn}
+
+Embedding 54 Node trên CPU mất khoảng 77 giây; dựng lại mỗi lần hỏi là không chấp nhận được. Ngược lại,
+dùng lại chỉ mục cũ sau khi đã đổi mô hình embedding hay cách cắt Node thì cho kết quả sai mà không báo
+lỗi. Cần lưu chỉ mục \emph{và} biết khi nào nó hết hợp lệ.
+
+\section{Cơ chế}
+
+Hàm \texttt{build\_or\_load\_index()} gọi \texttt{storage\_context.persist()} sau khi dựng chỉ mục; ở các lần
+sau, nó tạo \texttt{StorageContext} từ thư mục đã lưu rồi gọi \texttt{load\_index\_from\_storage()}. Thư mục lưu
+gồm docstore, vector store và index store dạng JSON.
+
+\subsection{Fingerprint: chống dùng lại chỉ mục cũ}
+
+Bản trước chỉ lưu tên mô hình embedding và sự tồn tại của \texttt{docstore.json}, nên sửa cách cắt
+Node mà quên \texttt{--rebuild} sẽ âm thầm dùng chỉ mục cũ. Bản mới lưu \texttt{corpus.json} cạnh
+chỉ mục, gồm: model embedding, thư mục corpus, \textbf{phiên bản loader cùng các ngưỡng cắt}, và
+sha256 + tên hiển thị của từng file. Chỉ cần một trong các thứ đó đổi là chỉ mục tự build lại.
+
+\begin{lstlisting}[language=Python, caption={Fingerprint của chỉ mục (\texttt{src/index\_builder.py}).}, label={lst:fingerprint}]
+    return {
+        "embed_model": cfg.embed_model_name,
+        "corpus_dir": cfg.corpus_dir,
+        "loader": {"phien_ban": LOADER_VERSION, "max_tu": MAX_TU, "min_tu_noi_dung": MIN_TU_NOI_DUNG},
+        "files": files,
+    }
+\end{lstlisting}
+
+Từ bản này, \texttt{persist\_dir} được suy ra thành \texttt{storage/<profile>/<đường dẫn corpus>}, nên hai profile có số chiều vector khác nhau không còn ghi đè lên nhau (bản báo cáo trước ghi nhận đây là việc ``nên làm''). Vì số chiều vector gắn với mô hình, đổi mô hình embedding vẫn phải build lại chỉ mục --- \texttt{corpus.json} cạnh chỉ mục sẽ tự phát hiện.
+
+
+\section{Số liệu}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{X l}
+    \toprule
+    \textbf{Thao tác (profile \texttt{server}, CPU, 54 Node)} & \textbf{Thời gian} \\
+    \midrule
+    Dựng mới (embedding toàn bộ Node) & khoảng 77 giây \\
+    Nạp lại từ đĩa (kể cả nạp mô hình embedding) & 1,5 giây (đo ngày 09/10) \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Thời gian dựng mới và nạp lại chỉ mục.}
+\end{table}
+
+\section{Dùng ở đâu trong đồ án}
+
+Mọi điểm vào (\texttt{pipeline.py}, \texttt{app/app.py}, \texttt{eval/*.py}, notebook) đều gọi
+\texttt{build\_or\_load\_index()}, nên không có đường nào dùng nhầm chỉ mục cũ.

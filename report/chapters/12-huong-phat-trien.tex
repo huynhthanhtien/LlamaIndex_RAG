@@ -1,0 +1,58 @@
+\chapter{Hướng phát triển}
+\label{ch:huong-phat-trien}
+
+\section{Cải tiến sản phẩm}
+\label{sec:huong-phat-trien}
+
+\paragraph{Đã xong trong bản này} (so với danh sách ``hướng phát triển'' của bản báo cáo trước):
+tách thư mục chỉ mục theo profile; fp16 cho embedding và reranker; model server HTTP cho
+embedding/reranker; mở rộng lên 6 văn bản; giao diện Gradio; ghim phiên bản thư viện; kiểm thử tự
+động; đánh giá có khoảng tin cậy, baseline và kiểm định cặp; câu trả lời tất định
+(\texttt{temperature=0}, \texttt{seed}). Trong tuần 05--09/10: chạy LLM và model server trên Colab qua
+Cloudflare tunnel; ghi nhật ký câu hỏi của giao diện Gradio; chạy lại 56 câu với prompt mới; thêm chú
+giải thang điểm vào prompt và công tắc \texttt{RAG\_THINKING}.
+
+\paragraph{Còn lại, theo thứ tự ưu tiên:}
+\begin{enumerate}
+  \item \textbf{Chạy} \texttt{make eval-answers} (LLM trên Colab) để có số faithfulness/relevancy/
+        correctness, và so chế độ RAG với \texttt{closed-book}. Đây là việc còn thiếu duy nhất của
+        phần đánh giá. Cùng đợt chạy đó, chạy lại 56 câu theo từng yếu tố một (chỉ đổi prompt, chỉ đổi
+        top-$k$ đưa vào LLM, bật/tắt \texttt{RAG\_THINKING}) để tách tác dụng của từng thay đổi ở
+        Mục~\ref{sec:chay-lai-56-cau}.
+  \item \textbf{Xử lý khóa tuyển sinh}: gắn metadata phạm vi áp dụng (ví dụ ``khóa 2025 trở đi'') cho
+        mục sửa đổi của QĐ 3183, và yêu cầu câu trả lời về điểm nêu rõ áp dụng cho khóa nào (hoặc nêu
+        cả hai bảng). Cùng lúc, gắn câu dẫn ``thang điểm 10''/``quy đổi để tính điểm trung bình'' vào
+        mục sửa đổi để thay chú giải đang đặt cứng trong prompt.
+  \item \textbf{Mở rộng bộ câu hỏi} lên vài trăm câu, có nhãn loại câu (trong/ngoài phạm vi, viết tắt,
+        nối tiếp, cần tra bảng) và hai người gán nhãn độc lập.
+  \item \textbf{Điền metadata hiệu lực} (\texttt{so\_hieu}, \texttt{ngay\_ban\_hanh}, \texttt{tinh\_trang})
+        rồi dùng \texttt{MetadataFilters} để loại văn bản hết hiệu lực --- \texttt{processed\_loader}
+        đã sẵn sàng nhận các trường này từ front matter.
+  \item \textbf{Liên kết Điều gốc với mục sửa đổi} bằng \texttt{NodeRelationship}: khi truy hồi được
+        Điều 7 của Quy chế 2021 thì tự động kèm mục ``sửa đổi Điều 7'' của QĐ 3183, và ngược lại.
+  \item \textbf{Small-to-big}: cắt thêm Node con theo khoản, truy hồi trên Node con rồi đưa Điều cha
+        cho LLM (\texttt{HierarchicalNodeParser} + \texttt{AutoMergingRetriever}) --- nhắm đúng lỗi
+        ``đọc sai chi tiết số'' trong Điều dài.
+  \item \textbf{Chat engine có ngữ cảnh} (\texttt{CondensePlusContextChatEngine}) cho câu hỏi nối tiếp;
+        giao diện Gradio đã có sẵn lịch sử chat.
+  \item \textbf{Công cụ tra bảng quy đổi điểm} (\texttt{FunctionTool} + agent) thay vì để LLM tự tính.
+  \item \textbf{Vector store ngoài} (Chroma/Qdrant) khi corpus vượt vài trăm Node, để lọc metadata
+        phức tạp và cập nhật từng phần.
+\end{enumerate}
+
+
+\section{Định hướng bản thân}
+
+\chualam{từng thành viên viết ở bản báo cáo cuối}.
+
+\section{Kết luận}
+
+Trên corpus 6 văn bản / 54 Node, hệ thống đạt Recall@1 = 81\% và Recall@3 = 100\% ở bộ 31 câu hỏi về
+Quy chế 2021, và Recall@1 = 90\% ở bộ 10 câu về nội dung sửa đổi --- trong khi baseline tìm từ khóa
+BM25 chỉ đạt 58\% và 40\% ở R@1. Chỉ số do hệ thống tự tính khớp với chỉ số do
+\texttt{RetrieverEvaluator} của LlamaIndex tính. Hai kỹ thuật ``nâng cao'' thường được khuyến nghị
+--- xếp hạng lại bằng cross-encoder và hybrid BM25 + vector --- \emph{không} cải thiện trên quy mô
+này và có thể làm giảm chất lượng nếu chọn sai tham số trộn, nên cả hai đều mặc định tắt và có công
+tắc đo lại bằng \texttt{make eval}. Điểm yếu hiện nay không nằm ở truy hồi vector mà ở ba chỗ: dữ
+liệu (54 Node, metadata hiệu lực trống), tầng sinh (LLM đọc sai số liệu, không nhớ hội thoại), và
+độ mạnh thống kê của bộ câu hỏi đánh giá.

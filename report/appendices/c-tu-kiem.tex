@@ -1,0 +1,22 @@
+\chapter{Bảng tự kiểm nhanh ba tầng}
+\label{app:tu-kiem}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l l X}
+    \toprule
+    \textbf{Tầng} & \textbf{Nội dung} & \textbf{Nhóm đã đạt} \\
+    \midrule
+    1A & Lõi LlamaIndex & 6 / 6 mục (Bảng~\ref{tab:tong-hop-1a}) \\
+    1B & Tự chọn & Custom node parser theo Điều; persistent index có fingerprint; trích dẫn nguồn;
+                    nhiều nguồn (6 văn bản); từ chối ngoài corpus (một phần, chưa đo tỷ lệ đúng) \\
+    2 & Chuẩn kỹ nghệ & \texttt{.env}/\texttt{.env.example}, ghim phiên bản \texttt{requirements.txt}, 26 kiểm
+                        thử offline, CI GitHub Actions, \texttt{Makefile}, README \\
+    3 & Nâng cao & Hybrid BM25 + vector (RRF), rerank cross-encoder fp16, model server HTTP, đánh giá có
+                   bootstrap CI và McNemar. Điểm sâu nhất có thể giải thích và sửa tại chỗ:
+                   chưa chốt \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Tự kiểm ba tầng.}
+\end{table}

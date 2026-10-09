@@ -1,0 +1,253 @@
+\chapter{Triển khai, tích hợp và minh chứng kết quả}
+\label{ch:trien-khai}
+
+\section{Tích hợp hệ thống}
+
+\begin{sloppypar}
+
+\begin{itemize}
+  \item \textbf{Dùng trực tiếp}: \texttt{VectorStoreIndex}, \texttt{StorageContext}, \texttt{SentenceSplitter},
+        \texttt{QueryFusionRetriever}, \texttt{SentenceTransformerRerank}, \texttt{SimilarityPostprocessor},
+        \texttt{RetrieverQueryEngine}, \texttt{RetrieverEvaluator}, các evaluator câu trả lời.
+  \item \textbf{Viết lại / tự viết}: bước dữ liệu (OCR + Markdown hai tầng thay \texttt{SimpleDirectoryReader}),
+        loader Node theo heading, BM25, client model server, độ đo thống kê.
+  \item \textbf{Điểm vào}: \texttt{src/pipeline.py} (dòng lệnh), \texttt{app/app.py} (Gradio, ghi nhật ký câu hỏi),
+        \texttt{eval/run\_batch\_cau\_hoi.py} (chạy hàng loạt).
+  \item \textbf{Thí nghiệm chỉ để ra quyết định}: so sánh vector/rerank/hybrid (quyết định tắt cả hai), chọn
+        6 văn bản đang áp dụng thay vì nạp cả văn bản hết hiệu lực (văn bản cũ lấn át Quy chế 2021 khi truy
+        hồi), chọn profile \texttt{server} làm cấu hình đo chính.
+\end{itemize}
+\end{sloppypar}
+
+\section{Kết quả đạt được}
+
+\subsection{Truy hồi}
+
+Bảng~\ref{tab:recall-vector} và~\ref{tab:baseline} (Chương~\ref{ch:cong-nghe-cot-loi}) cho chỉ số truy hồi;
+Bảng~\ref{tab:top-k} cho top-$k$ Node của các câu mẫu; Bảng~\ref{tab:recall} (Chương~\ref{ch:nang-cao}) so
+sánh các cấu hình nâng cao.
+
+\subsection{Câu trả lời}
+\label{sec:danh-gia-tra-loi}
+
+\subsubsection{Cách đánh giá}
+
+Bản báo cáo trước chấm câu trả lời bằng tay trên một phiên hỏi đáp 56 câu. Bản này bổ sung
+\texttt{eval/evaluate\_answers.py} để chấm tự động bằng chính các evaluator của LlamaIndex, chạy hàng
+loạt qua \texttt{BatchEvalRunner}:
+
+\begin{itemize}
+  \item \texttt{FaithfulnessEvaluator} --- câu trả lời có suy ra được từ ngữ cảnh truy hồi không;
+  \item \texttt{RelevancyEvaluator} --- câu trả lời có đúng câu hỏi không;
+  \item \texttt{CorrectnessEvaluator} --- so với đáp án chuẩn trong \texttt{eval/cau\_hoi\_danh\_gia.json};
+  \item chế độ \texttt{closed-book} (LLM trả lời \emph{không} có ngữ cảnh) làm mốc so sánh RAG với
+        không RAG.
+\end{itemize}
+
+Bộ câu hỏi chấm câu trả lời gồm 13 câu, mỗi câu có trường \texttt{pham\_vi} (``trong'' / ``ngoai'')
+và đáp án chuẩn lấy từ bảng đã kiểm chứng thủ công ở bản báo cáo trước. Nhờ trường \texttt{pham\_vi},
+script tách \textbf{từ chối đúng} (câu ngoài phạm vi) khỏi \textbf{từ chối sai} (đáp án có trong ngữ
+cảnh nhưng hệ thống vẫn nói không tìm thấy) --- chính là hai loại đã bị gộp thành một con số ``52\%
+từ chối'' ở bản trước.
+
+\paragraph{Trạng thái chạy.} Script đã viết xong, kiểm thử import và logic nhận dạng từ chối, nhưng
+\textbf{chưa chạy} \texttt{make eval-answers}. Trong tuần 05--09/10, LLM đã chạy được qua Ollama trên
+Colab (\texttt{scripts/setup\_server\_v2.sh}), và nhóm dùng nó để chạy lại 56 câu hỏi của phiên trước
+với prompt mới (Mục~\ref{sec:chay-lai-56-cau}) --- vẫn chấm tay. Vì vậy Mục~\ref{sec:tra-loi-thu-cong}
+trình bày kết quả chấm tay của phiên chạy trước (có ghi rõ nguồn), còn các bảng điểm
+faithfulness/relevancy/correctness sẽ được điền khi chạy \texttt{make eval-answers}.
+
+\subsubsection{Kết quả chấm tay (phiên chạy 56 câu, profile \texttt{server} có rerank)}
+\label{sec:tra-loi-thu-cong}
+
+Nhật ký \texttt{eval/results/test-basic.md} ghi một phiên chạy \texttt{src/pipeline.py}: 56 câu hỏi do
+nhóm tự đặt theo cách sinh viên thật sự hỏi, gồm cả viết tắt (``bao nhiêu chỉ''), sai chính tả
+(``xuất sắt''), câu hỏi nối tiếp (``còn kỹ sư'') và câu ngoài phạm vi. Hệ thống trả lời ``không tìm
+thấy'' ở 29/56 câu (52\%) và đưa ra câu trả lời ở 27 câu.
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{>{\hsize=0.95\hsize}X >{\hsize=0.95\hsize}X >{\hsize=1.1\hsize}X l}
+    \toprule
+    \textbf{Câu hỏi} & \textbf{Hệ thống trả lời} & \textbf{Quy chế 2021 quy định} & \textbf{Đánh giá} \\
+    \midrule
+    Học cử nhân cần bao nhiêu tín chỉ & Tối thiểu 120 tín chỉ & 120 tín chỉ (Điều 2) & Đúng \\
+    Muốn được B cần bao nhiêu điểm & Từ 7,0 đến 8,4 & B: 7,0--8,4 (Điều 9) & Đúng \\
+    Cảnh báo kỳ 1 và 3, kỳ 2 bình thường có bị buộc thôi học & Không, vì hai lần không liên tiếp & Buộc thôi học khi quá hai lần cảnh báo \emph{liên tiếp} (Điều 11) & Đúng \\
+    Mua bằng tiếng Anh giả nộp cho trường & Không được; buộc thôi học, thu hồi bằng & Như câu trả lời (Điều 19) & Đúng \\
+    \midrule
+    8,4 hệ 10 thì hệ 4 được bao nhiêu & 3,4 điểm & Khóa trước 2025: 8,4 là B, quy đổi 3,0; khóa 2025 trở đi (QĐ 3183): 8,4 là B+, quy đổi 3,5 (Điều 9, 10) & Sai \\
+    Khối lượng học kỳ chính & Tối thiểu 30 tuần & 2 học kỳ chính \emph{cộng lại} tối thiểu 30 tuần (Điều 6) & Sai \\
+    Học bị F thì làm gì & Học lại; điểm lần học cuối là điểm chính thức & Học phần không đạt phải học lại, điểm \emph{lần học cuối} là điểm chính thức; ``cao nhất'' chỉ áp dụng khi học cải thiện (Điều 9 khoản 4) & Đúng$^{*}$ \\
+    Học điểm P thì sao & P không tính vào điểm TB, ``quy đổi thành 0'' & P không được tính vào điểm TB (Điều 10 khoản 3), không quy đổi & Sai một phần \\
+    \midrule
+    Ra trường xuất sắc cần bao nhiêu điểm & Không tìm thấy & Từ 3,6 đến 4,0 (Điều 10), và Điều 10 \emph{có} trong 3 Điều nguồn & Từ chối sai \\
+    Còn kỹ sư (hỏi tiếp câu cử nhân) & Không tìm thấy & 150 tín chỉ; hỏi lại đầy đủ thì trả lời đúng & Từ chối sai \\
+    \midrule
+    Điểm rèn luyện là gì & Không tìm thấy & Không thuộc Quy chế đào tạo (văn bản riêng của CTSV) & Từ chối đúng \\
+    Bao nhiêu tiền một tín chỉ & Không tìm thấy & Không thuộc Quy chế đào tạo & Từ chối đúng \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Một số câu trả lời trong nhật ký phiên chạy trước, đối chiếu với văn bản Quy chế 2021.
+  Đây là số liệu chấm tay, không sinh lại được bằng lệnh. $^{*}$Bản báo cáo trước chấm câu này là
+  ``Sai một phần''; khi đối chiếu lại khoản 4 Điều 9 trong tuần 05--09/10 thì câu trả lời của hệ thống
+  là đúng, còn đáp án tham chiếu đã nhầm hai trường hợp học lại và học cải thiện.}
+  \label{tab:tra-loi}
+\end{table}
+
+\subsubsection{Phân tích}
+
+\paragraph{Prompt chống bịa hoạt động, nhưng hơi quá tay.} Với câu hỏi ngoài phạm vi, hệ thống từ chối
+thay vì bịa --- đúng mục tiêu. Nhưng tỷ lệ từ chối 52\% cao hơn tỷ lệ câu thật sự ngoài phạm vi: có
+câu mà thông tin \emph{đã nằm trong ngữ cảnh} vẫn bị từ chối, như câu hỏi về điểm ra trường loại xuất
+sắc (viết sai chính tả ``xuất sắt''). Đây chính là lý do phải tách ``từ chối đúng'' khỏi ``từ chối
+sai'' như thiết kế ở Mục~\ref{sec:danh-gia-tra-loi}.
+
+\paragraph{Lỗi sai tập trung ở phép tính và chi tiết số.} Các câu trả lời sai đều có Điều đúng trong
+ngữ cảnh (truy hồi đúng), nhưng LLM đọc sai hoặc suy diễn thêm: tự ``quy đổi'' 8,4 thành 3,4 thay vì
+tra bảng, hay đọc ``30 tuần cho 2 học kỳ'' thành ``30 tuần mỗi học kỳ''. Đây là loại lỗi nguy hiểm nhất vì câu
+trả lời vẫn trích dẫn đúng Điều. Bản này bổ sung hai ràng buộc trong \texttt{QA\_PROMPT} nhắm đúng
+loại lỗi này: \emph{trích nguyên văn câu quy định trước khi kết luận} và \emph{không tự quy đổi thang
+điểm, cần tra bảng thì chép đúng hàng của bảng}. Hiệu quả của hai ràng buộc này cần được đo bằng
+\texttt{make eval-answers} trên máy có LLM, và được ghi nhận là việc còn lại.
+
+\paragraph{Câu trả lời không ổn định --- đã xử lý ở mức mã nguồn.} Bản trước ghi nhận cùng một câu hỏi
+chỉ khác một dấu hỏi chấm mà lần đầu từ chối, lần sau trả lời ``Không''. Nguyên nhân là
+\texttt{Ollama(...)} không đặt \texttt{temperature}, nên mô hình lấy mẫu ngẫu nhiên. Bản này đặt
+\texttt{temperature=0} và \texttt{seed=42} trong \texttt{make\_llm()}; đây là sửa đổi đã kiểm tra ở
+mức mã nguồn nhưng cần một phiên chạy LLM mới để xác nhận bằng số.
+
+\paragraph{Không có ngữ cảnh hội thoại.} \texttt{RetrieverQueryEngine} gửi từng câu hỏi độc lập, nên
+câu nối tiếp ``còn kỹ sư'' bị từ chối. Sinh viên thường hỏi nối tiếp, nên đây vẫn là hạn chế lớn nhất
+ở tầng sinh.
+
+\subsubsection{Chạy lại 56 câu với prompt mới (tuần 05--09/10)}
+\label{sec:chay-lai-56-cau}
+
+\paragraph{Cách chạy.} Cùng 56 câu hỏi của phiên trước (\texttt{eval/results/cau-hoi01.md}) được chạy
+lại bằng \texttt{eval/run\_batch\_cau\_hoi.py} (bản notebook: \texttt{notebooks/chay\_cau\_hoi01.ipynb}),
+profile \texttt{server}, \texttt{qwen3:8b} trên Colab, \texttt{temperature=0}, \texttt{seed=42}. Kết quả
+ghi ở \texttt{eval/results/cau-hoi01-result.md} (phiên bản trong commit \texttt{be7b81e}, ngày 08/10).
+Prompt dùng trong lần chạy này đã có hai ràng buộc ``trích nguyên văn'' và ``không tự quy đổi'' nhưng
+\emph{chưa} có chú giải thang điểm ở Mục~\ref{sec:nham-thang-diem}.
+
+\paragraph{Lưu ý khi so sánh.} Hai phiên khác nhau ở \emph{hai} điểm cùng lúc: prompt mới, và cấu hình
+ngữ cảnh --- phiên trước bật rerank (LLM chỉ nhận 3 Node), phiên này tắt rerank (LLM nhận 10 Node).
+Vì vậy chênh lệch dưới đây không quy được riêng cho prompt; muốn tách phải chạy thêm một phiên chỉ đổi
+một yếu tố.
+
+\paragraph{Kết quả tổng.} Số câu trả lời ``không tìm thấy'' giảm từ 29/56 (52\%) xuống 23/56 (41\%).
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{>{\hsize=0.9\hsize}X >{\hsize=1.1\hsize}X >{\hsize=1.1\hsize}X >{\hsize=0.9\hsize}X}
+    \toprule
+    \textbf{Câu hỏi} & \textbf{Trả lời (phiên 08/10)} & \textbf{Quy chế quy định} & \textbf{So với phiên trước} \\
+    \midrule
+    Ra trường xuất sắt cần bao nhiêu điểm & ĐTB tích lũy 3,6--4,0 & 3,6--4,0 (Điều 10 khoản 4) & Từ chối sai $\to$ \textbf{Đúng} \\
+    8,4 hệ 10 thì hệ 4 được bao nhiêu & 3,5 & 3,5 với khóa 2025 trở đi (B+); 3,0 với khóa trước & Sai $\to$ Đúng một phần (không nêu khóa) \\
+    Điểm D+ ứng với khoảng nào trên thang 10 & 4,8--5,4 & 4,8--5,4 (QĐ 3183, Điều 1 khoản 3) & (câu mới) Đúng \\
+    Giỏi tiếng Anh nhưng không có chứng chỉ có ra trường được không & Được xét nếu đủ điều kiện; chưa đạt chuẩn ngoại ngữ thì có 3 năm để hoàn thiện & Như câu trả lời (Điều 13 khoản 4) & Đúng \\
+    \midrule
+    Không có chứng chỉ tiếng Anh có ra trường được không & Không, dẫn Điều 3 về học chương trình thứ hai ngành Ngôn ngữ Anh & Điều 13 khoản 4, như câu trên & \textbf{Sai} (lấy nhầm văn bản QĐ 810) \\
+    Học bị F thì làm gì & F quy đổi 0 và ``không được tính vào điểm trung bình'' & F quy đổi 0 và \emph{được} tính (Điều 10 khoản 2--3) & Đúng $\to$ \textbf{Sai} \\
+    Khối lượng học kỳ chính & Mỗi học kỳ chính tối thiểu 30 tuần & 2 học kỳ chính cộng lại tối thiểu 30 tuần (Điều 6) & Sai (không đổi) \\
+    Rớt một môn, các kỳ còn lại 4.0 có được xuất sắc không & Không tìm thấy & Chỉ bị giảm hạng nếu học lại vượt 5\% tổng tín chỉ (Điều 13 khoản 3) & Từ chối sai \\
+    Còn kỹ sư (hỏi tiếp) & Không tìm thấy & 150 tín chỉ & Từ chối sai (không đổi) \\
+    \midrule
+    Mua bằng tiếng Anh giả (hai cách hỏi) & Một cách hỏi: đúng, dẫn Điều 19 khoản 3; cách kia: không tìm thấy & Buộc thôi học, thu hồi bằng (Điều 19 khoản 3) & Không ổn định theo cách diễn đạt \\
+    Bao nhiêu tiền 01 tín & In ra nguyên chuỗi \texttt{/no\_think} & Ngoài phạm vi & Từ chối đúng $\to$ \textbf{Lỗi} \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Một số câu của phiên chạy lại ngày 08/10, chấm tay theo văn bản trong \texttt{data/processed}.}
+  \label{tab:chay-lai-56-cau}
+\end{table}
+
+\paragraph{Phân tích.}
+\begin{itemize}
+  \item \textbf{Ít từ chối sai hơn}, rõ nhất ở câu ``xuất sắt'' --- trước đây bị từ chối dù Điều 10 có
+        trong ngữ cảnh. Do ngữ cảnh tăng từ 3 lên 10 Node cùng lúc với đổi prompt, chưa kết luận được
+        yếu tố nào có tác dụng.
+  \item \textbf{Phạm vi hiệu lực theo khóa tuyển sinh là nguồn sai mới.} QĐ 3183 chỉ áp dụng thang điểm
+        có B+, C+, D+ cho khóa tuyển sinh từ 2025 (Điều 2 của QĐ). Hệ thống trả lời theo một trong hai
+        bảng mà không nói bảng đó áp dụng cho khóa nào: ``8,4 $\to$ 3,5'' đúng với khóa 2025, còn ``B là
+        7,0--8,4'' chỉ đúng với khóa trước 2025. Prompt hiện chỉ nói ``có văn bản sửa đổi thì dùng nội
+        dung đã sửa đổi'', tức là ngầm giả định mọi sinh viên đều thuộc khóa mới.
+  \item \textbf{Ngữ cảnh rộng hơn cũng kéo theo văn bản nhiễu.} Câu ``không có chứng chỉ tiếng Anh'' lấy
+        Điều 3 của QĐ 810 (điều kiện học chương trình thứ hai ngành Ngôn ngữ Anh) làm căn cứ, trong khi
+        Điều 13 --- căn cứ đúng --- cũng có trong ngữ cảnh. Câu về điểm F sai ở chi tiết ``không tính vào
+        điểm trung bình'', nhầm F với các điểm chữ không quy đổi ở khoản 3 Điều 10.
+  \item \textbf{Không ổn định theo cách diễn đạt.} \texttt{temperature=0} làm \emph{cùng một} câu hỏi cho
+        cùng câu trả lời, nhưng hai cách hỏi gần nhau vẫn có thể cho một câu đúng và một câu ``không tìm
+        thấy''. Tính tất định không thay được độ vững theo diễn đạt.
+  \item \textbf{Rò chỉ thị \texttt{/no\_think}.} Ở một câu ngoài phạm vi, Qwen3 trả về đúng chuỗi điều khiển
+        \texttt{/no\_think} thay cho câu trả lời. Cần lọc chuỗi này ở đầu ra và đếm nó như một lỗi trong
+        \texttt{evaluate\_answers.py}.
+\end{itemize}
+
+
+\subsection{So sánh trước -- sau các tối ưu}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{>{\hsize=0.8\hsize}X >{\hsize=1.1\hsize}X >{\hsize=1.1\hsize}X}
+    \toprule
+    \textbf{Vấn đề} & \textbf{Trước} & \textbf{Sau} \\
+    \midrule
+    Điều vắt qua hai trang & Bị chia đôi (mỗi trang một Document) & Một Node mỗi Điều (Markdown hai tầng) \\
+    Điều 1--3 của quyết định ban hành & Trùng nhãn với Điều 1--3 của quy chế & Tách \texttt{phan="ban\_hanh"} \\
+    Metadata rỗng trong embedding & Có (\texttt{chuong:}, \texttt{dieu:} rỗng) & Chỉ \texttt{nguon\_trich} \\
+    Dùng nhầm chỉ mục cũ & Có thể, nếu quên \texttt{--rebuild} & Fingerprint tự build lại \\
+    Câu trả lời giữa các lần hỏi & Không ổn định & \texttt{temperature=0}, \texttt{seed=42} \\
+    Embedding + reranker trên GPU 4\,GB & \texttt{CUDA out of memory} & fp16, khoảng 2,2\,GB \\
+    Tỷ lệ ``không tìm thấy'' (56 câu) & 52\% & 41\% (đổi prompt và top-$k$ cùng lúc) \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Các thay đổi đã đo hoặc kiểm chứng được.}
+\end{table}
+
+\subsection{Hướng dẫn chạy lại}
+
+\begin{lstlisting}[caption={Các lệnh chạy lại (từ thư mục gốc repo).}, label={lst:chay-lai}]
+python3 -m venv venv && venv/bin/pip install -r requirements.txt
+bash scripts/pull_models.sh server            # hoặc bash scripts/setup_server_v2.sh trên Colab
+RAG_PROFILE=server venv/bin/python src/index_builder.py
+RAG_PROFILE=server venv/bin/python src/pipeline.py      # hỏi đáp dòng lệnh
+RAG_PROFILE=server venv/bin/python app/app.py           # giao diện Gradio
+make test && make eval && make baseline                 # kiểm thử và số liệu truy hồi
+\end{lstlisting}
+
+\section{Bảng phủ kỹ thuật}
+\label{sec:bang-phu}
+
+Bảng phản ánh trạng thái tuần 5; bản cuối sẽ khóa cùng commit niêm phong, nộp ít nhất 24 giờ trước buổi bảo vệ. Chỉ khai
+những gì có trong commit đó.
+
+\begin{table}[H]
+  \centering
+  \scriptsize
+  \begin{tabularx}{\textwidth}{c >{\hsize=1.1\hsize}X c >{\hsize=0.7\hsize}X >{\hsize=1.2\hsize}X >{\hsize=1\hsize}X l}
+    \toprule
+    \textbf{TT} & \textbf{Nội dung} & \textbf{Tầng} & \textbf{Chức năng} & \textbf{File} & \textbf{Minh chứng} & \textbf{Trạng thái} \\
+    \midrule
+    1 & OCR + Markdown hai tầng & 1A & Nạp quy chế & \texttt{scripts/extract\_to\_md.py}, \texttt{clean\_md.py} & 6 văn bản & Dùng \\
+    2 & Node theo Điều & 1A+1B & Đơn vị truy hồi & \texttt{src/processed\_loader.py} & 54 Node, kiểm thử & Dùng \\
+    3 & Embedding + index + persist & 1A+1B & Lập chỉ mục & \texttt{src/index\_builder.py} & 77\,s / 1,5\,s & Dùng \\
+    4 & Retriever top-$k$ & 1A & Truy hồi & \texttt{src/retriever.py} & Bảng~\ref{tab:top-k} & Dùng \\
+    5 & Query engine + trích nguồn & 1A+1B & Hỏi đáp & \texttt{src/query\_engine.py} & Dòng ``Nguồn'' & Dùng \\
+    6 & Recall@$k$, MRR, nDCG, CI & 1A & Kiểm chứng & \texttt{eval/evaluate.py}, \texttt{metrics.py} & R@1 81\%, R@3 100\% & Dùng \\
+    7 & Từ chối ngoài corpus & 1B & Hỏi đáp & \texttt{src/query\_engine.py} & 41\% ``không tìm thấy'' & Chưa đo tỷ lệ đúng \\
+    8 & Hybrid BM25 & 3 & Truy hồi & \texttt{src/bm25.py} & Bảng~\ref{tab:recall} & Có, tắt \\
+    9 & Rerank cross-encoder & 3 & Truy hồi & \texttt{src/retriever.py} & Bảng~\ref{tab:recall} & Có, tắt \\
+    10 & Model server HTTP & 3 & Hạ tầng & \texttt{src/model\_server.py} & Chạy trên Colab & Dùng \\
+    11 & \texttt{.env}, 2 profile & 2 & Cấu hình & \texttt{src/config.py}, \texttt{.env.example} & --- & Dùng \\
+    12 & Unit test + CI & 2 & Kiểm thử & \texttt{tests/}, \texttt{.github/workflows/ci.yml} & 26 kiểm thử & Dùng \\
+    13 & Giao diện Gradio & 1B & Demo & \texttt{app/app.py} & Nhật ký câu hỏi & Chạy thử \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Bảng phủ kỹ thuật.}
+  \label{tab:bang-phu}
+\end{table}

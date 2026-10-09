@@ -1,0 +1,45 @@
+\chapter{Vị thế công nghệ và phạm vi ứng dụng}
+\label{ch:vi-the}
+
+\section{Các trường hợp ứng dụng tiêu biểu}
+
+\begin{itemize}
+  \item \textbf{Hỏi đáp trên tài liệu nội bộ}: quy chế, sổ tay, tài liệu kỹ thuật --- đúng dạng bài toán
+        của đồ án.
+  \item \textbf{Trợ lý tra cứu chính sách}: văn bản có sửa đổi, có hiệu lực theo thời gian, cần trích dẫn
+        nguồn để người dùng tự kiểm tra.
+  \item \textbf{Tìm kiếm tri thức doanh nghiệp}: gom nhiều nguồn (PDF, wiki, CSDL) vào một chỉ mục và hỏi
+        bằng ngôn ngữ tự nhiên.
+\end{itemize}
+
+\section{Tình hình sử dụng}
+
+\chualam{số liệu GitHub stars, lượt tải PyPI của \texttt{llama-index-core} và tin tuyển dụng sẽ thu thập kèm ngày truy cập ở tuần 6}
+
+\section{Xu hướng và giới hạn}
+
+\begin{itemize}
+  \item \textbf{Xu hướng}: từ RAG một lượt sang \emph{Workflows} (luồng nhiều bước điều khiển bằng sự
+        kiện) và agent dùng công cụ; dịch vụ phân tích tài liệu (LlamaParse) cho PDF phức tạp.
+  \item \textbf{Đối thủ}: LangChain/LangGraph (thiên về chuỗi và agent tổng quát), Haystack (thiên về
+        pipeline tìm kiếm). LlamaIndex mạnh nhất ở tầng dữ liệu: nạp, cắt, lập chỉ mục, truy hồi.
+  \item \textbf{Giới hạn quan sát được}: mặc định thiên về tiếng Anh và OpenAI (\texttt{Settings.llm} trỏ
+        tới OpenAI); nhiều tích hợp tách gói nên phải tự ghim phiên bản (Mục~\ref{sec:ma-sat}).
+\end{itemize}
+
+\section{Kết luận phạm vi}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{X X}
+    \toprule
+    \textbf{Nên dùng LlamaIndex} & \textbf{Không nên dùng} \\
+    \midrule
+    Hỏi đáp trên kho văn bản riêng, cần trích nguồn & Tính toán, tra bảng xác định, truy vấn có cấu trúc \\
+    Kho tài liệu thay đổi, cần lập chỉ mục lại & Phân loại / dự đoán trên dữ liệu bảng \\
+    Cần thử nhiều cách cắt, truy hồi, xếp hạng mà không viết lại hệ thống & Tài liệu ngắn vừa cửa sổ ngữ cảnh \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Phạm vi nên và không nên dùng LlamaIndex, rút ra từ đồ án.}
+\end{table}

@@ -1,0 +1,41 @@
+\chapter{Trích dẫn nguồn và từ chối câu hỏi ngoài corpus}
+\label{ch:trich-dan}
+
+\section{Vì sao chọn}
+
+Câu trả lời về quy chế chỉ có giá trị khi người đọc kiểm tra lại được. Và với câu hỏi mà quy chế không
+nói tới, ``không tìm thấy'' là câu trả lời đúng --- bịa ra một con số là lỗi nặng nhất.
+
+\section{Cơ chế}
+
+\paragraph{Trích dẫn.} \texttt{format\_sources()} đọc metadata của các Node nguồn qua \texttt{node\_label()}
+và in ``Nguồn: <văn bản> -- Điều $N$''. Nguồn lấy từ metadata chứ không để LLM tự ghi, nên luôn khớp với
+những gì đã vào prompt. Prompt còn bắt LLM trích nguyên văn câu quy định kèm tên văn bản và số Điều
+trước khi kết luận.
+
+\paragraph{Từ chối.} Hai lớp: (1) prompt cho LLM một lối ra hợp lệ --- ``nếu trích đoạn không có thông
+tin, hãy nói không tìm thấy''; (2) \texttt{SimilarityPostprocessor} loại Node dưới ngưỡng
+(\texttt{similarity\_cutoff}), đã cài nhưng mặc định tắt vì điểm cosine thấp và sát nhau
+(Mục~\ref{sec:retriever}).
+
+\section{Đã làm gì}
+
+\begin{itemize}
+  \item Nhãn nguồn thống nhất với văn bản embedding qua trường \texttt{nguon\_trich} (Chương~\ref{ch:node-parser}).
+  \item Bộ \texttt{eval/cau\_hoi\_danh\_gia.json}: 13 câu, mỗi câu có \texttt{pham\_vi} (10 ``trong'', 3 ``ngoài'')
+        để tách từ chối đúng khỏi từ chối sai.
+\end{itemize}
+
+\section{Số liệu}
+
+Trên 56 câu hỏi tự đặt (Chương~\ref{ch:trien-khai}), tỷ lệ trả lời ``không tìm thấy'' là 52\% ở phiên
+đầu và 41\% ở phiên chạy lại ngày 08/10. Chấm tay cho thấy cả hai loại: từ chối đúng (``điểm rèn luyện
+là gì'', ``bao nhiêu tiền một tín chỉ'') và từ chối sai (``còn kỹ sư'', ``rớt một môn có được xuất sắc
+không'').
+
+\chuatrienkhai{Tỷ lệ từ chối đúng trên một bộ câu ngoài corpus đủ lớn (ít nhất 10 câu) chưa đo; bộ hiện
+có mới 3 câu ``ngoài''. Trích dẫn chưa tới mức khoản/trang.}
+
+\section{Dùng ở đâu trong đồ án}
+
+Mọi câu trả lời ở CLI, giao diện Gradio và nhật ký đánh giá đều kèm dòng ``Nguồn''.
