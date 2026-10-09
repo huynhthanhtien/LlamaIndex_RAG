@@ -1,0 +1,275 @@
+\chapter{Giới thiệu về LlamaIndex}
+\label{ch:llamaindex}
+
+\section{Bối cảnh và lịch sử}
+
+\subsection{Bài toán: LLM không biết dữ liệu riêng}
+
+Mô hình ngôn ngữ lớn (Large Language Model, LLM) là mạng nơ-ron được huấn luyện trên lượng văn bản rất lớn để dự đoán token tiếp theo. Nhờ đó LLM có khả năng hiểu câu hỏi, diễn đạt lại, tóm tắt và suy luận đơn giản. Tuy nhiên, khi dùng LLM để trả lời về một văn bản nội bộ như quy chế của SGU, có bốn hạn chế cần xử lý:
+
+\begin{enumerate}
+  \item \textbf{Thiếu tri thức riêng.} Quy chế của một trường cụ thể, nhất là bản ban hành gần đây, hầu như không nằm trong dữ liệu huấn luyện, hoặc chỉ xuất hiện rất mờ nhạt.
+  \item \textbf{Tri thức bị đóng băng.} Kiến thức của mô hình dừng ở thời điểm huấn luyện; khi quy chế được sửa đổi, mô hình không tự cập nhật.
+  \item \textbf{Ảo giác (hallucination).} Mô hình có xu hướng sinh ra câu trả lời nghe hợp lý nhưng sai, ví dụ bịa số tín chỉ hoặc số Điều.
+  \item \textbf{Khó kiểm chứng.} Câu trả lời không kèm nguồn nên người dùng không biết đối chiếu ở đâu.
+\end{enumerate}
+
+Có thể khắc phục bằng cách tinh chỉnh (fine-tuning) mô hình trên văn bản quy chế, nhưng cách này tốn kém, phải huấn luyện lại mỗi khi văn bản đổi, và vẫn không loại bỏ hoàn toàn ảo giác. RAG đi theo hướng khác: giữ nguyên mô hình, đưa tri thức cần thiết vào \emph{ngữ cảnh} (prompt) tại thời điểm hỏi.
+
+\subsection{LlamaIndex ra đời từ đâu}
+
+LlamaIndex do Jerry Liu khởi xướng, ra mắt cuối năm 2022 dưới tên \emph{GPT Index}, và đổi tên thành
+LlamaIndex trong năm 2023~\cite{llamaindexrepo}. Dự án hiện do công ty LlamaIndex Inc.\ phát triển:
+thư viện mã nguồn mở (gói \texttt{llama-index-core} và các gói tích hợp) đi kèm các dịch vụ thương mại
+như LlamaCloud và LlamaParse.
+
+Điểm xuất phát của dự án cũng chính là pain-point nêu trên: LLM không biết dữ liệu riêng, cửa sổ ngữ
+cảnh có hạn nên không thể nhét cả kho tài liệu vào prompt, và khi thiếu căn cứ thì mô hình bịa. LlamaIndex
+giải quyết bằng một \emph{lớp dữ liệu} đứng giữa tài liệu và LLM: nạp tài liệu, cắt thành đơn vị nhỏ,
+lập chỉ mục, rồi khi có câu hỏi thì truy hồi đúng phần cần thiết đưa vào prompt.
+
+\section{Kiến trúc và nguyên lý hoạt động}
+
+\paragraph{Gọi đúng loại.} LlamaIndex là một \textbf{thư viện/framework dữ liệu cho ứng dụng LLM}.
+Nó không phải là mô hình ngôn ngữ, và cũng không phải ``RAG'': RAG là một \emph{kiến trúc} (truy hồi rồi
+sinh), còn LlamaIndex là công cụ cài đặt kiến trúc đó (và cả các kiến trúc khác như agent).
+
+\subsection{Retrieval-Augmented Generation (RAG)}
+
+\subsubsection{Ý tưởng}
+
+RAG~\cite{lewis2020rag,gao2023ragsurvey} tách bài toán thành hai bước: (1) \emph{truy hồi} --- từ kho tài liệu, tìm ra một số ít đoạn liên quan nhất tới câu hỏi; (2) \emph{sinh} --- đưa câu hỏi cùng các đoạn đó cho LLM và yêu cầu trả lời dựa trên chúng. Nếu ký hiệu $q$ là câu hỏi, $\mathcal{D}$ là tập các đoạn văn bản trong kho, thì:
+
+\begin{equation}
+  C = \operatorname{Retrieve}(q, \mathcal{D}, k), \qquad
+  a = \operatorname{LLM}\big(\text{prompt}(q, C)\big),
+\end{equation}
+
+trong đó $C \subset \mathcal{D}$ là $k$ đoạn được chọn và $a$ là câu trả lời. Vì $C$ lấy trực tiếp từ quy chế nên câu trả lời có căn cứ, và hệ thống có thể trích dẫn nguồn (số Điều, số trang) cho người dùng kiểm tra.
+
+\subsubsection{Hai pha của một hệ RAG}
+
+Một hệ RAG hoạt động theo hai pha có tần suất chạy khác nhau:
+
+\begin{itemize}
+  \item \textbf{Pha chuẩn bị (offline), chạy khi tài liệu thay đổi:} nạp tài liệu $\rightarrow$ cắt thành các đoạn $\rightarrow$ biến mỗi đoạn thành vector embedding $\rightarrow$ lưu vào chỉ mục.
+  \item \textbf{Pha truy vấn (online), chạy mỗi câu hỏi:} embedding câu hỏi $\rightarrow$ tìm $k$ đoạn gần nhất $\rightarrow$ ghép prompt $\rightarrow$ LLM sinh câu trả lời.
+\end{itemize}
+
+Chất lượng của hệ thống bị giới hạn bởi \emph{đoạn văn tìm được}: nếu bước truy hồi bỏ sót Điều đúng thì LLM dù tốt đến đâu cũng không thể trả lời đúng. Vì vậy phần lớn công sức của đồ án tập trung vào các bước chuẩn bị dữ liệu (nạp, cắt đoạn) và truy hồi.
+
+\subsection{Embedding và độ tương đồng vector}
+
+\subsubsection{Vector embedding}
+
+Embedding là phép ánh xạ một đoạn văn bản thành một vector số thực $\mathbf{v} \in \mathbb{R}^d$ sao cho các đoạn có nghĩa gần nhau nằm gần nhau trong không gian vector. Với mô hình dạng bi-encoder~\cite{reimers2019sentencebert}, câu hỏi và đoạn văn được mã hóa \emph{độc lập} bởi cùng một bộ mã hóa; nhờ vậy vector của toàn bộ kho tài liệu có thể tính trước và lưu lại, khi có câu hỏi chỉ cần mã hóa riêng câu hỏi. Chất lượng của mô hình embedding là yếu tố ảnh hưởng mạnh nhất tới kết quả truy hồi, và được xếp hạng công khai trên các benchmark như MTEB~\cite{muennighoff2022mteb}.
+
+\subsubsection{Độ đo cosine}
+
+Độ tương đồng giữa vector câu hỏi $\mathbf{q}$ và vector đoạn văn $\mathbf{d}$ thường được đo bằng cosine:
+
+\begin{equation}
+  \operatorname{sim}(\mathbf{q}, \mathbf{d})
+  = \frac{\mathbf{q}\cdot\mathbf{d}}{\lVert\mathbf{q}\rVert\,\lVert\mathbf{d}\rVert}
+  = \frac{\sum_{i=1}^{d} q_i d_i}{\sqrt{\sum_{i=1}^{d} q_i^2}\,\sqrt{\sum_{i=1}^{d} d_i^2}} .
+\end{equation}
+
+Giá trị càng gần 1 thì hai đoạn càng gần nhau về ngữ nghĩa. Cách khác là so khớp theo từ khóa xác suất kiểu BM25~\cite{robertson2009bm25}: mạnh ở token hiếm và ký hiệu (``B+'', ``150 tín chỉ'') nhưng không hiểu diễn đạt khác nghĩa; vì hai cách sai ở hai chỗ khác nhau, chúng thường được trộn thành \emph{hybrid search}. Khác với tìm theo từ khóa, so khớp vector cho phép ``cấm thi'' tìm được đoạn viết ``không đủ điều kiện dự thi'' vì hai cụm có embedding gần nhau.
+
+\subsection{Cắt đoạn văn bản (chunking)}
+
+\subsubsection{Vì sao phải cắt}
+
+Có hai lý do phải cắt tài liệu thành các đoạn nhỏ. Thứ nhất, cửa sổ ngữ cảnh của LLM có hạn, và càng nhét nhiều văn bản không liên quan thì câu trả lời càng dễ lệch --- mô hình còn có xu hướng bỏ qua thông tin nằm giữa ngữ cảnh dài~\cite{liu2023lostinthemiddle}. Thứ hai, một vector embedding cho cả tài liệu sẽ ``pha loãng'' mọi ý; mỗi đoạn nên xoay quanh một chủ đề để vector của nó đại diện đúng.
+
+\subsubsection{Các chiến lược cắt}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l X X}
+    \toprule
+    \textbf{Chiến lược} & \textbf{Ưu điểm} & \textbf{Nhược điểm} \\
+    \midrule
+    Cắt theo độ dài cố định & Đơn giản, kích thước đều & Có thể cắt ngang câu hoặc ngang điều khoản \\
+    Cắt theo câu (sentence splitter) & Không gãy câu, có chồng lấp (overlap) & Vẫn không biết ranh giới điều khoản \\
+    Cắt theo cấu trúc văn bản & Mỗi đoạn là một đơn vị nghĩa trọn vẹn & Phụ thuộc định dạng văn bản, cần quy tắc riêng \\
+    \bottomrule
+  \end{tabularx}
+  \caption{So sánh ba chiến lược cắt đoạn.}
+\end{table}
+
+Ứng dụng cụ thể của các chiến lược này vào quy chế SGU nằm ở Mục~\ref{sec:node} và Chương~\ref{ch:node-parser}.
+
+\subsection{Chỉ mục vector và truy hồi top-\texorpdfstring{$k$}{k}}
+
+Sau khi có vector cho mọi đoạn, hệ thống cần lưu chúng theo cách tìm kiếm nhanh. \emph{Chỉ mục vector} (vector index) lưu các cặp (vector, đoạn văn, metadata). Khi có câu hỏi, bộ truy hồi (retriever) tính độ tương đồng giữa vector câu hỏi và các vector trong chỉ mục rồi trả về $k$ đoạn có điểm cao nhất (top-$k$)~\cite{karpukhin2020dpr}. Với kho nhỏ như một quy chế (vài chục đến vài trăm đoạn), việc so sánh vét cạn với mọi vector là đủ nhanh; các cấu trúc tìm kiếm xấp xỉ chỉ cần khi kho rất lớn.
+
+
+\subsection{Tổng hợp câu trả lời (Response Synthesis)}
+
+Sau truy hồi, các đoạn tìm được phải được đưa cho LLM để sinh câu trả lời. LlamaIndex gọi bước này là \emph{response synthesis} và cung cấp nhiều chế độ (\texttt{response\_mode}). Các chế độ thường gặp:
+
+\begin{itemize}
+  \item \texttt{refine}: gọi LLM lần lượt từng đoạn, mỗi lần tinh chỉnh câu trả lời cũ bằng đoạn mới; chính xác nhưng tốn nhiều lượt gọi.
+  \item \texttt{compact}: gộp nhiều đoạn vào cùng một prompt sao cho vừa cửa sổ ngữ cảnh rồi mới gọi LLM, giảm số lượt gọi so với \texttt{refine}.
+  \item \texttt{tree\_summarize}: tóm tắt theo cấu trúc cây, phù hợp câu hỏi tổng hợp trên nhiều đoạn.
+  \item \texttt{simple\_summarize}: cắt bớt để nhét mọi đoạn vào một lần gọi.
+\end{itemize}
+
+\subsection{Xếp hạng lại (reranking)}
+
+Mô hình embedding dạng bi-encoder mã hóa câu hỏi và đoạn văn \emph{riêng rẽ}, nên nhanh nhưng chỉ so khớp ở mức ``ý chính''. Mô hình \emph{cross-encoder} nhận \emph{cặp} (câu hỏi, đoạn văn) làm một đầu vào duy nhất và chấm một điểm liên quan; nhờ xem cả hai cùng lúc, nó thường đánh giá chính xác hơn, nhưng phải chạy lại cho từng cặp nên chậm hơn nhiều và không thể tính trước. Vì vậy cách dùng phổ biến là hai tầng: bi-encoder lấy nhanh top-$k$ ứng viên, rồi cross-encoder chấm lại và chỉ giữ top-$n$ ($n<k$) đưa vào prompt.
+
+\subsection{Các thành phần chính và luồng xử lý}
+
+LlamaIndex~\cite{llamaindex2025docs} mô hình hóa chuỗi RAG bằng một số đối tượng có tên rõ ràng.
+Hình~\ref{fig:luong-llamaindex} vẽ lại luồng ba pha nạp --- lập chỉ mục --- truy vấn; bảng dưới chỉ ra
+từng đối tượng nằm ở đâu trong đồ án.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      node distance=5mm,
+      box/.style={rectangle, draw, rounded corners, minimum height=1cm, align=center, font=\small, text width=2.2cm},
+      arr/.style={-{Stealth}, thick}
+    ]
+    \node[box] (doc) {Tài liệu\\ \scriptsize Reader / Document};
+    \node[box, right=of doc] (node) {Node\\ \scriptsize NodeParser};
+    \node[box, right=of node] (idx) {Index\\ \scriptsize Embedding, VectorStoreIndex};
+    \node[box, right=of idx] (st) {Lưu đĩa\\ \scriptsize StorageContext};
+    \node[box, below=10mm of doc] (q) {Câu hỏi};
+    \node[box, right=of q] (ret) {Retriever\\ \scriptsize top-$k$};
+    \node[box, right=of ret] (pp) {Node\\ Postprocessor};
+    \node[box, right=of pp] (syn) {Response\\ Synthesizer + LLM};
+    \draw[arr] (doc) -- (node); \draw[arr] (node) -- (idx); \draw[arr] (idx) -- (st);
+    \draw[arr] (q) -- (ret); \draw[arr] (ret) -- (pp); \draw[arr] (pp) -- (syn);
+    \draw[arr, dashed] (idx.south) -- (ret.north);
+    \node[font=\scriptsize, above=4mm of idx.north west, anchor=south] {Nạp và lập chỉ mục (offline)};
+    \node[font=\scriptsize, below=1mm of pp] {Truy vấn: \texttt{QueryEngine} gộp ba khâu này (online)};
+  \end{tikzpicture}
+  \caption{Luồng xử lý của LlamaIndex (vẽ lại theo tài liệu chính hãng).}
+  \label{fig:luong-llamaindex}
+\end{figure}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l X X}
+    \toprule
+    \textbf{Khái niệm} & \textbf{Vai trò} & \textbf{Trong đồ án} \\
+    \midrule
+    \texttt{Document} & Một nguồn dữ liệu thô kèm metadata & Bản đầu dùng (\texttt{ingestion.py}); nay chỉ còn ở \texttt{hello\_world.py} \\
+    \texttt{Node} / \texttt{TextNode} & Đơn vị được lập chỉ mục, sinh từ Document hoặc dựng trực tiếp & \texttt{processed\_loader.py} (mỗi Điều / mục sửa đổi một Node) \\
+    \texttt{NodeParser} & Cắt Document thành Node (\texttt{SentenceSplitter}, \ldots) & \texttt{SentenceSplitter} cho Điều dài hơn 1\,024 từ \\
+    Embedding & Biến văn bản thành vector & \texttt{HuggingFaceEmbedding} hoặc \texttt{RemoteEmbedding} \\
+    \texttt{VectorStoreIndex} & Lưu Node kèm vector để truy hồi & \texttt{index\_builder.py} \\
+    \texttt{StorageContext} & Ghi / nạp chỉ mục xuống đĩa & \texttt{storage/<profile>/<corpus>} \\
+    \texttt{Retriever} & Lấy các Node liên quan tới câu hỏi & \texttt{retriever.py} (cosine top-$k$, tuỳ chọn trộn BM25) \\
+    \texttt{NodePostprocessor} & Lọc, xếp hạng lại Node sau truy hồi & \texttt{retriever.py} (ngưỡng, reranker) \\
+    Response synthesizer & Ghép Node vào prompt và gọi LLM & \texttt{query\_engine.py} (chế độ \texttt{compact}) \\
+    \texttt{QueryEngine} & Gộp retriever, postprocessor và synthesizer & \texttt{query\_engine.py} (\texttt{RetrieverQueryEngine}) \\
+    \texttt{Settings} & Cấu hình toàn cục (\texttt{embed\_model}, \texttt{llm}) & Chỉ gán ở \texttt{index\_builder} và \texttt{query\_engine} \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Các đối tượng chính của LlamaIndex và vị trí trong đồ án.}
+  \label{tab:khai-niem}
+\end{table}
+
+Điểm mạnh của thiết kế này là mỗi khâu độc lập: có thể đổi mô hình embedding, đổi cách cắt đoạn hoặc
+đổi chế độ tổng hợp mà không phải viết lại toàn bộ hệ thống.
+
+\subsection{Hệ sinh thái}
+
+Ngoài \texttt{llama-index-core}, LlamaIndex chia các tích hợp thành gói riêng: reader trên LlamaHub
+(PDF, web, CSDL\ldots), vector store (Chroma, Qdrant, \ldots), LLM (Ollama, OpenAI, \ldots) và embedding
+(HuggingFace, \ldots). Đồ án dùng hai gói tích hợp: \texttt{llama-index-llms-ollama} và
+\texttt{llama-index-embeddings-huggingface}. Cách chia gói này có mặt trái: \texttt{BM25Retriever} không
+nằm trong core, nên đồ án tự viết (Mục~\ref{sec:hybrid}).
+
+\section{So sánh và đánh giá}
+\label{sec:so-sanh}
+
+\subsection{So với tự viết RAG}
+
+Đồ án có hai chỗ vừa dùng LlamaIndex vừa tự viết cùng chức năng, nên so sánh được bằng trải nghiệm thật:
+
+\begin{itemize}
+  \item \textbf{Đánh giá truy hồi.} \texttt{eval/metrics.py} tự viết Recall@$k$, MRR, nDCG, bootstrap và
+        McNemar; \texttt{RetrieverEvaluator} của LlamaIndex cho cùng \texttt{mrr} đến ba chữ số thập phân
+        (Mục~\ref{sec:danh-gia-thuc-nghiem}). Thư viện đủ cho hit rate và MRR, nhưng không có khoảng tin
+        cậy và kiểm định cặp --- phần đó vẫn phải tự viết.
+  \item \textbf{BM25.} Tự viết khoảng 100 dòng (\texttt{src/bm25.py}) trên \texttt{BaseRetriever}; nhờ kế
+        thừa interface của LlamaIndex, nó cắm thẳng vào \texttt{QueryFusionRetriever} mà không phải sửa
+        phần còn lại.
+\end{itemize}
+
+Những gì LlamaIndex tiết kiệm được so với tự viết bằng \texttt{sentence-transformers} + \texttt{numpy}:
+lưu/nạp chỉ mục (\texttt{StorageContext}), chọn trường metadata nào vào embedding và prompt
+(các danh sách \texttt{excluded\_\ldots\_metadata\_keys}), trộn nhiều retriever, chuỗi postprocessor, response synthesizer
+có streaming và chế độ \texttt{compact}. Những gì nó \emph{không} tiết kiệm được nằm ở bảng ma sát dưới đây.
+
+\subsection{So với LangChain}
+
+\chualam{nhóm chưa dựng lại pipeline bằng LangChain; dự kiến tuần 6--7 dựng cùng pipeline truy hồi để so số dòng code, cách xem Node/chunk, khả năng lưu chỉ mục và tài liệu}
+
+\subsection{Điểm ma sát quan sát được khi dùng thật}
+\label{sec:ma-sat}
+
+Phần này ghi lại những chỗ thư viện không làm đúng như kỳ vọng ban đầu. Đây là loại thông tin
+mà tài liệu chính thức không nêu, và là một trong những kết quả của việc \emph{dùng thật} thư viện.
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{>{\hsize=1.05\hsize}X >{\hsize=1.05\hsize}X >{\hsize=0.9\hsize}X}
+    \toprule
+    \textbf{Hiện tượng} & \textbf{Nguyên nhân} & \textbf{Cách xử lý} \\
+    \midrule
+    Không nạp được embedding và reranker cùng lúc trên GPU 4\,GB &
+      \texttt{SentenceTransformerRerank} không có tham số \texttt{dtype}, luôn nạp fp32 &
+      Nạp reranker trên CPU, ép \texttt{\_model.half()} rồi mới chuyển lên GPU (dùng API nội bộ) \\
+    Vector bị nhiễu bởi các trường metadata rỗng &
+      Mặc định \texttt{metadata\_template} là \texttt{\{key\}: \{value\}} cho \emph{mọi} khóa, kể cả rỗng &
+      Lọc khóa rỗng và chỉ để một trường (\texttt{nguon\_trich}) được embedding \\
+    Không gắn được nhãn tiếng Việt cho từng khóa metadata &
+      \texttt{metadata\_template} chỉ có hai chỗ điền \texttt{\{key\}}, \texttt{\{value\}}, không tùy biến theo khóa &
+      Gom nhãn vào một trường \texttt{nguon\_trich} tự sinh \\
+    Bật hybrid là lỗi \texttt{ImportError: llama-index-llms-openai} &
+      \texttt{QueryFusionRetriever} làm \texttt{llm if llm else Settings.llm}, mà \texttt{Settings.llm} mặc định trỏ tới OpenAI &
+      Truyền thẳng đối tượng \texttt{Ollama} vào retriever (với \texttt{num\_queries=1} nó không bao giờ được gọi) \\
+    \texttt{BM25Retriever} không có trong \texttt{llama-index-core} &
+      Thư viện tách phần này ra package riêng (\texttt{llama-index-retrievers-bm25}) &
+      Tự viết \texttt{src/bm25.py} trên \texttt{BaseRetriever} (xem Mục~\ref{sec:retriever}) \\
+    Không lọc được theo toán tử ``khác'' trên metadata &
+      \texttt{SimpleVectorStore} mặc định chỉ là JSON trong RAM, hỗ trợ lọc hạn chế &
+      Chấp nhận ở quy mô hiện tại; ghi nhận việc chuyển sang Chroma/Qdrant khi corpus lớn \\
+    Đổi mô hình embedding là phải build lại toàn bộ chỉ mục &
+      Định dạng lưu \texttt{default\_\_vector\_store.json} gắn với số chiều vector &
+      Tách thư mục chỉ mục theo profile và thêm fingerprint theo model \\
+    Cấu hình toàn cục gây tác dụng phụ &
+      \texttt{Settings} là trạng thái global (embed\_model, llm) &
+      Chỉ gán \texttt{Settings} ở đúng hai chỗ (\texttt{index\_builder}, \texttt{query\_engine}) \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Các điểm ma sát với LlamaIndex gặp trong quá trình làm đồ án.}
+  \label{tab:ma-sat}
+\end{table}
+
+Một quan sát tổng quát: LlamaIndex tách bạch rất tốt ở mức \emph{interface} (retriever, node
+postprocessor, response synthesizer đều thay được độc lập), nhưng ở mức \emph{mặc định} thì thiên
+về ``chạy được ngay'' hơn là ``đúng cho tiếng Việt và cho văn bản pháp quy''. Vì vậy phần lớn công
+sức của đồ án nằm ở việc thay các mặc định đó, chứ không ở việc ghép các thành phần lại.
+
+\subsection{Khi nào KHÔNG nên dùng LlamaIndex}
+
+\begin{enumerate}
+  \item \textbf{Câu hỏi cần tính toán hoặc tra bảng có cấu trúc.} Quy đổi điểm hệ 10 sang hệ 4 là phép tra
+        bảng xác định. Đồ án ghi nhận LLM tự ``quy đổi'' 8,4 thành 3,4 và nhầm bảng hệ 10 với bảng hệ 4
+        (Mục~\ref{sec:nham-thang-diem}) dù truy hồi đúng. Loại câu này nên giải bằng một hàm Python hoặc
+        truy vấn SQL trên bảng quy đổi, không bằng truy hồi văn bản.
+  \item \textbf{Bài toán phân loại / dự đoán trên dữ liệu bảng.} Đó là việc của scikit-learn hay các
+        thư viện học máy; LlamaIndex không có gì để đóng góp.
+  \item \textbf{Tài liệu ngắn, ít thay đổi, vừa cửa sổ ngữ cảnh.} Hai quy định một trang trong corpus nếu
+        đứng riêng thì gọi thẳng LLM với toàn văn là đủ; dựng chỉ mục chỉ thêm độ phức tạp.
+\end{enumerate}

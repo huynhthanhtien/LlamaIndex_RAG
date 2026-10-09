@@ -52,6 +52,7 @@ class RAGConfig:
     request_timeout: float = 180.0
     temperature: float = 0.0  # 0 = tất định; trước đây không đặt nên câu trả lời đổi giữa các lần hỏi
     seed: int = 42            # truyền xuống Ollama qua additional_kwargs
+    thinking: bool = False    # chế độ suy luận của qwen3: đúng hơn khi tra bảng số, chậm ~4 lần (RAG_THINKING=1)
 
     # --- Thiết bị ---
     use_fp16: bool = False  # nạp embedding + reranker ở fp16 (chỉ khi cuda) để vừa GPU 4 GB
@@ -102,6 +103,8 @@ class RAGConfig:
             self.seed = int(os.environ["RAG_SEED"])
         if os.environ.get("RAG_TEMPERATURE"):
             self.temperature = float(os.environ["RAG_TEMPERATURE"])
+        if os.environ.get("RAG_THINKING"):
+            self.thinking = os.environ["RAG_THINKING"] == "1"
 
     def mo_ta(self) -> dict[str, object]:
         """Tóm tắt cấu hình để ghi kèm vào kết quả đánh giá (tái lập được thí nghiệm)."""
@@ -112,6 +115,7 @@ class RAGConfig:
             "llm_model": self.llm_model_name,
             "temperature": self.temperature,
             "seed": self.seed,
+            "thinking": self.thinking,
             "similarity_top_k": self.similarity_top_k,
             "similarity_cutoff": self.similarity_cutoff,
             "use_rerank": bool(self.use_rerank and self.reranker_model_name),

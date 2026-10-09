@@ -1,0 +1,78 @@
+\chapter{Phân tích và thiết kế hệ thống}
+\label{ch:thiet-ke}
+
+\section{Mô tả bài toán}
+
+Sinh viên SGU hỏi bằng tiếng Việt --- thường viết tắt, sai chính tả, hỏi nối tiếp --- về quy chế đào tạo,
+và nhận câu trả lời ngắn kèm văn bản và Điều nguồn để tự kiểm tra. Kho tài liệu gồm 6 văn bản đang áp
+dụng, trong đó có văn bản sửa đổi (QĐ 3183/2025) chỉ áp dụng một phần cho khóa tuyển sinh từ 2025.
+
+\section{User story}
+
+Các câu chuyện người dùng dưới đây lấy từ câu hỏi thật trong nhật ký hỏi đáp:
+
+\begin{itemize}
+  \item Là sinh viên, tôi muốn hỏi ``thời gian tối đa hoàn thành khóa học'' và nhận câu trả lời kèm Điều để tự kiểm tra.
+  \item Là sinh viên, khi hỏi điều không có trong quy chế (``bao nhiêu tiền một tín chỉ''), tôi muốn hệ thống nói rõ là không tìm thấy.
+  \item Là sinh viên khóa 2025, khi hỏi ``8,4 hệ 10 thì hệ 4 được bao nhiêu'', tôi muốn câu trả lời theo thang điểm áp dụng cho khóa của tôi.
+  \item Là sinh viên, tôi muốn hỏi bằng câu không dấu hoặc sai chính tả (``xuất sắt'', ``dạt diều khiện'') mà vẫn được trả lời.
+  \item Là sinh viên, sau khi hỏi về cử nhân, tôi muốn hỏi tiếp ``còn kỹ sư?'' mà không phải lặp lại cả câu.
+\end{itemize}
+
+Hai story cuối mới được đáp ứng một phần (BM25 bỏ dấu) hoặc chưa (không nhớ hội thoại).
+
+\section{Thiết kế}
+
+\subsection{Sơ đồ pipeline}
+
+Pipeline thật gồm sáu giai đoạn (Hình~\ref{fig:pipeline}, Chương~\ref{ch:moi-truong}): dữ liệu
+$\rightarrow$ Node $\rightarrow$ embedding/index $\rightarrow$ truy hồi $\rightarrow$ tổng hợp (ngữ cảnh + LLM
++ trích nguồn) $\rightarrow$ đánh giá.
+
+\subsection{Mô hình dữ liệu}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l X c c}
+    \toprule
+    \textbf{Khóa metadata} & \textbf{Ý nghĩa} & \textbf{Embed} & \textbf{Prompt} \\
+    \midrule
+    \texttt{nguon\_trich} & ``Điều 9 --- Quy chế \ldots 2021'' (sinh tự động) & có & có \\
+    \texttt{van\_ban} & Tên hiển thị của văn bản (\texttt{src/corpus.py}) & không & có \\
+    \texttt{chuong} & Tên Chương & không & có \\
+    \texttt{dieu} / \texttt{sua\_doi\_dieu} & Số Điều, hoặc số Điều được sửa đổi & không & có \\
+    \texttt{phan} & \texttt{chinh} / \texttt{sua\_doi} / \texttt{ban\_hanh} / \texttt{noi\_dung} & không & không \\
+    \texttt{phan\_doan} & Thứ tự đoạn khi một Điều bị cắt tiếp & không & có \\
+    \texttt{file}, \texttt{file\_goc}, \texttt{url} & Truy vết về file tầng 2 và PDF gốc & không & không \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Metadata của Node (chỉ khóa có giá trị mới được gắn).}
+\end{table}
+
+Bộ câu hỏi truy hồi là JSON \texttt{\{"question", "dieu\_dung"\}}; bộ chấm câu trả lời thêm
+\texttt{pham\_vi} (``trong''/``ngoai''), \texttt{dap\_an} và \texttt{nguon}.
+
+\subsection{Luồng truy vấn}
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      node distance=4mm,
+      box/.style={rectangle, draw, rounded corners, minimum height=1cm, align=center, font=\small, text width=1.9cm},
+      opt/.style={box, dashed},
+      arr/.style={-{Stealth}, thick}
+    ]
+    \node[box] (q) {Câu hỏi};
+    \node[box, right=of q] (v) {Vector top-10};
+    \node[opt, right=of v] (b) {+ BM25\\ (RRF)};
+    \node[opt, right=of b] (r) {Rerank\\ top-3};
+    \node[box, right=of r] (p) {Prompt\\ QA\_PROMPT};
+    \node[box, below=8mm of p] (l) {Ollama\\ qwen3};
+    \node[box, left=of l] (a) {Trả lời\\ + Nguồn};
+    \draw[arr] (q) -- (v); \draw[arr] (v) -- (b); \draw[arr] (b) -- (r); \draw[arr] (r) -- (p);
+    \draw[arr] (p) -- (l); \draw[arr] (l) -- (a);
+  \end{tikzpicture}
+  \caption{Luồng truy vấn; khung nét đứt là bước tuỳ chọn, mặc định tắt.}
+  \label{fig:luong-truy-van}
+\end{figure}

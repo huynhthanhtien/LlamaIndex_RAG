@@ -1,0 +1,88 @@
+\chapter*{Lời mở đầu}
+\addcontentsline{toc}{chapter}{Lời mở đầu}
+\label{ch:loi-mo-dau}
+
+\section*{1. Lý do chọn đề tài}
+
+Quy chế đào tạo là văn bản mà sinh viên tra cứu thường xuyên trong suốt quá trình học: thời gian tối đa
+để hoàn thành khóa học, cách tính điểm học phần, điều kiện xét tốt nghiệp, thủ tục nghỉ học tạm thời hay
+chuyển ngành. Tại Trường Đại học Sài Gòn (SGU), các quy định này nằm trong nhiều văn bản dài, phần lớn là
+PDF bản scan, và có văn bản sửa đổi chỉ áp dụng cho một số khóa. Tìm theo từ khóa chỉ khớp khi người hỏi
+dùng đúng thuật ngữ của văn bản (``cấm thi'' không tìm được ``không đủ điều kiện dự thi''); hỏi thẳng một
+mô hình ngôn ngữ lớn (LLM) thì câu trả lời trôi chảy nhưng không có căn cứ và có thể bịa.
+
+\textbf{LlamaIndex} được chọn vì nó chuyên cho đúng bài toán này --- hỏi đáp trên dữ liệu riêng --- và có
+sẵn các khâu nạp dữ liệu, cắt Node, lập chỉ mục, truy hồi, tổng hợp câu trả lời~\cite{llamaindex2025docs};
+hệ sinh thái của nó tích hợp sẵn Ollama (chạy LLM cục bộ, dữ liệu không ra dịch vụ bên ngoài) và mô hình
+embedding tiếng Việt trên HuggingFace.
+
+Định hướng nghề nghiệp của từng thành viên: \chualam{bổ sung ở bản báo cáo cuối}.
+
+\section*{2. Mục tiêu báo cáo}
+
+\paragraph{Mục tiêu kiến thức (cam kết).} Sáu mục lõi Tầng 1A:
+\begin{enumerate}
+  \item Ingestion: Document và metadata.
+  \item Node/chunk, giải thích chunk size và overlap.
+  \item Embedding và vector index.
+  \item Retriever top-$k$ / similarity.
+  \item Response synthesis có truy vết nguồn.
+  \item Đánh giá thực nghiệm ở khâu truy hồi.
+\end{enumerate}
+
+\paragraph{Mục tiêu kỹ năng (kế hoạch).} Tầng 1B: custom node parser theo Điều, persistent index có
+fingerprint, trích dẫn nguồn, từ chối câu hỏi ngoài corpus, nhiều nguồn (6 văn bản). Tầng 3: hybrid
+BM25 + vector, xếp hạng lại bằng cross-encoder, đánh giá có khoảng tin cậy và kiểm định thống kê, model
+server cho embedding/reranker.
+
+\section*{3. Phạm vi nghiên cứu}
+
+\begin{itemize}
+  \item \textbf{Corpus}: 6 văn bản SGU đang áp dụng --- Quy chế đào tạo trình độ đại học 2021, QĐ 3183/2025
+        sửa đổi Quy chế, QĐ 810 (học cùng lúc hai chương trình), QĐ 2375/2022 (chuyển chương trình, ngành),
+        quy định khối lượng đào tạo, quy định số tín chỉ tối thiểu kỹ sư CNTT --- tổng 54 Node.
+  \item \textbf{Mô hình}: embedding \texttt{AITeamVN/Vietnamese\_Embedding} chạy local (GPU 4\,GB ở fp16 hoặc
+        CPU); LLM \texttt{qwen3:8b} qua Ollama trên máy GPU thuê hoặc Google Colab.
+  \item \textbf{Không làm}: tư vấn pháp lý, agent, fine-tune LLM. Giao diện web chỉ ở mức chạy thử (Gradio).
+\end{itemize}
+
+\paragraph{Thay đổi phạm vi so với kế hoạch ban đầu.} Kế hoạch ban đầu là một văn bản (Quy chế 2021, 17
+trang scan) với LLM \texttt{qwen3:4b} chạy hoàn toàn trên máy cá nhân. Corpus được mở rộng lên 6 văn bản
+để trả lời được nội dung sửa đổi; LLM chuyển sang chạy từ xa vì GPU 4\,GB không chứa nổi
+\texttt{qwen3:8b} cùng embedding. Lý do chi tiết ở Chương~\ref{ch:danh-gia}.
+
+\section*{4. Kế hoạch và tiến độ 12 tuần}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l >{\hsize=0.9\hsize}X >{\hsize=1.3\hsize}X >{\hsize=0.8\hsize}X}
+    \toprule
+    \textbf{Tuần} & \textbf{Nội dung chính} & \textbf{Việc cụ thể của nhóm} & \textbf{Trạng thái} \\
+    \midrule
+    1 & Lập nhóm, chọn công nghệ & Đăng ký LlamaIndex, hồ sơ RAG & Xong \\
+    2 & Môi trường, Hello World, repo & venv, Ollama, \texttt{hello\_world.py}, \texttt{check\_model\_memory.py} & Xong \\
+    3--4 & Bắt buộc lõi, nháp Ch.~3--4 & OCR, Node theo Điều, index; bộ câu hỏi 01/02 & Xong; thay bằng Markdown hai tầng \\
+    5 & Chốt bài toán, thiết kế luồng & 6 văn bản, sơ đồ pipeline; Colab; chạy lại 56 câu & Xong \\
+    6--7 & Chọn thêm, thực nghiệm & Retriever, query engine, Recall@$k$ (xong sớm); thí nghiệm chunking & Đang làm \\
+    8--9 & Tích hợp, Tầng 3 & Trích nguồn, rerank, hybrid (xong sớm); từ chối ngoài corpus & Một phần \\
+    10 & Kiểm thử, đo trước--sau & 26 kiểm thử + CI (xong sớm); chấm câu trả lời tự động & Một phần \\
+    11 & Hands-on lab, chấm chéo & Viết lab & Chưa \\
+    12 & Hoàn thiện, niêm phong & Báo cáo, slide, video; nộp $\ge$ 24 giờ trước bảo vệ & Chưa \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Kế hoạch 12 tuần và trạng thái tại tuần 5. Người thực hiện từng tuần ghi ở Phụ lục~\ref{app:nhat-ky}.}
+\end{table}
+
+\section*{5. Cấu trúc báo cáo}
+
+Chương 1--2 giới thiệu LlamaIndex, kiến trúc, so sánh dựa trên trải nghiệm của nhóm
+và phạm vi nên/không nên dùng. Chương 3--8 trình bày môi trường, sáu mục lõi Tầng 1A
+với mã nguồn và kết quả chạy thật, rồi các kỹ thuật chọn thêm (node parser, persistent index, trích
+dẫn/từ chối) và nâng cao (hybrid, rerank). Chương 9--10 là phân tích thiết kế, triển
+khai, minh chứng và Bảng phủ kỹ thuật. Chương 11--12 đánh giá lại so với mục tiêu, phân
+tích lỗi, AI Disclosure và hướng phát triển. Cuối báo cáo là tài liệu tham khảo và các phụ lục: nhật ký
+tuần, bảng tự kiểm ba tầng và thực nghiệm học tập.
+
+Mọi số liệu đều lấy từ việc chạy thật các script trong repository; phần chưa làm được đánh dấu bằng
+khung ``Chưa triển khai'' hoặc ghi chú ``Chưa làm'' kèm thời điểm dự kiến bổ sung.

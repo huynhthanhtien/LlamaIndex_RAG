@@ -1,0 +1,15 @@
+\chapter{Thực nghiệm học tập}
+\label{app:thuc-nghiem}
+
+Các thí nghiệm dưới đây chỉ dùng để học hoặc để ra quyết định, không khai trong Bảng phủ kỹ thuật.
+
+\begin{itemize}
+  \item \textbf{Hybrid ưu tiên vector 3:1} (\texttt{relative\_score}): tốt nhất trên bộ 01 (R@1 84\%) nhưng
+        kém vector trên bộ 02; kết quả ở \texttt{eval/results/truy-hoi-hybrid-w.md}.
+  \item \textbf{Hai mô hình embedding}: profile \texttt{local} (\texttt{vietnamese-bi-encoder}, 768 chiều, nhận
+        tối đa 256 token, cần tách từ) cho Recall thấp hơn hẳn profile \texttt{server}. Số đo cũ (R@1 64,5\% trên
+        31 câu) thuộc pipeline một văn bản 21 Node nên không so trực tiếp được với số hiện tại.
+        \chualam{đo lại trên corpus 54 Node ở tuần 6--7}
+  \item \textbf{Chất lượng OCR}: tỷ lệ âm tiết tiếng Việt hợp lệ dùng để chọn giữa các bản scan; QĐ 3183/2025
+        thấp nhất (94,9\%).
+\end{itemize}

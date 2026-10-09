@@ -1,0 +1,104 @@
+\chapter{Đánh giá và nhìn lại}
+\label{ch:danh-gia}
+
+\section{So sánh với mục tiêu ban đầu}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{X l X}
+    \toprule
+    \textbf{Mục tiêu (Lời mở đầu)} & \textbf{Kết quả} & \textbf{Minh chứng} \\
+    \midrule
+    6 mục lõi Tầng 1A & Đạt 6/6 & Bảng~\ref{tab:tong-hop-1a} \\
+    Custom node parser, persistent index, trích nguồn & Đạt & Chương~\ref{ch:node-parser}--\ref{ch:trich-dan} \\
+    Từ chối câu ngoài corpus & Một phần & Chưa đo tỷ lệ đúng \\
+    Thí nghiệm chunking & Chưa & Mục~\ref{sec:node} \\
+    Hybrid, rerank (Tầng 3) & Đạt, có số liệu & Chương~\ref{ch:nang-cao} \\
+    Kiểm thử + CI (Tầng 2) & Đạt & 26 kiểm thử \\
+    Chấm câu trả lời tự động & Chưa chạy & Mục~\ref{sec:danh-gia-tra-loi} \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Đối chiếu mục tiêu và kết quả.}
+\end{table}
+
+\paragraph{Các quyết định đổi hướng.}
+\begin{itemize}
+  \item \textbf{Từ OCR theo trang sang Markdown hai tầng}: vì Điều bị chia đôi giữa hai trang và Điều của
+        quyết định ban hành trùng nhãn (Chương~\ref{ch:node-parser}).
+  \item \textbf{Từ một văn bản sang sáu văn bản đang áp dụng}: để trả lời được nội dung sửa đổi; văn bản hết
+        hiệu lực bị loại vì lấn át Quy chế 2021 khi truy hồi.
+  \item \textbf{Chọn profile \texttt{server} làm cấu hình chính, LLM chạy từ xa}: GPU 4\,GB không chạy nổi
+        \texttt{qwen3:8b} cùng embedding; LLM chạy trên máy GPU thuê hoặc Colab
+        (\texttt{scripts/setup\_server\_v2.sh}), embedding chạy local ở fp16 hoặc CPU.
+  \item \textbf{Tắt rerank và hybrid}: đo thấy không giúp ở quy mô 54 Node (Chương~\ref{ch:nang-cao}).
+\end{itemize}
+
+\section{Hạn chế}
+
+\begin{itemize}
+  \item \textbf{Độ mạnh thống kê của bộ câu hỏi.} 31 + 10 = 41 câu là ít; khoảng tin cậy rộng (bộ 02:
+        R@1 90\% với CI 70--100\%) và kiểm định vector--BM25 chưa đạt $p<0{,}05$. Cần mở rộng lên
+        khoảng 150--300 câu, phân tầng theo loại câu hỏi, và có hai người gán nhãn độc lập để báo cáo
+        độ đồng thuận.
+  \item \textbf{Corpus nhỏ.} 6 văn bản / 54 Node. Kết luận ``rerank và hybrid không giúp'' chỉ đúng ở
+        quy mô này; ở kho vài trăm Node trở lên, hai kỹ thuật đó cần được đo lại.
+  \item \textbf{Chất lượng OCR.} Văn bản quan trọng nhất (QĐ 3183/2025) có chất lượng OCR thấp nhất
+        (94,9\% âm tiết hợp lệ) và vẫn còn lỗi như ``Sửa đồi''.
+  \item \textbf{Metadata hiệu lực còn trống.} \texttt{\_metadata\_van\_ban.csv} chưa có số hiệu, ngày
+        ban hành, tình trạng hiệu lực, nên chưa áp dụng được lọc theo hiệu lực hay theo khóa.
+  \item \textbf{Đánh giá câu trả lời chưa chạy tự động.} Script đã có và LLM đã chạy được trên Colab,
+        nhưng \texttt{make eval-answers} chưa chạy; câu trả lời mới chỉ được chấm tay.
+  \item \textbf{Hạ tầng đo.} Số liệu trong chương này đo trên CPU; thời gian tuyệt đối không so sánh
+        được với các con số trên GPU ở bản báo cáo trước.
+  \item \textbf{Tầng sinh.} Không nhớ hội thoại, không có công cụ tra bảng/quy đổi điểm, chỉ một lượt
+        gọi LLM trên ngữ cảnh đã truy hồi.
+  \item \textbf{Không phân biệt khóa tuyển sinh.} Thang điểm của QĐ 3183 chỉ áp dụng từ khóa 2025, nhưng
+        hệ thống không hỏi hay nêu khóa nên câu trả lời về điểm chỉ đúng với một nhóm sinh viên
+        (Mục~\ref{sec:chay-lai-56-cau}).
+  \item \textbf{Chú giải thang điểm trong prompt chưa được đo.} Đây là kiến thức riêng của quy chế SGU
+        đặt trong prompt (Mục~\ref{sec:nham-thang-diem}), và chưa có phiên chạy nào xác nhận nó sửa được lỗi.
+\end{itemize}
+
+
+\section{Phân tích lỗi}
+
+\subsection{Lỗi 1: LLM nhầm thang điểm hệ 10 với hệ 4}
+
+\begin{itemize}
+  \item \textbf{Hiện tượng}: ``A thì được bao nhiêu điểm hệ 10'' $\rightarrow$ ``A được quy đổi thành 4,0 điểm hệ 10''
+        (nhật ký Gradio, ngày 08/10, hai lần hỏi).
+  \item \textbf{Phát hiện}: đọc nhật ký \texttt{questions\_log.jsonl}; top-$k$ (Bảng~\ref{tab:top-k}) cho thấy truy
+        hồi đúng, lỗi nằm ở tầng sinh.
+  \item \textbf{Nguyên nhân và cách sửa}: Mục~\ref{sec:nham-thang-diem}. Chưa đo lại sau khi sửa.
+\end{itemize}
+
+\subsection{Lỗi 2: \texttt{CUDA out of memory} khi nạp embedding cùng reranker}
+
+\begin{itemize}
+  \item \textbf{Hiện tượng}: trên card 4\,GB, profile \texttt{server} chiếm khoảng 3,5\,GB sau khi nạp embedding
+        và báo hết bộ nhớ khi nạp reranker.
+  \item \textbf{Nguyên nhân}: \texttt{SentenceTransformerRerank} không nhận \texttt{dtype}, luôn nạp fp32.
+  \item \textbf{Cách sửa}: nạp reranker trên CPU, ép fp16 rồi mới chuyển lên GPU:
+\end{itemize}
+
+\begin{lstlisting}[language=Python, caption={Nạp reranker fp16 (\texttt{make\_local\_reranker()} trong \texttt{src/retriever.py}).}, label={lst:rerank-fp16}]
+reranker = SentenceTransformerRerank(model=cfg.reranker_model_name, top_n=cfg.reranker_top_n,
+                                     device="cpu" if fp16 else device)
+if fp16:
+    reranker._model.half().to(device)
+    reranker.device = device
+\end{lstlisting}
+
+Sau khi sửa, cả hai mô hình cùng nằm trên GPU, tổng khoảng 2,2\,GB (Mục~\ref{sec:phan-cung}).
+
+\section{AI Disclosure}
+
+\chualam{phần này viết ở bản báo cáo cuối, dựa trên nhật ký dùng AI của nhóm}. Nội dung sẽ gồm:
+\begin{enumerate}
+  \item Công cụ AI đã dùng và dùng vào việc gì.
+  \item Phần có tỷ trọng AI sinh cao (ghi file / chức năng).
+  \item Ít nhất hai tình huống AI trả kết quả \emph{sai}: prompt, AI trả về gì, sai ở đâu, phát hiện thế nào,
+        sửa ra sao.
+  \item Tự đánh giá: nếu bỏ AI, phần nào nhóm vẫn tự viết lại được.
+\end{enumerate}

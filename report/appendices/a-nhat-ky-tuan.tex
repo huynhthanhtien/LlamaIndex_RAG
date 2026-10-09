@@ -1,0 +1,73 @@
+\chapter{Nhật ký công việc hàng tuần}
+\label{app:nhat-ky}
+
+Mỗi dòng phải khớp với commit trong repo. Cột ``Người làm'' lấy theo tác giả commit.
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{p{1.7cm} >{\hsize=1.1\hsize}X p{1.6cm} >{\hsize=0.9\hsize}X}
+    \toprule
+    \textbf{Tuần} & \textbf{Công việc đã làm} & \textbf{Người làm} & \textbf{Khó khăn / kết quả} \\
+    \midrule
+    1--2 & Lập nhóm, chọn công nghệ; cài môi trường, Hello World & --- & Chưa có commit trong repo \\
+    3 (21--27/09) & Khởi tạo repo, dữ liệu Quy chế 2021; \texttt{node\_parser.py} tách theo Điều; sửa \texttt{check\_model\_memory.py}; bộ câu hỏi 01 và 02; dữ liệu sổ tay sinh viên; nháp báo cáo (PR \#1--\#6) & Phan Hữu Kha, Võ Thị Như Ý, Trần Hà Thanh Thùy, Huỳnh Thanh Tiến, solozy & Pipeline một văn bản chạy được \\
+    4 (28/09--04/10) & Cấu hình 2 profile, RAG cơ bản, tiền xử lý Markdown hai tầng, \texttt{processed\_loader.py}, fingerprint chỉ mục, model server; báo cáo tuần 4 & solozy & 6 văn bản, 54 Node \\
+    5 \newline (05--09/10) &
+      Chạy LLM + model server trên Colab; hybrid BM25, baseline, kiểm định thống kê; 26 kiểm thử + CI;
+      Gradio có nhật ký câu hỏi; chạy lại 56 câu; chú giải thang điểm trong prompt, \texttt{RAG\_THINKING};
+      cập nhật Chương 3--5 &
+      solozy &
+      Truy hồi R@1 81\% / 90\%; rerank, hybrid không giúp; ``không tìm thấy'' 52\% $\to$ 41\%;
+      phát hiện lỗi nhầm hệ 10/hệ 4 và lỗi không phân biệt khóa tuyển sinh \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Nhật ký công việc theo tuần, lập từ \texttt{git log} (tuần 5: commit \texttt{be7b81e} ngày 08/10 và
+  các thay đổi chưa commit). Tên tài khoản git \texttt{solozy} do nhóm đối chiếu với thành viên.}
+  \label{tab:nhat-ky-tuan}
+\end{table}
+
+\section{Tuần 5 (05--09/10/2026)}
+
+\subsection{Công việc đã làm}
+
+\begin{itemize}
+  \item \textbf{Hạ tầng}: \texttt{scripts/setup\_server\_v2.sh}, \texttt{scripts/colab\_server.py} --- chạy
+        Ollama và model server trên Colab, mở URL công khai qua Cloudflare tunnel, in sẵn các dòng
+        \texttt{.env} cho máy local.
+  \item \textbf{Truy hồi}: hybrid BM25 + vector (\texttt{src/bm25.py}, \texttt{QueryFusionRetriever}); đo
+        bốn cấu hình và biến thể trọng số 3:1; baseline BM25 / không xếp hạng; khoảng tin cậy bootstrap và
+        kiểm định McNemar (\texttt{eval/metrics.py}).
+  \item \textbf{Kiểm thử}: 26 kiểm thử offline trong \texttt{tests/}, CI GitHub Actions, \texttt{Makefile}.
+  \item \textbf{Giao diện}: Gradio (\texttt{app/app.py}) ghi mỗi câu hỏi vào
+        \texttt{eval/results/questions\_log.jsonl}.
+  \item \textbf{Đánh giá câu trả lời}: chạy lại 56 câu bằng \texttt{eval/run\_batch\_cau\_hoi.py} với prompt
+        mới, chấm tay (Mục~\ref{sec:chay-lai-56-cau}).
+  \item \textbf{Tầng sinh}: thêm chú giải thang điểm hệ 10 / hệ 4 vào \texttt{QA\_PROMPT}; thêm công tắc
+        \texttt{RAG\_THINKING} (Mục~\ref{sec:nham-thang-diem}).
+  \item \textbf{Báo cáo}: cập nhật Chương 3--5 và phụ lục này.
+\end{itemize}
+
+\subsection{Kết quả và khó khăn}
+
+\begin{itemize}
+  \item Truy hồi (vector): bộ 01 R@1 81\%, R@3 100\%; bộ 02 R@1 90\%. Đo lại ngày 08/10 cho cùng chỉ số.
+  \item Rerank và hybrid không cải thiện trên 54 Node, nên để mặc định tắt (Chương~\ref{ch:nang-cao}).
+  \item Phiên chạy lại 56 câu: tỷ lệ ``không tìm thấy'' giảm từ 52\% xuống 41\%, nhưng vẫn sai ở số tuần
+        của học kỳ chính, điểm F và câu hỏi về chứng chỉ tiếng Anh; một câu trả về chuỗi \texttt{/no\_think}.
+  \item Lỗi mới phát hiện: nhầm thang điểm 10 với thang điểm 4 (``A được quy đổi thành 4,0 điểm hệ 10''),
+        và câu trả lời về điểm không phân biệt khóa tuyển sinh trước 2025 với từ 2025 trở đi (QĐ 3183).
+  \item Khi đối chiếu lại khoản 4 Điều 9, nhóm phát hiện đáp án tham chiếu cũ của câu ``học bị F'' bị
+        nhầm; đã sửa trong Bảng~\ref{tab:tra-loi}.
+\end{itemize}
+
+\subsection{Việc chuyển sang tuần 6}
+
+\begin{enumerate}
+  \item Chạy \texttt{make eval-answers} trên LLM Colab; chạy lại 56 câu theo từng yếu tố (prompt, top-$k$
+        đưa vào LLM, \texttt{RAG\_THINKING}) để đo tác dụng của chú giải thang điểm.
+  \item Thêm metadata khóa áp dụng cho mục sửa đổi của QĐ 3183 và yêu cầu câu trả lời nêu khóa.
+  \item Lọc chuỗi \texttt{/no\_think} khỏi đầu ra và đếm như một lỗi khi chấm.
+  \item Nạp văn bản quy đổi chứng chỉ tiếng Anh (thư mục \texttt{2\_quy\_doi\_tieng\_anh}): câu ``quy định
+        về tiếng anh đầu ra'' trong nhật ký Gradio hiện trả lời ``không tìm thấy''.
+\end{enumerate}

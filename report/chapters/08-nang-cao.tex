@@ -1,0 +1,115 @@
+\chapter{Kỹ thuật nâng cao đã chọn: hybrid search và xếp hạng lại}
+\label{ch:nang-cao}
+
+\section{Vì sao chọn}
+
+Câu hỏi về quy chế chứa ký hiệu và con số mà embedding nắm kém (``B+'', ``Điều 10'', ``150 tín chỉ''),
+và bi-encoder chỉ so khớp ở mức ý chính. Hai kỹ thuật thường được khuyến nghị cho đúng hai điểm yếu này
+là trộn BM25 (hybrid search) và xếp hạng lại bằng cross-encoder. Đồ án cài cả hai và \emph{đo} xem
+chúng có giúp trên corpus của mình không.
+
+\section{Cơ chế}
+\label{sec:hybrid}
+
+Module \texttt{src/retriever.py} tổ chức truy hồi thành ba tầng độc lập, đúng theo cách LlamaIndex
+tách \emph{retriever} khỏi \emph{node postprocessor}:
+
+\begin{enumerate}
+  \item \textbf{Vector top-$k$ (mặc định)}: \texttt{index.as\_retriever(similarity\_top\_k=10)}.
+        Câu hỏi được embedding bằng đúng mô hình đã dùng khi lập chỉ mục, rồi so cosine với toàn bộ
+        Node (\texttt{SimpleVectorStore} tìm vét cạn, phù hợp với kho vài chục đến vài trăm Node).
+  \item \textbf{Hybrid BM25 + vector (tuỳ chọn, \texttt{use\_hybrid})}: câu hỏi về quy chế chứa nhiều
+        ký hiệu và con số mà embedding nắm kém (``B+'', ``Điều 10'', ``150 tín chỉ'', ``QĐ 3183'').
+        Đồ án cài BM25 Okapi~\cite{robertson2009bm25} thuần Python trong \texttt{src/bm25.py} ---
+        gói \texttt{BM25Retriever} chính thức nằm ở một package riêng chứ không có trong
+        \texttt{llama-index-core}, nên tự viết vừa nhẹ vừa cho phép kiểm soát cách tách từ.
+        Hai nguồn được trộn bằng \texttt{QueryFusionRetriever} ở chế độ \texttt{reciprocal\_rerank}
+        (RRF), với \texttt{num\_queries=1} để không gọi LLM sinh truy vấn phụ và giữ phép đo tất định.
+  \item \textbf{Postprocessor}: ngưỡng tương đồng \texttt{SimilarityPostprocessor} (tuỳ chọn) rồi
+        tới xếp hạng lại bằng cross-encoder~\cite{nogueira2019passage}
+        (\texttt{SentenceTransformerRerank}, giữ top-3).
+\end{enumerate}
+
+\paragraph{Tách từ cho BM25.} \texttt{tach\_tu()} bỏ dấu tiếng Việt trước khi chấm điểm
+(\texttt{Điều} $\rightarrow$ \texttt{dieu}). Nhờ vậy câu hỏi gõ thiếu dấu hoặc lỗi OCR vẫn khớp văn
+bản có dấu --- đúng loại lỗi đã gặp trong nhật ký hỏi đáp. Đánh đổi là mất phân biệt các cặp chỉ
+khác dấu, hiếm gặp trong văn bản quy chế. \texttt{tests/test\_bm25.py} khóa lại hành vi này bằng ba
+ca: khớp theo ký hiệu ``B+'', khớp khi câu hỏi không dấu, và trả về rỗng khi không có từ nào khớp
+(tránh đưa Node nhiễu vào prompt).
+
+\paragraph{Một chi tiết dễ sai.} Điểm sau khi trộn RRF không cùng thang với cosine, nên nếu đặt
+\texttt{similarity\_cutoff} khi đang bật hybrid thì mọi Node đều bị loại. Hàm
+\texttt{get\_postprocessors()} vì thế chủ động bỏ qua ngưỡng khi \texttt{use\_hybrid=True} và ghi log
+cảnh báo, thay vì trả về danh sách rỗng một cách im lặng.
+
+\paragraph{Chạy trên GPU 4\,GB và trên máy từ xa.} Reranker nạp ở fp16 (Mục~\ref{sec:phan-cung}). Khi đặt
+\texttt{MODEL\_SERVER\_URL}, embedding và reranker được gọi qua HTTP tới \texttt{src/model\_server.py}
+(\texttt{RemoteEmbedding}, \texttt{RemoteRerank} trong \texttt{src/remote\_models.py}); client kiểm tra server
+đang chạy đúng mô hình của profile để vector không lệch với chỉ mục.
+
+\section{Số liệu}
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l l *{4}{>{\centering\arraybackslash}X} >{\centering\arraybackslash}X}
+    \toprule
+    \textbf{Bộ} & \textbf{Cấu hình} & \textbf{R@1 (CI 95\%)} & \textbf{R@3} & \textbf{MRR} & \textbf{nDCG@1} & \textbf{ms/câu} \\
+    \midrule
+    01 (31 câu) & vector (mặc định)          & 81\% [68--94] & 100\% & 0,892 & 0,806 & 165 \\
+                & + rerank                    & 81\% [65--94] & 100\% & 0,892 & 0,806 & 8\,487 \\
+                & hybrid (RRF, trọng số bằng) & 77\% [61--90] & 94\%  & 0,866 & 0,774 & 155 \\
+                & hybrid + rerank             & 81\% [65--94] & 100\% & 0,892 & 0,806 & 8\,193 \\
+                & hybrid ưu tiên vector 3:1   & 84\% [71--97] & 100\% & 0,914 & 0,839 & 148 \\
+    \midrule
+    02 (10 câu) & vector (mặc định)          & 90\% [70--100] & 90\%  & 0,910 & 0,900 & 149 \\
+                & + rerank                    & 60\% [30--90]  & 100\% & 0,783 & 0,600 & 7\,854 \\
+                & hybrid (RRF, trọng số bằng) & 60\% [30--90]  & 90\%  & 0,717 & 0,600 & 166 \\
+                & hybrid + rerank             & 60\% [30--90]  & 90\%  & 0,750 & 0,600 & 8\,811 \\
+                & hybrid ưu tiên vector 3:1   & 80\% [50--100] & 90\%  & 0,850 & 0,800 & 137 \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Truy hồi trên corpus 6 văn bản / 54 Node, profile \texttt{server}
+  (\texttt{AITeamVN/Vietnamese\_Embedding}), đo trên CPU. Sinh lại bằng \texttt{make eval}.}
+  \label{tab:recall}
+\end{table}
+
+\paragraph{2. Xếp hạng lại (rerank) không cải thiện trên kho nhỏ, và có hại cho bộ 02.}
+Trên bộ 01, rerank giữ nguyên cả ba chỉ số (81\% / 100\% / 0,892) nhưng đổi thứ tự top-1 ở bốn câu
+(số câu lấy đúng Quy chế 2021 tăng từ 23 lên 25). Trên bộ 02, rerank \emph{làm R@1 tụt từ 90\% xuống
+60\%} và MRR từ 0,910 xuống 0,783, đổi lại R@3 tăng từ 90\% lên 100\%. Nguyên nhân hợp lý: các mục
+sửa đổi của QĐ 3183 rất ngắn và dùng chung từ vựng (``thang điểm'', ``điểm chữ''), nên cross-encoder
+đẩy mục sửa đổi ``na ná'' lên trên mục đúng; đổi lại nó kéo được Node đúng vào top-3. Về chi phí,
+trên CPU rerank làm mỗi câu từ 0,15\,s lên 8,5\,s --- chậm hơn khoảng 50 lần --- mà không đem lại chỉ
+số nào tốt hơn. Kết luận thực nghiệm: \textbf{giữ \texttt{use\_rerank=False}} trên quy mô 54 Node, và
+chỉ đo lại khi corpus lớn hơn nhiều (hàng trăm đến hàng nghìn Node).
+
+\paragraph{3. Hybrid search: bản thân BM25 ở đây yếu, và cách trộn còn quan trọng hơn việc có trộn hay không.}
+Cấu hình hybrid mặc định (RRF, hai nguồn trọng số bằng nhau) \emph{làm giảm} chất lượng ở cả hai bộ:
+bộ 01 R@1 81\% $\to$ 77\%, R@3 100\% $\to$ 94\%; bộ 02 R@1 90\% $\to$ 60\%. Vì BM25 một mình chỉ đạt
+58\%/40\% ở R@1, việc cho nó trọng số ngang với vector kéo các Node khớp từ khóa nhưng sai ngữ nghĩa
+lên đầu. Để tách nguyên nhân, đồ án đo thêm biến thể \texttt{relative\_score} với trọng số ưu tiên
+vector 3:1: kết quả \emph{tốt nhất trên bộ 01} (R@1 84\%, MRR 0,914, nDCG@1 0,839) nhưng lại
+\emph{kém hơn vector} trên bộ 02 (R@1 80\% so với 90\%). Nói cách khác, chênh lệch giữa các biến thể
+hybrid nằm trong khoảng nhiễu của bộ câu hỏi, còn tham số trộn thì quyết định kết quả nhiều hơn cả
+việc ``có BM25 hay không''. Đây là lý do \texttt{use\_hybrid} mặc định vẫn là \texttt{False}: muốn
+bật phải chọn fusion mode và trọng số bằng đo trên chính corpus của mình.
+
+\paragraph{4. Kiểm định thống kê: bộ câu hỏi hiện tại chưa đủ mạnh để khẳng định các chênh lệch nhỏ.}
+Kiểm định McNemar chính xác trên R@1:
+\begin{itemize}
+  \item vector vs BM25, bộ 01: chỉ vector đúng 9 câu, chỉ BM25 đúng 2 câu, $p = 0{,}065$;
+  \item vector vs BM25, bộ 02: 5 câu so với 0 câu, $p = 0{,}062$;
+  \item vector vs hybrid ưu tiên vector, bộ 01: 0 câu so với 1 câu, $p = 1{,}000$.
+\end{itemize}
+Như vậy khoảng cách vector--BM25 rất lớn về độ lớn nhưng \emph{chưa đạt} ngưỡng $p<0{,}05$ với 31
+câu, còn chênh lệch +3 điểm phần trăm của biến thể hybrid tốt nhất hoàn toàn có thể là may mắn. Đây
+là hạn chế về \emph{độ mạnh thống kê} của bộ câu hỏi, không phải về hệ thống, và là lý do phải báo
+cáo khoảng tin cậy thay vì chỉ một con số.
+
+
+\section{Dùng ở đâu trong đồ án}
+
+Cả hai đều có công tắc (\texttt{use\_hybrid}, \texttt{use\_rerank}; \texttt{--rerank}, \texttt{--hybrid} trên dòng
+lệnh; ô chọn trong giao diện Gradio) và \textbf{mặc định tắt} theo kết quả đo. \texttt{make eval} đo lại cả
+bốn cấu hình khi corpus thay đổi.

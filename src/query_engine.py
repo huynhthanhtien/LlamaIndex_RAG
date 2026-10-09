@@ -22,6 +22,13 @@ QA_PROMPT = PromptTemplate(
     "Không tự suy diễn, không tự quy đổi thang điểm hay đổi đơn vị; nếu cần tra bảng thì chép đúng "
     "hàng của bảng có trong trích đoạn.\n"
     "Nếu có văn bản sửa đổi thì dùng nội dung đã sửa đổi.\n"
+    # Trích đoạn sửa đổi chỉ chứa bảng, không ghi thang điểm: thiếu chú giải này LLM lấy bảng quy đổi
+    # hệ 4 (Điều 10) để trả lời câu hỏi về hệ 10 (Điều 9).
+    "Lưu ý về thang điểm: điểm thành phần và điểm học phần chấm theo thang điểm 10 (\"hệ 10\"), rồi xếp loại "
+    "thành điểm chữ (A, B+, B, ...) theo khoảng điểm ở khoản 3 Điều 9. Điểm chữ được quy đổi sang thang điểm 4 "
+    "(\"hệ 4\") chỉ để tính điểm trung bình, theo khoản 2 Điều 10. Hỏi về hệ 10 hoặc khoảng điểm thì dùng bảng "
+    "Điều 9; hỏi về hệ 4 hoặc quy đổi để tính điểm trung bình thì dùng bảng Điều 10. "
+    "Khi tra khoảng điểm, so sánh con số với cả cận dưới và cận trên của từng hàng.\n"
     "Nếu trích đoạn không có thông tin, hãy nói không tìm thấy trong các văn bản quy định.\n"
     "Câu hỏi: {query_str}\n"
     "Trả lời: "
@@ -29,14 +36,17 @@ QA_PROMPT = PromptTemplate(
 
 
 def make_llm(cfg: RAGConfig) -> Ollama:
-    """LLM tất định: temperature=0 và seed cố định (trước đây không đặt nên đáp án đổi giữa các lần hỏi)."""
+    """LLM tất định: temperature=0 và seed cố định (trước đây không đặt nên đáp án đổi giữa các lần hỏi).
+
+    cfg.thinking bật chế độ suy luận của qwen3: tra bảng khoảng điểm chính xác hơn nhưng chậm ~4 lần.
+    """
     return Ollama(
         model=cfg.llm_model_name,
         base_url=cfg.ollama_base_url,
         request_timeout=cfg.request_timeout,
         temperature=cfg.temperature,
         additional_kwargs={"seed": cfg.seed},
-        thinking=False,
+        thinking=cfg.thinking,
         context_window=8192,
     )
 
