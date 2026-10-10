@@ -904,6 +904,7 @@
             <li><a href="#c11">C11 Đánh giá</a></li>
             <li><a href="#c12">C12 Thí nghiệm</a></li>
             <li><a href="#c13">C13 LlamaIndex</a></li>
+            <li><a href="#phan2">Phần II LlamaIndex</a></li>
             <li><a href="#phu-luc">Phụ lục</a></li>
         </ul>
     </nav>
@@ -915,7 +916,8 @@
             fusion, chunking, rerank, chỉ số đánh giá và thiết kế thí nghiệm — mỗi chương có công thức, ví dụ tính tay
             và câu hỏi tự kiểm tra.</p>
         <div class="badges">
-            <span class="badge">14 chương + phụ lục</span>
+            <span class="badge">Phần I: 14 chương lý thuyết</span>
+            <span class="badge">Phần II: 12 chương LlamaIndex</span>
             <span class="badge">Công thức có giải thích ký hiệu</span>
             <span class="badge">Ví dụ tính tay</span>
             <span class="badge">Đọc mã nguồn LlamaIndex</span>
@@ -928,8 +930,8 @@
     <section>
         <div class="stats-row">
             <div class="stat-card">
-                <div class="value">14</div>
-                <div class="label">Chương</div>
+                <div class="value">26</div>
+                <div class="label">Chương (14 lý thuyết + 12 LlamaIndex)</div>
             </div>
             <div class="stat-card">
                 <div class="value">20+</div>
@@ -947,7 +949,7 @@
 
         <div class="highlight info">
             <strong>Cách học:</strong> đọc theo thứ tự C0 → C12 (C0 có thể lướt nếu đã vững toán); mỗi chương làm phần “Ví dụ tính tay” bằng giấy bút rồi
-            mới mở đáp án câu hỏi. C13 là bản đồ nối lý thuyết với code LlamaIndex — đọc cuối cùng hoặc dùng để tra cứu.
+            mới mở đáp án câu hỏi. C13 là cầu nối sang <b>Phần II (L1–L12)</b> — giáo trình chi tiết về thư viện LlamaIndex.
             Phụ lục có bảng thuật ngữ Anh–Việt và bài báo gốc.
         </div>
 
@@ -966,6 +968,7 @@
             <a href="#c11"><div class="n">CHƯƠNG 11</div><div class="t">Đánh giá</div><div class="d">Recall, MRR, nDCG, faithfulness, McNemar</div></a>
             <a href="#c12"><div class="n">CHƯƠNG 12</div><div class="t">Thiết kế thí nghiệm</div><div class="d">Biến, seed, dev/test, ma trận cắt × %</div></a>
             <a href="#c13"><div class="n">CHƯƠNG 13</div><div class="t">Kiến trúc LlamaIndex</div><div class="d">11 thành phần ↔ file trong repo</div></a>
+            <a href="#phan2"><div class="n">PHẦN II · L1–L12</div><div class="t">Làm chủ thư viện LlamaIndex</div><div class="d">Gói, dữ liệu, ingestion, index, retriever, prompt, LLM, chat, agent, workflow, quan sát</div></a>
             <a href="#phu-luc"><div class="n">PHỤ LỤC</div><div class="t">Thuật ngữ &amp; tài liệu</div><div class="d">Anh–Việt, bài báo gốc</div></a>
         </div>
     </section>
@@ -3398,6 +3401,1139 @@ files = [<span class="string">f"VB{i:02d}"</span> <span class="keyword">for</spa
             định các ổ khác.</p>
 
         </section>
+
+    <!-- ===================== PHẦN II ===================== -->
+    <section id="phan2">
+        <div class="hero" style="margin-top:0;border-radius:16px;padding:2.5rem 1.5rem;">
+            <h1 style="font-size:1.9rem;">Phần II — Làm Chủ Thư Viện LlamaIndex</h1>
+            <p class="subtitle">Phần I trả lời “vì sao”. Phần II trả lời “thư viện làm việc đó bằng những lớp nào, cấu hình ra sao,
+                bẫy ở đâu”. Mọi tên lớp, tham số mặc định và chế độ trong phần này đã được kiểm tra trực tiếp trên
+                <code style="background:rgba(255,255,255,.2);color:#fff;">llama-index-core 0.14.24</code> cài trong repo.</p>
+        </div>
+        <div class="toc-grid" style="margin-top:1.2rem;">
+            <a href="#l1"><div class="n">L1</div><div class="t">Hệ sinh thái &amp; kiến trúc gói</div><div class="d">core, integrations, phiên bản</div></a>
+            <a href="#l2"><div class="n">L2</div><div class="t">Mô hình dữ liệu</div><div class="d">Document, Node, metadata, quan hệ</div></a>
+            <a href="#l3"><div class="n">L3</div><div class="t">Đọc dữ liệu</div><div class="d">Reader, SimpleDirectoryReader</div></a>
+            <a href="#l4"><div class="n">L4</div><div class="t">Ingestion pipeline</div><div class="d">transformation, cache, docstore</div></a>
+            <a href="#l5"><div class="n">L5</div><div class="t">Node parser</div><div class="d">10 bộ cắt và khi nào dùng</div></a>
+            <a href="#l6"><div class="n">L6</div><div class="t">Storage &amp; Index</div><div class="d">StorageContext, các loại index</div></a>
+            <a href="#l7"><div class="n">L7</div><div class="t">Retriever &amp; Postprocessor</div><div class="d">filter, auto-merging, router</div></a>
+            <a href="#l8"><div class="n">L8</div><div class="t">Synthesizer, Query engine, Prompt</div><div class="d">9 ResponseMode, tuỳ biến prompt</div></a>
+            <a href="#l9"><div class="n">L9</div><div class="t">LLM &amp; Embedding</div><div class="d">giao diện, Ollama, structured output</div></a>
+            <a href="#l10"><div class="n">L10</div><div class="t">Chat engine &amp; Memory</div><div class="d">hỏi tiếp nhiều lượt</div></a>
+            <a href="#l11"><div class="n">L11</div><div class="t">Agent &amp; Workflow</div><div class="d">tool, FunctionAgent, event-driven</div></a>
+            <a href="#l12"><div class="n">L12</div><div class="t">Quan sát, kiểm thử, hiệu năng</div><div class="d">instrumentation, mock, lỗi thường gặp</div></a>
+        </div>
+    </section>
+
+    <!-- ===================== L1 ===================== -->
+    <section id="l1" class="prose">
+        <div class="section-header">
+            <div class="icon" style="background:#e0f2f1;color:#00695c;">🧭</div>
+            <div>
+                <div class="section-num">Phần II · Chương L1</div>
+                <h2>Hệ Sinh Thái và Kiến Trúc Gói của LlamaIndex</h2>
+            </div>
+        </div>
+
+        <h3>L1.1. LlamaIndex là gì — “data framework” cho ứng dụng LLM</h3>
+        <p>LlamaIndex ra đời cuối 2022 với tên <strong>GPT Index</strong> (tác giả Jerry Liu), ban đầu là một thư viện nhỏ để xây
+            cấu trúc chỉ mục (cây, danh sách, bảng từ khoá) giúp GPT-3 “đọc” tài liệu dài hơn context window. Đổi tên thành
+            LlamaIndex năm 2023, thư viện tự định vị là <strong>data framework</strong>: tập trung vào đường đi của <em>dữ liệu</em> —
+            đọc, cắt, gắn metadata, đánh chỉ mục, truy hồi, tổng hợp — thay vì tập trung vào chuỗi lời gọi LLM. Đây là khác biệt
+            chính về triết lý so với LangChain (thiên về “chuỗi” và agent) và Haystack (thiên về pipeline tìm kiếm có cấu hình
+            khai báo).</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th></th><th>LlamaIndex</th><th>LangChain</th><th>Haystack</th></tr></thead>
+                <tbody>
+                    <tr><td>Trọng tâm</td><td>Dữ liệu → index → truy hồi → trả lời</td><td>Chuỗi lời gọi, công cụ, agent</td><td>Pipeline tìm kiếm/QA dạng đồ thị thành phần</td></tr>
+                    <tr><td>Trừu tượng RAG</td><td>Rất sâu (node, index, retriever, synthesizer riêng biệt)</td><td>Có nhưng mỏng hơn (retriever, chain)</td><td>Component + Pipeline</td></tr>
+                    <tr><td>Hợp với đồ án</td><td>✅ Thí nghiệm từng tầng RAG</td><td>Khi cần nhiều công cụ/agent</td><td>Khi cần pipeline sản phẩm</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>L1.2. Kiến trúc gói: core + integrations</h3>
+        <p>Từ phiên bản 0.10 (đầu 2024), LlamaIndex tách thành <strong>một gói lõi và hàng trăm gói tích hợp</strong>, tất cả cùng
+            chung namespace Python <code>llama_index</code>:</p>
+        <ul>
+            <li><code>llama-index-core</code> → <code>import llama_index.core</code>: mọi trừu tượng (Document, Node, Index, Retriever,
+                QueryEngine, Settings…) và các thành phần không cần thư viện ngoài.</li>
+            <li><code>llama-index-&lt;loại&gt;-&lt;tên&gt;</code> → <code>import llama_index.&lt;loại&gt;.&lt;tên&gt;</code>: mỗi tích hợp
+                một gói. Ví dụ trong repo: <code>llama-index-embeddings-huggingface</code> → <code>llama_index.embeddings.huggingface</code>,
+                <code>llama-index-llms-ollama</code> → <code>llama_index.llms.ollama</code>.</li>
+            <li>Các loại thường gặp: <code>llms</code>, <code>embeddings</code>, <code>vector_stores</code>, <code>readers</code>,
+                <code>retrievers</code>, <code>postprocessor</code>, <code>graph_stores</code>, <code>callbacks</code>.</li>
+            <li><code>llama-index</code> (không hậu tố) chỉ là gói “gom sẵn” core + vài tích hợp OpenAI phổ biến — cài nó sẽ kéo theo
+                OpenAI dù bạn không dùng.</li>
+        </ul>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Gói trong venv của repo</th><th>Phiên bản</th><th>Vai trò</th></tr></thead>
+                <tbody>
+                    <tr><td><code>llama-index-core</code></td><td>0.14.24</td><td>Lõi</td></tr>
+                    <tr><td><code>llama-index-embeddings-huggingface</code></td><td>0.8.0</td><td><code>HuggingFaceEmbedding</code></td></tr>
+                    <tr><td><code>llama-index-llms-ollama</code></td><td>0.11.0</td><td><code>Ollama</code></td></tr>
+                    <tr><td><code>llama-index-workflows</code></td><td>2.24.0</td><td>Engine workflow (import nội bộ là <code>workflows</code>), được <code>llama_index.core.workflow</code> re-export</td></tr>
+                    <tr><td><code>llama-index-instrumentation</code></td><td>0.6.0</td><td>Hệ thống span/event để quan sát (L12)</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="highlight">
+            <strong>Hệ quả thực hành:</strong> core và các gói tích hợp có <em>phiên bản riêng</em>. Nâng core mà không nâng tích hợp
+            (hoặc ngược lại) là nguồn lỗi import phổ biến nhất. Ghim phiên bản cả nhóm trong <code>requirements.txt</code>, và khi
+            tìm tài liệu, luôn kiểm tra tài liệu đó viết cho bản nào.
+        </div>
+
+        <h3>L1.3. LlamaHub và dịch vụ thương mại</h3>
+        <ul>
+            <li><strong>LlamaHub</strong> (llamahub.ai): danh mục các gói tích hợp — reader cho Notion, Google Drive, cơ sở dữ liệu;
+                vector store; LLM… Mỗi mục là một gói pip riêng.</li>
+            <li><strong>LlamaParse / LlamaCloud</strong>: dịch vụ trả phí của công ty LlamaIndex (parse PDF phức tạp, index được quản
+                lý). Không phải mã nguồn mở và không cần cho đồ án; tài liệu chính thức hay lồng ví dụ dùng chúng — cần phân biệt khi
+                đọc.</li>
+        </ul>
+
+        <h3>L1.4. Lịch sử thay đổi API cần biết khi đọc tài liệu cũ</h3>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h4>Trước 0.10 — <code>from llama_index import ...</code>, <code>ServiceContext</code></h4>
+                <p>Mọi thứ trong một gói; cấu hình LLM/embedding/chunk_size qua đối tượng <code>ServiceContext</code> truyền vào từng
+                    index. Rất nhiều bài hướng dẫn trên mạng vẫn dùng kiểu này.</p>
+            </div>
+            <div class="timeline-item">
+                <h4>0.10 — tách gói, <code>Settings</code> thay <code>ServiceContext</code></h4>
+                <p>Import đổi thành <code>llama_index.core</code>; xuất hiện đối tượng toàn cục <code>Settings</code>. Trong bản 0.14.24,
+                    lớp <code>ServiceContext</code> vẫn còn tên nhưng <strong>khởi tạo là báo <code>ValueError</code></strong> — gặp code
+                    dùng nó thì phải viết lại bằng <code>Settings</code> hoặc truyền tham số trực tiếp.</p>
+            </div>
+            <div class="timeline-item">
+                <h4>0.11 — chuyển sang Pydantic v2, workflow ra đời</h4>
+                <p>Các lớp cấu hình là model Pydantic v2; <em>Workflows</em> (event-driven) trở thành cách khuyến nghị để viết logic
+                    nhiều bước và agent.</p>
+            </div>
+            <div class="timeline-item">
+                <h4>0.12 → 0.14 — agent dựa trên workflow, gói workflows/instrumentation tách riêng</h4>
+                <p>Agent kiểu cũ (<code>OpenAIAgent</code>, <code>AgentRunner</code>) nhường chỗ cho <code>FunctionAgent</code>,
+                    <code>ReActAgent</code>, <code>AgentWorkflow</code> trong <code>llama_index.core.agent.workflow</code>. Một số tiện ích
+                    cũ bị chuyển/xoá — ví dụ <code>generate_question_context_pairs</code> không còn trong
+                    <code>llama_index.core.evaluation</code> của bản đang cài.</p>
+            </div>
+        </div>
+
+        <div class="quiz-head">✅ Câu hỏi tự kiểm tra</div>
+        <details class="quiz">
+            <summary>1. Muốn dùng Qdrant làm vector store, cần cài gì và import thế nào?</summary>
+            <p>Cài <code>llama-index-vector-stores-qdrant</code>; <code>from llama_index.vector_stores.qdrant import QdrantVectorStore</code>.</p>
+        </details>
+        <details class="quiz">
+            <summary>2. Gặp bài hướng dẫn dùng <code>ServiceContext.from_defaults(llm=..., chunk_size=512)</code>. Viết lại thế nào?</summary>
+            <p><code>Settings.llm = ...; Settings.chunk_size = 512</code>, hoặc tốt hơn: truyền <code>llm=</code> vào query engine và
+                dùng <code>SentenceSplitter(chunk_size=512)</code> trực tiếp.</p>
+        </details>
+        <details class="quiz">
+            <summary>3. Vì sao không nên <code>pip install llama-index</code> cho đồ án dùng Ollama?</summary>
+            <p>Gói gom sẵn kéo theo tích hợp OpenAI không dùng tới; nên cài <code>llama-index-core</code> + đúng các tích hợp cần.</p>
+        </details>
+    </section>
+
+    <!-- ===================== L2 ===================== -->
+    <section id="l2" class="prose">
+        <div class="section-header">
+            <div class="icon" style="background:#fff3e0;color:var(--primary);">🧱</div>
+            <div>
+                <div class="section-num">Phần II · Chương L2</div>
+                <h2>Mô Hình Dữ Liệu: Document, Node, Metadata, Quan Hệ</h2>
+            </div>
+        </div>
+
+        <h3>L2.1. Cây kế thừa</h3>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+classDiagram
+    class BaseNode {
+        id_ : str
+        metadata : dict
+        excluded_embed_metadata_keys
+        excluded_llm_metadata_keys
+        relationships : dict
+        embedding : list~float~
+        hash
+        get_content(metadata_mode)
+    }
+    class TextNode {
+        text : str
+        metadata_template
+        metadata_separator
+        text_template
+    }
+    class Node {
+        text_resource
+        image_resource
+        audio_resource
+    }
+    class Document
+    class ImageNode
+    class IndexNode {
+        index_id : str
+    }
+    BaseNode <|-- TextNode
+    BaseNode <|-- Node
+    Node <|-- Document
+    TextNode <|-- ImageNode
+    TextNode <|-- IndexNode
+            </pre>
+        </div>
+        <ul>
+            <li><strong><code>Document</code></strong> đại diện cho cả một nguồn (một file, một trang web). Trong 0.14.24 nó kế thừa
+                <code>Node</code> — lớp node “đa phương tiện” mới, nội dung nằm trong các trường resource (<code>text_resource</code>,
+                <code>image_resource</code>…) — chứ không kế thừa <code>TextNode</code>; nhưng vẫn có thuộc tính <code>text</code> và
+                <code>metadata</code> như cũ nên code đọc/ghi Document không cần đổi. Thường chỉ tồn tại ở đầu pipeline, trước khi bị cắt.</li>
+            <li><strong><code>TextNode</code></strong> là đơn vị được embed, lưu, truy hồi — chính là “chunk” ở Chương 8.</li>
+            <li><strong><code>IndexNode</code></strong> là node “trỏ” sang một đối tượng khác (một index con, một retriever, một node
+                lớn hơn) qua <code>index_id</code> — nền của <code>RecursiveRetriever</code> (L7).</li>
+            <li><strong><code>ImageNode</code></strong> cho dữ liệu ảnh/đa phương thức.</li>
+        </ul>
+
+        <h3>L2.2. Các trường quan trọng của một node</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Trường</th><th>Ý nghĩa</th><th>Lưu ý</th></tr></thead>
+                <tbody>
+                    <tr><td><code>id_</code> / <code>node_id</code></td><td>Định danh, mặc định UUID ngẫu nhiên</td><td>Chạy lại pipeline → id mới; đừng dùng làm nhãn đánh giá</td></tr>
+                    <tr><td><code>text</code></td><td>Nội dung</td><td></td></tr>
+                    <tr><td><code>metadata</code></td><td>dict tuỳ ý (giá trị nên là str/số/list phẳng)</td><td>Vector store ngoài thường chỉ lọc được kiểu đơn giản</td></tr>
+                    <tr><td><code>excluded_embed_metadata_keys</code></td><td>Khoá <em>không</em> đưa vào embedding</td><td>Repo: chỉ giữ <code>nguon_trich</code></td></tr>
+                    <tr><td><code>excluded_llm_metadata_keys</code></td><td>Khoá <em>không</em> đưa vào prompt</td><td>Repo: bỏ <code>file</code>, <code>url</code>…</td></tr>
+                    <tr><td><code>metadata_template</code>, <code>metadata_separator</code>, <code>text_template</code></td><td>Cách in metadata và ghép với nội dung</td><td>Mặc định <code>"{key}: {value}"</code>, <code>"\n"</code>, <code>"{metadata_str}\n\n{content}"</code></td></tr>
+                    <tr><td><code>relationships</code></td><td>Liên kết tới node khác</td><td>Xem L2.4</td></tr>
+                    <tr><td><code>embedding</code></td><td>Vector (nếu đã tính)</td><td>Khi lưu, vector nằm ở vector store, trong docstore là <code>null</code></td></tr>
+                    <tr><td><code>hash</code></td><td>Băm từ nội dung + metadata</td><td>Dùng để phát hiện thay đổi (L4) và gộp trùng (RRF, 7.5)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>L2.3. MetadataMode — một node, bốn cách nhìn</h3>
+        <div class="formula">
+            <div class="eq">get_content(mode) = text_template.format(metadata_str = metadata_template theo mode, content = text)</div>
+            <div class="legend">
+                <ul>
+                    <li><b>ALL</b>: mọi metadata; <b>EMBED</b>: bỏ <code>excluded_embed_metadata_keys</code> — dùng khi tính embedding;
+                        <b>LLM</b>: bỏ <code>excluded_llm_metadata_keys</code> — dùng khi ghép prompt; <b>NONE</b>: chỉ nội dung.</li>
+                    <li>Splitter cũng dùng chuỗi metadata để trừ vào chunk_size (8.9).</li>
+                </ul>
+            </div>
+        </div>
+        <p>Thiết kế này tách ba mối quan tâm khác nhau trên cùng một node: <em>máy tìm</em> cần gì (EMBED), <em>LLM đọc</em> cần gì
+            (LLM), và <em>ta lọc/trích dẫn</em> cần gì (toàn bộ metadata, dùng cho filter). Một lỗi phổ biến: đặt metadata dài
+            (đường dẫn file, URL, sha256) mà không loại khỏi EMBED → vector của mọi chunk cùng file bị kéo về gần nhau.</p>
+
+        <h3>L2.4. Quan hệ giữa các node</h3>
+        <p><code>relationships</code> là dict từ <code>NodeRelationship</code> tới <code>RelatedNodeInfo</code> (chứa node_id và
+            metadata của node kia):</p>
+        <ul>
+            <li><code>SOURCE</code> — node được cắt ra từ document nào (splitter tự gán). Dùng để xoá/cập nhật mọi node của một
+                document (<code>ref_doc_id</code>).</li>
+            <li><code>PREVIOUS</code> / <code>NEXT</code> — node liền trước/sau trong cùng document. <code>PrevNextNodePostprocessor</code>
+                dùng để kéo thêm ngữ cảnh lân cận.</li>
+            <li><code>PARENT</code> / <code>CHILD</code> — quan hệ cha–con của <code>HierarchicalNodeParser</code>, nền của
+                <code>AutoMergingRetriever</code>.</li>
+        </ul>
+        <p>Với đồ án, đây là chỗ cài đặt ý tưởng “Điều gốc ↔ Điều sửa đổi”: có thể tự gán một quan hệ (hoặc metadata
+            <code>bi_sua_doi_boi</code>) rồi viết postprocessor kéo node sửa đổi đi kèm mỗi khi node gốc được truy hồi.</p>
+
+        <h3>L2.5. NodeWithScore và QueryBundle</h3>
+        <ul>
+            <li><code>NodeWithScore(node, score)</code>: thứ retriever trả về. <code>score</code> mang nghĩa khác nhau tuỳ nơi sinh ra
+                (cosine, BM25, RRF, điểm reranker) — đừng so sánh điểm giữa các giai đoạn.</li>
+            <li><code>QueryBundle(query_str, custom_embedding_strs, embedding)</code>: câu hỏi đã “đóng gói”. Có thể đặt sẵn embedding
+                để nhiều retriever dùng chung, hoặc đặt <code>custom_embedding_strs</code> để embed một chuỗi khác câu hỏi gốc (đây là
+                cơ chế của HyDE, L7).</li>
+        </ul>
+
+        <h3>L2.6. Nhìn tận mắt: node lưu trên đĩa trông thế nào</h3>
+        <p>Một bản ghi trong <code>storage/vector_index/docstore.json</code> của repo (index cũ, trước khi sửa loader):</p>
+        <pre class="code-block">{"__data__": {"id_": "5e6bbd5f-991b-4a28-b513-25874f1ce34f",
+  "embedding": null,
+  "metadata": {"dieu": "1", "nguon": "Quy chế đào tạo 2021", "file_goc": "4. QuyCheDaoTaoDHSG 2021.md"},
+  "excluded_embed_metadata_keys": [], "excluded_llm_metadata_keys": [],
+  "relationships": {},
+  "metadata_template": "{key}: {value}", "metadata_separator": "\n",
+  "text": "Điều 1. Phạm vi điều chỉnh và đối tượng áp dụng ..."}}</pre>
+        <p>Đọc bản ghi này thấy ngay hai vấn đề mà <code>processed_loader.py</code> hiện tại đã sửa: <code>excluded_embed_metadata_keys</code>
+            rỗng (tên file <code>file_goc</code> lọt vào embedding), và <code>embedding: null</code> vì vector được lưu ở
+            <code>default__vector_store.json</code> chứ không ở docstore.</p>
+
+        <div class="quiz-head">✅ Câu hỏi tự kiểm tra</div>
+        <details class="quiz">
+            <summary>1. Vì sao không nên dùng node_id làm khoá nối kết quả giữa hai lần dựng index?</summary>
+            <p>Mặc định là UUID ngẫu nhiên, đổi mỗi lần chạy; trừ khi tự đặt <code>id_</code> ổn định (vd. băm từ file + số Điều).</p>
+        </details>
+        <details class="quiz">
+            <summary>2. Muốn LLM thấy “Điều 7 — QC 2021” nhưng embedding không thấy đường dẫn file. Cấu hình hai danh sách loại trừ thế nào?</summary>
+            <p>Đặt <code>file</code>, <code>url</code> vào cả hai danh sách; giữ <code>nguon_trich</code> ngoài cả hai.</p>
+        </details>
+        <details class="quiz">
+            <summary>3. Quan hệ nào giúp xoá toàn bộ chunk của một văn bản bị thay thế?</summary>
+            <p><code>SOURCE</code> (ref_doc_id) — <code>index.delete_ref_doc(doc_id)</code> xoá mọi node trỏ về document đó.</p>
+        </details>
+    </section>
+
+    <!-- ===================== L3 ===================== -->
+    <section id="l3" class="prose">
+        <div class="section-header">
+            <div class="icon" style="background:#e8f5e9;color:var(--success);">📂</div>
+            <div>
+                <div class="section-num">Phần II · Chương L3</div>
+                <h2>Đọc Dữ Liệu: Reader và SimpleDirectoryReader</h2>
+            </div>
+        </div>
+
+        <h3>L3.1. Reader là gì</h3>
+        <p>Reader (còn gọi data connector/loader) là lớp con của <code>BaseReader</code> với phương thức
+            <code>load_data(...) → list[Document]</code>. Mọi nguồn — file, cơ sở dữ liệu, API — đều quy về một danh sách Document.
+            Phần còn lại của pipeline không cần biết dữ liệu đến từ đâu.</p>
+
+        <h3>L3.2. SimpleDirectoryReader</h3>
+        <pre class="code-block"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> SimpleDirectoryReader
+
+docs = <span class="fn">SimpleDirectoryReader</span>(
+    input_dir=<span class="string">"data/processed/01_quy_che_dao_tao"</span>,
+    recursive=<span class="keyword">True</span>,                 <span class="comment"># đọc cả thư mục con</span>
+    required_exts=[<span class="string">".md"</span>],           <span class="comment"># chỉ lấy đuôi này</span>
+    exclude=[<span class="string">"_*.md"</span>],               <span class="comment"># bỏ file báo cáo kiểm tra</span>
+    filename_as_id=<span class="keyword">True</span>,           <span class="comment"># id Document = đường dẫn → ổn định giữa các lần chạy</span>
+    file_metadata=<span class="keyword">lambda</span> p: {<span class="string">"file"</span>: p},  <span class="comment"># tự định nghĩa metadata</span>
+).<span class="fn">load_data</span>()</pre>
+        <ul>
+            <li>Mỗi đuôi file được giao cho một reader qua bảng mặc định (<code>.pdf</code> → <code>PDFReader</code>, <code>.docx</code> →
+                <code>DocxReader</code>, …). Các reader này nằm trong gói <strong><code>llama-index-readers-file</code></strong>; thiếu gói,
+                thư viện chỉ cảnh báo và đọc file như văn bản thuần.</li>
+            <li>Tham số <code>file_extractor={".pdf": MyReader()}</code> thay reader cho một đuôi.</li>
+            <li>Metadata mặc định gồm <code>file_path</code>, <code>file_name</code>, <code>file_type</code>, <code>file_size</code>,
+                ngày tạo/sửa — tiện cho lọc, nhưng <strong>nên loại khỏi embedding</strong>.</li>
+            <li>PDF đọc theo trang: mỗi trang thành một Document (metadata <code>page_label</code>) — cắt Điều vắt qua hai trang thành
+                hai Document.</li>
+        </ul>
+
+        <h3>L3.3. Vì sao repo không dùng reader có sẵn</h3>
+        <p>Văn bản SGU là PDF scan tiếng Việt, cần OCR (Tesseract với mô hình <code>vie</code>), chấm chất lượng âm tiết, làm sạch
+            lỗi OCR và dựng heading Điều. <code>PDFReader</code> chỉ lấy text layer — với file scan sẽ ra rỗng hoặc rác. Repo vì vậy
+            tự làm hai tầng (<code>scripts/extract_to_md.py</code> → <code>scripts/clean_md.py</code>) rồi
+            <code>processed_loader.py</code> tạo thẳng <code>TextNode</code>. Đây là mẫu phổ biến trong thực tế: <em>dùng LlamaIndex từ
+            tầng Node trở đi, tự làm tầng đọc khi dữ liệu đặc thù</em>.</p>
+        <p>Nếu muốn “hợp chuẩn” LlamaIndex hơn, có thể viết một <code>BaseReader</code> bọc pipeline OCR, trả về Document mỗi văn bản
+            kèm front matter làm metadata, rồi để node parser cắt.</p>
+
+        <div class="quiz-head">✅ Câu hỏi tự kiểm tra</div>
+        <details class="quiz">
+            <summary>1. Vì sao <code>filename_as_id=True</code> quan trọng khi dùng IngestionPipeline có docstore?</summary>
+            <p>Docstore nhận diện “cùng một document” qua id; id ngẫu nhiên khiến mỗi lần chạy bị coi là tài liệu mới → nạp trùng.</p>
+        </details>
+        <details class="quiz">
+            <summary>2. PDF scan đi qua <code>PDFReader</code> cho kết quả gì?</summary>
+            <p>Gần như rỗng hoặc ký tự rác, vì PDFReader chỉ đọc text layer, không OCR.</p>
+        </details>
+    </section>
+
+    <!-- ===================== L4 ===================== -->
+    <section id="l4" class="prose">
+        <div class="section-header">
+            <div class="icon" style="background:#e3f2fd;color:var(--info);">🏭</div>
+            <div>
+                <div class="section-num">Phần II · Chương L4</div>
+                <h2>Ingestion Pipeline: Transformation, Cache, Docstore</h2>
+            </div>
+        </div>
+
+        <h3>L4.1. Transformation — một giao diện cho mọi bước nạp</h3>
+        <p>Mọi bước biến đổi khi nạp đều là <code>TransformComponent</code>: nhận <code>list[BaseNode]</code>, trả
+            <code>list[BaseNode]</code>. Node parser (Document → nhiều TextNode), metadata extractor (thêm metadata), embedding model
+            (gán <code>node.embedding</code>) đều là transformation. Nhờ chung giao diện, chúng xếp thành một chuỗi.</p>
+
+        <h3>L4.2. IngestionPipeline</h3>
+        <pre class="code-block"><span class="keyword">from</span> llama_index.core.ingestion <span class="keyword">import</span> IngestionPipeline, IngestionCache, DocstoreStrategy
+<span class="keyword">from</span> llama_index.core.storage.docstore <span class="keyword">import</span> SimpleDocumentStore
+
+pipeline = <span class="fn">IngestionPipeline</span>(
+    transformations=[
+        <span class="fn">SentenceSplitter</span>(chunk_size=<span class="number">512</span>, chunk_overlap=<span class="number">64</span>),  <span class="comment"># 1. cắt</span>
+        embed_model,                                          <span class="comment"># 2. embed</span>
+    ],
+    docstore=<span class="fn">SimpleDocumentStore</span>(),                         <span class="comment"># nhớ document đã nạp</span>
+    docstore_strategy=DocstoreStrategy.UPSERTS,
+    cache=<span class="fn">IngestionCache</span>(),                                <span class="comment"># nhớ kết quả từng bước</span>
+)
+nodes = pipeline.<span class="fn">run</span>(documents=docs)
+index = <span class="fn">VectorStoreIndex</span>(nodes, embed_model=embed_model)    <span class="comment"># node đã có embedding → không embed lại</span></pre>
+
+        <h3>L4.3. Cache — vì sao quan trọng cho thí nghiệm</h3>
+        <p>Cache lưu đầu ra của từng transformation theo khoá = băm(<em>các node đầu vào</em> + <em>cấu hình transformation</em>).
+            Chạy lại với cùng đầu vào và cùng cấu hình thì lấy từ cache thay vì tính lại. Trong ma trận thí nghiệm (3 chiến lược cắt
+            × 6 mức % × 3 seed), nhiều cấu hình chia sẻ chunk giống hệt nhau (vd. mức 20% chứa toàn bộ chunk của mức 10% cùng seed)
+            — cache giúp không phải embed lại những chunk đó, tiết kiệm phần tốn kém nhất trên GPU 4 GB. Cache có thể persist ra đĩa
+            (<code>pipeline.persist(...)</code> / <code>pipeline.load(...)</code>) hoặc dùng Redis/Mongo qua gói tích hợp.</p>
+
+        <h3>L4.4. Docstore strategy — nạp lại khi văn bản thay đổi</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Chiến lược</th><th>Hành vi</th><th>Dùng khi</th></tr></thead>
+                <tbody>
+                    <tr><td><code>upserts</code> (mặc định)</td><td>Document cùng id nhưng hash đổi → xử lý lại và thay thế; hash giữ nguyên → bỏ qua</td><td>Kho cập nhật dần (sửa OCR một văn bản)</td></tr>
+                    <tr><td><code>duplicates_only</code></td><td>Chỉ bỏ qua document có hash đã thấy</td><td>Không có id ổn định</td></tr>
+                    <tr><td><code>upserts_and_delete</code></td><td>Như upserts, và xoá document không còn trong lần nạp mới</td><td>Kho phản ánh đúng thư mục hiện tại (văn bản bị gỡ)</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>Cả ba đều dựa vào <strong>id document ổn định</strong> (L3) và <strong>hash</strong> (L2). Muốn xoá trong vector store, pipeline
+            cần được truyền <code>vector_store=...</code> để đồng bộ hai nơi.</p>
+
+        <h3>L4.5. Metadata extractor — dùng LLM để làm giàu metadata</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Extractor</th><th>Sinh ra</th><th>Ý tưởng</th></tr></thead>
+                <tbody>
+                    <tr><td><code>TitleExtractor</code></td><td><code>document_title</code></td><td>Gắn tiêu đề tài liệu vào mọi chunk</td></tr>
+                    <tr><td><code>QuestionsAnsweredExtractor</code></td><td><code>questions_this_excerpt_can_answer</code></td><td>Sinh câu hỏi chunk trả lời được → embedding gần câu hỏi người dùng hơn (giảm bất đối xứng, 3.10)</td></tr>
+                    <tr><td><code>SummaryExtractor</code></td><td><code>section_summary</code> (+ trước/sau)</td><td>Tóm tắt ngắn đi kèm chunk</td></tr>
+                    <tr><td><code>KeywordExtractor</code></td><td><code>excerpt_keywords</code></td><td>Từ khoá — hỗ trợ BM25/lọc</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>Mỗi extractor gọi LLM <em>cho mỗi chunk</em>: 1 500 chunk × vài giây với qwen3 local là hàng giờ. Kết quả còn phụ thuộc
+            chất lượng LLM, và metadata sinh ra đi vào embedding — một biến số mới cần kiểm soát trong thí nghiệm. Nên coi đây là
+            “cải tiến tuỳ chọn” để thử sau khi có baseline, và luôn bật cache.</p>
+
+        <h3>L4.6. Hai cách dựng index — tương đương nhưng khác chỗ kiểm soát</h3>
+        <ul>
+            <li><code>VectorStoreIndex.from_documents(docs, transformations=[...])</code>: tiện, tự chạy transformation bên trong (mặc
+                định <code>Settings.transformations</code> = <code>[Settings.node_parser]</code>, tức SentenceSplitter 1024/200).</li>
+            <li><code>IngestionPipeline</code> rồi <code>VectorStoreIndex(nodes)</code>: tách rời, có cache/docstore, kiểm tra được
+                node trước khi index. Repo làm theo tinh thần này (tạo node bằng <code>processed_loader</code>, rồi
+                <code>VectorStoreIndex(nodes)</code>), có thêm fingerprint <code>corpus.json</code> để biết khi nào phải dựng lại.</li>
+        </ul>
+
+        <div class="quiz-head">✅ Câu hỏi tự kiểm tra</div>
+        <details class="quiz">
+            <summary>1. Sửa lỗi OCR ở một văn bản rồi chạy lại pipeline với strategy upserts. Điều gì xảy ra?</summary>
+            <p>Chỉ văn bản đó có hash mới → được cắt và embed lại, thay node cũ; các văn bản khác bỏ qua.</p>
+        </details>
+        <details class="quiz">
+            <summary>2. Đổi chunk_size từ 512 lên 768. Cache bước embedding có dùng lại được không?</summary>
+            <p>Không cho các chunk khác nội dung: đầu vào bước embed đã thay đổi. Chỉ chunk trùng khớp tuyệt đối mới trúng cache.</p>
+        </details>
+        <details class="quiz">
+            <summary>3. Thêm QuestionsAnsweredExtractor vào thí nghiệm so sánh cách cắt có vấn đề gì?</summary>
+            <p>Thêm một biến (metadata do LLM sinh) vào embedding, phụ thuộc chất lượng LLM và chạy rất lâu; phải giữ giống nhau ở mọi
+                cấu hình hoặc tách thành thí nghiệm riêng.</p>
+        </details>
+    </section>
+    <!-- ===================== L5 ===================== -->
+    <section id="l5" class="prose">
+        <div class="section-header">
+            <div class="icon" style="background:#f3e5f5;color:#6a1b9a;">✂️</div>
+            <div>
+                <div class="section-num">Phần II · Chương L5</div>
+                <h2>Node Parser — Danh Mục và Cách Chọn</h2>
+            </div>
+        </div>
+
+        <p>Mọi node parser nằm trong <code>llama_index.core.node_parser</code> và chia ba nhóm. Chương 8 đã giải thích lý thuyết;
+            chương này là “bản tra cứu” để chọn đúng lớp.</p>
+
+        <h3>L5.1. Nhóm cắt văn bản thuần (text splitter)</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Lớp</th><th>Tham số chính (mặc định)</th><th>Cách cắt</th></tr></thead>
+                <tbody>
+                    <tr><td><code>TokenTextSplitter</code></td><td><code>chunk_size</code>=1024, <code>chunk_overlap</code>=20, <code>separator</code>=" "</td><td>Theo số token, ưu tiên ngắt ở dấu cách</td></tr>
+                    <tr><td><code>SentenceSplitter</code></td><td><code>chunk_size</code>=1024, <code>chunk_overlap</code>=200, <code>paragraph_separator</code>="\n\n\n"</td><td>Đoạn → câu (punkt) → dấu câu → từ → ký tự; gộp lại</td></tr>
+                    <tr><td><code>SentenceWindowNodeParser</code></td><td><code>window_size</code>=3, khoá <code>window</code>, <code>original_text</code></td><td>Mỗi <em>câu</em> một node; metadata <code>window</code> chứa 3 câu trước + 3 câu sau</td></tr>
+                    <tr><td><code>SemanticSplitterNodeParser</code></td><td><code>buffer_size</code>=1, <code>breakpoint_percentile_threshold</code>=95, cần <code>embed_model</code></td><td>Embed từng câu (kèm buffer câu lân cận); cắt ở chỗ khoảng cách cosine giữa hai nhóm liên tiếp vượt phân vị 95</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p><strong>Sentence window</strong> là cách cài “small-to-big” rẻ nhất: tìm kiếm trên câu đơn (embedding sắc nét), rồi dùng
+            <code>MetadataReplacementPostProcessor(target_metadata_key="window")</code> thay nội dung node bằng cửa sổ 7 câu trước khi
+            đưa cho LLM. Lưu ý <code>window</code> và <code>original_text</code> là metadata — phải loại khỏi embedding (lớp này tự
+            làm) để vector chỉ phản ánh một câu.</p>
+        <p><strong>Semantic splitter</strong>: ngưỡng là <em>phân vị</em> chứ không phải giá trị tuyệt đối — với percentile 95, khoảng 5%
+            vị trí giữa các câu có “độ nhảy nghĩa” lớn nhất trở thành ranh giới. Văn bản đồng nhất chủ đề vẫn bị cắt ở 5% vị trí, và số
+            chunk khó kiểm soát — điều cần lưu ý khi muốn giữ kích thước tương đương giữa các chiến lược (Chương 12).</p>
+
+        <h3>L5.2. Nhóm cắt theo định dạng file</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Lớp</th><th>Cắt theo</th><th>Ghi chú cho đồ án</th></tr></thead>
+                <tbody>
+                    <tr><td><code>MarkdownNodeParser</code></td><td>Heading <code>#</code>…<code>######</code>; metadata <code>header_path</code> ghi đường dẫn tiêu đề</td><td>Gần với cách <code>processed_loader</code> làm (Chương/Điều là <code>##</code>/<code>###</code>) — ứng viên “cắt theo cấu trúc” chuẩn thư viện</td></tr>
+                    <tr><td><code>HTMLNodeParser</code></td><td>Thẻ HTML (p, h1–h6, li…)</td><td>Trang web thông báo của trường</td></tr>
+                    <tr><td><code>JSONNodeParser</code></td><td>Cấu trúc JSON</td><td>Dữ liệu có cấu trúc</td></tr>
+                    <tr><td><code>CodeSplitter</code></td><td>Cây cú pháp (tree-sitter)</td><td>Mã nguồn</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>Parser theo định dạng không giới hạn kích thước: một mục Markdown dài vẫn là một node. Mẫu hay dùng là xếp hai bước trong
+            <code>transformations</code>: <code>[MarkdownNodeParser(), SentenceSplitter(chunk_size=…)]</code> — bước 1 cắt theo cấu
+            trúc, bước 2 chỉ cắt tiếp node nào quá dài. Đây đúng là logic của <code>parse_by_dieu</code> trong repo.</p>
+
+        <h3>L5.3. Nhóm quan hệ: HierarchicalNodeParser</h3>
+        <p>Cắt cùng một văn bản ở nhiều cỡ, mặc định <code>[2048, 512, 128]</code> token, nối bằng quan hệ PARENT/CHILD:</p>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+flowchart TB
+    A["node 2048 (gốc)"] --> B1["node 512"]
+    A --> B2["node 512"]
+    B1 --> C1["128"]
+    B1 --> C2["128"]
+    B1 --> C3["128"]
+    B2 --> C4["128"]
+    B2 --> C5["128"]
+            </pre>
+        </div>
+        <pre class="code-block">parser = <span class="fn">HierarchicalNodeParser</span>.<span class="fn">from_defaults</span>(chunk_sizes=[<span class="number">2048</span>, <span class="number">512</span>, <span class="number">128</span>])
+nodes = parser.<span class="fn">get_nodes_from_documents</span>(docs)
+leaf = <span class="fn">get_leaf_nodes</span>(nodes)                      <span class="comment"># chỉ node lá được embed</span>
+storage = <span class="fn">StorageContext</span>.<span class="fn">from_defaults</span>()
+storage.docstore.<span class="fn">add_documents</span>(nodes)               <span class="comment"># MỌI cấp phải nằm trong docstore</span>
+index = <span class="fn">VectorStoreIndex</span>(leaf, storage_context=storage)
+retriever = <span class="fn">AutoMergingRetriever</span>(index.<span class="fn">as_retriever</span>(similarity_top_k=<span class="number">12</span>), storage)</pre>
+        <p>Chỉ node lá vào vector index; các cấp trên chỉ nằm trong docstore để <code>AutoMergingRetriever</code> “gộp ngược” (L7.3).</p>
+
+        <h3>L5.4. Bảng chọn nhanh cho kho văn bản quy chế</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Tình huống</th><th>Lựa chọn</th></tr></thead>
+                <tbody>
+                    <tr><td>Markdown có heading Điều (tầng processed)</td><td><code>MarkdownNodeParser</code> → <code>SentenceSplitter</code> cho Điều dài</td></tr>
+                    <tr><td>Baseline “không hiểu cấu trúc”</td><td><code>TokenTextSplitter</code> và <code>SentenceSplitter</code>, cùng chunk_size</td></tr>
+                    <tr><td>Câu hỏi chi tiết, cần ngữ cảnh rộng</td><td><code>SentenceWindowNodeParser</code> + <code>MetadataReplacementPostProcessor</code></td></tr>
+                    <tr><td>Điều rất dài, nhiều khoản</td><td><code>HierarchicalNodeParser</code> + <code>AutoMergingRetriever</code></td></tr>
+                    <tr><td>Văn bản không cấu trúc (thông báo, sổ tay)</td><td><code>SentenceSplitter</code> hoặc <code>SemanticSplitterNodeParser</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="quiz-head">✅ Câu hỏi tự kiểm tra</div>
+        <details class="quiz">
+            <summary>1. Dùng SentenceWindowNodeParser nhưng quên MetadataReplacementPostProcessor. Hậu quả?</summary>
+            <p>LLM chỉ nhận từng câu đơn lẻ — thiếu ngữ cảnh, trả lời thiếu điều kiện. Cửa sổ chỉ nằm trong metadata, không tự được dùng.</p>
+        </details>
+        <details class="quiz">
+            <summary>2. Vì sao AutoMergingRetriever cần mọi cấp node trong docstore?</summary>
+            <p>Để từ node lá tra được node cha qua quan hệ PARENT và lấy nội dung cha khi gộp.</p>
+        </details>
+    </section>
+
+    <!-- ===================== L6 ===================== -->
+    <section id="l6" class="prose">
+        <div class="section-header">
+            <div class="icon" style="background:#e0f2f1;color:#00695c;">🗄️</div>
+            <div>
+                <div class="section-num">Phần II · Chương L6</div>
+                <h2>Storage và các Loại Index</h2>
+            </div>
+        </div>
+
+        <h3>L6.1. StorageContext — bốn kho trong một</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Kho</th><th>Lưu gì</th><th>File khi persist (mặc định)</th></tr></thead>
+                <tbody>
+                    <tr><td><code>docstore</code></td><td>Node (text, metadata, quan hệ) theo id</td><td><code>docstore.json</code></td></tr>
+                    <tr><td><code>index_store</code></td><td>Cấu trúc index: index_id, danh sách node_id thuộc index</td><td><code>index_store.json</code></td></tr>
+                    <tr><td><code>vector_stores</code></td><td>Vector + (tuỳ store) metadata để lọc; có namespace</td><td><code>default__vector_store.json</code>, <code>image__vector_store.json</code></td></tr>
+                    <tr><td><code>graph_store</code> / <code>property_graph_store</code></td><td>Đồ thị tri thức (nếu dùng)</td><td><code>graph_store.json</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>Thư mục <code>storage/vector_index/</code> của repo chứa đúng năm file này. Khi load,
+            <code>load_index_from_storage(StorageContext.from_defaults(persist_dir=…))</code> đọc index_store để biết index nào, node
+            nào, rồi nối với docstore và vector store. Ba điểm cần hiểu:</p>
+        <ul>
+            <li><strong>Vector store ngoài</strong> (Chroma, Qdrant…) tự lưu vector và thường cả text: khi đó docstore/index_store có
+                thể không được dùng (cờ <code>stores_text</code>). Index “mỏng” đi, dữ liệu thật nằm trong DB.</li>
+            <li><strong>Load không tính lại embedding</strong> nhưng vẫn cần <em>đúng</em> mô hình embedding để embed câu hỏi. Load index
+                dựng bằng mô hình A rồi truy vấn bằng mô hình B không báo lỗi — chỉ cho kết quả vô nghĩa. Fingerprint
+                <code>corpus.json</code> của repo chặn đúng lỗi này.</li>
+            <li><code>SimpleVectorStore</code> lưu JSON — dễ đọc, dễ diff, nhưng to và chậm khi kho lớn.</li>
+        </ul>
+
+        <h3>L6.2. Các loại index</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Index</th><th>Cấu trúc</th><th>Truy hồi</th><th>Chi phí</th><th>Dùng khi</th></tr></thead>
+                <tbody>
+                    <tr><td><code>VectorStoreIndex</code></td><td>Mỗi node một vector</td><td>Top-k tương đồng</td><td>Embed lúc nạp</td><td>Mặc định cho hỏi đáp</td></tr>
+                    <tr><td><code>SummaryIndex</code> (từng tên ListIndex)</td><td>Danh sách tuần tự node</td><td>Lấy <em>tất cả</em> (hoặc lọc bằng LLM/embedding)</td><td>Không embed; tốn LLM lúc hỏi</td><td>Tóm tắt toàn văn bản</td></tr>
+                    <tr><td><code>TreeIndex</code></td><td>Cây tóm tắt do LLM dựng</td><td>Đi từ gốc xuống lá theo LLM chọn</td><td>Nhiều lời gọi LLM khi dựng</td><td>Hiếm dùng hiện nay</td></tr>
+                    <tr><td><code>KeywordTableIndex</code></td><td>Bảng từ khoá → node</td><td>Khớp từ khoá (LLM/regex trích)</td><td>LLM trích từ khoá khi dựng</td><td>Tra theo thuật ngữ</td></tr>
+                    <tr><td><code>DocumentSummaryIndex</code></td><td>Tóm tắt mỗi document + node</td><td>Chọn document theo tóm tắt, rồi trả node của nó</td><td>LLM tóm tắt mỗi document</td><td>Nhiều văn bản, câu hỏi “văn bản nào nói về…”</td></tr>
+                    <tr><td><code>PropertyGraphIndex</code></td><td>Đồ thị thực thể–quan hệ + vector</td><td>Theo đồ thị, theo vector, hoặc text-to-Cypher</td><td>LLM trích bộ ba khi dựng</td><td>Quan hệ phức tạp (văn bản A sửa đổi B, thay thế C)</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>Mọi index có cùng bộ phương thức: <code>as_retriever(**kw)</code>, <code>as_query_engine(**kw)</code>,
+            <code>as_chat_engine(**kw)</code>, và các thao tác cập nhật <code>insert(document)</code>, <code>insert_nodes(nodes)</code>,
+            <code>delete_ref_doc(ref_doc_id)</code>, <code>refresh_ref_docs(documents)</code> (chỉ xử lý lại document có hash đổi).</p>
+        <p><strong>Ý tưởng đáng cân nhắc cho đồ án:</strong> quan hệ “văn bản A sửa đổi Điều N của văn bản B”, “văn bản C thay thế văn
+            bản D” là dữ liệu dạng đồ thị. <code>PropertyGraphIndex</code> có thể biểu diễn chúng tường minh thay vì nhét vào prompt.
+            Tuy vậy, với vài chục quan hệ, một bảng metadata + postprocessor tự viết đơn giản và dễ đo hơn.</p>
+
+        <h3>L6.3. Composability: index lồng index</h3>
+        <p>Có thể đặt một <code>IndexNode</code> trỏ tới retriever/query engine của index khác vào một index cha. Khi node đó được truy
+            hồi, <code>RecursiveRetriever</code> đi tiếp vào index con. Ứng dụng: index cha chứa một node tóm tắt cho mỗi nhóm (Học vụ,
+            CTSV, Khoá luận), mỗi node trỏ tới index riêng của nhóm — một dạng router dựa trên embedding thay vì LLM.</p>
+
+        <div class="quiz-head">✅ Câu hỏi tự kiểm tra</div>
+        <details class="quiz">
+            <summary>1. Xoá <code>default__vector_store.json</code> nhưng giữ <code>docstore.json</code>. Load index có dùng được không?</summary>
+            <p>Không: vector nằm trong vector store; docstore chỉ có text (embedding null). Phải dựng lại.</p>
+        </details>
+        <details class="quiz">
+            <summary>2. Vì sao SummaryIndex không phù hợp hỏi đáp trên 1 500 chunk?</summary>
+            <p>Mặc định đưa tất cả node cho LLM — hàng trăm nghìn token mỗi câu hỏi.</p>
+        </details>
+        <details class="quiz">
+            <summary>3. Sửa một văn bản, dùng <code>refresh_ref_docs</code>. Điều kiện để chỉ văn bản đó được xử lý lại?</summary>
+            <p>Document phải có id ổn định giữa các lần (vd. filename_as_id) để so hash với bản đã lưu.</p>
+        </details>
+    </section>
+
+    <!-- ===================== L7 ===================== -->
+    <section id="l7" class="prose">
+        <div class="section-header">
+            <div class="icon" style="background:#e3f2fd;color:var(--info);">🔎</div>
+            <div>
+                <div class="section-num">Phần II · Chương L7</div>
+                <h2>Retriever và Node Postprocessor Nâng Cao</h2>
+            </div>
+        </div>
+
+        <h3>L7.1. VectorIndexRetriever và các chế độ truy vấn</h3>
+        <p><code>index.as_retriever(...)</code> tạo <code>VectorIndexRetriever</code>. Tham số đáng biết:
+            <code>similarity_top_k</code> (mặc định thư viện là <b>2</b> — quá nhỏ cho hầu hết ứng dụng, repo đặt 10),
+            <code>filters</code>, <code>vector_store_query_mode</code>, <code>alpha</code> (trọng số hybrid khi store hỗ trợ). Các chế độ
+            trong 0.14.24: <code>default, sparse, hybrid, text_search, semantic_hybrid, svm, logistic_regression, linear_regression,
+            mmr</code>. Chế độ <code>hybrid</code>/<code>sparse</code> chỉ chạy với vector store có hỗ trợ (vd. Qdrant, Weaviate);
+            <code>SimpleVectorStore</code> hỗ trợ <code>default</code>, <code>mmr</code> và nhóm “learner” (svm…).</p>
+
+        <h3>L7.2. Lọc metadata</h3>
+        <pre class="code-block"><span class="keyword">from</span> llama_index.core.vector_stores <span class="keyword">import</span> MetadataFilters, MetadataFilter, FilterOperator, FilterCondition
+
+filters = <span class="fn">MetadataFilters</span>(
+    filters=[
+        <span class="fn">MetadataFilter</span>(key=<span class="string">"tinh_trang"</span>, value=<span class="string">"con_hieu_luc"</span>, operator=FilterOperator.EQ),
+        <span class="fn">MetadataFilter</span>(key=<span class="string">"nhom"</span>, value=[<span class="string">"hoc_vu"</span>, <span class="string">"ctsv"</span>], operator=FilterOperator.IN),
+    ],
+    condition=FilterCondition.AND,
+)
+retriever = index.<span class="fn">as_retriever</span>(similarity_top_k=<span class="number">10</span>, filters=filters)</pre>
+        <p>Toán tử có trong 0.14.24: <code>==, &gt;, &lt;, !=, &gt;=, &lt;=, in, nin, any, all, text_match, text_match_insensitive,
+            contains, is_empty</code>. Mỗi vector store hỗ trợ một tập con — <code>SimpleVectorStore</code> lọc trước trên dữ liệu
+            vét cạn (5.6). Đây là cách cài “chỉ trả lời theo văn bản còn hiệu lực” mà không cần tách index.</p>
+        <p><strong>Auto-retrieval</strong> (<code>VectorIndexAutoRetriever</code>): cho LLM đọc mô tả các trường metadata và tự sinh
+            filter từ câu hỏi (“quy chế 2021” → <code>nam_ban_hanh == 2021</code>). Linh hoạt nhưng thêm một lời gọi LLM và một nguồn lỗi.</p>
+
+        <h3>L7.3. AutoMergingRetriever</h3>
+        <p>Truy hồi trên node lá; nếu trong kết quả có <em>đủ nhiều</em> con của cùng một cha — tỉ lệ con được lấy trên tổng số con
+            vượt <code>simple_ratio_thresh</code> (mặc định 0,5) — thì thay các con bằng node cha. Lặp lên các cấp trên. Kết quả: câu
+            hỏi cụ thể nhận chunk nhỏ, câu hỏi “rộng” chạm nhiều phần của một Điều tự động nhận cả Điều.</p>
+
+        <h3>L7.4. RouterRetriever / RouterQueryEngine — chọn nguồn bằng LLM</h3>
+        <pre class="code-block">tools = [
+    <span class="fn">QueryEngineTool</span>.<span class="fn">from_defaults</span>(hoc_vu_engine, description=<span class="string">"Quy chế đào tạo, thi, tốt nghiệp, học phần"</span>),
+    <span class="fn">QueryEngineTool</span>.<span class="fn">from_defaults</span>(ctsv_engine,   description=<span class="string">"Học bổng, điểm rèn luyện, thủ tục sinh viên"</span>),
+]
+router = <span class="fn">RouterQueryEngine</span>(selector=<span class="fn">LLMSingleSelector</span>.<span class="fn">from_defaults</span>(llm=llm), query_engine_tools=tools)</pre>
+        <p>Selector đưa danh sách mô tả cho LLM và yêu cầu chọn một (hoặc nhiều, với <code>…MultiSelector</code>). Chất lượng phụ thuộc
+            hoàn toàn vào <strong>câu mô tả</strong> — mô tả là “prompt” của router. <code>PydanticSingleSelector</code> dùng function
+            calling, chỉ chạy với LLM hỗ trợ; với Ollama local thường dùng <code>LLMSingleSelector</code> (phân tích văn bản trả về).</p>
+
+        <h3>L7.5. QueryFusionRetriever: sinh câu hỏi biến thể</h3>
+        <p>Với <code>num_queries &gt; 1</code>, fusion retriever trước hết gọi LLM sinh thêm (num_queries − 1) câu hỏi diễn đạt khác, chạy
+            mọi retriever trên mọi câu, rồi hợp nhất (RAG-Fusion). Tăng recall cho câu hỏi diễn đạt lạ, đổi lại thêm một lời gọi LLM và
+            mất tính tất định nếu LLM không đặt temperature 0. Repo đặt <code>num_queries=1</code> để giữ phép đo ổn định.</p>
+
+        <h3>L7.6. Biến đổi câu hỏi: HyDE</h3>
+        <p><code>HyDEQueryTransform</code> (Hypothetical Document Embeddings): nhờ LLM viết một “đoạn văn giả định” trả lời câu hỏi, rồi
+            embed đoạn đó (đặt vào <code>custom_embedding_strs</code> của QueryBundle) thay vì câu hỏi. Ý tưởng: đoạn giả định có văn
+            phong giống văn bản trong kho hơn câu hỏi văn nói — giảm bất đối xứng (3.10). Rủi ro: LLM viết theo quy định chung (sai cho
+            SGU) và kéo truy hồi về hướng sai. Dùng qua <code>TransformQueryEngine(query_engine, query_transform=HyDEQueryTransform(...))</code>.</p>
+
+        <h3>L7.7. Danh mục node postprocessor</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Lớp</th><th>Việc làm</th><th>Gói</th></tr></thead>
+                <tbody>
+                    <tr><td><code>SimilarityPostprocessor</code></td><td>Bỏ node điểm &lt; cutoff</td><td>core</td></tr>
+                    <tr><td><code>KeywordNodePostprocessor</code></td><td>Giữ/bỏ node theo từ khoá bắt buộc/cấm</td><td>core</td></tr>
+                    <tr><td><code>MetadataReplacementPostProcessor</code></td><td>Thay nội dung bằng một trường metadata (sentence window)</td><td>core</td></tr>
+                    <tr><td><code>PrevNextNodePostprocessor</code></td><td>Kéo thêm node liền trước/sau qua quan hệ PREVIOUS/NEXT</td><td>core</td></tr>
+                    <tr><td><code>LongContextReorder</code></td><td>Xếp node tốt nhất ra đầu và cuối, kém nhất vào giữa — chống “lost in the middle” (8.6)</td><td>core</td></tr>
+                    <tr><td><code>FixedRecencyPostprocessor</code>, <code>TimeWeightedPostprocessor</code></td><td>Ưu tiên node mới theo trường ngày</td><td>core</td></tr>
+                    <tr><td><code>SentenceTransformerRerank</code></td><td>Cross-encoder (Chương 9)</td><td>core (cần sentence-transformers)</td></tr>
+                    <tr><td><code>LLMRerank</code></td><td>Nhờ LLM chấm mức liên quan từng lô node</td><td>core</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p><code>FixedRecencyPostprocessor</code> là ví dụ thú vị cho bài toán hiệu lực: nếu mỗi node có trường ngày ban hành, có thể ưu
+            tiên văn bản mới nhất — nhưng “mới nhất” không đồng nghĩa “đang hiệu lực” (văn bản mới có thể chỉ sửa một Điều), nên với quy
+            chế, metadata <code>tinh_trang</code> + liên kết sửa đổi đáng tin hơn.</p>
+
+        <div class="quiz-head">✅ Câu hỏi tự kiểm tra</div>
+        <details class="quiz">
+            <summary>1. Vì sao không nên để mặc định similarity_top_k = 2?</summary>
+            <p>Với câu cần hai văn bản (gốc + sửa đổi) hoặc khi đoạn đúng ở hạng 3, LLM không bao giờ thấy nó.</p>
+        </details>
+        <details class="quiz">
+            <summary>2. Router chọn sai index thường do đâu? Sửa thế nào trước khi đổi mô hình?</summary>
+            <p>Mô tả công cụ mơ hồ/chồng lấn; viết lại mô tả rõ phạm vi, có ví dụ câu hỏi, và đo độ chính xác của bước chọn riêng.</p>
+        </details>
+        <details class="quiz">
+            <summary>3. HyDE có thể làm hại hệ thống hỏi đáp quy chế SGU thế nào?</summary>
+            <p>Đoạn giả định viết theo kiến thức chung (vd. quy chế của Bộ), embedding kéo về đoạn tương tự nhưng sai đơn vị/số liệu SGU.</p>
+        </details>
+    </section>
+
+    <!-- ===================== L8 ===================== -->
+    <section id="l8" class="prose">
+        <div class="section-header">
+            <div class="icon" style="background:#fff8e1;color:var(--warning);">🧩</div>
+            <div>
+                <div class="section-num">Phần II · Chương L8</div>
+                <h2>Response Synthesizer, Query Engine và Hệ Thống Prompt</h2>
+            </div>
+        </div>
+
+        <h3>L8.1. Chín chế độ ResponseMode</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Chế độ</th><th>Cách hoạt động</th><th>Số lời gọi LLM</th></tr></thead>
+                <tbody>
+                    <tr><td><code>refine</code></td><td>Trả lời với node 1, sửa dần qua từng node</td><td>= số khối</td></tr>
+                    <tr><td><code>compact</code> (mặc định)</td><td>Gộp node thành ít khối nhất vừa context, rồi refine giữa các khối</td><td>Ít nhất có thể</td></tr>
+                    <tr><td><code>simple_summarize</code></td><td>Cắt cho vừa một lần gọi (có thể mất nội dung)</td><td>1</td></tr>
+                    <tr><td><code>tree_summarize</code></td><td>Tóm tắt theo cây từ dưới lên</td><td>Nhiều</td></tr>
+                    <tr><td><code>accumulate</code></td><td>Trả lời riêng với mỗi node, nối các câu trả lời</td><td>= số node</td></tr>
+                    <tr><td><code>compact_accumulate</code></td><td>Như accumulate nhưng gộp node trước</td><td>= số khối</td></tr>
+                    <tr><td><code>generation</code></td><td>Bỏ qua context, chỉ hỏi LLM</td><td>1</td></tr>
+                    <tr><td><code>no_text</code></td><td>Không gọi LLM, chỉ trả <code>source_nodes</code></td><td>0</td></tr>
+                    <tr><td><code>context_only</code></td><td>Trả về chuỗi context đã ghép</td><td>0</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>Hai chế độ cuối rất hữu ích cho thí nghiệm: <code>no_text</code> chạy toàn bộ query engine (retriever + postprocessor) mà
+            không tốn LLM — đánh giá truy hồi qua đúng đường code sản phẩm; <code>generation</code> là baseline “LLM không có RAG” để
+            chứng minh RAG có ích.</p>
+
+        <h3>L8.2. Danh mục query engine</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Lớp</th><th>Làm gì</th></tr></thead>
+                <tbody>
+                    <tr><td><code>RetrieverQueryEngine</code></td><td>Retriever + postprocessors + synthesizer (repo dùng)</td></tr>
+                    <tr><td><code>RouterQueryEngine</code></td><td>Chọn một/nhiều query engine con bằng selector (L7.4)</td></tr>
+                    <tr><td><code>SubQuestionQueryEngine</code></td><td>LLM tách câu hỏi phức thành câu hỏi con, mỗi câu gửi tới công cụ phù hợp, rồi tổng hợp — hợp với “so sánh quy định A và B”</td></tr>
+                    <tr><td><code>CitationQueryEngine</code></td><td>Cắt lại node thành đoạn nhỏ (mặc định 512 token, overlap 20), đánh số “Source 1, 2…”, yêu cầu LLM trích dẫn theo số</td></tr>
+                    <tr><td><code>TransformQueryEngine</code></td><td>Biến đổi câu hỏi (HyDE…) trước khi truy vấn</td></tr>
+                    <tr><td><code>RetryQueryEngine</code></td><td>Đánh giá câu trả lời bằng evaluator, không đạt thì hỏi lại với câu hỏi đã sửa</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>L8.3. Hệ thống prompt</h3>
+        <p>Mọi thành phần dùng prompt đều kế thừa <code>PromptMixin</code>, có hai phương thức để xem và thay prompt <em>mà không cần
+            biết cấu trúc bên trong</em>:</p>
+        <pre class="code-block">qe = index.<span class="fn">as_query_engine</span>(llm=llm)
+<span class="fn">print</span>(<span class="fn">list</span>(qe.<span class="fn">get_prompts</span>()))
+<span class="comment"># ['response_synthesizer:text_qa_template', 'response_synthesizer:refine_template',</span>
+<span class="comment">#  'response_synthesizer:chat_content_qa_template', 'response_synthesizer:chat_content_refine_template']</span>
+qe.<span class="fn">update_prompts</span>({<span class="string">"response_synthesizer:text_qa_template"</span>: QA_PROMPT})</pre>
+        <ul>
+            <li>Khoá có dạng <code>&lt;thành phần con&gt;:&lt;tên prompt&gt;</code>, lồng theo cây thành phần.</li>
+            <li><strong>Đừng quên <code>refine_template</code></strong>: khi context tràn và <code>compact</code> phải refine (10.9), prompt
+                refine mặc định tiếng Anh được dùng — các chỉ dẫn tiếng Việt của <code>QA_PROMPT</code> (trích nguyên văn, hệ 10/hệ 4)
+                biến mất ở lượt sau. Repo hiện chỉ thay <code>text_qa_template</code>.</li>
+            <li><code>PromptTemplate</code> cho dạng completion (một chuỗi); <code>ChatPromptTemplate</code> cho dạng hội thoại (danh sách
+                tin nhắn system/user). Với LLM chat, LlamaIndex tự chuyển <code>PromptTemplate</code> thành một tin nhắn user.</li>
+            <li><code>template.partial_format(ten_truong="Đại học Sài Gòn")</code> điền trước một phần biến; biến còn lại điền lúc chạy.</li>
+        </ul>
+
+        <h3>L8.4. Response và streaming</h3>
+        <p><code>query()</code> trả <code>Response</code> gồm <code>response</code> (chuỗi), <code>source_nodes</code> (list NodeWithScore
+            đã dùng), <code>metadata</code>. Với <code>streaming=True</code>, trả <code>StreamingResponse</code> có
+            <code>response_gen</code> (sinh từng mảnh chữ) — repo dùng trong <code>ask()</code> để in dần. Khi đánh giá, nên tắt streaming
+            để nhận chuỗi hoàn chỉnh.</p>
+
+        <div class="quiz-head">✅ Câu hỏi tự kiểm tra</div>
+        <details class="quiz">
+            <summary>1. Muốn đo Recall qua đúng query engine sản phẩm mà không tốn thời gian LLM, dùng chế độ nào?</summary>
+            <p><code>response_mode="no_text"</code>, rồi đọc <code>response.source_nodes</code>.</p>
+        </details>
+        <details class="quiz">
+            <summary>2. Câu trả lời đôi khi bằng tiếng Anh dù QA_PROMPT tiếng Việt. Một nguyên nhân từ phía LlamaIndex?</summary>
+            <p>Context tràn → bước refine dùng <code>refine_template</code> mặc định tiếng Anh; cần thay cả prompt refine.</p>
+        </details>
+        <details class="quiz">
+            <summary>3. Câu “So sánh điều kiện tốt nghiệp của QC 2017 và QC 2021” hợp với engine nào?</summary>
+            <p><code>SubQuestionQueryEngine</code> — tách thành hai câu hỏi con, mỗi câu truy hồi riêng, rồi tổng hợp.</p>
+        </details>
+    </section>
+    <!-- ===================== L9 ===================== -->
+    <section id="l9" class="prose">
+        <div class="section-header">
+            <div class="icon" style="background:#fff3e0;color:var(--primary);">🤖</div>
+            <div>
+                <div class="section-num">Phần II · Chương L9</div>
+                <h2>Giao Diện LLM và Embedding</h2>
+            </div>
+        </div>
+
+        <h3>L9.1. Một giao diện cho mọi LLM</h3>
+        <p>Mọi LLM (OpenAI, Anthropic, Ollama, vLLM…) là lớp con của <code>llama_index.core.llms.LLM</code> với cùng bộ phương thức:</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Phương thức</th><th>Đầu vào → đầu ra</th><th>Ghi chú</th></tr></thead>
+                <tbody>
+                    <tr><td><code>complete(prompt)</code></td><td>chuỗi → <code>CompletionResponse</code></td><td>Kiểu “điền tiếp văn bản”</td></tr>
+                    <tr><td><code>chat(messages)</code></td><td>list <code>ChatMessage</code> → <code>ChatResponse</code></td><td>Kiểu hội thoại có vai</td></tr>
+                    <tr><td><code>stream_complete</code>, <code>stream_chat</code></td><td>→ generator từng mảnh</td><td>Hiển thị dần</td></tr>
+                    <tr><td><code>acomplete</code>, <code>achat</code>, <code>astream_chat</code></td><td>bản async</td><td>Chạy song song nhiều câu (L12)</td></tr>
+                    <tr><td><code>predict(prompt_template, **kw)</code></td><td>template + biến → chuỗi</td><td>Thư viện dùng nội bộ</td></tr>
+                    <tr><td><code>structured_predict(OutputCls, template)</code>, <code>as_structured_llm(OutputCls)</code></td><td>→ đối tượng Pydantic</td><td>Structured output (L9.4)</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>Vai trò trong <code>ChatMessage</code> (0.14.24): <code>system, developer, user, assistant, function, tool, chatbot, model</code>.
+            Thuộc tính <code>llm.metadata</code> khai báo <code>context_window</code>, <code>num_output</code>, <code>is_chat_model</code>,
+            <code>is_function_calling_model</code> — synthesizer dựa vào đây để tính chỗ trống cho context (10.9), và agent dựa vào
+            <code>is_function_calling_model</code> để chọn cách gọi công cụ.</p>
+
+        <h3>L9.2. Ollama trong LlamaIndex</h3>
+        <p>Tham số của <code>llama_index.llms.ollama.Ollama</code> (gói 0.11.0): <code>model, base_url, temperature, context_window,
+            request_timeout, prompt_key, json_mode, additional_kwargs, is_function_calling_model, keep_alive, thinking</code>.</p>
+        <ul>
+            <li><code>context_window</code> vừa là thông tin cho LlamaIndex <em>vừa</em> được gửi xuống Ollama làm <code>num_ctx</code>.
+                Không đặt thì Ollama dùng mặc định nhỏ của server và cắt ngầm prompt dài.</li>
+            <li><code>request_timeout</code> (repo: 180 s): mô hình 4B trên GPU laptop 4 GB có thể cần hơn 2 phút cho một câu dài —
+                hết giờ sẽ ném <code>ReadTimeout</code>.</li>
+            <li><code>additional_kwargs</code> chuyển thẳng tuỳ chọn Ollama (repo: <code>seed</code>); <code>keep_alive</code> giữ mô
+                hình trong VRAM giữa các lần gọi (tránh nạp lại).</li>
+            <li><code>thinking</code> bật/tắt chế độ suy luận của mô hình hỗ trợ (Qwen3). Việc tắt có hiệu lực hay không còn phụ thuộc
+                phiên bản Ollama và bản mô hình — nên kiểm tra đầu ra thực tế.</li>
+            <li><code>json_mode=True</code> ép Ollama trả JSON hợp lệ — hữu ích cho structured output và LLM giám khảo.</li>
+        </ul>
+
+        <h3>L9.3. Settings và cơ chế “resolve”</h3>
+        <p><code>Settings</code> (0.14.24) có các thuộc tính: <code>llm, embed_model, node_parser, text_splitter, transformations,
+            chunk_size, chunk_overlap, context_window, num_output, tokenizer, callback_manager, prompt_helper, pydantic_program_mode
+            …</code>. <code>Settings.llm</code> và <code>Settings.embed_model</code> là <em>lazy</em>: lần đầu đọc mà chưa gán,
+            thư viện gọi <code>resolve_llm("default")</code> / <code>resolve_embed_model("default")</code> — tức OpenAI. Đây là nguồn
+            gốc lỗi “thiếu OpenAI API key” hay “không import được llama_index.llms.openai” khi chỉ quên truyền một tham số ở đâu đó
+            sâu bên trong. Repo gặp đúng trường hợp với <code>QueryFusionRetriever</code> và chặn bằng cách truyền <code>llm=</code>
+            tường minh. Để chắc chắn không bao giờ rơi về OpenAI trong test: <code>Settings.llm = MockLLM()</code>,
+            <code>Settings.embed_model = MockEmbedding(embed_dim=…)</code>.</p>
+
+        <h3>L9.4. Structured output — bắt LLM trả về dữ liệu có cấu trúc</h3>
+        <pre class="code-block"><span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel
+
+<span class="keyword">class</span> <span class="fn">TraLoiQuyChe</span>(BaseModel):
+    tra_loi: str
+    van_ban: str
+    dieu: str
+    trich_dan: str
+    tim_thay: bool
+
+sllm = llm.<span class="fn">as_structured_llm</span>(TraLoiQuyChe)
+qe = index.<span class="fn">as_query_engine</span>(llm=sllm, response_mode=<span class="string">"compact"</span>)
+r = qe.<span class="fn">query</span>(<span class="string">"Thời gian rút bớt học phần là bao lâu?"</span>)   <span class="comment"># r.response là JSON theo schema</span></pre>
+        <p>Cơ chế: với LLM hỗ trợ function calling, schema Pydantic được gửi như một “công cụ” và LLM điền tham số; với LLM thường,
+            thư viện chèn hướng dẫn định dạng vào prompt rồi phân tích JSON trả về (<code>pydantic_program_mode</code> điều khiển cách
+            nào). Lợi ích cho đồ án: trường <code>tim_thay</code> và <code>dieu</code> tách bạch giúp chấm tự động “từ chối đúng/sai”
+            và “trích dẫn đúng Điều” mà không phải phân tích câu văn.</p>
+
+        <h3>L9.5. Giao diện embedding</h3>
+        <ul>
+            <li><code>get_query_embedding(q)</code> / <code>get_text_embedding(t)</code> — tách bạch câu hỏi và văn bản (3.10);
+                <code>get_text_embedding_batch(list)</code> theo lô <code>embed_batch_size</code>.</li>
+            <li><code>HuggingFaceEmbedding</code> nhận: <code>model_name, max_length, query_instruction, text_instruction, normalize,
+                pooling, embed_batch_size, device, model_kwargs, trust_remote_code, cache_folder …</code>. Repo đặt
+                <code>embed_batch_size</code> 4 (fp16) / 10 để vừa VRAM 4 GB, và <code>torch_dtype=float16</code> qua
+                <code>model_kwargs</code>.</li>
+            <li><code>max_length</code>: độ dài tối đa đưa vào encoder — phần vượt bị cắt ngầm (3.5).</li>
+            <li><code>get_agg_embedding_from_queries</code>: trung bình embedding nhiều câu hỏi — dùng trong một số kỹ thuật biến đổi
+                câu hỏi.</li>
+        </ul>
+
+        <div class="quiz-head">✅ Câu hỏi tự kiểm tra</div>
+        <details class="quiz">
+            <summary>1. Code chạy tốt trên máy có OPENAI_API_KEY, lỗi trên máy khác. Nghi ngờ đầu tiên?</summary>
+            <p>Có thành phần nào đó không được truyền llm/embed_model nên rơi về <code>Settings</code> mặc định = OpenAI.</p>
+        </details>
+        <details class="quiz">
+            <summary>2. Khai báo <code>context_window=32768</code> cho mô hình thật chỉ chạy 8192 trên GPU. Điều gì xảy ra?</summary>
+            <p>LlamaIndex nhồi tới ~32k token; Ollama cố cấp phát (có thể hết VRAM) hoặc mô hình làm việc ngoài độ dài đã huấn luyện → chậm/sai.</p>
+        </details>
+    </section>
+
+    <!-- ===================== L10 ===================== -->
+    <section id="l10" class="prose">
+        <div class="section-header">
+            <div class="icon" style="background:#e8f5e9;color:var(--success);">💬</div>
+            <div>
+                <div class="section-num">Phần II · Chương L10</div>
+                <h2>Chat Engine và Memory — Hỏi Tiếp Nhiều Lượt</h2>
+            </div>
+        </div>
+
+        <h3>L10.1. Vấn đề: câu hỏi tiếp theo thiếu ngữ cảnh</h3>
+        <p>Sinh viên hỏi “Thời gian tối đa hoàn thành khoá học là bao lâu?”, rồi hỏi tiếp “Còn hệ vừa làm vừa học thì sao?”. Câu thứ
+            hai đem đi truy hồi một mình sẽ không tìm được gì liên quan — nó thiếu chủ đề. Query engine không có trí nhớ; chat engine
+            giải quyết bằng <strong>memory</strong> + một chiến lược dùng lịch sử.</p>
+
+        <h3>L10.2. Các chế độ chat (ChatMode)</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Chế độ</th><th>Mỗi lượt làm gì</th><th>Ưu / nhược</th></tr></thead>
+                <tbody>
+                    <tr><td><code>simple</code></td><td>Chỉ chat với LLM, không truy hồi</td><td>Không dùng cho RAG</td></tr>
+                    <tr><td><code>condense_question</code></td><td>LLM viết lại câu mới + lịch sử thành <em>một câu hỏi độc lập</em>, rồi đưa vào query engine</td><td>Truy hồi tốt cho câu hỏi tiếp; không trả lời được câu xã giao/meta (“bạn vừa nói gì?”)</td></tr>
+                    <tr><td><code>context</code></td><td>Truy hồi bằng chính câu mới, nhét context vào system prompt, chat với lịch sử</td><td>Tự nhiên; truy hồi kém khi câu mới thiếu chủ đề</td></tr>
+                    <tr><td><code>condense_plus_context</code></td><td>Viết lại câu hỏi độc lập để truy hồi, rồi chat với context + lịch sử</td><td>Cân bằng nhất cho chatbot RAG; 2 lời gọi LLM/lượt</td></tr>
+                    <tr><td><code>react</code>, <code>openai</code>, <code>best</code></td><td>Dùng agent với query engine làm công cụ</td><td>Linh hoạt, khó kiểm soát</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="mermaid-container">
+            <pre class="mermaid">
+sequenceDiagram
+    participant U as Sinh viên
+    participant CE as CondensePlusContext
+    participant L as LLM
+    participant R as Retriever
+    U->>CE: "Còn hệ vừa làm vừa học thì sao?"
+    CE->>L: lịch sử + câu mới → viết lại
+    L-->>CE: "Thời gian tối đa hoàn thành khoá học hệ vừa làm vừa học?"
+    CE->>R: truy hồi bằng câu đã viết lại
+    R-->>CE: node Điều 2 QC 2021
+    CE->>L: system(context) + lịch sử + câu mới
+    L-->>U: câu trả lời + nguồn
+            </pre>
+        </div>
+
+        <h3>L10.3. Memory</h3>
+        <ul>
+            <li><code>ChatMemoryBuffer.from_defaults(token_limit=…, chat_store=…, chat_store_key=…)</code>: giữ các tin nhắn gần nhất
+                trong giới hạn token, bỏ tin cũ nhất khi tràn.</li>
+            <li><code>chat_store</code> tách nơi lưu (RAM, Redis, file) khỏi logic; <code>chat_store_key</code> phân biệt người dùng.</li>
+            <li>Bản 0.14 có thêm lớp <code>Memory</code> mới (bộ nhớ ngắn hạn + các “khối” dài hạn) dùng chủ yếu với agent.</li>
+        </ul>
+        <p>Lưu ý cho đồ án: chat nhiều lượt khó đánh giá hơn hỏi đáp một lượt. Nên giữ đánh giá chính ở query engine một lượt, và đánh
+            giá riêng bước “viết lại câu hỏi” bằng một bộ nhỏ cặp (lịch sử, câu tiếp → câu độc lập chuẩn).</p>
+
+        <div class="quiz-head">✅ Câu hỏi tự kiểm tra</div>
+        <details class="quiz">
+            <summary>1. Vì sao chế độ <code>context</code> trả lời sai câu “Còn hệ vừa làm vừa học thì sao?”</summary>
+            <p>Truy hồi bằng câu thiếu chủ đề → node không liên quan; LLM có lịch sử nhưng context sai.</p>
+        </details>
+        <details class="quiz">
+            <summary>2. Bước nào trong condense_plus_context có thể làm hỏng câu hỏi gốc?</summary>
+            <p>Bước LLM viết lại: có thể thêm/bớt ý, đổi thuật ngữ; nên đo riêng chất lượng bước này.</p>
+        </details>
+    </section>
+
+    <!-- ===================== L11 ===================== -->
+    <section id="l11" class="prose">
+        <div class="section-header">
+            <div class="icon" style="background:#f3e5f5;color:#6a1b9a;">🕹️</div>
+            <div>
+                <div class="section-num">Phần II · Chương L11</div>
+                <h2>Agent và Workflow</h2>
+            </div>
+        </div>
+
+        <h3>L11.1. Tool — biến mọi thứ thành “công cụ” cho LLM</h3>
+        <ul>
+            <li><code>FunctionTool.from_defaults(fn)</code>: bọc một hàm Python; tên, docstring và chú thích kiểu trở thành mô tả cho LLM.</li>
+            <li><code>QueryEngineTool.from_defaults(query_engine, name=…, description=…)</code>: bọc cả một query engine — agent “hỏi”
+                index như gọi hàm.</li>
+        </ul>
+
+        <h3>L11.2. Agent — LLM tự quyết định gọi công cụ nào</h3>
+        <p>Agent lặp vòng <em>suy nghĩ → gọi công cụ → quan sát kết quả → …</em> cho tới khi đủ thông tin trả lời. Trong 0.14.24
+            (<code>llama_index.core.agent.workflow</code>):</p>
+        <ul>
+            <li><code>FunctionAgent</code>: dùng function calling gốc của LLM — chính xác hơn, cần LLM hỗ trợ.</li>
+            <li><code>ReActAgent</code>: dùng văn bản theo mẫu ReAct (Yao và cộng sự, 2023): <em>Thought / Action / Action Input /
+                Observation</em> — chạy với mọi LLM nhưng dễ lỗi định dạng với mô hình nhỏ.</li>
+            <li><code>AgentWorkflow</code>: nhiều agent chuyên trách chuyển giao (handoff) cho nhau.</li>
+        </ul>
+        <pre class="code-block">agent = <span class="fn">ReActAgent</span>(tools=[hoc_vu_tool, ctsv_tool], llm=llm)
+resp = <span class="keyword">await</span> agent.<span class="fn">run</span>(<span class="string">"Bị cảnh báo học tập 2 lần thì có được xét học bổng không?"</span>)</pre>
+        <p>Câu hỏi trên cần hai nguồn (quy chế học vụ về cảnh báo, quy chế học bổng về điều kiện) — agent có thể gọi lần lượt hai công
+            cụ. Nhưng với hệ thống hỏi đáp quy chế cần <strong>tính tất định và đo được</strong>, agent thường là lựa chọn sau cùng: số
+            bước không cố định, mô hình 4B hay gọi sai công cụ, và mỗi câu hỏi tốn nhiều lời gọi LLM.</p>
+
+        <h3>L11.3. Workflow — lập trình hướng sự kiện</h3>
+        <p>Workflow là cách LlamaIndex khuyến nghị để viết logic nhiều bước (kể cả agent ở trên được cài bằng workflow). Một workflow
+            gồm các <strong>step</strong> (hàm async có <code>@step</code>), mỗi step nhận một loại <strong>Event</strong> và phát ra
+            event khác; luồng chạy được suy ra từ chú thích kiểu.</p>
+        <pre class="code-block"><span class="keyword">from</span> llama_index.core.workflow <span class="keyword">import</span> Workflow, step, Event, StartEvent, StopEvent, Context
+
+<span class="keyword">class</span> <span class="fn">DaTruyHoi</span>(Event):
+    nodes: list
+
+<span class="keyword">class</span> <span class="fn">RAGQuyChe</span>(Workflow):
+    @step
+    <span class="keyword">async def</span> <span class="fn">truy_hoi</span>(self, ctx: Context, ev: StartEvent) -&gt; DaTruyHoi | StopEvent:
+        nodes = <span class="keyword">await</span> retriever.<span class="fn">aretrieve</span>(ev.query)
+        <span class="keyword">await</span> ctx.store.<span class="fn">set</span>(<span class="string">"query"</span>, ev.query)
+        <span class="keyword">if not</span> nodes <span class="keyword">or</span> nodes[<span class="number">0</span>].score &lt; NGUONG:
+            <span class="keyword">return</span> <span class="fn">StopEvent</span>(result=<span class="string">"Không tìm thấy trong các văn bản quy định."</span>)   <span class="comment"># từ chối sớm</span>
+        <span class="keyword">return</span> <span class="fn">DaTruyHoi</span>(nodes=nodes)
+
+    @step
+    <span class="keyword">async def</span> <span class="fn">tra_loi</span>(self, ctx: Context, ev: DaTruyHoi) -&gt; StopEvent:
+        query = <span class="keyword">await</span> ctx.store.<span class="fn">get</span>(<span class="string">"query"</span>)
+        r = <span class="keyword">await</span> synthesizer.<span class="fn">asynthesize</span>(query, nodes=ev.nodes)
+        <span class="keyword">return</span> <span class="fn">StopEvent</span>(result=r)
+
+result = <span class="keyword">await</span> <span class="fn">RAGQuyChe</span>(timeout=<span class="number">300</span>).<span class="fn">run</span>(query=<span class="string">"..."</span>)</pre>
+        <ul>
+            <li><code>StartEvent</code> mang tham số của <code>run(...)</code>; trả <code>StopEvent</code> là kết thúc.</li>
+            <li><code>Context</code>: trạng thái dùng chung giữa các step (<code>ctx.store</code>), gửi event (<code>send_event</code>),
+                chờ gom nhiều event (<code>collect_events</code>), phát sự kiện ra ngoài để hiển thị tiến trình
+                (<code>write_event_to_stream</code>).</li>
+            <li>Rẽ nhánh = trả về các loại event khác nhau; vòng lặp = step phát lại event đã nhận; song song = phát nhiều event rồi
+                <code>collect_events</code>.</li>
+        </ul>
+        <p>So với một hàm Python tuần tự, workflow cho: chạy bất đồng bộ tự nhiên, quan sát từng bước (L12), dễ thêm nhánh (từ chối sớm,
+            hỏi lại, kiểm tra hiệu lực văn bản) mà không biến code thành mớ if-else. Engine nằm trong gói <code>llama-index-workflows</code>.</p>
+
+        <div class="quiz-head">✅ Câu hỏi tự kiểm tra</div>
+        <details class="quiz">
+            <summary>1. Khi nào nên dùng FunctionAgent thay ReActAgent?</summary>
+            <p>Khi LLM hỗ trợ function calling ổn định (<code>is_function_calling_model=True</code>); ít lỗi định dạng hơn.</p>
+        </details>
+        <details class="quiz">
+            <summary>2. Trong workflow mẫu, thêm bước “nếu node là bản gốc đã bị sửa đổi thì kéo thêm bản sửa đổi” đặt ở đâu?</summary>
+            <p>Một step mới nhận <code>DaTruyHoi</code>, bổ sung node, phát <code>DaTruyHoi</code> (hoặc event mới) cho step trả lời.</p>
+        </details>
+    </section>
+
+    <!-- ===================== L12 ===================== -->
+    <section id="l12" class="prose">
+        <div class="section-header">
+            <div class="icon" style="background:#ffebee;color:#c62828;">🔬</div>
+            <div>
+                <div class="section-num">Phần II · Chương L12</div>
+                <h2>Quan Sát, Kiểm Thử, Hiệu Năng và Lỗi Thường Gặp</h2>
+            </div>
+        </div>
+
+        <h3>L12.1. Instrumentation — nhìn vào bên trong mỗi lời gọi</h3>
+        <p>LlamaIndex có hệ thống instrumentation (gói <code>llama-index-instrumentation</code>), thay thế dần cơ chế callback cũ:</p>
+        <ul>
+            <li><strong>Dispatcher</strong> (<code>get_dispatcher(__name__)</code>): mỗi module có một dispatcher, xếp thành cây.</li>
+            <li><strong>Span</strong>: một khoảng thực thi (vd. <code>RetrieverQueryEngine._query</code>), có cha–con — cho ra cây lời gọi
+                và thời gian từng bước. Các phương thức chính đều được bọc bằng <code>@dispatcher.span</code>.</li>
+            <li><strong>Event</strong>: sự kiện rời rạc (bắt đầu/kết thúc embedding, retrieval, LLM, kèm dữ liệu như prompt, số token).</li>
+            <li>Tự viết <code>BaseEventHandler</code> / <code>BaseSpanHandler</code> rồi gắn vào dispatcher gốc để ghi log, đo thời gian,
+                đếm token.</li>
+        </ul>
+        <pre class="code-block"><span class="keyword">from</span> llama_index.core.instrumentation <span class="keyword">import</span> get_dispatcher
+<span class="keyword">from</span> llama_index.core.instrumentation.event_handlers <span class="keyword">import</span> BaseEventHandler
+
+<span class="keyword">class</span> <span class="fn">GhiSuKien</span>(BaseEventHandler):
+    <span class="keyword">def</span> <span class="fn">handle</span>(self, event, **kw):
+        <span class="fn">print</span>(event.<span class="fn">class_name</span>(), event.timestamp)
+
+<span class="fn">get_dispatcher</span>().<span class="fn">add_event_handler</span>(<span class="fn">GhiSuKien</span>())</pre>
+        <p>Công cụ ngoài (Arize Phoenix, Langfuse, …) gắn vào cùng cơ chế qua gói tích hợp hoặc <code>set_global_handler(...)</code>,
+            cho giao diện xem từng trace: câu hỏi → node truy hồi kèm điểm → prompt cuối → câu trả lời. Đây là cách nhanh nhất để gỡ lỗi
+            “vì sao câu này sai”. Cơ chế cũ (<code>CallbackManager</code>, <code>LlamaDebugHandler</code>) vẫn còn trong 0.14.24 cho code viết theo kiểu cũ.</p>
+
+        <h3>L12.2. Kiểm thử không cần GPU</h3>
+        <ul>
+            <li><code>MockLLM</code> (trả văn bản giả, metadata context_window 3900) và <code>MockEmbedding(embed_dim=…)</code> cho phép chạy
+                toàn bộ pipeline trong CI: kiểm tra cắt node, metadata, prompt được ghép đúng, số node trả về… mà không tải mô hình.</li>
+            <li>Kiểm thử những thứ <em>tất định</em>: số node, khoá metadata, nội dung <code>get_content(EMBED)</code>, prompt cuối
+                (dùng <code>response_mode="context_only"</code> hoặc <code>get_prompts()</code>). Chất lượng câu trả lời để cho bộ đánh giá,
+                không để cho unit test.</li>
+        </ul>
+
+        <h3>L12.3. Hiệu năng</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Nút thắt</th><th>Cách xử lý trong LlamaIndex</th></tr></thead>
+                <tbody>
+                    <tr><td>Embed nhiều chunk khi nạp</td><td><code>embed_batch_size</code>; fp16; <code>IngestionCache</code>; persist index và chỉ dựng lại khi fingerprint đổi</td></tr>
+                    <tr><td>Chạy bộ đánh giá nhiều câu</td><td>Bản async (<code>aretrieve</code>, <code>aquery</code>) + <code>asyncio.gather</code>, hoặc <code>BatchEvalRunner(workers=…)</code>; với một GPU, giới hạn song song để không hết VRAM</td></tr>
+                    <tr><td>LLM chậm</td><td><code>keep_alive</code> giữ mô hình trong VRAM; giảm top-k/độ dài chunk; tắt thinking; <code>response_mode="no_text"</code> khi chỉ đo truy hồi</td></tr>
+                    <tr><td>Embed câu hỏi lặp lại cho nhiều retriever</td><td>Truyền <code>QueryBundle</code> có sẵn <code>embedding</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>L12.4. Lỗi thường gặp và nguyên nhân</h3>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Triệu chứng</th><th>Nguyên nhân thường gặp</th></tr></thead>
+                <tbody>
+                    <tr><td>Đòi OpenAI API key / không import được <code>llama_index.llms.openai</code></td><td>Thành phần nào đó rơi về <code>Settings</code> mặc định (L9.3)</td></tr>
+                    <tr><td><code>ValueError</code> khi tạo <code>ServiceContext</code></td><td>Code viết cho bản &lt; 0.10 (L1.4)</td></tr>
+                    <tr><td><code>ImportError</code> sau khi nâng cấp</td><td>Core và gói tích hợp lệch phiên bản</td></tr>
+                    <tr><td>“Metadata length is longer than chunk size”</td><td>Metadata quá dài so với chunk_size (8.9)</td></tr>
+                    <tr><td>Kết quả truy hồi vô nghĩa sau khi load index</td><td>Embed câu hỏi bằng mô hình khác lúc dựng (L6.1)</td></tr>
+                    <tr><td>Nạp trùng mỗi lần chạy pipeline</td><td>Document id ngẫu nhiên (L3, L4.4)</td></tr>
+                    <tr><td>Câu trả lời lẫn tiếng Anh</td><td>Refine template mặc định (L8.3), hoặc mô hình in phần suy luận</td></tr>
+                    <tr><td><code>ReadTimeout</code> với Ollama</td><td><code>request_timeout</code> quá nhỏ so với tốc độ GPU (L9.2)</td></tr>
+                    <tr><td>Đặt trọng số vector/BM25 không có tác dụng</td><td>Fusion mode RRF bỏ qua <code>retriever_weights</code> (7.5)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>L12.5. Lộ trình áp dụng Phần II vào đồ án</h3>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h4>1. Thay prompt refine tiếng Việt</h4>
+                <p><code>update_prompts</code> cho cả <code>refine_template</code> (L8.3) — rẻ, giảm câu trả lời lẫn tiếng Anh.</p>
+            </div>
+            <div class="timeline-item">
+                <h4>2. Đo truy hồi qua query engine với <code>no_text</code></h4>
+                <p>Đánh giá đúng đường code sản phẩm mà không tốn LLM (L8.1).</p>
+            </div>
+            <div class="timeline-item">
+                <h4>3. Lọc metadata theo hiệu lực</h4>
+                <p><code>MetadataFilters</code> trên <code>tinh_trang</code> sau khi điền metadata văn bản (L7.2).</p>
+            </div>
+            <div class="timeline-item">
+                <h4>4. IngestionPipeline + cache cho ma trận thí nghiệm</h4>
+                <p>Tránh embed lại chunk trùng giữa các cấu hình (L4.3).</p>
+            </div>
+            <div class="timeline-item">
+                <h4>5. Thử MarkdownNodeParser, SentenceWindow, Hierarchical như các chiến lược cắt bổ sung</h4>
+                <p>Mở rộng thí nghiệm Chương 12 bằng các lớp có sẵn (L5).</p>
+            </div>
+            <div class="timeline-item">
+                <h4>6. Instrumentation để gỡ lỗi từng câu sai</h4>
+                <p>Ghi lại node, điểm, prompt cuối cho mỗi câu trong bộ đánh giá (L12.1).</p>
+            </div>
+        </div>
+
+        <div class="quiz-head">✅ Câu hỏi tự kiểm tra</div>
+        <details class="quiz">
+            <summary>1. Viết unit test kiểm tra “embedding không chứa đường dẫn file” mà không tải mô hình. Kiểm tra gì?</summary>
+            <p>Với node từ loader, assert <code>"file" not in node.get_content(MetadataMode.EMBED)</code> (hoặc khoá file nằm trong
+                <code>excluded_embed_metadata_keys</code>).</p>
+        </details>
+        <details class="quiz">
+            <summary>2. Chạy 200 câu hỏi đánh giá bằng asyncio.gather trên GPU 4 GB bị lỗi hết bộ nhớ. Sửa thế nào?</summary>
+            <p>Giới hạn số tác vụ đồng thời (semaphore / <code>workers</code> nhỏ), hoặc chạy tuần tự phần embedding.</p>
+        </details>
+    </section>
 
     <!-- ===================== PHỤ LỤC ===================== -->
     <section id="phu-luc" class="prose">

@@ -38,6 +38,11 @@ RAG_PROFILE=server venv/bin/python src/pipeline.py                 # hỏi-đáp
 - Chưa nhớ ngữ cảnh hội thoại (câu hỏi nối tiếp), chưa có Router giữa nhiều nhóm văn bản
 - Giao diện Gradio mới ở mức chạy thử: `RAG_PROFILE=server venv/bin/python app/app.py` (http://127.0.0.1:7860)
 
+
+```bash
+RAG_PROFILE=server venv/bin/python app/app.py
+```
+
 ## Kiến trúc
 
 - **OCR**: chuyển PDF quy chế thành văn bản Markdown bằng `pytesseract` + `pdf2image` (hỗ trợ tiếng Việt).
@@ -132,11 +137,25 @@ Sáu giai đoạn của pipeline đã chạy được trên 6 văn bản quy ch�
 `eval/` (truy hồi, baseline, chấm câu trả lời). Phần chưa làm: router theo nhóm văn bản, lọc theo hiệu lực,
 bộ đánh giá có đáp án chuẩn đủ lớn. Xem `docs/bao_cao_cai_tien_rag.md` và báo cáo MD trong `docs/`.
 
+
+## Báo cáo GG docs 
+```bash
+https://docs.google.com/document/d/1TQZR0Qk_NSef59e24KFiL4X1CC3u3WQZq2tp6z1sjok/edit?usp=sharing
+```
+
+
 ## Chạy LLM + embedding trên colab 
 ```bash
 !wget -q -O setup_server_v2.sh https://raw.githubusercontent.com/huynhthanhtien/LlamaIndex_RAG/nghien-cuu-llamaindex-cai-tien/scripts/setup_server_v2.sh
 !bash setup_server_v2.sh
 ```
+
+## Tài liệu tham khảo 
+```bash
+https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions/hands-on-labs/aspnet-mvc-4-entity-framework-scaffolding-and-migrations?fbclid=IwY2xjawU2p9dleHRuA2FlbQIxMQBwZG9mAXNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR5jGCWpCstzuv-IKmqc3X_ytbYl8mNtIrIJ5eK3C79lj0SrbEI1trXUr9V2yg_aem_QKHRO6FdJjWXUVYEtRp6TA
+```
+
+[Tài liệu LlamaIndex(AI gen) ](https://htmlpreview.github.io/?https://github.com/huynhthanhtien/LlamaIndex_RAG/blob/nghien-cuu-llamaindex-cai-tien/docs/giao_trinh/co_so_ly_thuyet_rag.html)
 
 ## Giấy phép
 
