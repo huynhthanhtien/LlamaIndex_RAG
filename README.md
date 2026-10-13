@@ -1,13 +1,86 @@
 # SGU RAG (LlamaIndex)
 
-Hệ thống hỏi-đáp RAG (Retrieval-Augmented Generation) cho các văn bản quy chế đào tạo của Trường Đại học Sài Gòn (SGU), xây dựng trên [LlamaIndex](https://www.llamaindex.ai/) với LLM chạy local qua [Ollama](https://ollama.com/).
+Hệ thống hỏi-đáp RAG (Retrieval-Augmented Generation) cho các văn bản quy chế đào tạo của Trường Đại học Sài Gòn (SGU), xây dựng trên [LlamaIndex](https://www.llamaindex.ai/) với LLM chạy qua [Ollama](https://ollama.com/) (local, server GPU hoặc Google Colab).
 
-## Trạng thái hiện tại: 6 văn bản quy chế SGU đang áp dụng (Quy chế 2021 + QĐ sửa đổi 3183/2025 + 4 quy định)
+## Báo cáo GG docs
+```bash
+https://docs.google.com/document/d/1TQZR0Qk_NSef59e24KFiL4X1CC3u3WQZq2tp6z1sjok/edit?usp=sharing
+```
 
-Chuẩn bị dữ liệu (chạy một lần cho mỗi thư mục `data/raw/...`):
-`scripts/extract_to_md.py` (PDF → Markdown thô `data/ocr/`) → sửa tay nếu cần → `scripts/clean_md.py` (→ Markdown sạch có heading `data/processed/`).
+## Chạy LLM + embedding trên colab
+```bash
+!wget -q -O setup_server_v2.sh https://raw.githubusercontent.com/huynhthanhtien/LlamaIndex_RAG/nghien-cuu-llamaindex-cai-tien/scripts/setup_server_v2.sh
+!bash setup_server_v2.sh
+```
 
-Pipeline: `processed_loader` (mỗi Điều / mục sửa đổi một Node, gắn tên văn bản) → `index_builder` → `retriever` (+ rerank tuỳ chọn) → `query_engine` (Ollama) → `pipeline` (hỏi-đáp terminal).
+Script chạy trên Colab (T4 GPU): cài + chạy Ollama, dựng model server (embedding + reranker), mở URL công khai qua Cloudflare quick tunnel và in ra các dòng cần chép vào `.env` ở máy local (`OLLAMA_BASE_URL`, `MODEL_SERVER_URL`, ...). Sau đó index, retriever, query engine, đánh giá vẫn chạy ở máy local như bình thường. Notebook `notebooks/demo.ipynb` chứa sẵn hai lệnh trên.
+
+## Trạng thái hiện tại: 6 văn bản quy chế SGU đang áp dụng
+
+Index gồm Quy chế đào tạo SGU 2021 + QĐ sửa đổi 3183/2025 + 4 quy định (danh sách trong `src/corpus.py`, dict `SGU_HIEU_LUC`):
+
+| Tiền tố file | Tên hiển thị (dùng khi embedding và trích nguồn) |
+|---|---|
+| `25_quy-che-dao-tao` | Quy chế đào tạo trình độ đại học SGU 2021 |
+| `QD 3183.2025` | QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 |
+| `8_QD810` | QĐ 810 về học cùng lúc hai chương trình |
+| `2022-2375` | QĐ 2375/2022 về chuyển chương trình, ngành đào tạo |
+| `22_quy-dinh-ve-khoi-luong` | Quy định khối lượng đào tạo hệ chính quy theo tín chỉ |
+| `Quydinh150tc` | Quy định số tín chỉ tối thiểu kỹ sư CNTT (khóa 2017 trở đi) |
+
+Văn bản hết hiệu lực / văn bản của Bộ không nạp vào index: đã đo, chúng lấn át QC SGU 2021 khi truy hồi. `data/raw/` còn nhiều nhóm tài liệu khác (công tác sinh viên, chương trình đào tạo, khóa luận, biểu mẫu) chưa đưa vào index — xem `docs/ke_hoach_them_du_lieu_dao_tao.md`.
+
+**Chuẩn bị dữ liệu** (chạy một lần cho mỗi thư mục `data/raw/...`):
+`scripts/extract_to_md.py` (PDF/DOCX → Markdown thô `data/ocr/`) → sửa tay nếu cần → `scripts/clean_md.py` (→ Markdown sạch có heading `data/processed/`).
+
+**Pipeline**: `processed_loader` (mỗi Điều / mục sửa đổi một Node, gắn tên văn bản) → `index_builder` → `retriever` (vector, tuỳ chọn hybrid BM25 + rerank) → `query_engine` (Ollama, trích nguồn) → `pipeline` (terminal) / `app/app.py` (Gradio).
+
+## Kiến trúc
+
+- **Trích văn bản**: `scripts/extract_to_md.py` lấy cả text layer (`pdftotext`) lẫn OCR (`pytesseract` + `pdf2image`, `tessdata_best` tiếng Việt) cho từng trang rồi giữ bản tốt hơn; `.docx` đọc thẳng XML.
+- **Làm sạch + cấu trúc**: `scripts/clean_md.py` dựng heading `#` văn bản / `##` Chương / `###` Điều / `####` mục sửa đổi, ghi báo cáo kiểm tra `_bao_cao_kiem_tra.md`.
+- **Embedding**: mô hình embedding tiếng Việt (`bkai-foundation-models/vietnamese-bi-encoder` ở profile `local`, `AITeamVN/Vietnamese_Embedding` ở profile `server`).
+- **LLM**: Qwen3 qua Ollama (`qwen3:4b` local, `qwen3:8b` server), `temperature=0`, `seed=42`.
+- **Reranker** (tuỳ chọn, mặc định tắt): `AITeamVN/Vietnamese_Reranker` ở profile `server`.
+- **Hybrid search** (tuỳ chọn): BM25 thuần Python (`src/bm25.py`, tách từ bỏ dấu) trộn với vector bằng `QueryFusionRetriever`.
+- **Model server** (tuỳ chọn): `src/model_server.py` nạp embedding + reranker lên GPU một lần, client gọi qua HTTP (`MODEL_SERVER_URL`).
+- **Giao diện**: [Gradio](https://www.gradio.app/) (`app/app.py`) — hỏi-đáp + xem các trích đoạn được truy hồi.
+
+Cấu hình cho từng profile (`local` / `server`) được định nghĩa tập trung tại `src/config.py`.
+
+## Cài đặt
+
+### Yêu cầu
+
+- Python 3.10+
+- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) kèm gói ngôn ngữ tiếng Việt (`tesseract-ocr-vie`) và [Poppler](https://poppler.freedesktop.org/) (`pdftotext`, `pdf2image`) — chỉ cần khi trích văn bản từ PDF
+- [Ollama](https://ollama.com/) chạy local / trên server / trên Colab với model tương ứng đã `ollama pull` (xem `scripts/pull_models.sh`)
+
+### Thiết lập môi trường
+
+```bash
+python3 -m venv venv
+source venv/bin/activate.fish   # hoặc venv/bin/activate với bash/zsh
+pip install -r requirements.txt
+cp .env.example .env            # rồi chỉnh giá trị
+```
+
+Các biến trong `.env` (không commit):
+
+```bash
+RAG_PROFILE=local                        # "local" hoặc "server"
+OLLAMA_BASE_URL=http://localhost:11434   # profile "server" đọc biến này
+# MODEL_SERVER_URL=http://localhost:8001 # (tuỳ chọn) dùng model server thay vì nạp model tại chỗ
+# MODEL_SERVER_TOKEN=                    # trùng với token đặt khi chạy server
+```
+
+Biến tuỳ chỉnh thêm: `RAG_EMBED_DEVICE=cpu` (máy không GPU), `RAG_TEMPERATURE`, `RAG_SEED`, `RAG_THINKING=1` (bật chế độ suy luận của qwen3: đúng hơn khi tra bảng số, chậm ~4 lần).
+
+Kiểm tra cấu hình đang dùng:
+
+```bash
+python3 src/config.py
+```
 
 ## Chạy thử
 
@@ -17,148 +90,112 @@ Chạy từ thư mục gốc của repo (đường dẫn trong code là tương 
 RAG_PROFILE=server venv/bin/python src/index_builder.py            # build/load Index (thêm --rebuild để build lại)
 RAG_PROFILE=server venv/bin/python src/retriever.py "câu hỏi"      # thử truy hồi (thêm --rerank)
 RAG_PROFILE=server venv/bin/python src/query_engine.py             # thử hỏi-đáp 1 câu
-RAG_PROFILE=server venv/bin/python eval/evaluate.py [--rerank]     # Recall@k, MRR, nDCG, CI bootstrap, 2 bộ câu hỏi
-RAG_PROFILE=server venv/bin/python eval/baselines.py              # baseline BM25 / không xếp hạng
-make test                                                          # 26 kiểm thử offline (không cần GPU/Ollama)
 RAG_PROFILE=server venv/bin/python src/pipeline.py                 # hỏi-đáp qua terminal, gõ 'thoat' để dừng
+RAG_PROFILE=server venv/bin/python app/app.py                      # giao diện Gradio http://127.0.0.1:7860 (thêm --share)
 ```
 
 - Văn bản nạp vào index: `corpus_dir`, `corpus_files` và tên hiển thị `ten_van_ban` lấy mặc định từ `src/corpus.py` (`CORPUS_DIR`, dict `SGU_HIEU_LUC`).
-- Index lưu ở `storage/<profile>/<thư mục corpus>` kèm `corpus.json`; tự build lại khi văn bản, tên hiển thị hoặc model embedding đổi.
+- Index lưu ở `storage/<profile>/<thư mục corpus>` kèm `corpus.json`; tự build lại khi văn bản, tên hiển thị, logic cắt Node hoặc model embedding đổi.
 - Rerank: `use_rerank` trong `src/config.py`, mặc định **tắt** — trên corpus hiện tại rerank làm giảm Recall@1 (xem `make eval`).
 - Hybrid BM25 + vector: `use_hybrid` trong `src/config.py` (mặc định tắt), chạy thử bằng `eval/evaluate.py --cau-hinh hybrid`.
 - Trả lời tất định: `temperature=0`, `seed=42` trong `make_llm()`; đổi qua `RAG_TEMPERATURE`, `RAG_SEED`.
 - Máy không có GPU: `RAG_EMBED_DEVICE=cpu` hoặc để `resolve_device()` tự hạ cấp về CPU.
-- Notebook `notebooks/build_check_processed.ipynb`: build + đo RAM/VRAM + so sánh có/không rerank, gọi đúng code trên.
+- Model server tự chạy trên máy local: `venv/bin/uvicorn model_server:app --app-dir src --port 8001`.
 
-## Giới hạn đã biết (chưa triển khai, để ở Chương 5 báo cáo sau)
-
-- Rerank có sẵn nhưng mặc định tắt (xem trên); profile `local` không có reranker
-- Profile `local` (`vietnamese-bi-encoder`) chỉ nhận 256 token và cần tách từ — Recall thấp hơn hẳn profile `server`
-- Chưa nhớ ngữ cảnh hội thoại (câu hỏi nối tiếp), chưa có Router giữa nhiều nhóm văn bản
-- Giao diện Gradio mới ở mức chạy thử: `RAG_PROFILE=server venv/bin/python app/app.py` (http://127.0.0.1:7860)
-
+### Trích văn bản mới vào corpus
 
 ```bash
-RAG_PROFILE=server venv/bin/python app/app.py
+python scripts/extract_to_md.py data/raw/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc   # → data/ocr/ (thêm --force để ghi đè)
+python scripts/clean_md.py data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc         # → data/processed/
 ```
 
-## Kiến trúc
+`data/ocr/` (tầng 1) là nơi duy nhất sửa tay; `data/processed/` (tầng 2) luôn sinh lại từ tầng 1. Sau đó thêm tiền tố file vào `SGU_HIEU_LUC` trong `src/corpus.py` — index tự build lại ở lần chạy sau.
 
-- **OCR**: chuyển PDF quy chế thành văn bản Markdown bằng `pytesseract` + `pdf2image` (hỗ trợ tiếng Việt).
-- **Embedding**: mô hình embedding tiếng Việt (`bkai-foundation-models/vietnamese-bi-encoder` khi chạy local, `AITeamVN/Vietnamese_Embedding` khi chạy server/GPU).
-- **LLM**: mô hình Qwen3 chạy qua Ollama (`qwen3:4b` local, `qwen3:8b` server).
-- **Reranker** (tuỳ chọn): `AITeamVN/Vietnamese_Reranker` khi chạy ở profile server.
-- **Giao diện**: dự kiến dùng [Gradio](https://www.gradio.app/) (`app/`).
+## Kiểm thử và đánh giá
 
-Cấu hình cho từng profile (`local` / `server`) được định nghĩa tập trung tại `src/config.py`.
+```bash
+make test           # 26 kiểm thử offline (không cần GPU/Ollama), CI chạy lệnh này
+make test-llm       # kiểm thử có LLM: gọi Ollama thật trong .env (RAG_PROFILE=server)
+make eval           # truy hồi 4 cấu hình vector/rerank/hybrid/hybrid+rerank: Recall@k, MRR, nDCG, CI bootstrap, McNemar
+make baseline       # baseline BM25 / không xếp hạng
+make eval-answers   # chấm câu trả lời bằng evaluator của LlamaIndex (Faithfulness, Relevancy, Correctness, từ chối đúng/sai)
+```
+
+Hoặc gọi trực tiếp: `RAG_PROFILE=server venv/bin/python eval/evaluate.py [--cau-hinh vector,rerank,hybrid] [--kiem-chung]`, `eval/baselines.py`, `eval/evaluate_answers.py --che-do ca-hai`. Kết quả (JSON + Markdown) ghi vào `eval/results/`, kèm tóm tắt cấu hình (`RAGConfig.mo_ta()`) để tái lập.
 
 ## Cấu trúc thư mục
 
 ```
 .
-├── app/                # Giao diện người dùng (Gradio) — đang xây dựng
+├── app/
+│   └── app.py              # Giao diện Gradio: hỏi-đáp + xem trích đoạn truy hồi
 ├── data/
-│   ├── raw/            # PDF gốc (không commit, xem .gitignore)
-│   ├── ocr/            # Kết quả OCR dạng Markdown
-│   └── processed/      # Dữ liệu đã tiền xử lý, sẵn sàng để index
-├── docs/
-│   └── giao_trinh/     # Tài liệu tham khảo, giáo trình
+│   ├── raw/                # Văn bản gốc PDF/DOCX theo nhóm + metadata_manifest.csv
+│   ├── ocr/                # Tầng 1: Markdown thô (sửa tay ở đây)
+│   └── processed/          # Tầng 2: Markdown sạch có heading, sẵn sàng để index
+├── docs/                   # Báo cáo phân tích, đề xuất cải tiến, kế hoạch, phân công
+│   └── giao_trinh/         # Tài liệu cơ sở lý thuyết RAG (HTML)
 ├── eval/
-│   ├── evaluate.py      # truy hồi: Recall@k, MRR, nDCG, CI bootstrap, McNemar
-│   ├── baselines.py     # baseline BM25 / không xếp hạng
-│   ├── evaluate_answers.py  # chấm câu trả lời bằng evaluator của LlamaIndex
-│   ├── metrics.py       # độ đo + kiểm định thống kê
-│   └── results/         # Kết quả đánh giá (JSON + Markdown)
-├── notebooks/          # Notebook thử nghiệm
-├── scripts/            # Script tiện ích (OCR, thử nghiệm nhanh...)
+│   ├── evaluate.py         # truy hồi: Recall@k, MRR, nDCG, CI bootstrap, McNemar
+│   ├── baselines.py        # baseline BM25 / không xếp hạng
+│   ├── evaluate_answers.py # chấm câu trả lời bằng evaluator của LlamaIndex
+│   ├── metrics.py          # độ đo + kiểm định thống kê
+│   ├── run_batch_cau_hoi.py, compare_results.py  # chạy hàng loạt câu hỏi, so sánh kết quả
+│   ├── cau_hoi_danh_gia.json, test_questions_0*.json  # bộ câu hỏi
+│   └── results/            # Kết quả đánh giá (JSON + Markdown)
+├── notebooks/              # build_check_processed, chay_thu_pipeline, chay_cau_hoi01, ckey_gpu_pipeline, demo (Colab)
+├── report/                 # Báo cáo LaTeX (main.tex, chapters/, appendices/) — `make report`
+├── scripts/
+│   ├── extract_to_md.py    # PDF/DOCX -> Markdown (text layer + OCR)
+│   ├── clean_md.py         # Markdown thô -> Markdown sạch có cấu trúc
+│   ├── reorganize_raw.py   # tái cấu trúc data/raw + manifest
+│   ├── setup_server_v2.sh  # dựng Ollama + model server trên Colab/máy GPU (tunnel công khai)
+│   ├── colab_server.py     # phương án Python cho Colab
+│   ├── pull_models.sh      # pull model theo profile
+│   ├── manager.py          # quản lý ckey.vn GPU / Ollama / embedding server
+│   └── check_model_memory.py, test_ocr.py, hello_world.py
 ├── src/
-│   ├── config.py           # Cấu hình RAG: profile, model, tham số truy hồi, văn bản nạp vào index
-│   ├── bm25.py             # BM25 thuần Python (không cần gói ngoài) cho hybrid search
+│   ├── config.py           # Cấu hình RAG: profile, model, tham số truy hồi
+│   ├── corpus.py           # Thư mục corpus + danh sách văn bản nạp vào index
 │   ├── processed_loader.py # Markdown tầng 2 -> Node
-│   ├── index_builder.py    # build/load index theo profile
-│   ├── retriever.py        # tìm kiếm + rerank
+│   ├── index_builder.py    # build/load index theo profile, kiểm tra fingerprint
+│   ├── bm25.py             # BM25 thuần Python (không cần gói ngoài) cho hybrid search
+│   ├── retriever.py        # vector + hybrid BM25 + rerank
 │   ├── query_engine.py     # prompt + LLM (temperature=0, seed) + trích nguồn
-│   └── model_server.py     # (tuỳ chọn) server embedding + reranker, chạy riêng trên GPU
-├── storage/
-│   └── <profile>/...       # Vector index đã build (không commit)
-├── tests/              # kiểm thử offline (unittest)
-├── Makefile            # make test / eval / baseline / report
-└── requirements.txt    # đã ghim phiên bản
+│   ├── pipeline.py         # hỏi-đáp qua terminal
+│   ├── model_server.py     # (tuỳ chọn) server embedding + reranker, chạy riêng trên GPU
+│   ├── remote_models.py    # client gọi model server
+│   └── ingestion.py, node_parser.py  # pipeline cũ đọc PDF trực tiếp (giữ để tham khảo)
+├── storage/<profile>/...   # Vector index đã build (không commit)
+├── tests/                  # kiểm thử offline (unittest) + test_llm.py (cần Ollama)
+├── Makefile                # make test / test-llm / eval / baseline / eval-answers / report
+└── requirements.txt        # đã ghim phiên bản
 ```
-
-## Cài đặt
-
-### Yêu cầu
-
-- Python 3.10+
-- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) đã cài đặt hệ thống, kèm gói ngôn ngữ tiếng Việt (`tesseract-ocr-vie`)
-- [Poppler](https://poppler.freedesktop.org/) (cần cho `pdf2image`)
-- [Ollama](https://ollama.com/) đã cài đặt và chạy local (hoặc trên server) với các model tương ứng đã `ollama pull`
-
-### Thiết lập môi trường
-
-```bash
-python3 -m venv venv
-source venv/bin/activate.fish   # hoặc venv/bin/activate với bash/zsh
-pip install -r requirements.txt
-```
-
-Tạo file `.env` ở thư mục gốc (không commit) nếu cần tuỳ chỉnh, ví dụ:
-
-```bash
-RAG_PROFILE=local            # "local" hoặc "server"
-OLLAMA_BASE_URL=http://localhost:11434
-```
-
-## Sử dụng
-
-### 1. OCR văn bản PDF
-
-```bash
-python3 scripts/test_ocr.py data/raw/<ten-file>.pdf
-```
-
-Kết quả được lưu dưới dạng Markdown trong `data/ocr/`.
-
-### 2. Kiểm tra cấu hình
-
-```bash
-python3 src/config.py
-```
-
-In ra profile đang dùng (`local`/`server`) và các thông số tương ứng.
 
 ## Trạng thái dự án
 
 Sáu giai đoạn của pipeline đã chạy được trên 6 văn bản quy chế đang áp dụng: `scripts/extract_to_md.py` +
 `scripts/clean_md.py` (dữ liệu) → `src/processed_loader.py` (Node) → `src/index_builder.py` (index) →
 `src/retriever.py` (vector, tuỳ chọn hybrid BM25) → `src/query_engine.py` (LLM + trích nguồn) →
-`eval/` (truy hồi, baseline, chấm câu trả lời). Phần chưa làm: router theo nhóm văn bản, lọc theo hiệu lực,
-bộ đánh giá có đáp án chuẩn đủ lớn. Xem `docs/bao_cao_cai_tien_rag.md` và báo cáo MD trong `docs/`.
+`eval/` (truy hồi, baseline, chấm câu trả lời). Xem `docs/bao_cao_cai_tien_rag.md` và các báo cáo MD trong `docs/`.
 
+### Giới hạn đã biết (chưa triển khai, để ở Chương 5 báo cáo sau)
 
-## Báo cáo GG docs 
-```bash
-https://docs.google.com/document/d/1TQZR0Qk_NSef59e24KFiL4X1CC3u3WQZq2tp6z1sjok/edit?usp=sharing
-```
+- Rerank có sẵn nhưng mặc định tắt (xem trên); profile `local` không có reranker
+- Profile `local` (`vietnamese-bi-encoder`) chỉ nhận 256 token và cần tách từ — Recall thấp hơn hẳn profile `server`
+- Chưa nhớ ngữ cảnh hội thoại (câu hỏi nối tiếp), chưa có Router giữa nhiều nhóm văn bản, chưa lọc theo hiệu lực văn bản
+- Bộ đánh giá có đáp án chuẩn còn nhỏ
+- Giao diện Gradio mới ở mức chạy thử
 
-
-## Chạy LLM + embedding trên colab 
-```bash
-!wget -q -O setup_server_v2.sh https://raw.githubusercontent.com/huynhthanhtien/LlamaIndex_RAG/nghien-cuu-llamaindex-cai-tien/scripts/setup_server_v2.sh
-!bash setup_server_v2.sh
-```
-
-## Tài liệu tham khảo 
+## Tài liệu tham khảo
 ```bash
 https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions/hands-on-labs/aspnet-mvc-4-entity-framework-scaffolding-and-migrations?fbclid=IwY2xjawU2p9dleHRuA2FlbQIxMQBwZG9mAXNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR5jGCWpCstzuv-IKmqc3X_ytbYl8mNtIrIJ5eK3C79lj0SrbEI1trXUr9V2yg_aem_QKHRO6FdJjWXUVYEtRp6TA
 ```
 
 [Tài liệu LlamaIndex(AI gen) ](https://htmlpreview.github.io/?https://github.com/huynhthanhtien/LlamaIndex_RAG/blob/nghien-cuu-llamaindex-cai-tien/docs/giao_trinh/co_so_ly_thuyet_rag.html)
 
+[Tổng quan LlamaIndex](https://htmlpreview.github.io/?https://github.com/huynhthanhtien/LlamaIndex_RAG/blob/nghien-cuu-llamaindex-cai-tien/docs/llamaindex_tong_quan.html)
+
 ## Giấy phép
-
-
 
 Chưa xác định.

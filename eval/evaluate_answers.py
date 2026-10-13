@@ -39,7 +39,7 @@ from metrics import bootstrap_ci
 from query_engine import build_query_engine, make_llm
 from retriever import node_label
 
-TU_CHOI = re.compile(r"không tìm thấy|không có thông tin|không đề cập|không nêu|không quy định trong", re.IGNORECASE)
+TU_CHOI = re.compile(r"không tìm thấy|không có thông tin|không đề cập|không nêu|không (được )?quy định trong", re.IGNORECASE)
 PROMPT_CLOSED_BOOK = (
     "Trả lời câu hỏi sau về quy chế đào tạo trình độ đại học của Trường Đại học Sài Gòn. "
     "Nếu không chắc chắn, hãy nói không biết.\nCâu hỏi: {q}\nTrả lời: "

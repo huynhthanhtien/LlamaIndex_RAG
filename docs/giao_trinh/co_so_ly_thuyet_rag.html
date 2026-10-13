@@ -1843,7 +1843,7 @@ flowchart LR
             chỉnh.</p>
 
         <h3>4.9. Bên trong LlamaIndex: hàm similarity</h3>
-        <pre class="code-block"><span class="comment"># llama_index/core/base/embeddings/base.py (0.14.24)</span>
+        <pre class="code-block"><span class="comment"># llama_index/core/base/embeddings/base.py (0.14.24, rút gọn)</span>
 <span class="keyword">def</span> <span class="fn">similarity</span>(embedding1, embedding2, mode=SimilarityMode.DEFAULT):
     <span class="keyword">if</span> mode == SimilarityMode.EUCLIDEAN:
         <span class="comment"># dùng -khoảng cách để "càng lớn càng giống", giữ nguyên thứ tự xếp hạng</span>
@@ -2864,7 +2864,7 @@ DEFAULT_TEXT_QA_PROMPT_TMPL = (
     <span class="string">"Query: {query_str}\n"</span>
     <span class="string">"Answer: "</span>
 )
-<span class="comment"># llama_index/core/constants.py</span>
+<span class="comment"># llama_index/core/constants.py (0.14.24)</span>
 DEFAULT_CONTEXT_WINDOW = <span class="number">3900</span>   <span class="comment"># tokens — dùng khi LLM không khai báo context_window</span>
 DEFAULT_NUM_OUTPUTS = <span class="number">256</span>      <span class="comment"># tokens dành cho câu trả lời</span></pre>
         <p><code>{context_str}</code> được điền bằng nội dung các node ở chế độ <code>MetadataMode.LLM</code> nối với nhau. Chế độ
@@ -2999,6 +2999,9 @@ nguon_trich: Điều 7 — Quy chế đào tạo trình độ đại học SGU 2
                         cho thông tin về khác biệt nên bị bỏ.</li>
                     <li>“− 1”: hiệu chỉnh liên tục (Edwards). So với phân phối χ² 1 bậc tự do: χ² &gt; 3,84 ⇔ p &lt; 0,05.</li>
                     <li>Khi b + c nhỏ (dưới ~25) nên dùng kiểm định nhị thức chính xác.</li>
+                    <li><b>Trong repo:</b> hàm <code>mcnemar</code> ở <code>eval/metrics.py</code> dùng luôn dạng <em>chính xác</em>:
+                        p = 2 · Σ<sub>i=0</sub><sup>min(b,c)</sup> C(b+c, i) / 2<sup>b+c</sup> (giới hạn ≤ 1) — không cần xấp xỉ χ², đúng cả khi
+                        b + c nhỏ. Công thức χ² ở trên dùng để hiểu và tính tay.</li>
                 </ul>
             </div>
         </div>
