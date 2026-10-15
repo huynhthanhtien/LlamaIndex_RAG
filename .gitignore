@@ -6,4 +6,4 @@ storage/
 .env
 *.log
 .tmp/
-docs/
+# docs/
