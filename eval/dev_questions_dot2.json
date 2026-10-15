@@ -1,0 +1,17 @@
+[
+  {"question": "Sinh viên khóa 2024 có IELTS 4.5 thì được quy đổi Tiếng Anh 1 mấy điểm?", "dieu_dung": "29_2101|2", "dap_an": "9"},
+  {"question": "Sinh viên khóa 2022 có TOEIC Nghe và Đọc 520, Nói 110, Viết 110 được quy đổi mấy điểm tiếng Anh?", "dieu_dung": "CV2626|3", "dap_an": "9"},
+  {"question": "Sinh viên khóa 2021 có IELTS 5.5 thì điểm Tiếng Anh III được quy đổi là bao nhiêu?", "dieu_dung": "202111_2366", "dap_an": "10"},
+  {"question": "Sinh viên khóa 2020 có chứng chỉ VSTEP 4.0 được quy đổi mấy điểm tiếng Anh?", "dieu_dung": "30_TB so 2451", "dap_an": "8"},
+  {"question": "Sinh viên khóa 2023 có PTE Academic 50 điểm được quy đổi mấy điểm tiếng Anh?", "dieu_dung": "TB so 2567", "dap_an": "9"},
+  {"question": "Sinh viên khóa 2021 có PTE Academic 50 điểm được quy đổi mấy điểm tiếng Anh?", "dieu_dung": "TB so 2567", "dap_an": "8"},
+  {"question": "Chứng chỉ tiếng Anh dùng để quy đổi điểm cho khóa 2024 phải được cấp trong thời gian bao lâu?", "dieu_dung": "29_2101|2", "dap_an": "không quá 02 năm tính đến ngày nộp hồ sơ"},
+  {"question": "Sinh viên khóa 2024 phải nộp chứng chỉ tiếng Anh trước khi nào để được quy đổi cả 3 học phần Tiếng Anh 1, 2, 3?", "dieu_dung": "29_2101|2", "dap_an": "trước thời điểm bắt đầu học kỳ 2 năm thứ nhất tối thiểu 10 ngày"},
+  {"question": "Thi khảo sát tiếng Anh đầu vào được 92 điểm thì được gì?", "dieu_dung": "202111_2366;CV2626|3", "dap_an": "quy đổi điểm 8 Tiếng Anh 1 và được đăng ký học Tiếng Anh 2"},
+  {"question": "Học phần Tiếng Anh 1 theo chương trình mới có bao nhiêu tín chỉ?", "dieu_dung": "CV2626|3", "dap_an": "03 tín chỉ (mã 866401)"},
+  {"question": "Sinh viên khóa 2022 có chứng chỉ APTIS đạt B1 được quy đổi thế nào?", "dieu_dung": "CV2626|3", "dap_an": "điểm 10 cho cả 3 học phần"},
+  {"question": "Học phần Tiếng Anh 2 dùng giáo trình gì?", "dieu_dung": "CV2626|3", "dap_an": "Cambridge English Empower Pre-intermediate (B1), Unit 1 – Unit 6"},
+  {"question": "Sinh viên khóa 2021 có TOEFL ITP 500 điểm được quy đổi mấy điểm tiếng Anh?", "dieu_dung": "30_TB so 2451", "dap_an": "9"},
+  {"question": "Ngành nào không phải học các học phần tiếng Anh không chuyên?", "dieu_dung": "202111_2366;CV2626|2", "dap_an": "Sư phạm Anh, Ngôn ngữ Anh, Quốc tế học, CNTT chất lượng cao"},
+  {"question": "Sinh viên khóa 2024 có Linguaskill 155 điểm được quy đổi mấy điểm tiếng Anh?", "dieu_dung": "29_2101|2", "dap_an": "9"}
+]

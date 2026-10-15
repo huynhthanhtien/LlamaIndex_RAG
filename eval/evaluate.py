@@ -1,4 +1,4 @@
-"""Đánh giá truy hồi trên 2 bộ câu hỏi, chấm theo (văn bản, Điều).
+"""Đánh giá truy hồi trên các bộ câu hỏi trong BO_CAU_HOI, chấm theo (văn bản, Điều).
 
 Corpus có nhiều văn bản cùng số Điều (QC SGU 2021, QĐ 3183 sửa đổi...), nên chỉ so số Điều
 cho kết quả ảo: mỗi bộ câu hỏi có luật riêng xác định Node nào là đúng.
@@ -56,15 +56,30 @@ def dung_bo_02(n: NodeWithScore, d: str) -> bool:
     return bool(m.get("sua_doi_dieu") == d or (m.get("phan") == "chinh" and m.get("dieu") == d))
 
 
+def dung_bo_dev(n: NodeWithScore, d: str) -> bool:
+    """Bộ dev theo đợt: nhãn "<tiền tố file>" (văn bản 1 Node) hoặc "<tiền tố file>|<Điều>" (Điều của phần chính);
+    nhiều nhãn đúng ngăn bởi ";" (cùng nội dung có ở nhiều văn bản, vd KSTAĐV trong TB 2366 và QyĐ 2626)."""
+    m = n.node.metadata
+    for nhan in d.split(";"):
+        tien_to, _, dieu = nhan.partition("|")
+        if str(m.get("file", "")).startswith(tien_to) and (not dieu or (m.get("phan") == "chinh" and m.get("dieu") == dieu)):
+            return True
+    return False
+
+
 BO_CAU_HOI: list[tuple[str, ChamDung]] = [
     ("test_questions_01.json", dung_bo_01),
     ("test_questions_02.json", dung_bo_02),
+    ("dev_questions_dot1.json", dung_bo_dev),
+    ("dev_questions_dot2.json", dung_bo_dev),
 ]
 
 # Tên cấu hình -> thay đổi so với config gốc. Dùng cho bảng ablation trong báo cáo.
 CAU_HINH: dict[str, dict[str, object]] = {
     "vector": {},
     "rerank": {"use_rerank": True},
+    # rerank giữ lại cả 10 Node (thay vì top_n=3) để đo được R@5/R@10 sau khi xếp hạng lại
+    "rerank-top10": {"use_rerank": True, "reranker_top_n": 10},
     "hybrid": {"use_hybrid": True},
     "hybrid+rerank": {"use_hybrid": True, "use_rerank": True},
     # Biến thể để tách nguyên nhân: nếu RRF (trọng số bằng nhau) là thủ phạm thì cấu hình này

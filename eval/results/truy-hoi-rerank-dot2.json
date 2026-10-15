@@ -1,0 +1,1831 @@
+{
+ "thoi_diem": "2026-10-13 14:54:05",
+ "ket_qua": [
+  {
+   "bo_cau_hoi": "test_questions_01.json",
+   "cau_hinh": "vector",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": false,
+    "reranker_model": null,
+    "reranker_top_n": 3,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 31,
+   "hang": [
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    1,
+    2,
+    3,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    531.68,
+    583.06,
+    669.56,
+    575.87,
+    505.21,
+    486.33,
+    489.73,
+    491.96,
+    499.78,
+    490.05,
+    661.09,
+    544.61,
+    880.08,
+    493.59,
+    452.39,
+    492.36,
+    585.75,
+    488.28,
+    493.61,
+    528.47,
+    747.78,
+    901.92,
+    842.35,
+    789.54,
+    998.81,
+    786.45,
+    1213.76,
+    1591.44,
+    1170.29,
+    731.72,
+    1046.67
+   ],
+   "thoi_gian_trung_binh_ms": 702.1,
+   "thoi_gian_p95_ms": 1213.8,
+   "top1_van_ban": {
+    "Quy chế đào tạo trình độ đại học SGU 202": 23,
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 4,
+    "QĐ 810 về học cùng lúc hai chương trình": 3,
+    "QĐ 2375/2022 về chuyển chương trình, ngà": 1
+   },
+   "ngoai_top3": [],
+   "chi_so": {
+    "R@1": 0.8065,
+    "R@3": 1.0,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.8065,
+     0.6774,
+     0.9355
+    ],
+    "R@3_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.8871,
+    "MRR@3": 0.8871,
+    "nDCG@1": 0.8065,
+    "nDCG@3": 0.9159,
+    "nDCG@10": 0.9159
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_02.json",
+   "cau_hinh": "vector",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": false,
+    "reranker_model": null,
+    "reranker_top_n": 3,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 10,
+   "hang": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    null
+   ],
+   "thoi_gian_ms": [
+    1488.46,
+    5772.63,
+    10197.25,
+    2721.86,
+    3061.07,
+    3379.86,
+    999.22,
+    603.05,
+    557.84,
+    699.38
+   ],
+   "thoi_gian_trung_binh_ms": 2948.1,
+   "thoi_gian_p95_ms": 10197.2,
+   "top1_van_ban": {
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 9,
+    "TB 2567/2024 bổ sung chứng chỉ PTE Acade": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào?",
+     "dung": "2 (QĐ 3183)",
+     "top3": [
+      "TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)",
+      "TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước)",
+      "TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.9,
+    "R@3": 0.9,
+    "R@5": 0.9,
+    "R@10": 0.9,
+    "R@1_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@3_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@5_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@10_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "MRR": 0.9,
+    "MRR@3": 0.9,
+    "nDCG@1": 0.9,
+    "nDCG@3": 0.9,
+    "nDCG@10": 0.9
+   }
+  },
+  {
+   "bo_cau_hoi": "dev_questions_dot1.json",
+   "cau_hinh": "vector",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": false,
+    "reranker_model": null,
+    "reranker_top_n": 3,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 20,
+   "hang": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    4,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    616.28,
+    484.65,
+    490.88,
+    451.59,
+    476.86,
+    504.3,
+    455.23,
+    559.78,
+    512.22,
+    510.75,
+    506.58,
+    511.04,
+    481.57,
+    600.61,
+    494.08,
+    496.82,
+    12467.69,
+    12577.65,
+    5617.23,
+    2971.87
+   ],
+   "thoi_gian_trung_binh_ms": 2089.4,
+   "thoi_gian_p95_ms": 12467.7,
+   "top1_van_ban": {
+    "QĐ 898/2025 ban hành Quy định tổ chức th": 6,
+    "QĐ 3260/2025 về việc hoãn thi": 4,
+    "Quy chế công tác cố vấn học tập (QĐ 367/": 4,
+    "Quy định cấp bảng điểm học tập (2018)": 2,
+    "Quy định cấp bản sao văn bằng, chứng chỉ": 2,
+    "Quy định 3248/2018 giải quyết thắc mắc, ": 1,
+    "Quy chế đào tạo trình độ đại học SGU 202": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai?",
+     "dung": "CV_3248",
+     "top3": [
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11",
+      "Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6",
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.95,
+    "R@3": 0.95,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.95,
+     0.85,
+     1.0
+    ],
+    "R@3_ci95": [
+     0.95,
+     0.85,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.9625,
+    "MRR@3": 0.95,
+    "nDCG@1": 0.95,
+    "nDCG@3": 0.95,
+    "nDCG@10": 0.9715
+   }
+  },
+  {
+   "bo_cau_hoi": "dev_questions_dot2.json",
+   "cau_hinh": "vector",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": false,
+    "reranker_model": null,
+    "reranker_top_n": 3,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 15,
+   "hang": [
+    2,
+    2,
+    1,
+    4,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    2
+   ],
+   "thoi_gian_ms": [
+    6782.99,
+    1411.54,
+    3397.54,
+    28287.02,
+    1624.7,
+    1131.0,
+    2555.98,
+    1359.49,
+    1671.68,
+    2214.22,
+    543.08,
+    927.83,
+    1098.92,
+    749.41,
+    493.03
+   ],
+   "thoi_gian_trung_binh_ms": 3616.6,
+   "thoi_gian_p95_ms": 28287.0,
+   "top1_van_ban": {
+    "QyĐ 2626/2022 tiếng Anh không chuyên, qu": 5,
+    "TB 2366/2021 tiếng Anh không chuyên, quy": 4,
+    "TB 2567/2024 bổ sung chứng chỉ PTE Acade": 2,
+    "QyĐ 2101/2024 tiếng Anh không chuyên, qu": 2,
+    "TB 2451/2024 bổ sung chứng chỉ quy đổi t": 2
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Sinh viên khóa 2020 có chứng chỉ VSTEP 4.0 được quy đổi mấy điểm tiếng Anh?",
+     "dung": "30_TB so 2451",
+     "top3": [
+      "TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)",
+      "TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)",
+      "QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.6667,
+    "R@3": 0.9333,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.6667,
+     0.4,
+     0.8667
+    ],
+    "R@3_ci95": [
+     0.9333,
+     0.8,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.8167,
+    "MRR@3": 0.8,
+    "nDCG@1": 0.6667,
+    "nDCG@3": 0.8349,
+    "nDCG@10": 0.8636
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_01.json",
+   "cau_hinh": "rerank",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 31,
+   "hang": [
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    1,
+    3,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    2,
+    2,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    1228.81,
+    1229.3,
+    1023.27,
+    1337.45,
+    1205.9,
+    1089.19,
+    1092.3,
+    1058.1,
+    1080.96,
+    1153.81,
+    1167.58,
+    1157.9,
+    1120.55,
+    1057.89,
+    1101.38,
+    1217.2,
+    1121.41,
+    1073.75,
+    1101.0,
+    1047.63,
+    1139.48,
+    1098.88,
+    1136.94,
+    1196.69,
+    1076.13,
+    1179.43,
+    1123.96,
+    1125.91,
+    1228.76,
+    1208.44,
+    1179.44
+   ],
+   "thoi_gian_trung_binh_ms": 1140.6,
+   "thoi_gian_p95_ms": 1229.3,
+   "top1_van_ban": {
+    "Quy chế đào tạo trình độ đại học SGU 202": 25,
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 3,
+    "QĐ 810 về học cùng lúc hai chương trình": 2,
+    "QĐ 2375/2022 về chuyển chương trình, ngà": 1
+   },
+   "ngoai_top3": [],
+   "chi_so": {
+    "R@1": 0.8065,
+    "R@3": 1.0,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.8065,
+     0.6452,
+     0.9355
+    ],
+    "R@3_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.8925,
+    "MRR@3": 0.8925,
+    "nDCG@1": 0.8065,
+    "nDCG@3": 0.9201,
+    "nDCG@10": 0.9201
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_02.json",
+   "cau_hinh": "rerank",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 10,
+   "hang": [
+    1,
+    2,
+    1,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1,
+    null
+   ],
+   "thoi_gian_ms": [
+    1634.7,
+    1229.3,
+    1169.96,
+    1210.11,
+    1286.81,
+    1222.95,
+    1068.98,
+    1313.59,
+    1229.79,
+    1125.64
+   ],
+   "thoi_gian_trung_binh_ms": 1249.2,
+   "thoi_gian_p95_ms": 1634.7,
+   "top1_van_ban": {
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 9,
+    "Quy chế đào tạo trình độ đại học SGU 202": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào?",
+     "dung": "2 (QĐ 3183)",
+     "top3": [
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+      "QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.6,
+    "R@3": 0.9,
+    "R@5": 0.9,
+    "R@10": 0.9,
+    "R@1_ci95": [
+     0.6,
+     0.3,
+     0.9
+    ],
+    "R@3_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@5_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@10_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "MRR": 0.75,
+    "MRR@3": 0.75,
+    "nDCG@1": 0.6,
+    "nDCG@3": 0.7893,
+    "nDCG@10": 0.7893
+   }
+  },
+  {
+   "bo_cau_hoi": "dev_questions_dot1.json",
+   "cau_hinh": "rerank",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 20,
+   "hang": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    2,
+    1,
+    1,
+    null,
+    1,
+    3,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    1090.4,
+    1230.31,
+    1227.71,
+    1206.07,
+    1185.0,
+    1602.03,
+    1126.87,
+    1228.35,
+    1113.37,
+    1204.65,
+    1065.83,
+    1083.27,
+    1149.39,
+    1124.98,
+    1142.45,
+    1333.88,
+    1124.24,
+    1127.55,
+    1124.69,
+    1259.27
+   ],
+   "thoi_gian_trung_binh_ms": 1187.5,
+   "thoi_gian_p95_ms": 1333.9,
+   "top1_van_ban": {
+    "QĐ 898/2025 ban hành Quy định tổ chức th": 6,
+    "Quy chế công tác cố vấn học tập (QĐ 367/": 5,
+    "QĐ 3260/2025 về việc hoãn thi": 4,
+    "Quy định 3248/2018 giải quyết thắc mắc, ": 2,
+    "Quy định cấp bản sao văn bằng, chứng chỉ": 2,
+    "Quy định cấp bảng điểm học tập (2018)": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai?",
+     "dung": "CV_3248",
+     "top3": [
+      "Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 14"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.8,
+    "R@3": 0.95,
+    "R@5": 0.95,
+    "R@10": 0.95,
+    "R@1_ci95": [
+     0.8,
+     0.6,
+     0.95
+    ],
+    "R@3_ci95": [
+     0.95,
+     0.85,
+     1.0
+    ],
+    "R@5_ci95": [
+     0.95,
+     0.85,
+     1.0
+    ],
+    "R@10_ci95": [
+     0.95,
+     0.85,
+     1.0
+    ],
+    "MRR": 0.8667,
+    "MRR@3": 0.8667,
+    "nDCG@1": 0.8,
+    "nDCG@3": 0.8881,
+    "nDCG@10": 0.8881
+   }
+  },
+  {
+   "bo_cau_hoi": "dev_questions_dot2.json",
+   "cau_hinh": "rerank",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 15,
+   "hang": [
+    1,
+    1,
+    1,
+    3,
+    2,
+    1,
+    1,
+    1,
+    1,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    1199.43,
+    1145.48,
+    1208.14,
+    1135.52,
+    1090.94,
+    1121.93,
+    1142.18,
+    1193.07,
+    1657.17,
+    1499.12,
+    1343.19,
+    4307.48,
+    3878.01,
+    3071.34,
+    2815.55
+   ],
+   "thoi_gian_trung_binh_ms": 1853.9,
+   "thoi_gian_p95_ms": 4307.5,
+   "top1_van_ban": {
+    "QyĐ 2101/2024 tiếng Anh không chuyên, qu": 6,
+    "QyĐ 2626/2022 tiếng Anh không chuyên, qu": 5,
+    "TB 2366/2021 tiếng Anh không chuyên, quy": 2,
+    "TB 2567/2024 bổ sung chứng chỉ PTE Acade": 1,
+    "TB 2451/2024 bổ sung chứng chỉ quy đổi t": 1
+   },
+   "ngoai_top3": [],
+   "chi_so": {
+    "R@1": 0.7333,
+    "R@3": 1.0,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.7333,
+     0.5333,
+     0.9333
+    ],
+    "R@3_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.8556,
+    "MRR@3": 0.8556,
+    "nDCG@1": 0.7333,
+    "nDCG@3": 0.8929,
+    "nDCG@10": 0.8929
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_01.json",
+   "cau_hinh": "rerank-top10",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 10,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 31,
+   "hang": [
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    1,
+    3,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    2,
+    2,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    3933.84,
+    1840.51,
+    17101.22,
+    3990.19,
+    4055.47,
+    3713.3,
+    4009.66,
+    3481.9,
+    1486.4,
+    4658.36,
+    3785.88,
+    1234.46,
+    1217.49,
+    2134.98,
+    1249.53,
+    1213.63,
+    1235.18,
+    1150.91,
+    1419.38,
+    1149.75,
+    1211.04,
+    1185.56,
+    1162.02,
+    1170.29,
+    1112.83,
+    1249.64,
+    1126.31,
+    1171.36,
+    1477.01,
+    1200.91,
+    1126.65
+   ],
+   "thoi_gian_trung_binh_ms": 2492.1,
+   "thoi_gian_p95_ms": 4658.4,
+   "top1_van_ban": {
+    "Quy chế đào tạo trình độ đại học SGU 202": 25,
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 3,
+    "QĐ 810 về học cùng lúc hai chương trình": 2,
+    "QĐ 2375/2022 về chuyển chương trình, ngà": 1
+   },
+   "ngoai_top3": [],
+   "chi_so": {
+    "R@1": 0.8065,
+    "R@3": 1.0,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.8065,
+     0.6452,
+     0.9355
+    ],
+    "R@3_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.8925,
+    "MRR@3": 0.8925,
+    "nDCG@1": 0.8065,
+    "nDCG@3": 0.9201,
+    "nDCG@10": 0.9201
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_02.json",
+   "cau_hinh": "rerank-top10",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 10,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 10,
+   "hang": [
+    1,
+    2,
+    1,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1,
+    null
+   ],
+   "thoi_gian_ms": [
+    1076.83,
+    1114.09,
+    1318.26,
+    1637.24,
+    1354.3,
+    1410.83,
+    1173.24,
+    1318.88,
+    1259.67,
+    1198.31
+   ],
+   "thoi_gian_trung_binh_ms": 1286.2,
+   "thoi_gian_p95_ms": 1637.2,
+   "top1_van_ban": {
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 9,
+    "Quy chế đào tạo trình độ đại học SGU 202": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào?",
+     "dung": "2 (QĐ 3183)",
+     "top3": [
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+      "QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.6,
+    "R@3": 0.9,
+    "R@5": 0.9,
+    "R@10": 0.9,
+    "R@1_ci95": [
+     0.6,
+     0.3,
+     0.9
+    ],
+    "R@3_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@5_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@10_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "MRR": 0.75,
+    "MRR@3": 0.75,
+    "nDCG@1": 0.6,
+    "nDCG@3": 0.7893,
+    "nDCG@10": 0.7893
+   }
+  },
+  {
+   "bo_cau_hoi": "dev_questions_dot1.json",
+   "cau_hinh": "rerank-top10",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 10,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 20,
+   "hang": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    2,
+    1,
+    1,
+    4,
+    1,
+    3,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    1188.99,
+    1198.38,
+    1330.31,
+    1365.55,
+    1236.02,
+    1151.72,
+    1118.05,
+    1245.2,
+    1257.59,
+    1189.4,
+    1106.7,
+    1287.52,
+    1228.39,
+    1174.97,
+    1238.51,
+    1302.08,
+    1191.23,
+    1119.62,
+    1169.0,
+    1074.82
+   ],
+   "thoi_gian_trung_binh_ms": 1208.7,
+   "thoi_gian_p95_ms": 1330.3,
+   "top1_van_ban": {
+    "QĐ 898/2025 ban hành Quy định tổ chức th": 6,
+    "Quy chế công tác cố vấn học tập (QĐ 367/": 5,
+    "QĐ 3260/2025 về việc hoãn thi": 4,
+    "Quy định 3248/2018 giải quyết thắc mắc, ": 2,
+    "Quy định cấp bản sao văn bằng, chứng chỉ": 2,
+    "Quy định cấp bảng điểm học tập (2018)": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai?",
+     "dung": "CV_3248",
+     "top3": [
+      "Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 14"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.8,
+    "R@3": 0.95,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.8,
+     0.6,
+     0.95
+    ],
+    "R@3_ci95": [
+     0.95,
+     0.85,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.8792,
+    "MRR@3": 0.8667,
+    "nDCG@1": 0.8,
+    "nDCG@3": 0.8881,
+    "nDCG@10": 0.9096
+   }
+  },
+  {
+   "bo_cau_hoi": "dev_questions_dot2.json",
+   "cau_hinh": "rerank-top10",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 10,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 15,
+   "hang": [
+    1,
+    1,
+    1,
+    3,
+    2,
+    1,
+    1,
+    1,
+    1,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    1117.65,
+    1209.05,
+    1363.72,
+    1810.94,
+    1284.35,
+    1068.76,
+    1137.68,
+    2140.59,
+    1167.68,
+    1090.87,
+    1529.64,
+    1331.71,
+    1126.53,
+    2240.74,
+    1034.18
+   ],
+   "thoi_gian_trung_binh_ms": 1376.9,
+   "thoi_gian_p95_ms": 2240.7,
+   "top1_van_ban": {
+    "QyĐ 2101/2024 tiếng Anh không chuyên, qu": 6,
+    "QyĐ 2626/2022 tiếng Anh không chuyên, qu": 5,
+    "TB 2366/2021 tiếng Anh không chuyên, quy": 2,
+    "TB 2567/2024 bổ sung chứng chỉ PTE Acade": 1,
+    "TB 2451/2024 bổ sung chứng chỉ quy đổi t": 1
+   },
+   "ngoai_top3": [],
+   "chi_so": {
+    "R@1": 0.7333,
+    "R@3": 1.0,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.7333,
+     0.5333,
+     0.9333
+    ],
+    "R@3_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.8556,
+    "MRR@3": 0.8556,
+    "nDCG@1": 0.7333,
+    "nDCG@3": 0.8929,
+    "nDCG@10": 0.8929
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_01.json",
+   "cau_hinh": "hybrid+rerank",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "use_hybrid": true,
+    "bm25_top_k": 10,
+    "fusion_mode": "reciprocal_rerank",
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 31,
+   "hang": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    1,
+    3,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    2,
+    2,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    1748.29,
+    1254.55,
+    1112.16,
+    1653.85,
+    1229.18,
+    1127.05,
+    1124.2,
+    1229.51,
+    1844.57,
+    1065.98,
+    1184.99,
+    1126.24,
+    1137.23,
+    1140.75,
+    1131.32,
+    1155.04,
+    1109.55,
+    1072.37,
+    1103.93,
+    1262.62,
+    1126.99,
+    1125.75,
+    1126.88,
+    1228.38,
+    1587.65,
+    1101.67,
+    1098.37,
+    1331.07,
+    1434.66,
+    1178.1,
+    1189.18
+   ],
+   "thoi_gian_trung_binh_ms": 1236.8,
+   "thoi_gian_p95_ms": 1748.3,
+   "top1_van_ban": {
+    "Quy chế đào tạo trình độ đại học SGU 202": 26,
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 2,
+    "QĐ 810 về học cùng lúc hai chương trình": 2,
+    "QĐ 2375/2022 về chuyển chương trình, ngà": 1
+   },
+   "ngoai_top3": [],
+   "chi_so": {
+    "R@1": 0.8387,
+    "R@3": 1.0,
+    "R@5": 1.0,
+    "R@10": 1.0,
+    "R@1_ci95": [
+     0.8387,
+     0.7097,
+     0.9677
+    ],
+    "R@3_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@5_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "R@10_ci95": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "MRR": 0.9086,
+    "MRR@3": 0.9086,
+    "nDCG@1": 0.8387,
+    "nDCG@3": 0.932,
+    "nDCG@10": 0.932
+   }
+  },
+  {
+   "bo_cau_hoi": "test_questions_02.json",
+   "cau_hinh": "hybrid+rerank",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "use_hybrid": true,
+    "bm25_top_k": 10,
+    "fusion_mode": "reciprocal_rerank",
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 10,
+   "hang": [
+    1,
+    2,
+    1,
+    3,
+    2,
+    1,
+    1,
+    1,
+    1,
+    null
+   ],
+   "thoi_gian_ms": [
+    1114.05,
+    1161.27,
+    1126.73,
+    1228.55,
+    1340.82,
+    1323.44,
+    1139.1,
+    1181.99,
+    1260.85,
+    1146.33
+   ],
+   "thoi_gian_trung_binh_ms": 1202.3,
+   "thoi_gian_p95_ms": 1340.8,
+   "top1_van_ban": {
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 9,
+    "Quy chế đào tạo trình độ đại học SGU 202": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào?",
+     "dung": "2 (QĐ 3183)",
+     "top3": [
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+      "QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.6,
+    "R@3": 0.9,
+    "R@5": 0.9,
+    "R@10": 0.9,
+    "R@1_ci95": [
+     0.6,
+     0.3,
+     0.9
+    ],
+    "R@3_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@5_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "R@10_ci95": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "MRR": 0.7333,
+    "MRR@3": 0.7333,
+    "nDCG@1": 0.6,
+    "nDCG@3": 0.7762,
+    "nDCG@10": 0.7762
+   }
+  },
+  {
+   "bo_cau_hoi": "dev_questions_dot1.json",
+   "cau_hinh": "hybrid+rerank",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "use_hybrid": true,
+    "bm25_top_k": 10,
+    "fusion_mode": "reciprocal_rerank",
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 20,
+   "hang": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    2,
+    1,
+    1,
+    null,
+    1,
+    null,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    1245.27,
+    1366.3,
+    1126.13,
+    1236.13,
+    1120.11,
+    1156.64,
+    1147.37,
+    1586.19,
+    1128.36,
+    1226.87,
+    1136.41,
+    1194.07,
+    1138.22,
+    1132.75,
+    1218.17,
+    1177.5,
+    1193.99,
+    1126.86,
+    1125.11,
+    1196.76
+   ],
+   "thoi_gian_trung_binh_ms": 1199.0,
+   "thoi_gian_p95_ms": 1366.3,
+   "top1_van_ban": {
+    "QĐ 898/2025 ban hành Quy định tổ chức th": 6,
+    "Quy chế công tác cố vấn học tập (QĐ 367/": 5,
+    "QĐ 3260/2025 về việc hoãn thi": 4,
+    "Quy định 3248/2018 giải quyết thắc mắc, ": 2,
+    "Quy định cấp bản sao văn bằng, chứng chỉ": 2,
+    "Quy định cấp bảng điểm học tập (2018)": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai?",
+     "dung": "CV_3248",
+     "top3": [
+      "Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 14"
+     ]
+    },
+    {
+     "cau_hoi": "Xin bảng điểm thì bao lâu mới nhận được?",
+     "dung": "QuyDinh_CapBangDiem",
+     "top3": [
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6",
+      "Quy định 3248/2018 giải quyết thắc mắc, khiếu nại kết quả học tập",
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 4"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.8,
+    "R@3": 0.9,
+    "R@5": 0.9,
+    "R@10": 0.9,
+    "R@1_ci95": [
+     0.8,
+     0.6,
+     0.95
+    ],
+    "R@3_ci95": [
+     0.9,
+     0.75,
+     1.0
+    ],
+    "R@5_ci95": [
+     0.9,
+     0.75,
+     1.0
+    ],
+    "R@10_ci95": [
+     0.9,
+     0.75,
+     1.0
+    ],
+    "MRR": 0.85,
+    "MRR@3": 0.85,
+    "nDCG@1": 0.8,
+    "nDCG@3": 0.8631,
+    "nDCG@10": 0.8631
+   }
+  },
+  {
+   "bo_cau_hoi": "dev_questions_dot2.json",
+   "cau_hinh": "hybrid+rerank",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "use_hybrid": true,
+    "bm25_top_k": 10,
+    "fusion_mode": "reciprocal_rerank",
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 15,
+   "hang": [
+    1,
+    1,
+    1,
+    null,
+    2,
+    1,
+    1,
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    1650.59,
+    1065.59,
+    1359.17,
+    1674.36,
+    1171.94,
+    1157.65,
+    1218.25,
+    1126.11,
+    1228.71,
+    1121.28,
+    1238.2,
+    1185.03,
+    1115.55,
+    1218.45,
+    1094.52
+   ],
+   "thoi_gian_trung_binh_ms": 1241.7,
+   "thoi_gian_p95_ms": 1674.4,
+   "top1_van_ban": {
+    "QyĐ 2626/2022 tiếng Anh không chuyên, qu": 6,
+    "QyĐ 2101/2024 tiếng Anh không chuyên, qu": 5,
+    "TB 2366/2021 tiếng Anh không chuyên, quy": 2,
+    "TB 2567/2024 bổ sung chứng chỉ PTE Acade": 1,
+    "TB 2451/2024 bổ sung chứng chỉ quy đổi t": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Sinh viên khóa 2020 có chứng chỉ VSTEP 4.0 được quy đổi mấy điểm tiếng Anh?",
+     "dung": "30_TB so 2451",
+     "top3": [
+      "QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 2",
+      "QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3",
+      "QĐ 810 về học cùng lúc hai chương trình – Điều 3"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.8,
+    "R@3": 0.9333,
+    "R@5": 0.9333,
+    "R@10": 0.9333,
+    "R@1_ci95": [
+     0.8,
+     0.6,
+     1.0
+    ],
+    "R@3_ci95": [
+     0.9333,
+     0.8,
+     1.0
+    ],
+    "R@5_ci95": [
+     0.9333,
+     0.8,
+     1.0
+    ],
+    "R@10_ci95": [
+     0.9333,
+     0.8,
+     1.0
+    ],
+    "MRR": 0.8667,
+    "MRR@3": 0.8667,
+    "nDCG@1": 0.8,
+    "nDCG@3": 0.8841,
+    "nDCG@10": 0.8841
+   }
+  }
+ ]
+}

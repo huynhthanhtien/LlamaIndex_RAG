@@ -55,7 +55,7 @@ def corpus_fingerprint(cfg: RAGConfig) -> dict[str, object]:
     Trước đây fingerprint chỉ gồm tên model và nội dung file, nên sửa cách cắt Node trong
     processed_loader.py mà quên `--rebuild` sẽ dùng index cũ (bẫy đã ghi trong huong_dan_src.md).
     """
-    files = {p.name: f"{hashlib.sha256(p.read_bytes()).hexdigest()} | {ten_hien_thi(cfg, p)}" for p in corpus_files(cfg)}
+    files = {str(p.relative_to(ROOT / cfg.corpus_dir)): f"{hashlib.sha256(p.read_bytes()).hexdigest()} | {ten_hien_thi(cfg, p)}" for p in corpus_files(cfg)}
     return {
         "embed_model": cfg.embed_model_name,
         "corpus_dir": cfg.corpus_dir,

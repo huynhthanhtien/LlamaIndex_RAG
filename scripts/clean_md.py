@@ -40,6 +40,8 @@ HEADER = re.compile(
     r"CỘNG\s+H[ÒO]A\s+X[ÃA]\s+H[ỘO]I|Độc\s+lập\s*[-—–]|Ủ?Y\s+BAN\s+NH[ÂẦA]N|BỘ\s+GIÁO\s+DỤC|"
     r"^\s*Số\s*:|^THÀNH\s+PH[ỐÓO]\s+H[ỒỔÔO]\s+CH[ÍI]\s+MINH\s*$|^TRƯỜNG\s+ĐẠI\s+HỌC\s+SÀI\s+GÒN\b|^[\W_]{3,}$"
 )
+# Dòng bảng Markdown chép tay ở tầng 1 ("| a | b |"); OCR hay để sót "|" lạc ở đầu dòng nên đòi đủ 3 dấu "|"
+TABLE_ROW = re.compile(r"^\|.*\|.*\|$")
 SIGN = re.compile(r"^(KT\.?\s*)?(PHÓ\s+)?(HIỆU|BỘ|THỨ)\s+TR[ƯU][ỞỚỎƠO]NG\b|^\(?Đã\s+ký\)?$")
 MARKER = re.compile(
     r"^([-_•.\s]*[ĐÐD]i[eêèéẻẽẹềếểễệ]u\s+\d+|Ch[ưu]ơng\s+|Mục\s+\d+|Phần\s+|\d{1,2}[.)]\s|[a-zđ]\)\s|[-–•+*]\s|[“\"]|[A-Z]\+?\s*:)"
@@ -78,7 +80,7 @@ def clean_page(text: str, stats: dict[str, int]) -> list[str]:
             stats["so_trang"] += 1
     # Khối quốc hiệu: chỉ xét 10 dòng có chữ đầu tiên
     for idx in [i for i, l in enumerate(lines) if l][:10]:
-        if HEADER.search(lines[idx]):
+        if HEADER.search(lines[idx]) and not TABLE_ROW.match(lines[idx]):  # "|---|" của bảng khớp ^[\W_]{3,}$
             lines[idx] = ""
             stats["quoc_hieu"] += 1
     # Khối "Nơi nhận" + chữ ký: bỏ từ "Nơi nhận" tới hết trang
@@ -107,8 +109,16 @@ def join_lines(lines: list[str], stats: dict[str, int]) -> list[str]:
         if not line:
             blank_before = True
             continue
+        # Bảng Markdown (chép tay ở tầng 1): các dòng "|" liền nhau giữ nguyên thành một khối, không nối với văn xuôi
+        if TABLE_ROW.match(line):
+            if paras and TABLE_ROW.match(paras[-1].split("\n")[-1]) and not blank_before:
+                paras[-1] += "\n" + line
+            else:
+                paras.append(line)
+            blank_before = False
+            continue
         line = re.sub(r"^([“\"]?)(\d{1,2}),\s+(?=[A-ZĐÀ-Ỹ])", r"\1\2. ", line)  # "2, Kế hoạch" -> "2. Kế hoạch"
-        if paras:
+        if paras and not TABLE_ROW.match(paras[-1].split("\n")[-1]):
             prev = paras[-1]
             starts_lower = line[0].islower()
             new_para = (
