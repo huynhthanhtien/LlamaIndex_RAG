@@ -1,0 +1,202 @@
+[
+  {
+    "id": "KC-QC-001",
+    "question": "Thời gian tối đa để học xong toàn khóa là bao nhiêu năm vậy ạ?",
+    "dieu_dung": "Điều 2"
+  },
+  {
+    "id": "KC-QC-002",
+    "question": "Khi học tập trung dồn tiến độ thì một ngày được học tối đa mấy tiếng?",
+    "dieu_dung": "Điều 6"
+  },
+  {
+    "id": "KC-QC-003",
+    "question": "Tổng số tuần lên lớp tối thiểu cho các học kỳ chính trong một năm học là bao nhiêu?",
+    "dieu_dung": "Điều 6"
+  },
+  {
+    "id": "KC-QC-004",
+    "question": "Trường cho phép học trực tuyến tối đa bao nhiêu phần trăm tổng số tín chỉ của chương trình?",
+    "dieu_dung": "Điều 8"
+  },
+  {
+    "id": "KC-QC-005",
+    "question": "Thi cử và đánh giá bằng hình thức trực tuyến thì được tính tối đa bao nhiêu phần trăm điểm môn học?",
+    "dieu_dung": "Điều 9"
+  },
+  {
+    "id": "KC-QC-006",
+    "question": "Nhà trường xét công nhận và chuyển đổi tín chỉ cũ tối đa bao nhiêu phần trăm chương trình?",
+    "dieu_dung": "Điều 13"
+  },
+  {
+    "id": "KC-QC-007",
+    "question": "Một năm học chính quy bắt buộc phải có tối thiểu bao nhiêu tuần lên lớp?",
+    "dieu_dung": "Điều 6"
+  },
+  {
+    "id": "KC-QC-008",
+    "question": "Bỏ thi kết thúc học phần mà không xin phép thì bị chấm mấy điểm?",
+    "dieu_dung": "Điều 9"
+  },
+  {
+    "id": "KC-QC-009",
+    "question": "Những lý do gì khiến sinh viên đạt loại Giỏi hoặc Xuất sắc nhưng bị hạ một bậc xếp loại tốt nghiệp?",
+    "dieu_dung": "Điều 14"
+  },
+  {
+    "id": "KC-QC-010",
+    "question": "Hành vi đi thi hộ hoặc nhờ người thi hộ bị nhà trường kỷ luật thế nào?",
+    "dieu_dung": "Điều 20"
+  },
+  {
+    "id": "KC-QC-011",
+    "question": "Thời gian xin nghỉ học tạm thời vì việc cá nhân có bị tính vào thời gian học tối đa toàn khóa không?",
+    "dieu_dung": "Điều 15"
+  },
+  {
+    "id": "KC-QC-012",
+    "question": "Sinh viên sang trường khác học trao đổi thì được tích lũy tối đa bao nhiêu phần trăm tín chỉ?",
+    "dieu_dung": "Điều 17"
+  },
+  {
+    "id": "KC-QC-013",
+    "question": "Đang học năm mấy thì sinh viên không được phép làm thủ tục chuyển ngành?",
+    "dieu_dung": "Điều 16"
+  },
+  {
+    "id": "KC-QC-014",
+    "question": "Dùng chứng chỉ giả để làm hồ sơ đầu vào thì sinh viên chịu hình thức xử lý gì?",
+    "dieu_dung": "Điều 20"
+  },
+  {
+    "id": "KC-QC-015",
+    "question": "rot mon tu chon co bat buoc phai hoc lai dung mon do ko hay doi mon khac",
+    "dieu_dung": "Điều 3"
+  },
+  {
+    "id": "KC-QC-016",
+    "question": "diem F tinh vao he 4 la bn z",
+    "dieu_dung": "Điều 10"
+  },
+  {
+    "id": "KC-QC-017",
+    "question": "no bao nhieu tin chi thi bi canh bao hoc vu v ad",
+    "dieu_dung": "Điều 11"
+  },
+  {
+    "id": "KC-QC-018",
+    "question": "hoc song song 2 nganh thi sv nam may moi duoc dang ky vay",
+    "dieu_dung": "Điều 18"
+  },
+  {
+    "id": "KC-QC-019",
+    "question": "khi nao thi truong cap bang tot nghiep cho sinh vien",
+    "dieu_dung": "Điều 14"
+  },
+  {
+    "id": "KC-QC-020",
+    "question": "Em bị tai nạn giao thông phải nằm viện điều trị dài ngày thì có được xin nghỉ học tạm thời không ạ?",
+    "dieu_dung": "Điều 15"
+  },
+  {
+    "id": "KC-QC-021",
+    "question": "Học kỳ đầu năm nhất mà điểm trung bình của em dưới 0.8 thì có bị cảnh báo học tập không?",
+    "dieu_dung": "Điều 11"
+  },
+  {
+    "id": "KC-QC-022",
+    "question": "Hết thời gian tối đa nhưng chưa đạt chuẩn tin học đầu ra thì em có được gia hạn để thi bù không?",
+    "dieu_dung": "Điều 14"
+  },
+  {
+    "id": "KC-QC-023",
+    "question": "Nếu đang học ngành thứ hai mà điểm ngành chính bị rớt xuống diện cảnh báo thì em có phải dừng học ngành 2 không?",
+    "dieu_dung": "Điều 18"
+  },
+  {
+    "id": "KC-QC-024",
+    "question": "Thi lại điểm thành phần để cải thiện điểm rớt thì điểm học phần tối đa chỉ được tính ở mức nào?",
+    "dieu_dung": "Điều 9"
+  },
+  {
+    "id": "KC-QC-025",
+    "question": "Sinh viên được phép hoãn thi có lý do chính đáng thì trên bảng điểm ghi nhận ký hiệu chữ gì?",
+    "dieu_dung": "Điều 9"
+  },
+  {
+    "id": "KC-QC-026",
+    "question": "Điểm tổng kết học phần từ 7,0 đến 8,4 được xếp vào điểm chữ gì?",
+    "dieu_dung": "Điều 9"
+  },
+  {
+    "id": "KC-QC-027",
+    "question": "Điểm chữ C tương ứng với mấy điểm khi quy đổi sang hệ 4?",
+    "dieu_dung": "Điều 10"
+  },
+  {
+    "id": "KC-QC-028",
+    "question": "Điểm trung bình tích lũy hệ 4 đạt từ 3,2 đến dưới 3,6 được xếp loại học lực gì?",
+    "dieu_dung": "Điều 10"
+  },
+  {
+    "id": "KC-QC-029",
+    "question": "Số tín chỉ tích lũy đạt từ 2M đến dưới 3M thì sinh viên được xếp vào trình độ năm thứ mấy?",
+    "dieu_dung": "Điều 10"
+  },
+  {
+    "id": "KC-QC-030",
+    "question": "Điểm tổng kết môn học phải đạt từ bao nhiêu trở lên thì được tính là đạt không phân mức (điểm P)?",
+    "dieu_dung": "Điều 9"
+  },
+  {
+    "id": "KC-QC-031",
+    "question": "Sinh viên năm hai học theo tín chỉ bị buộc thôi học nếu điểm trung bình tích lũy dưới mức bao nhiêu?",
+    "dieu_dung": "Điều 11"
+  },
+  {
+    "id": "KC-QC-032",
+    "question": "Hình thức đánh giá bảo vệ đồ án trực tuyến cần tối thiểu bao nhiêu thành viên trong hội đồng chuyên môn?",
+    "dieu_dung": "Điều 9"
+  },
+  {
+    "id": "KC-3183-001",
+    "question": "Điểm tổng kết môn học từ 7,8 đến 8,4 được quy đổi sang điểm chữ mới nào?",
+    "dieu_dung": "Điều 9"
+  },
+  {
+    "id": "KC-3183-002",
+    "question": "Quy chế mới bổ sung thêm những mức điểm chữ cộng nào vào bảng điểm?",
+    "dieu_dung": "Điều 9"
+  },
+  {
+    "id": "KC-3183-003",
+    "question": "Ký hiệu điểm chữ nào dùng để đánh dấu học phần do sinh viên tự xin rút?",
+    "dieu_dung": "Điều 9"
+  },
+  {
+    "id": "KC-3183-004",
+    "question": "Điểm chữ B+ được quy đổi tương ứng bằng mấy điểm trong hệ thống thang điểm 4?",
+    "dieu_dung": "Điều 10"
+  },
+  {
+    "id": "KC-3183-005",
+    "question": "Các quy định về thang điểm chữ phân mức mới như B+, C+, D+ áp dụng bắt đầu từ khóa sinh viên năm nào?",
+    "dieu_dung": "Điều 2"
+  },
+  {
+    "id": "KC-3183-006",
+    "question": "Sinh viên khóa mới xin rút môn học thành công thì trên bảng điểm sẽ hiện ký hiệu chữ gì?",
+    "dieu_dung": "Điều 9"
+  },
+  {
+    "id": "KC-3183-007",
+    "question": "Điểm chữ C+ được quy đổi tương ứng với mấy điểm trong thang điểm 4 theo quy định mới?",
+    "dieu_dung": "Điều 10"
+  },
+  {
+    "id": "KC-3183-008",
+    "question": "Điểm chữ chưa hoàn thiện do được phép hoãn thi theo quy định sửa đổi được ký hiệu bằng chữ gì?",
+    "dieu_dung": "Điều 9"
+  }
+]
