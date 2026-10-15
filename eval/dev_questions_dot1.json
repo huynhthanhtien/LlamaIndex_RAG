@@ -1,0 +1,22 @@
+[
+  {"question": "Sinh viên bị ốm không dự thi được thì có được hoãn thi không?", "dieu_dung": "3260-QD-Hoan-thi"},
+  {"question": "Đơn xin hoãn thi phải nộp chậm nhất khi nào?", "dieu_dung": "3260-QD-Hoan-thi"},
+  {"question": "Được hoãn thi thì phải đăng ký thi lại trong thời hạn bao lâu?", "dieu_dung": "3260-QD-Hoan-thi"},
+  {"question": "Thi lại học phần đã được hoãn thi có phải đóng lệ phí không?", "dieu_dung": "3260-QD-Hoan-thi"},
+  {"question": "Đến phòng thi trễ bao nhiêu phút thì không được dự thi?", "dieu_dung": "QD898|7"},
+  {"question": "Sinh viên được mang những gì vào phòng thi?", "dieu_dung": "QD898|7"},
+  {"question": "Thi tự luận 90 phút thì sau bao lâu sinh viên mới được ra khỏi phòng thi?", "dieu_dung": "QD898|7"},
+  {"question": "Sinh viên bị cảnh cáo trong khi thi bị trừ bao nhiêu điểm?", "dieu_dung": "QD898|8"},
+  {"question": "Lệ phí phúc khảo bài thi kết thúc học phần là bao nhiêu?", "dieu_dung": "QD898|5"},
+  {"question": "Sau bao lâu thì có kết quả phúc khảo?", "dieu_dung": "QD898|5"},
+  {"question": "Muốn khiếu nại điểm quá trình thì làm thế nào?", "dieu_dung": "CV_3248"},
+  {"question": "Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai?", "dieu_dung": "CV_3248"},
+  {"question": "Ai được quyền yêu cầu cấp bảng điểm học tập?", "dieu_dung": "QuyDinh_CapBangDiem"},
+  {"question": "Xin bảng điểm thì bao lâu mới nhận được?", "dieu_dung": "QuyDinh_CapBangDiem"},
+  {"question": "Bản sao bằng tốt nghiệp cấp từ sổ gốc có giá trị như bản chính không?", "dieu_dung": "QuyDinh_CapBanSao"},
+  {"question": "Cần mang giấy tờ gì để xin cấp bản sao văn bằng?", "dieu_dung": "QuyDinh_CapBanSao"},
+  {"question": "Cố vấn học tập có những nhiệm vụ gì?", "dieu_dung": "QĐ_CVHT|6"},
+  {"question": "Tiêu chuẩn để làm cố vấn học tập là gì?", "dieu_dung": "QĐ_CVHT|3"},
+  {"question": "Cố vấn học tập có những quyền gì?", "dieu_dung": "QĐ_CVHT|7"},
+  {"question": "Cố vấn học tập không hoàn thành nhiệm vụ thì bị xử lý thế nào?", "dieu_dung": "QĐ_CVHT|13"}
+]

@@ -114,11 +114,11 @@ def load_processed(path: Path, ten_hien_thi: str = "") -> list[TextNode]:
 
 
 def corpus_files(cfg: RAGConfig) -> list[Path]:
-    """File .md trong cfg.corpus_dir được nạp: khớp tiền tố trong cfg.corpus_files (rỗng = tất cả)."""
+    """File .md trong cfg.corpus_dir (kể cả thư mục con) được nạp: khớp tiền tố tên file trong cfg.corpus_files (rỗng = tất cả)."""
     folder = ROOT / cfg.corpus_dir
     if not folder.is_dir():
         raise FileNotFoundError(f"Không thấy {cfg.corpus_dir} — chạy scripts/extract_to_md.py rồi scripts/clean_md.py")
-    files = sorted(p for p in folder.glob("*.md") if not p.name.startswith("_"))
+    files = sorted(p for p in folder.rglob("*.md") if not p.name.startswith("_"))
     if cfg.corpus_files:
         files = [p for p in files if p.name.startswith(cfg.corpus_files)]
         thieu = [t for t in cfg.corpus_files if not any(p.name.startswith(t) for p in files)]

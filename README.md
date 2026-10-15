@@ -15,9 +15,9 @@ https://docs.google.com/document/d/1TQZR0Qk_NSef59e24KFiL4X1CC3u3WQZq2tp6z1sjok/
 
 Script chạy trên Colab (T4 GPU): cài + chạy Ollama, dựng model server (embedding + reranker), mở URL công khai qua Cloudflare quick tunnel và in ra các dòng cần chép vào `.env` ở máy local (`OLLAMA_BASE_URL`, `MODEL_SERVER_URL`, ...). Sau đó index, retriever, query engine, đánh giá vẫn chạy ở máy local như bình thường. Notebook `notebooks/demo.ipynb` chứa sẵn hai lệnh trên.
 
-## Trạng thái hiện tại: 6 văn bản quy chế SGU đang áp dụng
+## Trạng thái hiện tại: 17 văn bản Đào tạo của SGU (108 Node)
 
-Index gồm Quy chế đào tạo SGU 2021 + QĐ sửa đổi 3183/2025 + 4 quy định (danh sách trong `src/corpus.py`, dict `SGU_HIEU_LUC`):
+Index gồm Quy chế đào tạo SGU 2021 + QĐ sửa đổi 3183/2025 + 4 quy định, cộng 6 văn bản của đợt 1 (thi, phúc khảo, thủ tục, cố vấn học tập) và 5 văn bản của đợt 2 (quy đổi chứng chỉ tiếng Anh, bảng chép tay từ bản scan). Corpus là cả thư mục `data/processed/01_quy_che_dao_tao` (kể cả thư mục con); danh sách văn bản trong `src/corpus.py`, dict `SGU_HIEU_LUC`:
 
 | Tiền tố file | Tên hiển thị (dùng khi embedding và trích nguồn) |
 |---|---|
@@ -27,6 +27,17 @@ Index gồm Quy chế đào tạo SGU 2021 + QĐ sửa đổi 3183/2025 + 4 quy 
 | `2022-2375` | QĐ 2375/2022 về chuyển chương trình, ngành đào tạo |
 | `22_quy-dinh-ve-khoi-luong` | Quy định khối lượng đào tạo hệ chính quy theo tín chỉ |
 | `Quydinh150tc` | Quy định số tín chỉ tối thiểu kỹ sư CNTT (khóa 2017 trở đi) |
+| `3260-QD-Hoan-thi` | QĐ 3260/2025 về việc hoãn thi |
+| `QD898` | QĐ 898/2025 ban hành Quy định tổ chức thi học kì |
+| `CV_3248` | Quy định 3248/2018 giải quyết thắc mắc, khiếu nại kết quả học tập |
+| `QuyDinh_CapBangDiem` | Quy định cấp bảng điểm học tập (2018) |
+| `QuyDinh_CapBanSao` | Quy định cấp bản sao văn bằng, chứng chỉ (2018) |
+| `QĐ_CVHT` | Quy chế công tác cố vấn học tập (QĐ 367/2019) |
+| `202111_2366` | TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước) |
+| `30_TB so 2451` | TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước) |
+| `CV2626` | QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) |
+| `29_2101` | QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) |
+| `TB so 2567` | TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa) |
 
 Văn bản hết hiệu lực / văn bản của Bộ không nạp vào index: đã đo, chúng lấn át QC SGU 2021 khi truy hồi. `data/raw/` còn nhiều nhóm tài liệu khác (công tác sinh viên, chương trình đào tạo, khóa luận, biểu mẫu) chưa đưa vào index — xem `docs/ke_hoach_them_du_lieu_dao_tao.md`.
 
@@ -109,7 +120,7 @@ python scripts/extract_to_md.py data/raw/01_quy_che_dao_tao/1_quy_che_dao_tao_da
 python scripts/clean_md.py data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc         # → data/processed/
 ```
 
-`data/ocr/` (tầng 1) là nơi duy nhất sửa tay; `data/processed/` (tầng 2) luôn sinh lại từ tầng 1. Sau đó thêm tiền tố file vào `SGU_HIEU_LUC` trong `src/corpus.py` — index tự build lại ở lần chạy sau.
+`data/ocr/` (tầng 1) là nơi duy nhất sửa tay (bảng trong bản scan: chép tay thành bảng Markdown `| … |`, `clean_md.py` giữ nguyên khối bảng); `data/processed/` (tầng 2) luôn sinh lại từ tầng 1. Sau đó thêm tiền tố file vào `SGU_HIEU_LUC` trong `src/corpus.py` (mỗi tiền tố phải khớp đúng một file trong cả cây thư mục) — index tự build lại ở lần chạy sau. Thêm câu hỏi dev cho văn bản mới (ví dụ `eval/dev_questions_dot1.json`, `dev_questions_dot2.json`; nhiều nhãn đúng ngăn bởi `;`, nhãn `"<tiền tố file>"` hoặc `"<tiền tố file>|<Điều>"`) để `make eval` đo được.
 
 ## Kiểm thử và đánh giá
 
@@ -174,7 +185,7 @@ Hoặc gọi trực tiếp: `RAG_PROFILE=server venv/bin/python eval/evaluate.py
 
 ## Trạng thái dự án
 
-Sáu giai đoạn của pipeline đã chạy được trên 6 văn bản quy chế đang áp dụng: `scripts/extract_to_md.py` +
+Sáu giai đoạn của pipeline đã chạy được trên 17 văn bản Đào tạo: `scripts/extract_to_md.py` +
 `scripts/clean_md.py` (dữ liệu) → `src/processed_loader.py` (Node) → `src/index_builder.py` (index) →
 `src/retriever.py` (vector, tuỳ chọn hybrid BM25) → `src/query_engine.py` (LLM + trích nguồn) →
 `eval/` (truy hồi, baseline, chấm câu trả lời). Xem `docs/bao_cao_cai_tien_rag.md` và các báo cáo MD trong `docs/`.
