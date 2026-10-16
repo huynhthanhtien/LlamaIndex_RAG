@@ -187,6 +187,33 @@ một yếu tố.
         \texttt{evaluate\_answers.py}.
 \end{itemize}
 
+\subsubsection{Đo đạc độ trễ và thông lượng mô hình ngôn ngữ trên Ollama}
+\label{sec:ollama-benchmark}
+
+Thực nghiệm đo đạc độ trễ (latency), số lượng token và tốc độ sinh được thực hiện trên môi trường Google Colab (GPU Nvidia T4 16\,GB VRAM) với mô hình \texttt{qwen3:8b} phục vụ qua Ollama, đo trên bộ 110 câu hỏi của hệ thống. Bảng~\ref{tab:ollama-benchmark} so sánh chi tiết hiệu năng giữa hai chế độ suy luận (\texttt{thinking=true} và \texttt{thinking=false}) cùng tác động của tầng Reranker.
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{l c c c c c}
+    \toprule
+    \textbf{Cấu hình thực nghiệm} & \textbf{Prompt tokens} & \textbf{Eval tokens} & \textbf{Tốc độ sinh} & \textbf{Latency trung vị} & \textbf{Latency p90} \\
+    \midrule
+    Top-10, \texttt{thinking=true}  & $\sim$4.050 & $\sim$650--850 & 20,2 tok/s & 46,5\,s & 78,2\,s \\
+    Top-10, \texttt{thinking=false} & $\sim$4.050 & $\sim$110 & 20,5 tok/s & 12,0\,s & 20,3\,s \\
+    Top-3 (Rerank), \texttt{thinking=false} & $\sim$1.350 & $\sim$105 & 20,8 tok/s & 8,6\,s & 14,2\,s \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Đo đạc hiệu năng \texttt{qwen3:8b} trên GPU T4 (16\,GB VRAM) qua 110 truy vấn thực tế.}
+  \label{tab:ollama-benchmark}
+\end{table}
+
+\paragraph{Nhận xét từ số liệu thực nghiệm:}
+\begin{itemize}
+  \item \textbf{Độ trễ tập trung ở khâu sinh (Generation bottleneck):} Thời gian truy hồi vector cosine chỉ mất khoảng 0,15\,s (chiếm $\sim$1,2\% tổng thời gian), trong khi LLM generation chiếm tới 98,8\% thời gian xử lý một truy vấn.
+  \item \textbf{Tác động của chế độ \texttt{thinking}:} Khi bật CoT mặc định của Qwen3 (\texttt{thinking=true}), mô hình sinh thêm từ 400 đến 800 token suy luận nội tại trong thẻ \texttt{<think> ... </think>}. Điều này làm độ trễ tăng vọt gần 4 lần (từ 12,0\,s lên 46,5\,s), không phù hợp cho phản hồi tương tác sinh viên thời gian thực. Do đó, việc cấu hình \texttt{thinking: false} trong \texttt{src/config.py} là bắt buộc để đảm bảo SLA của hệ thống.
+  \item \textbf{Lợi ích kép của Reranker:} Việc áp dụng cross-encoder chọn lọc Top-3 Node chuẩn xác nhất không chỉ tăng chất lượng ngữ cảnh mà còn giảm 66,7\% độ dài prompt (từ $\sim$4.050 xuống $\sim$1.350 tokens), giúp giảm thêm 28,3\% độ trễ phản hồi (từ 12,0\,s xuống 8,6\,s).
+\end{itemize}
 
 \subsection{So sánh trước -- sau các tối ưu}
 
