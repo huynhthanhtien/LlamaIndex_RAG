@@ -1,82 +1,122 @@
 [
   {
     "id": "KC-NG-001",
-    "question": "Mức học phí cho một tín chỉ đối với sinh viên chính quy năm nay là bao nhiêu tiền?"
+    "question": "Mức học phí cho một tín chỉ đối với sinh viên chính quy năm nay là bao nhiêu tiền?",
+    "loai": "ngoai_han",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì học phí thuộc quy định tài chính, không có trong quy chế đào tạo."
   },
   {
     "id": "KC-NG-002",
-    "question": "Thủ tục đăng ký ở ký túc xá Đại học Sài Gòn đối với tân sinh viên như thế nào?"
+    "question": "Thủ tục đăng ký ở ký túc xá Đại học Sài Gòn đối với tân sinh viên như thế nào?",
+    "loai": "ngoai_han",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì thông tin KTX thuộc ban quản lý, không nằm trong quy chế."
   },
   {
     "id": "KC-NG-003",
-    "question": "Có thể bảo lưu kết quả học tập tối đa bao nhiêu năm nếu bị đuổi học?"
+    "question": "Giá vé giữ xe máy theo tháng tại cơ sở An Dương Vương của trường là bao nhiêu?",
+    "loai": "ngoai_han",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì đây là quy định cơ sở vật chất."
   },
   {
     "id": "KC-NG-004",
-    "question": "Nộp bằng giả tiếng anh thì bị gì?"
+    "question": "Làm cách nào để kết nối mạng wifi nội bộ của trường dành riêng cho sinh viên?",
+    "loai": "ngoai_han",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì đây là hướng dẫn của TT CNTT."
   },
   {
     "id": "KC-NG-005",
-    "question": "Hạn chót đóng tiền bảo hiểm y tế bắt buộc của sinh viên năm học này là ngày nào?"
+    "question": "Hạn chót đóng tiền bảo hiểm y tế bắt buộc của sinh viên năm học này là ngày nào?",
+    "loai": "ngoai_han",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì BHYT thuộc mảng Công tác sinh viên."
   },
   {
     "id": "KC-NG-006",
-    "question": "Nếu tôi được điểm F thì tôi được tính hệ số mấy vào điểm trung bình tích lũy?"
+    "question": "Mỗi sinh viên được mượn tối đa mấy quyển sách tại thư viện trường trong bao lâu?",
+    "loai": "ngoai_han",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì thuộc Nội quy Thư viện."
   },
   {
     "id": "KC-NG-007",
-    "question": "Sinh viên đạt bao nhiêu điểm rèn luyện trong một học kỳ thì được xếp loại xuất sắc?"
+    "question": "Sinh viên đạt bao nhiêu điểm rèn luyện trong một học kỳ thì được xếp loại xuất sắc?",
+    "loai": "sat_bien",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì Điểm rèn luyện thuộc Quy chế đánh giá CTSV chưa được nạp."
   },
   {
     "id": "KC-NG-008",
-    "question": "Tiêu chuẩn về điểm học tập và điểm rèn luyện để được nhận học bổng khuyến khích học tập là gì?"
+    "question": "Tiêu chuẩn về điểm học tập và điểm rèn luyện để được nhận học bổng khuyến khích học tập là gì?",
+    "loai": "sat_bien",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì Quy định xét học bổng chưa được nạp."
   },
   {
     "id": "KC-NG-009",
-    "question": "Sinh viên bị xếp loại rèn luyện yếu có bị đình chỉ học tập hoặc xử lý học vụ không?"
+    "question": "Sinh viên bị xếp loại rèn luyện yếu có bị đình chỉ học tập hoặc xử lý học vụ không?",
+    "loai": "sat_bien",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời hoặc phân định rõ phần học vụ (có) và phần rèn luyện (không có dữ liệu)."
   },
   {
     "id": "KC-NG-010",
-    "question": "Hồ sơ xin miễn giảm học phí diện chính sách gồm những giấy tờ gì và nộp về phòng nào?"
+    "question": "Hồ sơ xin miễn giảm học phí diện chính sách gồm những giấy tờ gì và nộp về phòng nào?",
+    "loai": "sat_bien",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì thuộc chế độ chính sách sinh viên."
   },
   {
     "id": "KC-NG-011",
-    "question": "Mỗi năm sinh viên bắt buộc phải tham gia tối thiểu bao nhiêu ngày công tác xã hội để đủ điều kiện tốt nghiệp?"
+    "question": "Mỗi năm sinh viên bắt buộc phải tham gia tối thiểu bao nhiêu ngày công tác xã hội để đủ điều kiện tốt nghiệp?",
+    "loai": "sat_bien",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì thuộc quy định Đoàn - Hội chưa nạp."
   },
   {
     "id": "KC-NG-012",
-    "question": "Thủ tục xin cấp giấy xác nhận sinh viên để vay vốn ngân hàng chính sách xã hội thực hiện ở đâu?"
+    "question": "Thủ tục xin cấp giấy xác nhận sinh viên để vay vốn ngân hàng chính sách xã hội thực hiện ở đâu?",
+    "loai": "sat_bien",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì thuộc thủ tục hành chính CTSV."
   },
   {
     "id": "KC-NG-013",
-    "question": "Mức tiền thưởng dành cho sinh viên đạt danh hiệu Sinh viên 5 tốt cấp trường là bao nhiêu tiền?"
+    "question": "Mức tiền thưởng dành cho sinh viên đạt danh hiệu Sinh viên 5 tốt cấp trường là bao nhiêu tiền?",
+    "loai": "sat_bien",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì thuộc phong trào Hội Sinh viên."
   },
   {
     "id": "KC-NG-014",
-    "question": "Chuẩn đầu ra tin học đối với sinh viên không chuyên ngành CNTT theo thông báo mới nhất yêu cầu chứng chỉ gì?"
+    "question": "Chuẩn đầu ra tin học đối với sinh viên không chuyên ngành CNTT theo thông báo mới nhất yêu cầu chứng chỉ gì?",
+    "loai": "sat_bien",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì văn bản quy định chuẩn đầu ra riêng biệt chưa được nạp."
   },
   {
     "id": "KC-NG-015",
-    "question": "Khi nào sinh viên đánh giá điểm rèn luyện?"
+    "question": "Điều 45 Quy chế đào tạo đại học năm 2021 quy định về vấn đề gì?",
+    "loai": "bay",
+    "hanh_vi_mong_doi": "Hệ thống cần chỉ ra rằng Quy chế 2021 không có Điều 45 (chỉ có 22 Điều)."
   },
   {
     "id": "KC-NG-016",
-    "question": "Sinh viên được rút bớt học phần trong vòng 8 tuần đầu của học kỳ đúng không?"
+    "question": "Theo Quyết định 3183, sinh viên được rút bớt học phần trong vòng 8 tuần đầu của học kỳ đúng không?",
+    "loai": "bay",
+    "hanh_vi_mong_doi": "Hệ thống cần đính chính lại thông tin sai trong câu hỏi: theo QĐ 3183 chỉ được rút trong 3 tuần đầu, không phải 8 tuần."
   },
   {
     "id": "KC-NG-017",
-    "question": "Quy định đào tạo trình độ thạc sĩ và tiến sĩ của Trường Đại học Sài Gòn quy định thời gian đào tạo bao lâu?"
+    "question": "Quy định đào tạo trình độ thạc sĩ và tiến sĩ của Trường Đại học Sài Gòn quy định thời gian đào tạo bao lâu?",
+    "loai": "bay",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối trả lời vì tài liệu hiện tại chỉ áp dụng cho trình độ Đại học."
   },
   {
     "id": "KC-NG-018",
-    "question": "Sinh viên thi hộ bị xử phạt thế nào?"
+    "question": "Khoản 10 Điều 9 Quy chế đào tạo 2021 quy định mức phạt tiền đối với sinh viên thi hộ là bao nhiêu?",
+    "loai": "bay",
+    "hanh_vi_mong_doi": "Hệ thống cần đính chính: Điều 9 không có khoản 10, xử lý thi hộ nằm ở Điều 20 và không có quy định phạt tiền."
   },
   {
     "id": "KC-NG-019",
-    "question": "Quy định về trang phục và đồng phục thể dục?"
+    "question": "Quy định về trang phục và đồng phục thể dục của Đại học Sài Gòn được nêu ở Điều nào trong Quy chế 2021?",
+    "loai": "bay",
+    "hanh_vi_mong_doi": "Hệ thống cần từ chối vì Quy chế 2021 không quy định về trang phục."
   },
   {
     "id": "KC-NG-020",
-    "question": "Điểm trung bình tích lũy đạt 2.4 hệ 4 có được xét tốt nghiệp loại Giỏi theo Quy chế 2021 không?"
+    "question": "Điểm trung bình tích lũy đạt 2.4 hệ 4 có được xét tốt nghiệp loại Giỏi theo Quy chế 2021 không?",
+    "loai": "bay",
+    "hanh_vi_mong_doi": "Hệ thống cần đính chính: 2.4 chỉ xếp loại Trung bình, không đủ điều kiện loại Giỏi."
   }
 ]
