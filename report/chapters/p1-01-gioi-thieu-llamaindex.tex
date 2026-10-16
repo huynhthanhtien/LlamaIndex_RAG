@@ -240,7 +240,7 @@ mà tài liệu chính thức không nêu, và là một trong những kết qu�
       Truyền thẳng đối tượng \texttt{Ollama} vào retriever (với \texttt{num\_queries=1} nó không bao giờ được gọi) \\
     \texttt{BM25Retriever} không có trong \texttt{llama-index-core} &
       Thư viện tách phần này ra package riêng (\texttt{llama-index-retrievers-bm25}) &
-      Tự viết \texttt{src/bm25.py} trên \texttt{BaseRetriever} (xem Mục~\ref{sec:retriever}) \\
+      Tự viết \texttt{src/bm25.py} trên \texttt{BaseRetriever} (xem Mục~\ref{sec:hybrid}) \\
     Không lọc được theo toán tử ``khác'' trên metadata &
       \texttt{SimpleVectorStore} mặc định chỉ là JSON trong RAM, hỗ trợ lọc hạn chế &
       Chấp nhận ở quy mô hiện tại; ghi nhận việc chuyển sang Chroma/Qdrant khi corpus lớn \\
