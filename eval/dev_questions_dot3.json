@@ -1,0 +1,122 @@
+[
+  {
+    "id": "dot3_01",
+    "question": "Quy trình phúc khảo bài thi kết thúc học phần gồm mấy bước và đó là những bước nào?",
+    "cau_hoi": "Quy trình phúc khảo bài thi kết thúc học phần gồm mấy bước và đó là những bước nào?",
+    "dieu_dung": "HD-Quy trinh phuc khao",
+    "dap_an": "Gồm 4 bước: Bước 1: Tiếp nhận đơn phúc khảo; Bước 2: Thành lập Ban phúc khảo và các Tổ chấm phúc khảo; Bước 3: Tổ chức chấm phúc khảo; Bước 4: Công bố kết quả phúc khảo",
+    "nguon": "Hướng dẫn 1181/HD-ĐHSG ngày 27/06/2022, Mục 1.a Lưu trình"
+  },
+  {
+    "id": "dot3_02",
+    "question": "Sinh viên muốn phúc khảo bài thi kết thúc học phần thì phải nộp đơn trong thời hạn bao lâu kể từ khi công bố điểm?",
+    "cau_hoi": "Sinh viên muốn phúc khảo bài thi kết thúc học phần thì phải nộp đơn trong thời hạn bao lâu kể từ khi công bố điểm?",
+    "dieu_dung": "HD-Quy trinh phuc khao;QD898|5",
+    "dap_an": "Chậm nhất 07 ngày làm việc kể từ thời điểm Trường công bố điểm thi trên trang thông tin đào tạo (thongtindaotao.sgu.edu.vn)",
+    "nguon": "Hướng dẫn 1181/HD-ĐHSG Mục 1.b Bước 1 và QĐ 898/2025 Điều 5 khoản 1"
+  },
+  {
+    "id": "dot3_03",
+    "question": "Sau bao lâu kể từ thời điểm thành lập Ban phúc khảo thì kết quả chấm phúc khảo được công bố?",
+    "cau_hoi": "Sau bao lâu kể từ thời điểm thành lập Ban phúc khảo thì kết quả chấm phúc khảo được công bố?",
+    "dieu_dung": "HD-Quy trinh phuc khao;QD898|5",
+    "dap_an": "Sau 15 ngày kể từ thời điểm thành lập Ban phúc khảo",
+    "nguon": "Hướng dẫn 1181/HD-ĐHSG Mục 1.b Bước 4 và QĐ 898/2025 Điều 5 khoản 3"
+  },
+  {
+    "id": "dot3_04",
+    "question": "Sinh viên phúc khảo bài thi có được nhận lại lệ phí phúc khảo không và trong trường hợp nào?",
+    "cau_hoi": "Sinh viên phúc khảo bài thi có được nhận lại lệ phí phúc khảo không và trong trường hợp nào?",
+    "dieu_dung": "HD-Quy trinh phuc khao;QD898|5",
+    "dap_an": "Được nhận lại lệ phí phúc khảo nếu kết quả chấm phúc khảo thay đổi so với kết quả chấm lần đầu (liên hệ Phòng Kế hoạch Tài chính)",
+    "nguon": "Hướng dẫn 1181/HD-ĐHSG Mục 1.b Bước 4 và QĐ 898/2025 Điều 5 khoản 3"
+  },
+  {
+    "id": "dot3_05",
+    "question": "Ca 1 học từ mấy giờ đến mấy giờ và bao gồm những tiết nào?",
+    "cau_hoi": "Ca 1 học từ mấy giờ đến mấy giờ và bao gồm những tiết nào?",
+    "dieu_dung": "02.-Tiethoc_phonghoc",
+    "dap_an": "Từ 07g00 đến 11g30, bao gồm tiết 1 đến tiết 5 (có 20 phút nghỉ giải lao từ 08g40 đến 09g00 giữa tiết 2 và tiết 3)",
+    "nguon": "Quy định số tiết và thời gian các tiết học (02.-Tiethoc_phonghoc.pdf), Mục 1.1"
+  },
+  {
+    "id": "dot3_06",
+    "question": "Ca 2 và Ca 3 trong ngày gồm những tiết nào và khung giờ học cụ thể ra sao?",
+    "cau_hoi": "Ca 2 và Ca 3 trong ngày gồm những tiết nào và khung giờ học cụ thể ra sao?",
+    "dieu_dung": "02.-Tiethoc_phonghoc",
+    "dap_an": "Ca 2 gồm tiết 6 đến tiết 10 từ 12g00 đến 16g30 (nghỉ 20 phút giữa tiết 7 và 8 từ 13g40 đến 14g00); Ca 3 gồm tiết 11 đến tiết 13 từ 17g00 đến 19g30",
+    "nguon": "Quy định số tiết và thời gian các tiết học (02.-Tiethoc_phonghoc.pdf), Mục 1.1"
+  },
+  {
+    "id": "dot3_07",
+    "question": "Mỗi tiết học tại Trường Đại học Sài Gòn kéo dài bao nhiêu phút và thời gian giải lao giữa các tiết học trong ca là bao lâu?",
+    "cau_hoi": "Mỗi tiết học tại Trường Đại học Sài Gòn kéo dài bao nhiêu phút và thời gian giải lao giữa các tiết học trong ca là bao lâu?",
+    "dieu_dung": "02.-Tiethoc_phonghoc",
+    "dap_an": "Mỗi tiết kéo dài 50 phút; nghỉ giải lao 20 phút sau tiết 2 (Ca 1: 08g40-09g00) và sau tiết 7 (Ca 2: 13g40-14g00)",
+    "nguon": "Quy định số tiết và thời gian các tiết học (02.-Tiethoc_phonghoc.pdf), Mục 1.1"
+  },
+  {
+    "id": "dot3_08",
+    "question": "Ký tự đầu tiên của mã phòng học quy định cơ sở nào tại Trường Đại học Sài Gòn?",
+    "cau_hoi": "Ký tự đầu tiên của mã phòng học quy định cơ sở nào tại Trường Đại học Sài Gòn?",
+    "dieu_dung": "02.-Tiethoc_phonghoc",
+    "dap_an": "C: cơ sở chính (273 An Dương Vương, Q.5); 1: cơ sở 1 (105 Bà Huyện Thanh Quan, Q.3); 2: cơ sở 2 (04 Tôn Đức Thắng, Q.1); 3: cơ sở 3 (20 Ngô Thời Nhiệm, Q.3)",
+    "nguon": "Quy định số tiết và thời gian các tiết học (02.-Tiethoc_phonghoc.pdf), Mục 1.2"
+  },
+  {
+    "id": "dot3_09",
+    "question": "Sinh viên đại học chính quy cần thỏa mãn những điều kiện gì để được xét và công nhận tốt nghiệp?",
+    "cau_hoi": "Sinh viên đại học chính quy cần thỏa mãn những điều kiện gì để được xét và công nhận tốt nghiệp?",
+    "dieu_dung": "25_quy-che-dao-tao|13",
+    "dap_an": "Tích lũy đủ học phần, số tín chỉ và đạt chuẩn đầu ra của CTĐT; điểm trung bình tích lũy toàn khóa đạt từ 2,00 trở lên (từ trung bình trở lên); không bị truy cứu trách nhiệm hình sự hoặc đang bị kỷ luật đình chỉ học tập",
+    "nguon": "Quy chế đào tạo SGU 2021, Điều 13 khoản 1"
+  },
+  {
+    "id": "dot3_10",
+    "question": "Sinh viên đại học không chuyên tiếng Anh tốt nghiệp từ năm 2021 trở đi cần đạt chứng chỉ ngoại ngữ gì để đủ chuẩn đầu ra tốt nghiệp?",
+    "cau_hoi": "Sinh viên đại học không chuyên tiếng Anh tốt nghiệp từ năm 2021 trở đi cần đạt chứng chỉ ngoại ngữ gì để đủ chuẩn đầu ra tốt nghiệp?",
+    "dieu_dung": "TB_ChuanDauRa_2020",
+    "dap_an": "Chứng chỉ Bậc 3/6 Khung năng lực ngoại ngữ Việt Nam, hoặc B1 (Khung Châu Âu), PET (Pass), Aptis (B1), TOEIC 450, TOEFL PBT 450, TOEFL iBT 45, IELTS 4.5",
+    "nguon": "TB 536/ĐHSG-ĐT ngày 30/03/2020, Mục 2.a"
+  },
+  {
+    "id": "dot3_11",
+    "question": "Sinh viên ngành Sư phạm Tiếng Anh và Ngôn ngữ Anh tốt nghiệp từ năm 2021 trở đi cần đạt chuẩn đầu ra ngoại ngữ 2 ở mức nào?",
+    "cau_hoi": "Sinh viên ngành Sư phạm Tiếng Anh và Ngôn ngữ Anh tốt nghiệp từ năm 2021 trở đi cần đạt chuẩn đầu ra ngoại ngữ 2 ở mức nào?",
+    "dieu_dung": "TB_ChuanDauRa_2020",
+    "dap_an": "Chứng chỉ Bậc 3/6 (Khung năng lực ngoại ngữ Việt Nam) hoặc chứng chỉ quốc tế tương đương: Tiếng Pháp DELF B1 / TCF Niveau 3; Tiếng Trung HSK cấp 3; Tiếng Nhật Cấp độ 3 / JLPT N4; Tiếng Hàn Cấp độ III (TOPIK 2); Tiếng Tây Ban Nha DELE B1; Tiếng Nga TRKI cấp 1; Tiếng Đức ZD B1",
+    "nguon": "TB 536/ĐHSG-ĐT ngày 30/03/2020, Mục 2.b"
+  },
+  {
+    "id": "dot3_12",
+    "question": "Sau khi sinh viên đáp ứng đầy đủ điều kiện tốt nghiệp và hoàn thành nghĩa vụ, Hiệu trưởng ra quyết định công nhận và cấp bằng tốt nghiệp trong thời hạn bao lâu?",
+    "cau_hoi": "Sau khi sinh viên đáp ứng đầy đủ điều kiện tốt nghiệp và hoàn thành nghĩa vụ, Hiệu trưởng ra quyết định công nhận và cấp bằng tốt nghiệp trong thời hạn bao lâu?",
+    "dieu_dung": "25_quy-che-dao-tao|13",
+    "dap_an": "Trong thời hạn 03 tháng tính từ thời điểm đáp ứng đầy đủ điều kiện tốt nghiệp và hoàn thành các nghĩa vụ với cơ sở đào tạo",
+    "nguon": "Quy chế đào tạo SGU 2021, Điều 13 khoản 2"
+  },
+  {
+    "id": "dot3_13",
+    "question": "Thời gian tối đa để hoàn thành chương trình cử nhân chính quy theo Quy chế đào tạo 2021 là bao lâu, và con số này khác như thế nào so với Quyết định 736/2014 trước đây?",
+    "cau_hoi": "Thời gian tối đa để hoàn thành chương trình cử nhân chính quy theo Quy chế đào tạo 2021 là bao lâu, và con số này khác như thế nào so với Quyết định 736/2014 trước đây?",
+    "dieu_dung": "25_quy-che-dao-tao|2",
+    "dap_an": "Theo Quy chế 2021 (Điều 2 khoản 5), thời gian tối đa không vượt quá 02 lần thời gian theo kế hoạch học tập chuẩn toàn khóa (cử nhân 4 năm là tối đa 8 năm). Trước đây theo QĐ 736/2014 (Mục 1.1), thời gian tối đa là thời gian thiết kế cộng thêm 06 học kỳ (cử nhân 4 năm cộng 6 học kỳ = 7 năm).",
+    "nguon": "Quy chế đào tạo SGU 2021 (Điều 2 khoản 5) so với QĐ 736/QyĐ-ĐHSG-ĐT năm 2014 (Mục 1.1)"
+  },
+  {
+    "id": "dot3_14",
+    "question": "Lệ phí phúc khảo bài thi kết thúc học phần theo quy định hiện hành là bao nhiêu tiền, và trước đây theo Quy định 3248/2018 là bao nhiêu?",
+    "cau_hoi": "Lệ phí phúc khảo bài thi kết thúc học phần theo quy định hiện hành là bao nhiêu tiền, và trước đây theo Quy định 3248/2018 là bao nhiêu?",
+    "dieu_dung": "HD-Quy trinh phuc khao;QD898|5",
+    "dap_an": "Hiện hành là 150.000 đồng/bài thi (theo Hướng dẫn 1181/HD-ĐHSG năm 2022 và QĐ 898/QĐ-ĐHSG năm 2025 Điều 5). Trước đây là 100.000 đồng/học phần (theo Quy định 3248/QyĐ-ĐHSG-ĐT năm 2018 Mục 2, nay đã bị thay thế).",
+    "nguon": "HD 1181/HD-ĐHSG Mục 1.b, QĐ 898/2025 Điều 5 khoản 1 so với Quy định 3248/2018 Mục 2"
+  },
+  {
+    "id": "dot3_15",
+    "question": "Theo quy định hiện hành, sinh viên nộp đơn phúc khảo bài thi học phần chuyên ngành ở đâu, và điểm này khác gì so với Quy định 3248/2018?",
+    "cau_hoi": "Theo quy định hiện hành, sinh viên nộp đơn phúc khảo bài thi học phần chuyên ngành ở đâu, và điểm này khác gì so với Quy định 3248/2018?",
+    "dieu_dung": "HD-Quy trinh phuc khao;QD898|5",
+    "dap_an": "Theo quy định hiện hành (HD 1181 và QĐ 898), sinh viên nộp đơn và đóng lệ phí trực tiếp tại Phòng Đào tạo cho mọi học phần (sau đó Phòng Đào tạo mới chuyển danh sách về khoa). Trước đây theo QĐ 3248/2018, sinh viên nộp đơn môn chung tại Phòng Đào tạo và nộp đơn môn chuyên ngành trực tiếp tại Trưởng các khoa.",
+    "nguon": "HD 1181/HD-ĐHSG Mục 1.b Bước 1, QĐ 898/2025 Điều 5 khoản 1 so với QĐ 3248/2018 Mục 2"
+  }
+]

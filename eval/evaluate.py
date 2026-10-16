@@ -72,6 +72,7 @@ BO_CAU_HOI: list[tuple[str, ChamDung]] = [
     ("test_questions_02.json", dung_bo_02),
     ("dev_questions_dot1.json", dung_bo_dev),
     ("dev_questions_dot2.json", dung_bo_dev),
+    ("dev_questions_dot3.json", dung_bo_dev),
 ]
 
 # Tên cấu hình -> thay đổi so với config gốc. Dùng cho bảng ablation trong báo cáo.
