@@ -5,15 +5,14 @@ url: "https://daotao.sgu.edu.vn/images/pdf/quy_dinh/QuyDinh_CapBangDiem.pdf"
 tieu_de: "download the pdf file."
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/5_quy_dinh_hoc_vu_khac/QuyDinh_CapBangDiem.md"
-ten_van_ban: "Quy định về việc cấp bảng điểm học tập"
+ten_van_ban: "Quy định cấp bảng điểm học tập (2018)"
 loai: "Quy định"
-so_hieu: ""
+so_hieu: "QyĐ-ĐHSG (2018)"
 co_quan: "Trường Đại học Sài Gòn"
-ngay_ban_hanh: "06/2018"
-ap_dung: ""
-tinh_trang: ""
-bi_sua_doi_boi: ""
-ghi_chu: "Số hiệu OCR không đọc rõ (?124)"
+ngay_ban_hanh: "2018-06-01"
+tinh_trang: "con_hieu_luc"
+ap_dung: "Người học hệ chính quy và không chính quy tại Trường Đại học Sài Gòn"
+ghi_chu: "Quy định về việc cấp bảng điểm học tập; ban hành tháng 06/2018"
 so_phan: 1
 ---
 

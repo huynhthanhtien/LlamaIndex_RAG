@@ -5,14 +5,16 @@ url: "https://daotao.sgu.edu.vn/images/pdf/quy_dinh/CV2626ToChucDayHocCacHPTAKoC
 tieu_de: "download the pdf file."
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/2_quy_doi_tieng_anh/CV2626ToChucDayHocCacHPTAKoChuyenTheoChuongTrinhApDungMoiChoCacKhoaTSTuNam2022TroDi.md"
-ten_van_ban: "Quy định về việc tổ chức dạy học các học phần tiếng Anh không chuyên theo chương trình mới áp dụng cho các khóa tuyển sinh từ năm 2022 trở đi"
+ten_van_ban: "QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023)"
 loai: "Quy định"
 so_hieu: "2626/QyĐ-ĐHSG"
 co_quan: "Trường Đại học Sài Gòn"
-ngay_ban_hanh: "16/11/2022"
-ap_dung: "Khóa tuyển sinh 2022 và 2023 (từ 2024 áp dụng QyĐ 2101)"
+ngay_ban_hanh: "2022-11-16"
 tinh_trang: "bi_sua_doi"
-bi_sua_doi_boi: "QyĐ 2101/2024 (thay thế cho khóa từ 2024); TB 2567/2024"
+bi_sua_doi_boi: ["2101/QyĐ-ĐHSG", "2567/TB-ĐHSG"]
+ap_dung: "Khóa tuyển sinh 2022 và 2023 (từ khóa 2024 thay thế bởi QyĐ 2101)"
+ap_dung_khoa_tu: 2022
+ap_dung_khoa_den: 2023
 ghi_chu: "Bảng gốc có khoảng chồng lấn (Linguaskill 140-149 / 149-158; VSTEP = 4.0 / 4.0-5.0) — giữ nguyên văn"
 so_phan: 1
 ---

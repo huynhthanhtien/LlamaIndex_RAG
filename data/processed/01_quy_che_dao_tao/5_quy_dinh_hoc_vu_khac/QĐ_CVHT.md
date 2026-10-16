@@ -5,15 +5,14 @@ url: "https://drive.google.com/open?id=1cX22emLNst-vUuKaPfAPau4FdOjTzbLi"
 tieu_de: "Quy đinh về cố vấn học tập."
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/5_quy_dinh_hoc_vu_khac/QĐ_CVHT.md"
-ten_van_ban: "Quy chế về công tác cố vấn học tập của Trường Đại học Sài Gòn"
+ten_van_ban: "Quy chế công tác cố vấn học tập (QĐ 367/2019)"
 loai: "Quy chế"
 so_hieu: "367/QĐ-ĐHSG"
 co_quan: "Trường Đại học Sài Gòn"
-ngay_ban_hanh: "03/2019"
-ap_dung: ""
-tinh_trang: ""
-bi_sua_doi_boi: ""
-ghi_chu: ""
+ngay_ban_hanh: "2019-03-14"
+tinh_trang: "con_hieu_luc"
+ap_dung: "Sinh viên đại học, cao đẳng đào tạo theo hệ thống tín chỉ tại Trường Đại học Sài Gòn"
+ghi_chu: "Ban hành kèm theo Quyết định số 367/QĐ-ĐHSG; không áp dụng cho các khóa theo niên chế"
 so_phan: 1
 ---
 

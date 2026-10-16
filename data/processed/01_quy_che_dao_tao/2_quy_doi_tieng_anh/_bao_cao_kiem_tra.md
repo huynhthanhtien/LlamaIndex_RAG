@@ -72,3 +72,16 @@ Nguồn: `data/ocr/01_quy_che_dao_tao/2_quy_doi_tieng_anh`
   - `Căn cứ Thông báo số 2451/TB-ĐHSG ngày 23 tháng 9 năm 2024 của Trường Đại học Sài Gòn về việc bổ sung chứng chỉ Tiếng Anh quy đổi thành điểm học tập các học phần`
   - `Căn cứ Tờ trình số 16/TTr-TTKT ngày 25 tháng 9 năm 2024 của Trung tâm Khảo thí về việc bổ sung chứng chỉ tiếng Anh Pearson Test of English Academic (PTE Academi`
   - `Áp dụng đối với sinh viên khóa 20 còn trong thời hạn quy đổi điểm các học phần tiếng Anh không chuyên (những ngành thuộc chương trình đào tạo cấp bằng kỹ sư, th`
+
+---
+
+## Báo cáo xác minh hiệu lực và chuỗi phiên bản theo khóa (D1 - 16/10/2026)
+
+| Văn bản | Tình trạng | Khóa áp dụng | Căn cứ xác minh & Mối quan hệ | Kết luận |
+|---|---|---|---|---|
+| `202111_2366-TB-DHSG...pdf` | `bi_sua_doi` | 2020–2021 (học phần TA I/II/III) | Ban hành 19/11/2021; bổ sung bởi TB 2451 và TB 2567. | Áp dụng cho khóa $\le 2021$ |
+| `30_TB so 2451...pdf` | `con_hieu_luc` | 2020–2021 | Ban hành 23/09/2024 bổ sung bảng quy đổi vào TB 2366; căn cứ Tờ trình 09/TTKT. | Áp dụng cho khóa $\le 2021$ |
+| `CV2626ToChucDayHoc...pdf` | `bi_sua_doi` | 2022–2023 | QyĐ 2626 ban hành 16/11/2022 chu kỳ 2020–2024; đã bị QyĐ 2101 thay thế cho khóa từ 2024 trở đi. | Áp dụng cho khóa 2022, 2023 |
+| `29_2101-Qui dinh...pdf` | `con_hieu_luc` | Từ 2024 trở đi | QyĐ 2101 ban hành 26/08/2024 chu kỳ 2024–2028; Điều 4 khoản 3 quy định thay thế QyĐ 2626 cho khóa từ 2024. | Áp dụng cho khóa $\ge 2024$ |
+| `TB so 2567...pdf` | `con_hieu_luc` | Cả 2 nhóm khóa | Ban hành 27/09/2024; bổ sung chứng chỉ PTE Academic vào TB 2366/2451 (khóa 2020–2021) và QyĐ 2626/2101 (khóa từ 2022). | Áp dụng cho mọi khóa |
+

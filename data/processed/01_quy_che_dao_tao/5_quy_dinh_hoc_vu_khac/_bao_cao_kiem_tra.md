@@ -40,3 +40,16 @@ Nguồn: `data/ocr/01_quy_che_dao_tao/5_quy_dinh_hoc_vu_khac`
   - `trưởng bồ nhiệm CVHT mới (bằng văn bản cụ thể cho từng lớp SV). Việc thay thế CVHT`
   - `1. Quy chế này có hiệu lực thi hành kể từ ngày kí.`
   - `3. Các quy chế, quy định trước đây của Trường trái với quy chế này đều bị bãi bỏ.`
+
+---
+
+## Báo cáo xác minh hiệu lực và phiên bản (D1 - 16/10/2026)
+
+| Văn bản | Tình trạng | Căn cứ xác minh | Ngày tra cứu | Kết luận |
+|---|---|---|---|---|
+| `QĐ_CVHT.pdf` | `con_hieu_luc` | QĐ 367/QĐ-ĐHSG ngày 14/03/2019 ban hành Quy chế công tác cố vấn học tập. Có hiệu lực từ ngày ký. | 2026-10-16 | Đang áp dụng |
+| `QuyDinh_CapBangDiem.pdf` | `con_hieu_luc` | Ban hành tháng 06/2018 căn cứ VBHN 17/2014 và TT 06/2017. Thủ tục cấp bảng điểm hiện vẫn áp dụng. | 2026-10-16 | Đang áp dụng |
+| `QuyDinh_CapBanSao.pdf` | `con_hieu_luc` | Ban hành năm 2018 căn cứ NĐ 79/2007 và TT 19/2015. Thủ tục cấp bản sao văn bằng chứng chỉ hiện vẫn áp dụng. | 2026-10-16 | Đang áp dụng |
+| `24_quy-dinh-so-736...` | `het_hieu_luc` / xung đột | QĐ 736/2014 về thời gian tối đa hoàn thành CTĐT xung đột với Điều 2 Quy chế 2021 (QĐ 258/2022). | 2026-10-16 | Không nạp vào index; dùng làm ca kiểm thử xung đột |
+| `02.-Tiethoc_phonghoc.pdf` | `con_hieu_luc` | Bảng ca/tiết/giờ học, đang áp dụng (chuẩn bị nạp ở đợt 3 D2). | 2026-10-16 | Nạp đợt 3 theo F4 |
+

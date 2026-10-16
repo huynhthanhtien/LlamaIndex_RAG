@@ -5,15 +5,14 @@ url: "https://khoatckt.sgu.edu.vn/wp-content/uploads/2025/11/3260-QD-Hoan-thi-.p
 tieu_de: "tại đây"
 trung_noi_dung_voi: ["01_quy_che_dao_tao/3_cong_tac_thi_ket_thuc_hoc_phan/20251120143954840_HoanThi.pdf"]
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/3_cong_tac_thi_ket_thuc_hoc_phan/3260-QD-Hoan-thi-.md"
-ten_van_ban: "Quy định về việc hoãn thi đối với sinh viên trình độ đại học hệ chính quy"
+ten_van_ban: "QĐ 3260/2025 về việc hoãn thi"
 loai: "Quy định"
 so_hieu: "3260/QyĐ-ĐHSG"
 co_quan: "Trường Đại học Sài Gòn"
-ngay_ban_hanh: "2025"
-ap_dung: "Sinh viên đại học hệ chính quy"
+ngay_ban_hanh: "2025-11-20"
 tinh_trang: "con_hieu_luc"
-bi_sua_doi_boi: ""
-ghi_chu: "Số hiệu lấy theo tên file; ngày OCR không đọc được"
+ap_dung: "Sinh viên đại học hệ chính quy"
+ghi_chu: "Quy định về việc hoãn thi đối với sinh viên trình độ đại học hệ chính quy; căn cứ QĐ 258/QĐ-ĐHSG"
 so_phan: 1
 ---
 

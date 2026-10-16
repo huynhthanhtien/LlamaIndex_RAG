@@ -5,15 +5,15 @@ url: "https://daotao.sgu.edu.vn/images/pdf/quy_dinh/CV_3248_001_khieunai.pdf"
 tieu_de: "download the pdf file."
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/3_cong_tac_thi_ket_thuc_hoc_phan/CV_3248_001_khieunai.md"
-ten_van_ban: "Quy định về việc giải quyết thắc mắc khiếu nại kết quả học tập của sinh viên"
+ten_van_ban: "Quy định 3248/2018 giải quyết thắc mắc, khiếu nại kết quả học tập"
 loai: "Quy định"
 so_hieu: "3248/QyĐ-ĐHSG-ĐT"
 co_quan: "Trường Đại học Sài Gòn"
-ngay_ban_hanh: "2018"
-ap_dung: ""
-tinh_trang: ""
-bi_sua_doi_boi: ""
-ghi_chu: "Mục 2 (phúc khảo) lệ phí 100.000đ khác QĐ 898/2025 (150.000đ)"
+ngay_ban_hanh: "2018-09-01"
+tinh_trang: "bi_sua_doi"
+bi_sua_doi_boi: ["898/QĐ-ĐHSG"]
+ap_dung: "Giải quyết thắc mắc, khiếu nại điểm quá trình và điểm thi kết thúc học phần của sinh viên"
+ghi_chu: "Mục 2 về phúc khảo và lệ phí 100.000đ đã bị thay thế bởi Điều 6 QĐ 898/QĐ-ĐHSG (150.000đ); mục 1 điểm quá trình vẫn áp dụng"
 so_phan: 1
 ---
 

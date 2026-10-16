@@ -5,15 +5,14 @@ url: "https://daotao.sgu.edu.vn/images/pdf/quy_dinh/QuyCheDaoTao_2017.pdf"
 tieu_de: "download the pdf file."
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QuyCheDaoTao_2017.md"
-ten_van_ban: ""
-loai: ""
-so_hieu: ""
-co_quan: ""
-ngay_ban_hanh: ""
-ap_dung: ""
-tinh_trang: ""
-bi_sua_doi_boi: ""
-ghi_chu: ""
+ten_van_ban: "Quy chế đào tạo trình độ đại học SGU 2017"
+loai: "Quy chế"
+so_hieu: "3522/QĐ-ĐHSG-ĐT"
+co_quan: "Trường Đại học Sài Gòn"
+ngay_ban_hanh: "2017-12-08"
+tinh_trang: "het_hieu_luc"
+ap_dung: "Đã hết hiệu lực"
+ghi_chu: "Đã bị thay thế bởi Quy chế đào tạo SGU 2021 (QĐ 258/QĐ-ĐHSG); dùng làm đối chứng, không nạp vào index"
 so_phan: 2
 ---
 
