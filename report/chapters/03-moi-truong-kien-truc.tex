@@ -51,7 +51,7 @@ File \texttt{requirements.txt} đã được \textbf{ghim đúng phiên bản} m
 
 Máy phát triển dùng card rời NVIDIA RTX A2000 Laptop (4 GB VRAM, khoảng 3{,}7 GB khả dụng cho PyTorch). Kiểm tra bằng cách nạp mô hình qua đúng hàm của dự án và in thiết bị của các tham số cho thấy cả mô hình embedding lẫn reranker đều nằm trên \texttt{cuda:0}. LLM không chạy trên máy này: ở profile \texttt{server}, Ollama chạy trên máy GPU thuê từ dịch vụ ckey.vn, được quản lý bằng \texttt{scripts/manager.py}.
 
-Ở bản báo cáo trước, profile \texttt{server} \textbf{không nạp đồng thời} được embedding và reranker trên card 4 GB: tiến trình đã chiếm khoảng 3{,}5 GB và báo \texttt{CUDA out of memory} khi nạp mô hình thứ hai, nên phép đo phải đẩy embedding lên CPU. Bản hiện tại đã gộp thay đổi fp16: embedding còn khoảng 1{,}1 GB, cả hai mô hình cùng nằm trên GPU tổng khoảng 2{,}2 GB (xem \texttt{src/index\_builder.py} và \texttt{make\_local\_reranker()} trong \texttt{src/retriever.py}). Thêm nữa, \texttt{resolve\_device()} tự hạ cấp về CPU khi máy không có CUDA, nên cùng mã nguồn chạy được cả trên máy GPU, máy CPU và CI. Các số liệu ở Chương~\ref{ch:danh-gia} được đo lại trên \textbf{CPU} vì môi trường chạy lại không có driver NVIDIA; đây là lý do thời gian truy hồi trong báo cáo lớn hơn con số đo trên GPU ở bản trước.
+Ở bản báo cáo trước, profile \texttt{server} \textbf{không nạp đồng thời} được embedding và reranker trên card 4 GB: tiến trình đã chiếm khoảng 3{,}5 GB và báo \texttt{CUDA out of memory} khi nạp mô hình thứ hai, nên phép đo phải đẩy embedding lên CPU. Bản hiện tại đã gộp thay đổi fp16: embedding còn khoảng 1{,}1 GB, cả hai mô hình cùng nằm trên GPU tổng khoảng 2{,}2 GB (xem \texttt{src/index\_builder.py} và \texttt{make\_local\_reranker()} trong \texttt{src/retriever.py}). Thêm nữa, \texttt{resolve\_device()} tự hạ cấp về CPU khi máy không có CUDA, nên cùng mã nguồn chạy được cả trên máy GPU, máy CPU và CI. Các số liệu ở Chương~\ref{sec:danh-gia-thuc-nghiem} được đo lại trên \textbf{CPU} vì môi trường chạy lại không có driver NVIDIA; đây là lý do thời gian truy hồi trong báo cáo lớn hơn con số đo trên GPU ở bản trước.
 
 \section{Cài đặt và Hello World}
 
@@ -102,40 +102,122 @@ Kết quả chạy thật:
 
 \begin{lstlisting}[caption={Cấu trúc thư mục dự án.}, label={lst:cau-truc-thu-muc}]
 .
-|-- app/            # Giao dien Gradio chay thu (app/app.py)
+|-- .github/
+|   `-- workflows/
+|       `-- ci.yml             # Cấu hình CI/CD tự động cho dự án
+|-- .vscode/
+|   `-- settings.json          # Cấu hình môi trường làm việc VS Code
+|-- app/
+|   |-- app.py                 # Giao diện Gradio chạy thử demo RAG
+|   `-- assets/                # Tài nguyên tĩnh cho ứng dụng giao diện
 |-- data/
-|   |-- raw/        # PDF goc (khong commit)
-|   |-- ocr/        # Tang 1: Markdown tho sau OCR, noi sua tay
-|   `-- processed/  # Tang 2: Markdown co heading, sinh lai tu tang 1
-|-- eval/
-|   |-- evaluate.py              # Recall@k, MRR, nDCG, CI bootstrap, McNemar
-|   |-- baselines.py             # baseline BM25 / khong xep hang
-|   |-- evaluate_answers.py      # cham cau tra loi bang evaluator cua LlamaIndex
-|   |-- metrics.py               # do do + kiem dinh thong ke
-|   |-- cau_hoi_danh_gia.json    # 13 cau co dap an chuan + nhan pham vi
-|   |-- test_questions_01.json   # 31 cau hoi
-|   |-- test_questions_02.json   # 10 cau hoi ve QD sua doi 3183/2025
-|   `-- results/                 # ket qua JSON + Markdown
-|-- notebooks/      # Chay thu pipeline, chay tren GPU thue
-|-- scripts/        # hello_world.py, test_ocr.py, check_model_memory.py,
-|                   # pull_models.sh, manager.py
-|-- src/
-|   |-- corpus.py          # Danh sach van ban nap vao index
-|   |-- config.py          # RAGConfig + 2 profile + resolve_device()
-|   |-- processed_loader.py# Markdown tang 2 -> TextNode
-|   |-- bm25.py            # BM25 thuan Python cho hybrid search
-|   |-- index_builder.py   # Node -> VectorStoreIndex + fingerprint
-|   |-- retriever.py       # vector / +BM25 / +rerank / nguong tuong dong
-|   |-- query_engine.py    # Prompt + LLM (temperature=0, seed) + nguon
-|   |-- remote_models.py   # Client goi model server qua HTTP
-|   |-- model_server.py    # FastAPI giu embedding + reranker tren GPU
-|   |-- ingestion.py       # BAN CU: OCR theo trang (khong con dung)
-|   |-- node_parser.py     # BAN CU: cat theo regex (khong con dung)
-|   `-- pipeline.py        # Hoi dap qua dong lenh
-|-- tests/              # 26 kiem thu offline (unittest)
-|-- storage/            # storage/<profile>/<corpus>/ (khong commit)
-|-- Makefile            # make test / eval / baseline / eval-answers / report
-`-- requirements.txt    # da ghim phien ban
+|   |-- raw/                   # Tầng 0: Dữ liệu thô (PDF, DOCX) chia theo 5 mảng công tác
+|   |   |-- 01_quy_che_dao_tao/
+|   |   |-- 02_cong_tac_sinh_vien/
+|   |   |-- 03_chuong_trinh_dao_tao/
+|   |   |-- 04_khoa_luan_thuc_tap/
+|   |   `-- 05_bieu_mau_thu_tuc/
+|   |-- ocr/                   # Tầng 1: Markdown thô sau OCR
+|   |   `-- 01_quy_che_dao_tao/
+|   `-- processed/             # Tầng 2: Markdown đã chuẩn hóa heading
+|       `-- 01_quy_che_dao_tao/
+|-- docs/                      # Thư mục tài liệu, phân tích, kế hoạch và báo cáo chi tiết
+|   |-- bao_cao_cai_tien_bai_nghien_cuu.md  # Báo cáo cải tiến bài nghiên cứu
+|   |-- bao_cao_cai_tien_rag.md             # Báo cáo cải tiến hiệu năng hệ thống RAG
+|   |-- bao_cao_danh_gia_du_lieu_raw.md     # Báo cáo đánh giá chất lượng dữ liệu thô
+|   |-- bao_cao_mo_rong_corpus.md           # Báo cáo phương án mở rộng ngữ liệu
+|   |-- bao_cao_phan_tich_yeu_cau.md        # Báo cáo phân tích yêu cầu hệ thống
+|   |-- de_xuat_code_cai_tien_pipeline.md   # Đề xuất mã nguồn cải tiến pipeline
+|   |-- de_xuat_xu_ly_nhan_xet.md           # Kế hoạch tiếp thu và xử lý nhận xét
+|   |-- giao_trinh/                         # Tài liệu giáo trình và lý thuyết RAG
+|   |   `-- co_so_ly_thuyet_rag.html        # Cơ sở lý thuyết RAG (HTML)
+|   |-- huong_dan_src.md                    # Hướng dẫn sử dụng mã nguồn src/
+|   |-- ke_hoach_them_du_lieu_dao_tao.md    # Kế hoạch bổ sung dữ liệu đào tạo
+|   |-- kha-task-1.md                       # Tài liệu giao việc Task 1
+|   |-- llamaindex_tong_quan.html           # Tổng quan về thư viện LlamaIndex
+|   |-- nhanxet.md                          # Tổng hợp nhận xét và góp ý
+|   |-- phan-cong-4-nguoi.md                # Bảng phân công nhiệm vụ nhóm 4 người
+|   |-- phan_loai_tai_lieu_va_huong_giai_quyet.md # Phân loại tài liệu & hướng giải quyết
+|   |-- phan_tich_ky_thuat_nang_cao_va_co_hoi_cai_tien.md # Phân tích kỹ thuật nâng cao
+|   |-- task-0.md                           # Chi tiết công việc Task 0
+|   `-- task-tap-kiem-chung-va-phan-cong.md # Phân công tập kiểm chứng dữ liệu
+|-- eval/                      # Thư mục đánh giá hiệu năng hệ thống
+|   |-- results/               # Thư mục lưu kết quả đánh giá (JSON, Markdown)
+|   |-- baselines.py           # Baseline BM25 và không xếp hạng
+|   |-- cau_hoi_danh_gia.json  # Bộ câu hỏi có đáp án chuẩn
+|   |-- compare_results.py     # Script so sánh kết quả các lần chạy
+|   |-- dev_questions_dot1.json# Bộ câu hỏi phát triển đợt 1
+|   |-- dev_questions_dot2.json# Bộ câu hỏi phát triển đợt 2
+|   |-- evaluate_answers.py    # Chấm câu trả lời bằng evaluator của LlamaIndex
+|   |-- evaluate.py            # Chạy đánh giá truy hồi
+|   |-- metrics.py             # Đo độ chính xác và kiểm định thống kê
+|   |-- run_batch_cau_hoi.py   # Script chạy batch câu hỏi tự động
+|   |-- test_kiem_chung_3183.json  # File JSON kiểm chứng QĐ 3183
+|   |-- test_kiem_chung_qc2021.json# File JSON kiểm chứng quy chế 2021
+|   |-- test_questions_01.json # Bộ câu hỏi kiểm thử 01
+|   `-- test_questions_02.json # Bộ câu hỏi kiểm thử 02
+|-- report/                    # Mã nguồn và tài liệu báo cáo LaTeX
+|   |-- appendices/            # Các phụ lục báo cáo (Nhật ký, minh chứng, tự kiểm, thực nghiệm)
+|   |   |-- a-nhat-ky-tuan.tex
+|   |   |-- b-minh-chung-nhom.tex
+|   |   |-- c-tu-kiem.tex
+|   |   `-- d-thuc-nghiem.tex
+|   |-- chapters/              # Nội dung các chương báo cáo
+|   |   |-- 03-moi-truong-kien-truc.tex
+|   |   |-- 04-cong-nghe-cot-loi.tex
+|   |   |-- 05-node-parser.tex
+|   |   |-- 06-persistent-index.tex
+|   |   |-- 07-trich-dan-tu-choi.tex
+|   |   |-- 08-nang-cao.tex
+|   |   |-- 09-phan-tich-thiet-ke.tex
+|   |   |-- 10-trien-khai.tex
+|   |   |-- 11-danh-gia-nhin-lai.tex
+|   |   |-- 12-huong-phat-trien.tex
+|   |   |-- p1-01-gioi-thieu-llamaindex.tex
+|   |   `-- p1-02-vi-the.tex
+|   |-- config/                # Cấu hình định dạng và macros LaTeX
+|   |   |-- macros.tex
+|   |   |-- metadata.tex
+|   |   `-- preamble.tex
+|   |-- figures/               # Hình ảnh và tài nguyên đồ họa báo cáo
+|   |   `-- logoITSGU.png
+|   |-- frontmatter/           # Phần mở đầu (Bìa, lời mở đầu)
+|   |-- main.tex               # File mã nguồn LaTeX chính để biên dịch báo cáo
+|   `-- main.pdf               # File báo cáo PDF đã biên dịch hoàn chỉnh
+|-- scripts/                   # Các script tiện ích và tự động hóa
+|   |-- check_model_memory.py  # Kiểm tra bộ nhớ VRAM của mô hình
+|   |-- clean_md.py            # Làm sạch các tệp Markdown
+|   |-- colab_server.py        # Chạy server trên Google Colab
+|   |-- extract_to_md.py       # Trích xuất văn bản sang Markdown
+|   |-- hello_world.py         # Script kiểm tra nhanh môi trường
+|   |-- manager.py             # Quản lý các tác vụ hệ thống
+|   |-- pull_models.sh         # Script tải các mô hình cần thiết
+|   |-- reorganize_raw.py      # Sắp xếp lại cấu trúc dữ liệu thô
+|   |-- setup_server.sh        # Cài đặt server phiên bản 1
+|   |-- setup_server_v2.sh     # Cài đặt server phiên bản 2
+|   `-- test_ocr.py            # Kiểm thử tính năng OCR
+|-- src/                       # Mã nguồn lõi của hệ thống RAG
+|   |-- bm25.py                # BM25 thuần Python phục vụ hybrid search
+|   |-- config.py              # RAGConfig, 2 profile và resolve_device()
+|   |-- corpus.py              # Danh sách văn bản nạp vào index
+|   |-- index_builder.py       # Node, VectorStoreIndex và fingerprint
+|   |-- model_server.py        # FastAPI giữ embedding và reranker trên GPU
+|   |-- processed_loader.py    # Chuyển Markdown Tầng 2 thành TextNode
+|   |-- query_engine.py        # Prompt, LLM (temperature=0, seed) và nguồn
+|   |-- remote_models.py       # Client gửi request đến model server
+|   `-- retriever.py           # Vector, BM25, rerank và ngưỡng tương đồng
+|-- tests/                     # Thư mục kiểm thử tự động hệ thống (Unit tests)
+|   |-- __init__.py            # Khởi tạo gói kiểm thử
+|   |-- test_bm25.py           # Kiểm thử thuật toán BM25
+|   |-- test_corpus.py         # Kiểm thử nạp và quản lý ngữ liệu
+|   |-- test_llm.py            # Kiểm thử tương tác với mô hình ngôn ngữ
+|   |-- test_metrics.py        # Kiểm thử các chỉ số đánh giá
+|   `-- test_processed_loader.py # Kiểm thử bộ nạp dữ liệu đã xử lý
+|-- .env.example               # Mẫu cấu hình biến môi trường
+|-- .gitignore                 # Danh sách các file bỏ qua không commit (storage)
+|-- Makefile                   # Các lệnh nhanh: test, eval, baseline, report
+|-- README.md                  # Tài liệu hướng dẫn cài đặt và sử dụng dự án
+`-- requirements.txt           # Danh sách thư viện Python đã ghim phiên bản
 \end{lstlisting}
 
 Mọi script chạy từ thư mục gốc của repository, ví dụ \texttt{RAG\_PROFILE=server python src/pipeline.py}. Các module trong \texttt{src/} vừa là thư viện (được module sau \texttt{import}) vừa có khối \texttt{\_\_main\_\_} để chạy thử riêng từng giai đoạn.
@@ -167,23 +249,25 @@ class RAGConfig:
     persist_dir: str = ""           # trong = storage/<profile>/<corpus>
 \end{lstlisting}
 
-\begin{table}[H]
+\begin{table}[htbp]
   \centering
-  \small
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.15}
   \begin{tabularx}{\textwidth}{l X X}
     \toprule
     \textbf{Tham số} & \textbf{Profile \texttt{local}} & \textbf{Profile \texttt{server}} \\
     \midrule
-    Embedding & \texttt{bkai-foundation-models/ vietnamese-bi-encoder} (768 chiều) & \texttt{AITeamVN/Vietnamese\_Embedding} (1024 chiều) \\
-    Thiết bị embedding & \texttt{cuda} & \texttt{cuda} \\
-    LLM (Ollama) & \texttt{qwen3:4b}, \texttt{localhost:11434} & \texttt{qwen3:8b}, địa chỉ lấy từ \texttt{OLLAMA\_BASE\_URL} \\
-    Reranker & không dùng & \texttt{AITeamVN/Vietnamese\_Reranker}, giữ top 3 \\
-    Retriever & top-10 & top-10 \\
+    Embedding & \url{bkai-foundation-models/vietnamese-bi-encoder} (768 chiều) & \url{AITeamVN/Vietnamese_Embedding} (1024 chiều) \\
+    Thiết bị embedding & \texttt{cpu} (hoặc tự động nhận diện) & \texttt{cuda} (chuyên dụng trên GPU) \\
+    LLM (Ollama) & \texttt{qwen3:4b}, \url{localhost:11434} & \texttt{qwen3:8b}, lấy từ \texttt{OLLAMA_BASE_URL} \\
+    Reranker & Không dùng & \url{AITeamVN/Vietnamese_Reranker}, giữ top 3 \\
+    Retriever & Top-10 & Top-10 \\
     \bottomrule
   \end{tabularx}
-  \caption{Hai profile cấu hình trong \texttt{src/config.py}.}
+  \caption{Hai profile cấu hình trong \url{src/config.py}.}
+  \label{tab:cau-hinh-profile}
 \end{table}
-
 Chỉ mục được lưu tách theo profile và tự build lại khi cấu hình đổi (Chương~\ref{ch:persist}).
 
 Nguồn dữ liệu thực tế được khai báo ở \emph{một} chỗ: \texttt{src/corpus.py} (\texttt{CORPUS\_DIR} và dict \texttt{SGU\_HIEU\_LUC}). Trường \texttt{corpus\_sources} cũ cùng hai file PDF không tồn tại đã được gỡ bỏ, nên không còn tình trạng cấu hình trỏ vào file không có thật.
@@ -191,7 +275,7 @@ Nguồn dữ liệu thực tế được khai báo ở \emph{một} chỗ: \text
 \subsection{Các script hỗ trợ}
 
 \begin{itemize}
-  \item \texttt{scripts/test\_ocr.py}: render toàn bộ một PDF và OCR ra file Markdown trong \texttt{data/ocr/}, kèm số trang và tổng số ký tự. Đây là script tạo ra bản OCR \texttt{data/ocr/4.\ QuyCheDaoTaoDHSG 2021.md} mà \texttt{index\_builder.py} dùng làm đầu vào.
+  \item \texttt{scripts/test\_ocr.py}: kiểm thử độc lập khâu nhận diện và trích xuất văn bản OCR (Tầng 2), chuyển toàn bộ PDF/ảnh sang file Markdown sạch.
   \item \texttt{scripts/check\_model\_memory.py}: đo RAM/VRAM khi nạp một mô hình embedding hoặc reranker (nhận \texttt{repo\_id}, \texttt{--type}, \texttt{--device}), giúp chọn mô hình vừa với phần cứng.
   \item \texttt{scripts/pull\_models.sh}: tải LLM qua Ollama và tải embedding/reranker từ HuggingFace theo profile, đồng bộ với \texttt{config.py}; dừng với thông báo lỗi nếu thiếu \texttt{ollama}, daemon chưa chạy hoặc thiếu \texttt{huggingface\_hub}.
   \item \texttt{scripts/manager.py}: công cụ dòng lệnh gom các thao tác với dịch vụ GPU thuê (xem, thuê, khởi động lại, xóa máy; xem số dư), gọi thử Ollama và chạy một server embedding.
@@ -234,27 +318,30 @@ Chuỗi xử lý của đồ án gồm sáu giai đoạn. Hình \ref{fig:pipelin
   \label{fig:pipeline}
 \end{figure}
 
-\begin{table}[H]
+\begin{table}[htbp]
   \centering
-  \small
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.15}
   \begin{tabularx}{\textwidth}{l l X l}
     \toprule
     \textbf{Giai đoạn} & \textbf{Mức} & \textbf{File} & \textbf{Chạy được} \\
     \midrule
-    1. Dữ liệu & Bắt buộc lõi & \texttt{scripts/extract\_to\_md.py}, \texttt{scripts/clean\_md.py} & Có \\
-    2. Node & Bắt buộc lõi & \texttt{src/processed\_loader.py} & Có \\
-    3. Index & Bắt buộc lõi & \texttt{src/index\_builder.py} & Có \\
-    4. Retriever & Bắt buộc lõi & \texttt{src/retriever.py} & Có \\
-    5. Response Synthesis & Bắt buộc lõi & \texttt{src/query\_engine.py}, \texttt{src/pipeline.py} & Có \\
-    6. Evaluation & Bắt buộc lõi & \texttt{eval/evaluate.py}, \texttt{eval/baselines.py}, \texttt{eval/evaluate\_answers.py} & Có (truy hồi: tự động; câu trả lời: cần Ollama) \\
-    Hybrid BM25 & Chọn thêm & \texttt{src/bm25.py}, \texttt{src/retriever.py} & Có (mặc định tắt) \\
-    Rerank & Chọn thêm & \texttt{src/retriever.py} & Có (profile \texttt{server}, mặc định tắt) \\
-    Model server & Chọn thêm & \texttt{src/model\_server.py}, \texttt{src/remote\_models.py} & Có \\
-    Kiểm thử & Bắt buộc lõi & \texttt{tests/}, \texttt{Makefile}, CI & Có (26 kiểm thử) \\
-    Giao diện web & Chọn thêm & \texttt{app/app.py} & Có (chạy thử) \\
+    1. Dữ liệu & Bắt buộc & \url{scripts/extract_to_md.py}, \url{scripts/clean_md.py} & Có \\
+    2. Node & Bắt buộc & \url{src/processed_loader.py} & Có \\
+    3. Index & Bắt buộc & \url{src/index_builder.py} & Có \\
+    4. Retriever & Bắt buộc & \url{src/retriever.py} & Có \\
+    5. Response & Bắt buộc & \url{src/query_engine.py}, \url{src/pipeline.py} & Có \\
+    6. Evaluation & Bắt buộc & \url{eval/evaluate.py}, \url{eval/baselines.py}, \url{eval/evaluate_answers.py} & Có (tự động / Ollama) \\
+    Hybrid BM25 & Tùy chọn & \url{src/bm25.py}, \url{src/retriever.py} & Có (tắt) \\
+    Rerank & Tùy chọn & \url{src/retriever.py} & Có (server) \\
+    Model server & Tùy chọn & \url{src/model_server.py}, \url{src/remote_models.py} & Có \\
+    Kiểm thử & Bắt buộc & \url{tests/}, \texttt{Makefile}, CI & Có (26 test) \\
+    Giao diện web & Tùy chọn & \url{app/app.py} & Có (demo) \\
     \bottomrule
   \end{tabularx}
   \caption{Trạng thái mã nguồn của từng giai đoạn.}
+  \label{tab:trang-thai-nguon}
 \end{table}
 
 \section{Kiểm chứng môi trường}
