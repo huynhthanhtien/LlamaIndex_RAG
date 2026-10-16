@@ -43,7 +43,18 @@ giải thang điểm vào prompt và công tắc \texttt{RAG\_THINKING}.
 
 \section{Định hướng bản thân}
 
-\chualam{từng thành viên viết ở bản báo cáo cuối}.
+\subsection{Định hướng nghiên cứu và phát triển của thành viên Phan Hữu Kha (N2)}
+
+Với vai trò phụ trách kỹ nghệ dữ liệu, quản lý phiên bản hiệu lực và đánh giá mô hình trong đồ án, tôi định hướng tập trung vào các vấn đề cốt lõi sau nhằm nâng cấp hệ thống hỏi đáp quy chế đào tạo:
+
+\begin{itemize}
+  \item \textbf{Tự động hóa hoàn toàn luồng trích xuất bảng biểu phức tạp (Automated Tabular Extraction):}
+        Hiện tại các bảng quy đổi chứng chỉ tiếng Anh (như trong văn bản 2366, 2451, 2626) đã được chuẩn hóa thành công sang CSV cấu trúc 8 cột. Hướng phát triển tiếp theo là xây dựng pipeline tự động phân tích định dạng PDF biểu bảng (sử dụng LayoutLMv3 hoặc Docling) kết hợp OCR chuyên dụng cho tiếng Việt để trích xuất trực tiếp thành bảng có cấu trúc và nạp vào cơ sở dữ liệu SQLite/PostgreSQL, tránh việc chuyển đổi thủ công khi nhà trường ban hành quy định mới.
+  \item \textbf{Cơ chế truy hồi phân cấp Small-to-Big cho các Điều quy chế dài:}
+        Nghiên cứu áp dụng \texttt{HierarchicalNodeParser} để chia nhỏ các Điều dài thành các Node con ở cấp khoản, điểm phục vụ tìm kiếm embedding cosine chính xác cao (tránh pha loãng ngữ nghĩa). Khi truy hồi, hệ thống tự động ánh xạ ngược lên Node cha (toàn bộ nội dung Điều) thông qua \texttt{AutoMergingRetriever} để cung cấp trọn vẹn ngữ cảnh pháp lý cho LLM, triệt tiêu lỗi suy diễn sai các chi tiết số và mốc thời gian.
+  \item \textbf{Tích hợp Structured Tool Calling giải quyết triệt để bài toán quy đổi điểm:}
+        Thay vì để mô hình ngôn ngữ tự diễn giải và ước lượng khoảng điểm (dễ dẫn tới ảo giác như lỗi nhầm thang điểm hệ 10/hệ 4 đã phát hiện), hệ thống sẽ trang bị cho Agent một \texttt{FunctionTool} thực hiện truy vấn SQL chính xác trên các file CSV bảng quy đổi (\texttt{data/bang\_quy\_doi/}). LLM chỉ đóng vai trò phân tích tham số (chứng chỉ, điểm số, khóa học) và gọi hàm, đảm bảo tính tất định và chính xác tuyệt đối 100\% cho sinh viên.
+\end{itemize}
 
 \section{Kết luận}
 

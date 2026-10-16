@@ -211,3 +211,22 @@ Không đưa vào tầng 2 (mẫu đơn .docx): `1a. QuyDinhChuyenNganhDaoTao_Do
   - `Số:535/ĐHSG-ĐT Thành phố Hồ Chí Minh, ngày 3Ô tháng3 năm 2020`
   - `Căn cứ Kết luận của cuộc họp Hội đồng Khoa học và Đào tạo ngày 28/02/2020,`
   - `định số 99/2019/NĐ-CP ngày 30 tháng 12 năm 2019:`
+
+---
+
+## Báo cáo xác minh hiệu lực và phiên bản (D1 - 16/10/2026)
+
+| Văn bản | Tình trạng | Căn cứ xác minh | Ngày tra cứu | Kết luận |
+|---|---|---|---|---|
+| `25_quy-che-dao-tao-...pdf` | `bi_sua_doi` | QĐ 258/QĐ-ĐHSG ngày 22/02/2022 ban hành QC ĐHCQ áp dụng từ khóa 2021 trở đi; bị sửa đổi một số điều bởi QĐ 3183/QĐ-ĐHSG. | 2026-10-16 | Đang áp dụng (sửa đổi Điều 6, 7, 9, 10) |
+| `QD 3183.2025 ...pdf` | `con_hieu_luc` | QĐ 3183/QĐ-ĐHSG ngày 14/04/2025 sửa đổi QC 2021; Điều 2 quy định các khoản sửa điểm (3, 4, 5 Điều 1) áp dụng cho khóa từ 2025 trở đi. | 2026-10-16 | Đang áp dụng |
+| `8_QD810...pdf` | `con_hieu_luc` | QĐ 810/QĐ-ĐHSG ngày 15/04/2024 về học cùng lúc 2 chương trình; căn cứ QC 2021 (QĐ 258/QĐ-ĐHSG). | 2026-10-16 | Đang áp dụng |
+| `2022-2375...pdf` | `con_hieu_luc` | QyĐ 2375/QyĐ-ĐHSG ngày 18/10/2022 về chuyển CTĐT, ngành ĐHCQ; căn cứ QC 2021 (QĐ 258/QĐ-ĐHSG). | 2026-10-16 | Đang áp dụng |
+| `22_quy-dinh-ve-khoi-luong...pdf` | `con_hieu_luc` | Trích quy định 1625/QyĐ-ĐHSG-ĐT ngày 31/07/2018 về khối lượng đào tạo hệ chính quy theo tín chỉ. | 2026-10-16 | Đang áp dụng |
+| `Quydinh150tc.pdf` | `con_hieu_luc` | Thông báo 535/TB-ĐHSG ngày 30/03/2020 điều chỉnh CTĐT kỹ sư 150 tín chỉ cho các khóa 2017, 2018, 2019. | 2026-10-16 | Đang áp dụng |
+| `01.Quyche43.pdf` | `het_hieu_luc` | QĐ 43/2007/QĐ-BGDĐT đã bị Thông tư 08/2021/TT-BGDĐT thay thế. | 2026-10-16 | Hết hiệu lực, không nạp |
+| `3_quyet-dinh-so-17...pdf` | `het_hieu_luc` | VBHN 17/VBHN-BGDĐT (2014) hợp nhất QĐ 43 và TT 57, đã hết hiệu lực. | 2026-10-16 | Hết hiệu lực, không nạp |
+| `05.-QD_trienkhaiTT57...pdf` | `het_hieu_luc` | Công văn 147/ĐHSG-ĐT năm 2013 triển khai TT 57/2012, đã hết hiệu lực. | 2026-10-16 | Hết hiệu lực, không nạp |
+| `QuyCheDaoTao_2017.pdf` | `het_hieu_luc` | QĐ 3522/2017 của Trường ĐHSG đã bị Quy chế 2021 (QĐ 258/QĐ-ĐHSG) thay thế. | 2026-10-16 | Hết hiệu lực, không nạp |
+| `2_qui-che-dao-tao-...-08-nam-2021...pdf` | `con_hieu_luc` (Bộ) | Thông tư 08/2021/TT-BGDĐT cấp Bộ; trùng số Điều với QC SGU nên mặc định không nạp để tránh lấn át văn bản của Trường. | 2026-10-16 | Không nạp vào index chính |
+

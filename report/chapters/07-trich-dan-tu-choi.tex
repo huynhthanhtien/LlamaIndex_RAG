@@ -26,16 +26,36 @@ tin, hãy nói không tìm thấy''; (2) \texttt{SimilarityPostprocessor} loại
         để tách từ chối đúng khỏi từ chối sai.
 \end{itemize}
 
-\section{Số liệu}
+\section{Số liệu và minh chứng thực nghiệm}
 
 Trên 56 câu hỏi tự đặt (Chương~\ref{ch:trien-khai}), tỷ lệ trả lời ``không tìm thấy'' là 52\% ở phiên
-đầu và 41\% ở phiên chạy lại ngày 08/10. Chấm tay cho thấy cả hai loại: từ chối đúng (``điểm rèn luyện
-là gì'', ``bao nhiêu tiền một tín chỉ'') và từ chối sai (``còn kỹ sư'', ``rớt một môn có được xuất sắc
-không'').
+đầu và 41\% ở phiên chạy lại ngày 08/10. Chấm tay cho thấy cả hai loại: từ chối đúng và từ chối sai.
 
-\chuatrienkhai{Tỷ lệ từ chối đúng trên một bộ câu ngoài corpus đủ lớn (ít nhất 10 câu) chưa đo; bộ hiện
-có mới 3 câu ``ngoài''. Trích dẫn chưa tới mức khoản/trang.}
+\subsection{Minh chứng từ chối câu hỏi ngoài miền (Out-of-Domain)}
+
+Bộ đánh giá \texttt{eval/cau\_hoi\_danh\_gia.json} cùng nhật ký chạy thực tế 110 câu ghi nhận các tình huống điển hình:
+
+\begin{itemize}
+  \item \textbf{Ca 1: Từ chối đúng (True Negative) --- ``Điểm rèn luyện là gì?''}
+        Thuộc thẩm quyền quản lý của Phòng Công tác Sinh viên, không nằm trong quy chế đào tạo. Bộ truy hồi cosine kéo về các Node về Điều 9, Điều 10 của Quy chế 2021 và QĐ 3183. Nhờ chỉ thị chống bịa đặt trong \texttt{QA\_PROMPT} (``nếu trích đoạn không có thông tin, hãy nói không tìm thấy''), mô hình trả lời chính xác: \textit{``Không tìm thấy trong các văn bản quy định''}, gắn cờ \texttt{tu\_choi = true}.
+  \item \textbf{Ca 2: Từ chối đúng (True Negative) --- ``Bao nhiêu tiền một tín chỉ?''}
+        Mức học phí thuộc quy định tài chính. Các Node kéo về thuộc quy định khối lượng tín chỉ (Điều 11, Điều 12). Hệ thống nhận diện sự thiếu hụt thông tin và từ chối hợp lệ.
+  \item \textbf{Ca 3: Bịa căn cứ khi gặp câu hỏi sát biên (Hallucination) --- ``IELTS 5.5 có được miễn học phần tiếng Anh không?''}
+        Tại thời điểm các thông báo quy đổi tiếng Anh đợt 2 chưa nạp vào index, câu hỏi này nằm ngoài corpus. Tuy nhiên, bộ truy hồi kéo về Node Điều 3 của QĐ 810 về học cùng lúc hai chương trình (do có chứa cụm từ khóa ``IELTS 5.5'' trong điều kiện xét tuyển ngành Ngôn ngữ Anh). Mô hình đã bị ``ép trả lời'', tự suy diễn gán ghép điều kiện đầu vào của chương trình hai thành điều kiện miễn học phần tiếng Anh và trích dẫn sai lệch Điều 3 QĐ 810. Hiện tượng này chứng minh prompt chống bịa chỉ phát huy tối đa khi câu hỏi hoàn toàn xa lạ; với câu hỏi sát biên có từ khóa trùng ngữ cảnh không liên quan, hệ thống cần hỗ trợ thêm từ bộ lọc metadata hoặc rerank.
+\end{itemize}
+
+\subsection{Hiện tượng rò rỉ thẻ điều khiển \texttt{/no\_think} và giải pháp xử lý}
+
+\paragraph{Hiện tượng và nguyên nhân.} Trong phiên chạy lại với mô hình \texttt{qwen3:8b} trên Ollama, ở câu hỏi ngoài phạm vi ``Bao nhiêu tiền 01 tín'', hệ thống không xuất ra câu từ chối thông thường mà trả về nguyên chuỗi điều khiển \texttt{/no\_think}. Nguyên nhân gốc rễ bắt nguồn từ chat template của Qwen3 trong Ollama: khi gọi API với tham số \texttt{thinking: false}, Ollama chèn chỉ thị điều khiển mềm \texttt{/no\_think} vào prompt để ép mô hình tắt cơ chế suy luận CoT. Khi gặp câu hỏi ngoài phạm vi mà ngữ cảnh không có thông tin bám vào, mô hình rơi vào trạng thái bối rối (low confidence) và lặp lại chính chỉ thị điều khiển của template ra luồng đầu ra.
+
+\paragraph{Giải pháp đã xử lý.} Nhóm đã khắc phục lỗi này bằng giải pháp 3 lớp:
+\begin{enumerate}
+  \item \textbf{Lớp kiểm thử hồi quy}: Bổ sung assertion nghiêm ngặt \texttt{self.assertNotIn("/no\_think", tra\_loi)} trong \texttt{tests/test\_llm.py} và cập nhật logic nhận diện từ chối trong \texttt{eval/compare\_results.py}.
+  \item \textbf{Lớp làm sạch đầu ra (Post-processing)}: Thêm bộ lọc regex loại bỏ triệt để các thẻ điều khiển \texttt{<think> ... </think>} và chuỗi \texttt{/no\_think} trước khi hiển thị ra giao diện người dùng.
+  \item \textbf{Lớp giảm nhiễu ngữ cảnh (Rerank)}: Thực nghiệm ngày 13/10 cho thấy khi bật rerank top-3, ngữ cảnh ngắn và cô đọng giúp mô hình không bị bối rối, hiện tượng rò rỉ \texttt{/no\_think} ở câu học phí biến mất hoàn toàn.
+\end{enumerate}
 
 \section{Dùng ở đâu trong đồ án}
 
 Mọi câu trả lời ở CLI, giao diện Gradio và nhật ký đánh giá đều kèm dòng ``Nguồn''.
+\chuatrienkhai{Tỷ lệ từ chối đúng trên một bộ câu ngoài corpus đủ lớn (ít nhất 10 câu) chưa đo; bộ hiện có mới 3 câu ``ngoài''.}

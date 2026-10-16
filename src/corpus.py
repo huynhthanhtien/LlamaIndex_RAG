@@ -33,4 +33,8 @@ SGU_HIEU_LUC: dict[str, str] = {
     "CV2626": "QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023)",
     "29_2101": "QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024)",
     "TB so 2567": "TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)",
+    # Đợt 3: quy trình phúc khảo, tiết học và chuẩn đầu ra tốt nghiệp
+    "HD-Quy trinh phuc khao": "HD 1181/2022 thực hiện quy trình phúc khảo bài thi kết thúc học phần",
+    "02.-Tiethoc_phonghoc": "Quy định thời gian tiết học, ca học và mã phòng học",
+    "TB_ChuanDauRa_2020": "TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp",
 }

@@ -5,15 +5,16 @@ url: "https://ctsv.sgu.edu.vn/data/vanban/25.pdf"
 tieu_de: "5. Quy chế đào tạo trình độ đại học tại Trường Đại học Sài Gòn"
 trung_noi_dung_voi: ["01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/4. QuyCheDaoTaoDHSG 2021.pdf", "01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/4. QuyCheDaoTaoDHSG 2021__daotao.pdf"]
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/25_quy-che-dao-tao-trinh-do-dai-hoc-tai-truong-dai-hoc-sai-gon.md"
-ten_van_ban: ""
-loai: ""
-so_hieu: ""
-co_quan: ""
-ngay_ban_hanh: ""
-ap_dung: ""
-tinh_trang: ""
-bi_sua_doi_boi: ""
-ghi_chu: ""
+ten_van_ban: "Quy chế đào tạo trình độ đại học SGU 2021"
+loai: "Quy chế"
+so_hieu: "258/QĐ-ĐHSG"
+co_quan: "Trường Đại học Sài Gòn"
+ngay_ban_hanh: "2022-02-22"
+tinh_trang: "bi_sua_doi"
+bi_sua_doi_boi: ["3183/QĐ-ĐHSG"]
+ap_dung: "Khóa tuyển sinh từ năm 2021 trở đi"
+ap_dung_khoa_tu: 2021
+ghi_chu: "Ban hành kèm theo Quyết định 258/QĐ-ĐHSG; sửa đổi một số điều bởi QĐ 3183/QĐ-ĐHSG"
 so_phan: 2
 ---
 

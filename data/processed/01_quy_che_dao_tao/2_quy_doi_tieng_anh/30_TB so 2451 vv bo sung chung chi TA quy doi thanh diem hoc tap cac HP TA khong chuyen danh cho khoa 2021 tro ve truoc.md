@@ -5,14 +5,16 @@ url: "https://daotao.sgu.edu.vn/images/pdf/tieng_anh/30_TB%20so%202451%20vv%20bo
 tieu_de: "download the pdf file."
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/2_quy_doi_tieng_anh/30_TB so 2451 vv bo sung chung chi TA quy doi thanh diem hoc tap cac HP TA khong chuyen danh cho khoa 2021 tro ve truoc.md"
-ten_van_ban: "Thông báo về việc bổ sung chứng chỉ Tiếng Anh quy đổi thành điểm học tập các học phần tiếng Anh không chuyên dành cho các khóa 2021 trở về trước"
+ten_van_ban: "TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước)"
 loai: "Thông báo"
 so_hieu: "2451/TB-ĐHSG"
 co_quan: "Trường Đại học Sài Gòn"
-ngay_ban_hanh: "23/09/2024"
-ap_dung: "Khóa tuyển sinh 2021 trở về trước"
+ngay_ban_hanh: "2024-09-23"
 tinh_trang: "con_hieu_luc"
-bi_sua_doi_boi: ""
+sua_doi: ["2366/TB-ĐHSG"]
+ap_dung: "Khóa tuyển sinh 2021 trở về trước"
+ap_dung_khoa_tu: 2020
+ap_dung_khoa_den: 2021
 ghi_chu: "Bổ sung bảng của TB 2366; bảng chép tay"
 so_phan: 1
 ---

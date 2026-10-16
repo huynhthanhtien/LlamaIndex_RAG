@@ -40,3 +40,17 @@ Nguồn: `data/ocr/01_quy_che_dao_tao/3_cong_tac_thi_ket_thuc_hoc_phan`
   - `Điều 2. Quyết định này có hiệu lực thi hành kể từ ngày kí.`
   - `Điều 3. Quyết định này thay thế Quy định số 3089/QyÐ-ÐHSG ngày 03/12/2020`
   - `nghiệp trung học phổ thông ban hành kèm theo Thông tư số 24/2024/TT-BGDĐT ngày`
+
+---
+
+## Báo cáo xác minh hiệu lực và phiên bản (D1 - 16/10/2026)
+
+| Văn bản | Tình trạng | Căn cứ xác minh | Ngày tra cứu | Kết luận |
+|---|---|---|---|---|
+| `QD898BanHanhQuyDinhToChucThiHocKi.pdf` | `con_hieu_luc` | Điều 2: có hiệu lực từ ngày ký (08/01/2025). Điều 3: thay thế Quy định 3089/QyĐ-ĐHSG ngày 03/12/2020. | 2026-10-16 | Đang áp dụng, thay thế 3089 |
+| `Quy dinh ve cong tac to chuc thi hoc ki.pdf` | `het_hieu_luc` | Là Quy định 3089/QyĐ-ĐHSG (OCR đọc nhầm 3084), đã bị QĐ 898 thay thế hoàn toàn tại Điều 3. | 2026-10-16 | Không nạp vào index trả lời |
+| `CV_3248_001_khieunai.pdf` | `bi_sua_doi` | Mục 2 quy định lệ phí phúc khảo 100.000đ mâu thuẫn với Điều 6 QĐ 898/2025 (150.000đ). Phần phúc khảo đã bị QĐ 898 thay thế, phần khiếu nại điểm quá trình vẫn giữ. | 2026-10-16 | Đánh dấu `bi_sua_doi_boi: ["898/QĐ-ĐHSG"]` |
+| `3260-QD-Hoan-thi-.pdf` | `con_hieu_luc` | Ban hành ngày 20/11/2025 căn cứ QĐ 258/QĐ-ĐHSG. Đang áp dụng cho sinh viên ĐHCQ. | 2026-10-16 | Đang áp dụng |
+| `HD-Quy trinh phuc khao bai thi ket thuc hoc phan.pdf` | `con_hieu_luc` (quy trình) | Căn cứ vào 3089 (đã bị 898 thay thế), nhưng bảng các bước nộp đơn và xử lý phúc khảo trên thực tế vẫn áp dụng tại Phòng Đào tạo (chuẩn bị nạp ở đợt 3). | 2026-10-16 | Nạp đợt 3 theo định dạng F6 |
+| `ChienLuoc_001.pdf` | `het_hieu_luc` | QĐ 2018 căn cứ VBHN 17/2014 của Bộ (đã hết hiệu lực); là chiến lược nội bộ, không thuộc quy chế đào tạo sinh viên. | 2026-10-16 | Không nạp |
+

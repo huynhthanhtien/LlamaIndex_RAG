@@ -5,15 +5,16 @@ url: "https://drive.google.com/file/d/1MFSqkxyDU4E_13Kl8VPjqCJqbRpj5IQj/view?usp
 tieu_de: "Quy định về số tín chỉ tối thiểu đối với kỹ sư CNTT (từ khóa 2017 trở đi)"
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/Quydinh150tc.md"
-ten_van_ban: ""
-loai: ""
-so_hieu: ""
-co_quan: ""
-ngay_ban_hanh: ""
-ap_dung: ""
-tinh_trang: ""
-bi_sua_doi_boi: ""
-ghi_chu: ""
+ten_van_ban: "Quy định số tín chỉ tối thiểu kỹ sư CNTT (khóa 2017 trở đi)"
+loai: "Thông báo"
+so_hieu: "535/TB-ĐHSG"
+co_quan: "Trường Đại học Sài Gòn"
+ngay_ban_hanh: "2020-03-30"
+tinh_trang: "con_hieu_luc"
+ap_dung: "Sinh viên các khóa tuyển sinh 2017, 2018, 2019 các ngành kỹ sư"
+ap_dung_khoa_tu: 2017
+ap_dung_khoa_den: 2019
+ghi_chu: "Thông báo về việc điều chỉnh CTĐT chu kỳ 2016-2020 đối với các ngành đào tạo kỹ sư (150 tín chỉ)"
 so_phan: 1
 ---
 
