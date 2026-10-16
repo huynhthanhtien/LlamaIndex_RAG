@@ -5,15 +5,17 @@ url: "https://daotao.sgu.edu.vn/images/pdf/tieng_anh/29_2101-Qui%20dinh%20vv%20t
 tieu_de: "download the pdf file."
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/2_quy_doi_tieng_anh/29_2101-Qui dinh vv to chuc day hoc cac HP tieng Anh khong chuyen ap dung cho cac khoa TS tu nam 2024 tro di.md"
-ten_van_ban: "Quy định về việc tổ chức dạy học các học phần tiếng Anh không chuyên áp dụng cho các khóa tuyển sinh từ năm 2024 trở đi"
+ten_van_ban: "QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024)"
 loai: "Quy định"
 so_hieu: "2101/QyĐ-ĐHSG"
 co_quan: "Trường Đại học Sài Gòn"
-ngay_ban_hanh: "26/08/2024"
-ap_dung: "Khóa tuyển sinh từ 2024 trở đi"
+ngay_ban_hanh: "2024-08-26"
 tinh_trang: "con_hieu_luc"
-bi_sua_doi_boi: "TB 2567/2024 (bổ sung PTE)"
-ghi_chu: "Thay thế QyĐ 2626 cho khóa từ 2024; bảng chép tay"
+thay_the: ["2626/QyĐ-ĐHSG"]
+bi_sua_doi_boi: ["2567/TB-ĐHSG"]
+ap_dung: "Khóa tuyển sinh từ năm 2024 trở đi"
+ap_dung_khoa_tu: 2024
+ghi_chu: "Thay thế QyĐ 2626 cho khóa từ 2024; bổ sung PTE bởi TB 2567; bảng chép tay"
 so_phan: 1
 ---
 

@@ -5,15 +5,14 @@ url: "https://ctsv.sgu.edu.vn/data/vanban/2.pdf"
 tieu_de: "2. Qui chế đào tạo trình độ đại học hệ chính qui (Qui chế 08 năm 2021) áp dụng đối với sinh viên K.21 trở về sau"
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/2_qui-che-dao-tao-trinh-do-dai-hoc-he-chinh-qui-qui-che-08-nam-2021-ap.md"
-ten_van_ban: ""
-loai: ""
-so_hieu: ""
-co_quan: ""
-ngay_ban_hanh: ""
-ap_dung: ""
-tinh_trang: ""
-bi_sua_doi_boi: ""
-ghi_chu: ""
+ten_van_ban: "Quy chế đào tạo trình độ đại học (Thông tư 08/2021/TT-BGDĐT)"
+loai: "Thông tư"
+so_hieu: "08/2021/TT-BGDĐT"
+co_quan: "Bộ Giáo dục và Đào tạo"
+ngay_ban_hanh: "2021-03-18"
+tinh_trang: "con_hieu_luc"
+ap_dung: "Cấp Bộ; áp dụng đối với các khóa tuyển sinh sau ngày TT có hiệu lực"
+ghi_chu: "Văn bản cấp Bộ, trùng số Điều với QC SGU 2021; mặc định không nạp vào index để tránh lấn át QC SGU"
 so_phan: 2
 ---
 

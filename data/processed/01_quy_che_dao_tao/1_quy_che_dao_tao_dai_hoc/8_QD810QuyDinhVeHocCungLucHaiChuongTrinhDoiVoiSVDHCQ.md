@@ -5,15 +5,14 @@ url: "https://daotao.sgu.edu.vn/images/pdf/quy_dinh/8_QD810QuyDinhVeHocCungLucHa
 tieu_de: "download the pdf file."
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/8_QD810QuyDinhVeHocCungLucHaiChuongTrinhDoiVoiSVDHCQ.md"
-ten_van_ban: ""
-loai: ""
-so_hieu: ""
-co_quan: ""
-ngay_ban_hanh: ""
-ap_dung: ""
-tinh_trang: ""
-bi_sua_doi_boi: ""
-ghi_chu: ""
+ten_van_ban: "QĐ 810 về học cùng lúc hai chương trình"
+loai: "Quy định"
+so_hieu: "810/QĐ-ĐHSG"
+co_quan: "Trường Đại học Sài Gòn"
+ngay_ban_hanh: "2024-04-15"
+tinh_trang: "con_hieu_luc"
+ap_dung: "Sinh viên đại học chính quy; có hiệu lực từ ngày ký (15/04/2024)"
+ghi_chu: "Ban hành kèm theo Quyết định số 810/QĐ-ĐHSG; căn cứ QĐ 258/QĐ-ĐHSG"
 so_phan: 2
 ---
 

@@ -5,15 +5,14 @@ url: "https://docs.google.com/viewerng/viewer?url=http://fit.sgu.edu.vn/site/wp-
 tieu_de: "Quy chế đào tạo trình độ đại học (hệ chuẩn)."
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QC_dao-tao-trinh-do-dai-hoc-he-chuan.md"
-ten_van_ban: ""
-loai: ""
-so_hieu: ""
-co_quan: ""
-ngay_ban_hanh: ""
-ap_dung: ""
-tinh_trang: ""
-bi_sua_doi_boi: ""
-ghi_chu: ""
+ten_van_ban: "Quy chế đào tạo đại học và cao đẳng hệ chính quy theo hệ thống tín chỉ (áp dụng hệ chuẩn cũ)"
+loai: "Quy chế"
+so_hieu: "43/2007/QĐ-BGDĐT"
+co_quan: "Trường Đại học Sài Gòn"
+ngay_ban_hanh: "2013-02-10"
+tinh_trang: "het_hieu_luc"
+ap_dung: "Đã hết hiệu lực"
+ghi_chu: "Theo QĐ 43/2007 và TT 57/2012; đã hết hiệu lực theo QC SGU 2021 (QĐ 258/2022), không nạp vào index"
 so_phan: 1
 ---
 

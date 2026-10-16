@@ -5,15 +5,14 @@ url: "https://ctsv.sgu.edu.vn/data/vanban/22.pdf"
 tieu_de: "2. Quy định về khối lượng đào tạo của các hệ đào tạo chính quy đào tạo theo hệ thống tín chỉ."
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/22_quy-dinh-ve-khoi-luong-dao-tao-cua-cac-he-dao-tao-chinh-quy-dao-tao.md"
-ten_van_ban: ""
-loai: ""
-so_hieu: ""
-co_quan: ""
-ngay_ban_hanh: ""
-ap_dung: ""
-tinh_trang: ""
-bi_sua_doi_boi: ""
-ghi_chu: ""
+ten_van_ban: "Quy định khối lượng đào tạo hệ chính quy theo tín chỉ"
+loai: "Quy định"
+so_hieu: "1625/QyĐ-ĐHSG-ĐT"
+co_quan: "Trường Đại học Sài Gòn"
+ngay_ban_hanh: "2018-07-31"
+tinh_trang: "con_hieu_luc"
+ap_dung: "Sinh viên các hệ đào tạo chính quy theo tín chỉ"
+ghi_chu: "Trích quy định 1625/QyĐ-ĐHSG-ĐT ngày 31/07/2018"
 so_phan: 1
 ---
 

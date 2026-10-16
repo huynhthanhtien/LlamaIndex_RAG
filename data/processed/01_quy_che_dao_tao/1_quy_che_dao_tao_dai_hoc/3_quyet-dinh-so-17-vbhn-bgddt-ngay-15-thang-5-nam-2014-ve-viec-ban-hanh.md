@@ -5,15 +5,14 @@ url: "https://ctsv.sgu.edu.vn/data/vanban/3.pdf"
 tieu_de: "3. Quyết định số 17/VBHN-BGDĐT ngày 15 tháng 5 năm 2014 về việc Ban hành quy chế đào tạo Đại học và Cao đẳng hệ chính quy theo hệ thống tín chỉ."
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/3_quyet-dinh-so-17-vbhn-bgddt-ngay-15-thang-5-nam-2014-ve-viec-ban-hanh.md"
-ten_van_ban: ""
-loai: ""
-so_hieu: ""
-co_quan: ""
-ngay_ban_hanh: ""
-ap_dung: ""
-tinh_trang: ""
-bi_sua_doi_boi: ""
-ghi_chu: ""
+ten_van_ban: "Văn bản hợp nhất Quy chế đào tạo ĐH và CĐ chính quy theo hệ thống tín chỉ (17/VBHN-BGDĐT)"
+loai: "Văn bản hợp nhất"
+so_hieu: "17/VBHN-BGDĐT"
+co_quan: "Bộ Giáo dục và Đào tạo"
+ngay_ban_hanh: "2014-05-15"
+tinh_trang: "het_hieu_luc"
+ap_dung: "Đã hết hiệu lực"
+ghi_chu: "Hợp nhất QĐ 43/2007 và TT 57/2012; đã hết hiệu lực theo TT 08/2021/TT-BGDĐT, không nạp vào index"
 so_phan: 2
 ---
 

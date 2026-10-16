@@ -5,15 +5,16 @@ url: "https://daotao.sgu.edu.vn/images/pdf/tieng_anh/TB%20so%202567-%20Bo%20sung
 tieu_de: "download the pdf file."
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/2_quy_doi_tieng_anh/TB so 2567- Bo sung chung chi tieng Anh PTE Academic de xet quy doi diem cac HP TA khong chuyen.md"
-ten_van_ban: "Thông báo về việc bổ sung chứng chỉ tiếng Anh PTE Academic để xét quy đổi điểm học tập các học phần tiếng Anh không chuyên"
+ten_van_ban: "TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)"
 loai: "Thông báo"
 so_hieu: "2567/TB-ĐHSG"
 co_quan: "Trường Đại học Sài Gòn"
-ngay_ban_hanh: "27/09/2024"
-ap_dung: "Khóa 2020-2021 và khóa từ 2022 (2 bảng riêng)"
+ngay_ban_hanh: "2024-09-27"
 tinh_trang: "con_hieu_luc"
-bi_sua_doi_boi: ""
-ghi_chu: "Bổ sung PTE vào TB 2366/2451 và QyĐ 2626/2101"
+sua_doi: ["2366/TB-ĐHSG", "2451/TB-ĐHSG", "2626/QyĐ-ĐHSG", "2101/QyĐ-ĐHSG"]
+ap_dung: "Khóa 2020-2021 và khóa từ 2022 trở đi (2 bảng riêng)"
+ap_dung_khoa_tu: 2020
+ghi_chu: "Bổ sung chứng chỉ PTE Academic vào TB 2366/2451 và QyĐ 2626/2101"
 so_phan: 1
 ---
 

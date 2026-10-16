@@ -5,15 +5,17 @@ url: "https://daotao.sgu.edu.vn/images/pdf/quy_dinh/202111_2366-TB-DHSG_%20to%20
 tieu_de: "download the pdf file."
 trung_noi_dung_voi: ["01_quy_che_dao_tao/2_quy_doi_tieng_anh/2366-TB-ĐHSG_ tô chức dạy học các học phần tiếng Anh không chuyên áp dụng từ năm học 2021 - 2022 (1).pdf"]
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/2_quy_doi_tieng_anh/202111_2366-TB-DHSG_ to chuc day hoc cac hoc phan tieng Anh khong chuyen ap dung tu nam hoc 2021 - 2022.md"
-ten_van_ban: "Thông báo về việc tổ chức dạy học các học phần tiếng Anh không chuyên áp dụng từ năm học 2021 - 2022"
+ten_van_ban: "TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)"
 loai: "Thông báo"
 so_hieu: "2366/TB-ĐHSG"
 co_quan: "Trường Đại học Sài Gòn"
-ngay_ban_hanh: "19/11/2021"
-ap_dung: "Khóa tuyển sinh 2021 trở về trước (học phần Tiếng Anh I/II/III)"
+ngay_ban_hanh: "2021-11-19"
 tinh_trang: "bi_sua_doi"
-bi_sua_doi_boi: "TB 2451/2024; TB 2567/2024"
-ghi_chu: "Bảng quy đổi chép tay từ bản scan"
+bi_sua_doi_boi: ["2451/TB-ĐHSG", "2567/TB-ĐHSG"]
+ap_dung: "Khóa tuyển sinh 2021 trở về trước (học phần Tiếng Anh I/II/III)"
+ap_dung_khoa_tu: 2020
+ap_dung_khoa_den: 2021
+ghi_chu: "Bảng quy đổi chép tay từ bản scan; bổ sung bởi TB 2451 và TB 2567"
 so_phan: 1
 ---
 

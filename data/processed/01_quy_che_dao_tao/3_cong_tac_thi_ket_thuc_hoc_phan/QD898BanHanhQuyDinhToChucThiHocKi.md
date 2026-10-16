@@ -5,15 +5,15 @@ url: "https://daotao.sgu.edu.vn/images/pdf/quy_dinh/QD898BanHanhQuyDinhToChucThi
 tieu_de: "Quy định Tổ chức thi học kì (2025)"
 trung_noi_dung_voi: []
 nguon_tang_1: "data/ocr/01_quy_che_dao_tao/3_cong_tac_thi_ket_thuc_hoc_phan/QD898BanHanhQuyDinhToChucThiHocKi.md"
-ten_van_ban: ""
+ten_van_ban: "QĐ 898/2025 ban hành Quy định tổ chức thi học kì"
 loai: "Quyết định"
-so_hieu: "898"
+so_hieu: "898/QĐ-ĐHSG"
 co_quan: "Trường Đại học Sài Gòn"
-ngay_ban_hanh: "2025"
-ap_dung: ""
+ngay_ban_hanh: "2025-01-08"
 tinh_trang: "con_hieu_luc"
-bi_sua_doi_boi: ""
-ghi_chu: "Điều 3 QĐ: thay thế Quy định 3089/QyĐ-ĐHSG ngày 03/12/2020"
+thay_the: ["3089/QyĐ-ĐHSG"]
+ap_dung: "Công tác tổ chức thi học kì tại Trường Đại học Sài Gòn; có hiệu lực từ ngày ký"
+ghi_chu: "Điều 3 thay thế Quy định 3089/QyĐ-ĐHSG ngày 03/12/2020; Điều 6 quy định lệ phí phúc khảo 150.000đ/học phần"
 so_phan: 2
 ---
 
