@@ -94,11 +94,27 @@ Sau khi sửa, cả hai mô hình cùng nằm trên GPU, tổng khoảng 2,2\,GB
 
 \section{AI Disclosure}
 
-\chualam{phần này viết ở bản báo cáo cuối, dựa trên nhật ký dùng AI của nhóm}. Nội dung sẽ gồm:
+Dưới đây là nhật ký minh bạch việc sử dụng công cụ AI hỗ trợ trong quá trình thực hiện đồ án (đặc biệt đối với các phân hệ dữ liệu, kiểm thử và báo cáo của thành viên Phan Hữu Kha):
+
 \begin{enumerate}
-  \item Công cụ AI đã dùng và dùng vào việc gì.
-  \item Phần có tỷ trọng AI sinh cao (ghi file / chức năng).
-  \item Ít nhất hai tình huống AI trả kết quả \emph{sai}: prompt, AI trả về gì, sai ở đâu, phát hiện thế nào,
-        sửa ra sao.
-  \item Tự đánh giá: nếu bỏ AI, phần nào nhóm vẫn tự viết lại được.
+  \item \textbf{Công cụ AI đã sử dụng:}
+        \begin{itemize}
+          \item \textit{GitHub Copilot / Claude 3.5 Sonnet / Antigravity Agent}: Hỗ trợ tự động hóa viết kịch bản tiền xử lý dữ liệu (\texttt{scripts/clean\_md.py}), tạo khung mã nguồn bộ kiểm thử (\texttt{tests/}), gợi ý cấu trúc truy vấn đánh giá (\texttt{eval/evaluate.py}) và rà soát lỗi chính tả, cú pháp LaTeX trong các chương báo cáo.
+        \end{itemize}
+  \item \textbf{Phần có tỷ trọng AI sinh cao:}
+        \begin{itemize}
+          \item Kịch bản parser trích xuất dữ liệu thô và regex chuẩn hóa văn bản quy chế (\texttt{scripts/extract\_to\_md.py}, \texttt{src/corpus.py}).
+          \item Bộ khung 15 câu hỏi đánh giá dev đợt 3 (\texttt{eval/dev\_questions\_dot3.json}) dựa trên dữ liệu văn bản gốc đã nạp.
+        \end{itemize}
+  \item \textbf{Hai tình huống AI trả kết quả sai và cách khắc phục:}
+        \begin{itemize}
+          \item \textit{Tình huống 1 (Biểu thức chính quy tham lam làm gộp Điều)}:
+                Khi sinh kịch bản tách văn bản theo Điều bằng regex \texttt{r"Điều\textbackslash{}s+\textbackslash{}d+.*?(?=Điều\textbackslash{}s+\textbackslash{}d+|\$)"}, AI sử dụng cờ \texttt{re.DOTALL} mà không xử lý trường hợp các Điều bị ngắt trang hoặc chứa các tiêu đề phụ dẫn đến việc gom nhầm nhiều Điều liên tiếp thành một Document duy nhất. \\
+                \textit{Phát hiện \& Sửa}: Kiểm tra số lượng Node thực tế thấy thiếu hụt nghiêm trọng (chỉ có 35 Node thay vì 54 Node). Nhóm đã can thiệp thủ công, viết lại bộ bóc tách Markdown hai tầng trong \texttt{src/processed\_loader.py} căn cứ theo thẻ tiêu đề chuẩn \texttt{\#} và \texttt{\#\#} cùng parser front matter.
+          \item \textit{Tình huống 2 (Bỏ qua phạm vi hiệu lực theo khóa học của QĐ 3183)}:
+                Khi yêu cầu AI tổng hợp bảng quy đổi điểm chữ sang thang 4 theo QĐ 3183/QĐ-ĐHSG, AI mặc định áp dụng thang điểm mới có điểm B+ (3,5) cho toàn bộ sinh viên mà bỏ qua quy định tại Điều 2 của Quyết định (chỉ áp dụng từ khóa tuyển sinh 2025 trở đi; các khóa trước 2025 vẫn giữ thang điểm cũ). \\
+                \textit{Phát hiện \& Sửa}: Khi đối soát với hồ sơ gốc và chạy thử nghiệm đánh giá câu hỏi ``8,4 hệ 10 thì hệ 4 được bao nhiêu'', nhóm đã phát hiện sự sai lệch nghiêm trọng. Thành viên N2 đã bổ sung trường metadata \texttt{ap\_dung\_tu\_khoa: 2025} vào front matter của văn bản và thiết kế câu hỏi kiểm thử đối kháng trong \texttt{eval/dev\_questions\_dot3.json} để ép mô hình phải phân định rõ khóa tuyển sinh.
+        \end{itemize}
+  \item \textbf{Tự đánh giá năng lực độc lập khi không có AI:}
+        Nếu hoàn toàn không sử dụng AI, nhóm vẫn hoàn toàn tự chủ 100\% việc thiết kế kiến trúc hệ thống RAG (Node parser, Retriever, Index Builder, Pipeline hỏi đáp), nắm vững cách lập chỉ mục vector, quy trình chuẩn hóa dữ liệu pháp lý và phương pháp đo lường khoa học (Recall@$k$, MRR, nDCG). Sự hỗ trợ của AI chủ yếu giúp tăng tốc độ gõ phím, tự động hóa các tác vụ lặp lại (boilerplate code) và định dạng bảng biểu báo cáo.
 \end{enumerate}

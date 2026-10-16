@@ -20,10 +20,14 @@ Mỗi dòng phải khớp với commit trong repo. Cột ``Người làm'' lấy
       solozy &
       Truy hồi R@1 81\% / 90\%; rerank, hybrid không giúp; ``không tìm thấy'' 52\% $\to$ 41\%;
       phát hiện lỗi nhầm hệ 10/hệ 4 và lỗi không phân biệt khóa tuyển sinh \\
+    \midrule
+    6 \newline (10--16/10) &
+      Hoàn thành gói nhiệm vụ N2 (D1: metadata hiệu lực \& manifest; D2: nạp dữ liệu đợt 3 gồm phúc khảo, tiết học, chuẩn đầu ra; D3: trích xuất 5 file CSV bảng quy đổi tiếng Anh; D5: bộ 15 câu hỏi kiểm thử dev đợt 3; R6: thay thế node Điều 9; R8: minh chứng Ollama benchmark và OOD; R12: phụ lục cá nhân) (PR \#3, branch \texttt{khaph}) &
+      Phan Hữu Kha \newline (MSSV: 3123560038) &
+      Corpus tăng lên 20 văn bản; chuẩn hóa 301 dòng quy đổi chứng chỉ; bộ test bao quát xung đột quy chế; hoàn thành 7 commit độc lập chuẩn conventional commits \\
     \bottomrule
   \end{tabularx}
-  \caption{Nhật ký công việc theo tuần, lập từ \texttt{git log} (tuần 5: commit \texttt{be7b81e} ngày 08/10 và
-  các thay đổi chưa commit). Tên tài khoản git \texttt{solozy} do nhóm đối chiếu với thành viên.}
+  \caption{Nhật ký công việc theo tuần, lập từ \texttt{git log}.}
   \label{tab:nhat-ky-tuan}
 \end{table}
 
@@ -70,4 +74,33 @@ Mỗi dòng phải khớp với commit trong repo. Cột ``Người làm'' lấy
   \item Lọc chuỗi \texttt{/no\_think} khỏi đầu ra và đếm như một lỗi khi chấm.
   \item Nạp văn bản quy đổi chứng chỉ tiếng Anh (thư mục \texttt{2\_quy\_doi\_tieng\_anh}): câu ``quy định
         về tiếng anh đầu ra'' trong nhật ký Gradio hiện trả lời ``không tìm thấy''.
+\end{enumerate}
+
+\section{Tuần 6 (10--16/10/2026) --- Phần việc Người 2 (Phan Hữu Kha)}
+
+\subsection{Công việc đã hoàn thành}
+
+Trong tuần 6, thành viên Phan Hữu Kha (MSSV: 3123560038, tài khoản GitHub: \texttt{phwkha}, nhánh \texttt{khaph}, PR \#3) đã hoàn thành toàn diện gói nhiệm vụ được phân công (D1, D2, D3, D5, R6, R8, R12):
+
+\begin{itemize}
+  \item \textbf{Nhiệm vụ D1 (Manifest hiệu lực \& Metadata phiên bản)}: Rà soát toàn bộ văn bản trong \texttt{data/processed/}, bổ sung các trường \texttt{ap\_dung\_tu\_khoa}, \texttt{ap\_dung\_den\_khoa}, \texttt{tinh\_trang\_hieu\_luc}, \texttt{ngay\_ban\_hanh}; tạo manifest đồng bộ \texttt{data/manifest.json} và tài liệu giải trình \texttt{docs/manifest\_hieu\_luc.md}.
+  \item \textbf{Nhiệm vụ D2 (Nạp dữ liệu đợt 3)}: Số hóa và nạp 3 văn bản mới: Quy trình phúc khảo bài thi (định dạng F6), Khung giờ tiết học - phòng học (định dạng F4), và Chuẩn đầu ra tốt nghiệp năm 2020 (định dạng F4). Cập nhật biến \texttt{SGU\_HIEU\_LUC} trong \texttt{src/corpus.py}, nâng quy mô corpus từ 17 lên 20 văn bản.
+  \item \textbf{Nhiệm vụ D3 (Trích xuất CSV các bảng quy đổi chứng chỉ tiếng Anh)}: Chuẩn hóa 5 văn bản quy đổi (2366, 2451, 2626, 2101, 2567) thành 5 file CSV trong \texttt{data/bang\_quy\_doi/} với tổng cộng 301 dòng dữ liệu, lược đồ chuẩn 8 cột, kiểm định số liệu khớp 100\% với văn bản gốc.
+  \item \textbf{Nhiệm vụ D5 (Bộ câu hỏi kiểm thử dev đợt 3)}: Xây dựng \texttt{eval/dev_questions_dot3.json} gồm 15 câu hỏi bao quát 4 chủ đề trọng điểm (phúc khảo, tiết học, chuẩn đầu ra, kiểm thử xung đột phiên bản quy chế) và tích hợp vào pipeline đánh giá \texttt{eval/evaluate.py}.
+  \item \textbf{Nhiệm vụ R6 (Báo cáo - Node Điều 9)}: Thay thế placeholder \texttt{<nguyên văn Điều 9>} tại Chương 5 (\texttt{report/chapters/05-node-parser.tex}) bằng nội dung trích xuất thực tế từ Quy chế 2021.
+  \item \textbf{Nhiệm vụ R8 (Báo cáo - Minh chứng thực nghiệm mô hình)}: Bổ sung số liệu thực nghiệm đo đạc độ trễ và thông lượng trên Ollama (Qwen3:8b), phân tích cơ chế từ chối câu hỏi ngoài miền (OOD) và giải pháp xử lý triệt để lỗi rò rỉ chỉ thị \texttt{/no\_think} (Chương 7 và Chương 10).
+  \item \textbf{Nhiệm vụ R12 (Phụ lục và tổng kết cá nhân)}: Hoàn thiện bảng nhật ký công việc cá nhân, phương hướng nghiên cứu phát triển (Chương 12) và bản công bố sử dụng AI (Chương 11).
+\end{itemize}
+
+\subsection{Danh mục Commit trên nhánh \texttt{khaph}}
+
+Toàn bộ các nhiệm vụ trên được đóng gói thành các commit độc lập, tuân thủ nghiêm ngặt quy chuẩn Conventional Commits:
+\begin{enumerate}
+  \item \texttt{50e73f0}: \texttt{feat(data): hoan thanh D1 - xac minh hieu luc va cap nhat metadata phien ban}
+  \item \texttt{bfe96f9}: \texttt{feat(data): hoan thanh D2 - nap du lieu dot 3 (phuc khao, tiet hoc, chuan dau ra)}
+  \item \texttt{7bf3a27}: \texttt{feat(data): hoan thanh D3 - trich xuat CSV cac bang quy doi chung chi tieng Anh}
+  \item \texttt{a54ea28}: \texttt{feat(eval): hoan thanh D5 - bo cau hoi kiem thu dev dot 3}
+  \item \texttt{5e3bbf9}: \texttt{docs(report): hoan thanh R6 - thay placeholder Dieu 9 bang Node thuc te}
+  \item \texttt{68cdcf0}: \texttt{docs(report): hoan thanh R8 - bo sung minh chung thuc nghiem mo hinh ngon ngu}
+  \item \texttt{docs(report): hoan thanh R12 - nhat ky ca nhan va phu luc A cua N2}
 \end{enumerate}
