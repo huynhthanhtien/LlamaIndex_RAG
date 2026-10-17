@@ -41,7 +41,10 @@ def setup_embedding(cfg: RAGConfig) -> None:
     if cfg.model_server_url:
         from remote_models import RemoteEmbedding, check_server
 
-        check_server(cfg.model_server_url, cfg.embed_model_name, cfg.reranker_model_name)
+        check_server(
+            cfg.model_server_url, cfg.embed_model_name, cfg.reranker_model_name if cfg.use_rerank else None,
+            cfg.reranker_max_length,
+        )
         Settings.embed_model = RemoteEmbedding(
             base_url=cfg.model_server_url, model_name=cfg.embed_model_name, embed_batch_size=32
         )

@@ -60,7 +60,7 @@ def build_query_engine(index: VectorStoreIndex, cfg: RAGConfig) -> RetrieverQuer
         response_mode=ResponseMode(cfg.response_mode),
         streaming=cfg.streaming,
         text_qa_template=QA_PROMPT,
-        node_postprocessors=get_postprocessors(cfg),
+        node_postprocessors=get_postprocessors(cfg, index),
     )
 
 

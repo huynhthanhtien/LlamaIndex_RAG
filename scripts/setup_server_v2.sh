@@ -153,6 +153,7 @@ client (remote_models.check_server) báo lỗi nếu server chạy model khác c
 Biến môi trường (mặc định = profile "server"):
     EMBED_MODEL          AITeamVN/Vietnamese_Embedding
     RERANK_MODEL         AITeamVN/Vietnamese_Reranker   (để rỗng = không bật rerank)
+    RERANK_MAX_LENGTH    2048  (token mỗi cặp câu hỏi–Node; SentenceTransformerRerank mặc định cắt ở 512)
     DEVICE               cuda nếu có GPU, ngược lại cpu
     FP16                 1  (chỉ có tác dụng khi DEVICE=cuda)
     MODEL_SERVER_TOKEN   nếu đặt: mọi request phải có header "Authorization: Bearer <token>"
@@ -179,6 +180,7 @@ from pydantic import BaseModel
 
 EMBED_MODEL = os.environ.get("EMBED_MODEL", "AITeamVN/Vietnamese_Embedding")
 RERANK_MODEL = os.environ.get("RERANK_MODEL", "AITeamVN/Vietnamese_Reranker") or None
+RERANK_MAX_LENGTH = int(os.environ.get("RERANK_MAX_LENGTH", "2048"))
 DEVICE = os.environ.get("DEVICE") or ("cuda" if torch.cuda.is_available() else "cpu")
 FP16 = os.environ.get("FP16", "1") == "1" and DEVICE == "cuda"
 TOKEN = os.environ.get("MODEL_SERVER_TOKEN") or None
@@ -201,6 +203,11 @@ def load_embedding() -> HuggingFaceEmbedding:
 def load_reranker(model_name: str) -> SentenceTransformerRerank:
     # Giữ giống make_local_reranker() trong src/retriever.py
     rerank = SentenceTransformerRerank(model=model_name, device="cpu" if FP16 else DEVICE)
+    # Như dat_do_dai_toi_da() trong src/retriever.py: sentence-transformers >= 5 dùng max_seq_length
+    if isinstance(getattr(type(rerank._model), "max_seq_length", None), property):  # pyright: ignore[reportPrivateUsage]
+        rerank._model.max_seq_length = RERANK_MAX_LENGTH  # pyright: ignore[reportPrivateUsage]
+    else:
+        rerank._model.max_length = RERANK_MAX_LENGTH  # pyright: ignore[reportPrivateUsage]
     if FP16:
         # SentenceTransformerRerank không nhận dtype: nạp trên CPU, ép fp16 rồi mới đưa lên GPU
         rerank._model.half().to(DEVICE)  # pyright: ignore[reportPrivateUsage]
@@ -236,8 +243,9 @@ class RerankRequest(BaseModel):
 
 
 @app.get("/health")
-def health() -> dict[str, str | bool | None]:
-    return {"embed_model": EMBED_MODEL, "reranker_model": RERANK_MODEL, "device": DEVICE, "fp16": FP16}
+def health() -> dict[str, str | int | bool | None]:
+    return {"embed_model": EMBED_MODEL, "reranker_model": RERANK_MODEL, "reranker_max_length": RERANK_MAX_LENGTH,
+            "device": DEVICE, "fp16": FP16}
 
 
 @app.post("/embed")

@@ -10,7 +10,10 @@ Thay đổi so với bản cũ (xem docs/bao_cao_cai_tien_bai_nghien_cuu.md):
   - Chỉ đưa MỘT trường vào embedding: `nguon_trich` ("Điều 9 — Quy chế ... 2021").
     Các khóa kỹ thuật (file, phan, ...) không còn lọt vào vector.
   - Ghi rõ LOADER_VERSION để index_builder phát hiện khi logic cắt thay đổi.
+  - Metadata hiệu lực (tinh_trang, sua_doi/thay_the, khóa áp dụng) đi vào Node để src/phien_ban.py lọc phiên bản;
+    không vào embedding, không vào prompt.
 """
+import json
 import re
 import sys
 from pathlib import Path
@@ -24,10 +27,13 @@ from config import RAGConfig, get_config
 ROOT = Path(__file__).resolve().parent.parent
 MAX_TU = 1024  # Điều dài hơn thì cắt nhỏ, như node_parser.parse_by_dieu
 MIN_TU_NOI_DUNG = 30  # chữ nằm ngay dưới "#"/"##" (không thuộc Điều nào) ngắn hơn thì bỏ (tiêu đề, dòng trích yếu)
-LOADER_VERSION = "processed_loader/2"  # đổi khi cách cắt hoặc schema metadata thay đổi
+LOADER_VERSION = "processed_loader/3"  # đổi khi cách cắt hoặc schema metadata thay đổi
 
+# Quan hệ giữa các văn bản (front matter ghi dạng list JSON) và khóa tuyển sinh áp dụng — dùng cho src/phien_ban.py
+QUAN_HE = ("sua_doi", "bi_sua_doi_boi", "thay_the", "bi_thay_the_boi")
+KHOA_AP_DUNG = ("ap_dung_khoa_tu", "ap_dung_khoa_den")
 # Metadata chỉ để lọc / trích dẫn: không đưa vào prompt
-KHONG_LLM = ["file", "file_goc", "url", "phan"]
+KHONG_LLM = ["file", "file_goc", "url", "phan", *QUAN_HE, *KHOA_AP_DUNG]
 # Metadata kỹ thuật: không đưa vào embedding (embedding chỉ nhận `nguon_trich`)
 KHONG_EMBED = ["file", "file_goc", "url", "phan", "chuong", "dieu", "sua_doi_dieu", "van_ban"]
 
@@ -42,6 +48,25 @@ def front_matter(text: str) -> tuple[dict[str, str], str]:
     _, front, body = text.split("---\n", 2)
     pairs = (line.split(": ", 1) for line in front.strip().splitlines() if ": " in line)
     return {k: v.strip().strip('"') for k, v in pairs}, body
+
+
+def danh_sach_so_hieu(gia_tri: str) -> str:
+    """'["2451/TB-ĐHSG", "2567/TB-ĐHSG"]' -> "2451/TB-ĐHSG; 2567/TB-ĐHSG" (metadata Node giữ kiểu chuỗi)."""
+    try:
+        ds = json.loads(gia_tri)
+    except json.JSONDecodeError:
+        return gia_tri.strip()
+    return "; ".join(str(x) for x in ds) if isinstance(ds, list) else str(ds)
+
+
+def khoa_theo_dieu(meta: dict[str, str]) -> dict[str, int]:
+    """`ap_dung_khoa_tu_theo_dieu: {"9": 2025}` — văn bản sửa đổi mà mỗi Điều áp dụng từ khóa khác nhau
+    (QĐ 3183 Điều 2: khoản 3–5, tức các mục sửa Điều 9 và 10, chỉ áp dụng từ khóa 2025)."""
+    try:
+        ds = json.loads(meta.get("ap_dung_khoa_tu_theo_dieu") or "{}")
+    except json.JSONDecodeError:
+        return {}
+    return {str(k): int(v) for k, v in ds.items()} if isinstance(ds, dict) else {}
 
 
 def nguon_trich(meta: dict[str, str | int]) -> str:
@@ -105,6 +130,15 @@ def load_processed(path: Path, ten_hien_thi: str = "") -> list[TextNode]:
         for khoa in ("so_hieu", "ngay_ban_hanh", "tinh_trang", "nhom"):
             if meta.get(khoa):
                 node_meta[khoa] = meta[khoa]
+        for khoa in QUAN_HE:
+            if meta.get(khoa):
+                node_meta[khoa] = danh_sach_so_hieu(meta[khoa])
+        for khoa in KHOA_AP_DUNG:
+            if meta.get(khoa, "").isdigit():
+                node_meta[khoa] = int(meta[khoa])
+        dieu_node = str(node_meta["sua_doi_dieu"] or node_meta["dieu"])
+        if dieu_node in khoa_theo_dieu(meta):
+            node_meta["ap_dung_khoa_tu"] = khoa_theo_dieu(meta)[dieu_node]
         text = f"{title}\n{rest.strip()}"
         chunks = [text] if len(text.split()) <= MAX_TU else _splitter.split_text(text)
         for j, chunk in enumerate(chunks, start=1):

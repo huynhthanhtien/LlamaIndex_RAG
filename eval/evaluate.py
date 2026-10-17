@@ -9,6 +9,16 @@ Khác bản cũ:
   - Có thể kiểm chứng chéo bằng `RetrieverEvaluator` của LlamaIndex (--kiem-chung).
   - So sánh nhiều cấu hình trên cùng bộ câu hỏi và kiểm định McNemar cho từng cặp.
 
+Luật chấm (một Node top-k được tính là đúng khi):
+  - Bộ 01 (QC SGU 2021, so_hieu 258): Node phần chính của QC 2021 có `dieu` thuộc nhãn, hoặc mục QĐ 3183 có
+    `sua_doi_dieu` thuộc nhãn (mục sửa đổi chính Điều đó cũng là câu trả lời đúng).
+  - Bộ 02 (QĐ 3183): chỉ Node có so_hieu 3183, với `sua_doi_dieu` thuộc nhãn hoặc Điều phần chính thuộc nhãn
+    (nhãn "2 (QĐ 3183)" là Điều 2 của chính QĐ 3183).
+  - Bộ dev (đợt 1–3): nhãn "<tiền tố file>" (văn bản chỉ có 1 Node) hoặc "<tiền tố file>|<Điều>" (Điều
+    thuộc phần chính của văn bản đó).
+  - Nhiều nhãn cùng đúng: viết "a;b" hoặc `"dieu_dung": ["a", "b"]`; Node khớp một nhãn bất kỳ là đúng.
+    JSON cũ có `dieu_dung` là chuỗi (định dạng tập kiểm chứng K1/K2) vẫn đọc được như trước.
+
 Cách dùng (từ thư mục gốc repo):
     RAG_PROFILE=server RAG_EMBED_DEVICE=cpu venv/bin/python eval/evaluate.py
     ... eval/evaluate.py --cau-hinh vector,rerank,hybrid
@@ -16,6 +26,7 @@ Cách dùng (từ thư mục gốc repo):
 """
 import argparse
 import dataclasses
+import gc
 import json
 import sys
 import time
@@ -40,20 +51,37 @@ TimKiem = Callable[[str], list[NodeWithScore]]
 KS = (1, 3, 5, 10)
 
 
+# Bộ 01/02 chấm theo cặp (số hiệu văn bản, Điều) lấy từ front matter, không theo tên file
+QC_2021 = "258"  # 258/QĐ-ĐHSG — Quy chế đào tạo trình độ đại học SGU 2021
+QD_3183 = "3183"  # 3183/QĐ-ĐHSG — sửa đổi QC 2021
+
+
+def so_vb(m: dict[str, object]) -> str:
+    """Số văn bản của Node: "3183/QĐ-ĐHSG" -> "3183" ("" nếu Node không có so_hieu)."""
+    return str(m.get("so_hieu", "")).split("/")[0].strip()
+
+
+def cac_dieu(nhan: str) -> list[str]:
+    """Nhãn bộ 01/02: "9", "9;10" (nhiều Điều cùng đúng) hoặc "2 (QĐ 3183)" -> ["9"], ["9", "10"], ["2"]."""
+    return [x.split()[0] for x in nhan.split(";") if x.strip()]
+
+
 def dung_bo_01(n: NodeWithScore, d: str) -> bool:
     """Bộ 01 hỏi về QC SGU 2021: đúng là Điều đó (phần chính) hoặc mục QĐ 3183 sửa đổi chính Điều đó."""
     m = n.node.metadata
-    goc = str(m.get("file", "")).startswith("25_") and m.get("phan") == "chinh" and m.get("dieu") == d
-    sua_doi = str(m.get("file", "")).startswith("QD 3183") and m.get("sua_doi_dieu") == d
+    ds = cac_dieu(d)
+    goc = so_vb(m) == QC_2021 and m.get("phan") == "chinh" and m.get("dieu") in ds
+    sua_doi = so_vb(m) == QD_3183 and m.get("sua_doi_dieu") in ds
     return bool(goc or sua_doi)
 
 
 def dung_bo_02(n: NodeWithScore, d: str) -> bool:
     """Bộ 02 hỏi về nội dung sửa đổi: đúng là mục QĐ 3183 sửa đổi Điều đó; nhãn "2 (QĐ 3183)" là Điều 2 của QĐ."""
     m = n.node.metadata
-    if not str(m.get("file", "")).startswith("QD 3183"):
+    if so_vb(m) != QD_3183:
         return False
-    return bool(m.get("sua_doi_dieu") == d or (m.get("phan") == "chinh" and m.get("dieu") == d))
+    ds = cac_dieu(d)
+    return bool(m.get("sua_doi_dieu") in ds or (m.get("phan") == "chinh" and m.get("dieu") in ds))
 
 
 def dung_bo_dev(n: NodeWithScore, d: str) -> bool:
@@ -76,16 +104,23 @@ BO_CAU_HOI: list[tuple[str, ChamDung]] = [
 ]
 
 # Tên cấu hình -> thay đổi so với config gốc. Dùng cho bảng ablation trong báo cáo.
+# Ghi tường minh use_rerank / loc_phien_ban vì profile server đã bật cả hai mặc định (16/10).
+_TAT = {"use_rerank": False, "loc_phien_ban": False}
 CAU_HINH: dict[str, dict[str, object]] = {
-    "vector": {},
-    "rerank": {"use_rerank": True},
+    "vector": dict(_TAT),
+    "rerank": {"use_rerank": True, "loc_phien_ban": False},
     # rerank giữ lại cả 10 Node (thay vì top_n=3) để đo được R@5/R@10 sau khi xếp hạng lại
-    "rerank-top10": {"use_rerank": True, "reranker_top_n": 10},
-    "hybrid": {"use_hybrid": True},
-    "hybrid+rerank": {"use_hybrid": True, "use_rerank": True},
+    "rerank-top10": {"use_rerank": True, "reranker_top_n": 10, "loc_phien_ban": False},
+    "loc": {"use_rerank": False, "loc_phien_ban": True},
+    "rerank+loc": {"use_rerank": True, "loc_phien_ban": True},
+    "rerank-top10+loc": {"use_rerank": True, "reranker_top_n": 10, "loc_phien_ban": True},
+    "hybrid": {"use_hybrid": True, **_TAT},
+    "hybrid+rerank": {"use_hybrid": True, "use_rerank": True, "loc_phien_ban": False},
+    "hybrid+rerank+loc": {"use_hybrid": True, "use_rerank": True, "loc_phien_ban": True},
     # Biến thể để tách nguyên nhân: nếu RRF (trọng số bằng nhau) là thủ phạm thì cấu hình này
     # (relative_score, ưu tiên vector 3:1) phải tốt hơn hybrid thuần.
-    "hybrid-uu-tien-vector": {"use_hybrid": True, "fusion_mode": "relative_score", "vector_weight": 3.0, "bm25_weight": 1.0},
+    "hybrid-uu-tien-vector": {"use_hybrid": True, "fusion_mode": "relative_score", "vector_weight": 3.0,
+                              "bm25_weight": 1.0, **_TAT},
 }
 
 
@@ -138,15 +173,34 @@ class KetQua:
         }
 
 
+def giai_phong_gpu() -> None:
+    gc.collect()
+    try:
+        import torch
+    except ImportError:
+        return
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+
+def chuan_hoa_nhan(nhan: str | list[str]) -> str:
+    """`dieu_dung` dạng list (nhiều nhãn đúng) -> chuỗi "a;b" mà các hàm dung_bo_* đọc; chuỗi giữ nguyên."""
+    return nhan if isinstance(nhan, str) else ";".join(x.strip() for x in nhan if x.strip())
+
+
 def doc_cau_hoi(ten_file: str) -> list[dict[str, str]]:
-    return json.loads((ROOT / "eval" / ten_file).read_text(encoding="utf-8"))
+    ds: list[dict[str, str | list[str]]] = json.loads((ROOT / "eval" / ten_file).read_text(encoding="utf-8"))
+    # Chỉ dieu_dung có thể là list; các trường khác (question, ...) là chuỗi nên chuan_hoa_nhan giữ nguyên.
+    return [{k: chuan_hoa_nhan(v) for k, v in q.items()} for q in ds]
 
 
 def danh_gia(ten_file: str, dung: ChamDung, tim: TimKiem, cau_hinh: str, mo_ta: dict[str, object]) -> KetQua:
     questions = doc_cau_hoi(ten_file)
     kq = KetQua(ten_file, cau_hinh, mo_ta, len(questions))
     for q in questions:
-        d = q["dieu_dung"].split()[0]
+        # Truyền nguyên nhãn: nhãn dev có dấu cách ("TB so 2567", "HD-Quy trinh phuc khao"); trước đây
+        # split()[0] cắt còn "TB" / "HD-Quy" nên tiền tố khớp lỏng (TB_ChuanDauRa cũng tính là đúng).
+        d = q["dieu_dung"]
         t0 = time.perf_counter()
         res = tim(q["question"])
         kq.thoi_gian_ms.append((time.perf_counter() - t0) * 1000)
@@ -176,7 +230,7 @@ def kiem_chung_thu_vien(cfg: RAGConfig, ten_file: str, dung: ChamDung, index: Ve
     ev = RetrieverEvaluator.from_metric_names(["mrr", "hit_rate"], retriever=get_retriever(index, cfg))
     diem: dict[str, list[float]] = {"mrr": [], "hit_rate": []}
     for q in doc_cau_hoi(ten_file):
-        d = q["dieu_dung"].split()[0]
+        d = q["dieu_dung"]
         mong_doi = [nid for nid, n in index.docstore.docs.items() if dung(NodeWithScore(node=n), d)]
         if not mong_doi:
             continue
@@ -240,7 +294,7 @@ def main() -> None:
             thay_doi["similarity_cutoff"] = args.cutoff
         cfg = dataclasses.replace(goc, **thay_doi)
         retriever = get_retriever(index, cfg)
-        posts = get_postprocessors(cfg)
+        posts = get_postprocessors(cfg, index)
         tim = lambda q, r=retriever, p=posts: search(index, cfg, q, postprocessors=p, retriever=r)  # noqa: E731
         tim("khởi động")  # lần đầu chậm hơn (khởi tạo CUDA kernel / nạp model), không tính vào thời gian
         print(f"=== {ten} ===")
@@ -252,6 +306,9 @@ def main() -> None:
                 kq_tv = kiem_chung_thu_vien(cfg, ten_file, dung, index)
                 print(f"  Kiểm chứng bằng RetrieverEvaluator của LlamaIndex: "
                       f"hit_rate={kq_tv.get('hit_rate', 0):.3f}, mrr={kq_tv.get('mrr', 0):.3f}\n")
+        # Mỗi cấu hình rerank nạp một CrossEncoder riêng; không giải phóng thì cấu hình rerank thứ hai tràn card 4 GB
+        del tim, posts, retriever
+        giai_phong_gpu()
 
     so_sanh_cap(tat_ca)
 

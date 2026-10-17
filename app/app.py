@@ -52,7 +52,7 @@ LOG_PATH = Path(__file__).resolve().parent.parent / "eval" / "results" / "questi
 def rerankers() -> list[BaseNodePostprocessor]:
     global _rerankers
     if _rerankers is None:
-        _rerankers = get_postprocessors(dataclasses.replace(cfg, use_rerank=True))
+        _rerankers = get_postprocessors(dataclasses.replace(cfg, use_rerank=True), index)
     return _rerankers
 
 
