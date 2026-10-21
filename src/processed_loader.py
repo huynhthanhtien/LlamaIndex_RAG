@@ -25,7 +25,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from config import RAGConfig, get_config
 
 ROOT = Path(__file__).resolve().parent.parent
-MAX_TU = 1024  # Điều dài hơn thì cắt nhỏ, như node_parser.parse_by_dieu
+# Hai đơn vị khác nhau: MAX_TU đếm TỪ (tách theo khoảng trắng) để quyết định có cắt Điều hay không, còn
+# chunk_size của SentenceSplitter đếm TOKEN theo tokenizer mặc định của LlamaIndex (tiktoken), không phải token của
+# model embedding/reranker. Đo 21/10 bằng tokenizer AITeamVN: cặp (câu hỏi, Node) dài nhất 1233 token (< 2048 của
+# reranker), 63/118 Node vượt 256 token của embedding profile local.
+MAX_TU = 1024  # Điều dài hơn MAX_TU từ thì cắt nhỏ, như node_parser.parse_by_dieu
 MIN_TU_NOI_DUNG = 30  # chữ nằm ngay dưới "#"/"##" (không thuộc Điều nào) ngắn hơn thì bỏ (tiêu đề, dòng trích yếu)
 LOADER_VERSION = "processed_loader/3"  # đổi khi cách cắt hoặc schema metadata thay đổi
 
@@ -40,7 +44,7 @@ KHONG_EMBED = ["file", "file_goc", "url", "phan", "chuong", "dieu", "sua_doi_die
 HEADING = re.compile(r"(?m)^(?=#{1,4} )")
 SO_DIEU = re.compile(r"Điều (\d+)")
 
-_splitter = SentenceSplitter(chunk_size=MAX_TU, chunk_overlap=50)
+_splitter = SentenceSplitter(chunk_size=MAX_TU, chunk_overlap=50)  # 1024 / 50 token tiktoken (xem MAX_TU)
 
 
 def front_matter(text: str) -> tuple[dict[str, str], str]:

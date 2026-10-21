@@ -7,3 +7,5 @@ storage/
 *.log
 .tmp/
 # docs/
+# log câu hỏi của giao diện Gradio (app/app.py)
+/logs/

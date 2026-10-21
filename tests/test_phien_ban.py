@@ -106,6 +106,11 @@ class TestUuTienTheoDiem(unittest.TestCase):
     def test_muc_sua_doi_theo_dieu_luon_len_truoc(self) -> None:
         self.assertEqual(chay_diem(UuTienSuaDoi(), (QC7, 0.97), (SD7, 0.01)), ["sd7", "qc7"])
 
+    def test_khong_rerank_thi_khong_so_ti_le(self) -> None:
+        # Không rerank: điểm là cosine, không cùng thang với ngưỡng 0,5 -> quan hệ cả văn bản luôn đưa lên
+        p = UuTienSuaDoi(ti_le_toi_thieu=None)
+        self.assertEqual(chay_diem(p, (TB2366_SUA, 0.542), (TB2567_PTE, 0.001)), ["2567pte", "2366s"])
+
 
 VAN_BAN_SUA_DOI = """---
 so_hieu: "3183/QĐ-ĐHSG"

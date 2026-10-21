@@ -4,9 +4,10 @@ Bản cũ chỉ chấm câu trả lời thủ công trên một phiên hỏi đ�
 đo tự động, có thể chạy lại:
   - `FaithfulnessEvaluator`: câu trả lời có bám vào ngữ cảnh truy hồi (chống bịa).
   - `RelevancyEvaluator`: câu trả lời có liên quan tới câu hỏi.
-  - `CorrectnessEvaluator`: so với đáp án chuẩn trong eval/cau_hoi_danh_gia.json.
-  - Từ chối: tách **từ chối đúng** (câu ngoài phạm vi) và **từ chối sai** (đáp án có trong ngữ cảnh),
-    thay vì một con số "52% từ chối" gộp cả hai như báo cáo trước.
+  Giám khảo của hai evaluator là chính LLM sinh câu trả lời (make_llm), nên đây là tự chấm, chỉ để tham khảo;
+  đáp án chuẩn trong eval/cau_hoi_danh_gia.json chỉ ghi kèm kết quả để chấm tay (không có CorrectnessEvaluator).
+  - Từ chối: tách **từ chối đúng** (tỉ lệ trên các câu ngoài phạm vi) và **từ chối sai** (tỉ lệ trên các câu
+    trong phạm vi), thay vì một con số "52% từ chối" gộp cả hai như báo cáo trước.
   - Chế độ `closed-book` (LLM trả lời không có ngữ cảnh) làm mốc so sánh RAG vs không RAG.
 Chạy hàng loạt bằng BatchEvalRunner của thư viện.
 
@@ -14,6 +15,7 @@ Cần Ollama đang chạy. Cách dùng:
     RAG_PROFILE=server RAG_EMBED_DEVICE=cpu venv/bin/python eval/evaluate_answers.py --che-do ca-hai
 """
 import argparse
+import dataclasses
 import json
 import re
 import sys
@@ -54,7 +56,8 @@ def ollama_san_sang(base_url: str) -> bool:
 
 
 def tra_loi_rag(cfg: RAGConfig, index: VectorStoreIndex, cau_hoi: list[str]) -> list[Response]:
-    engine = build_query_engine(index, cfg)
+    # Profile mặc định bật streaming (cho pipeline/app); ở đây cần Response đầy đủ để chấm
+    engine = build_query_engine(index, dataclasses.replace(cfg, streaming=False))
     ket: list[Response] = []
     for q in cau_hoi:
         r = engine.query(q)
@@ -69,7 +72,10 @@ def tra_loi_closed_book(cfg: RAGConfig, cau_hoi: list[str]) -> list[Response]:
 
 
 def diem_evaluator(llm: LLM, cau_hoi: list[str], responses: list[Response]) -> dict[str, list[float | None]]:
-    """Chấm bằng BatchEvalRunner; bỏ qua bài không có ngữ cảnh (closed-book) cho faithfulness/relevancy."""
+    """Chấm bằng BatchEvalRunner; bỏ qua bài không có ngữ cảnh (closed-book) cho faithfulness/relevancy.
+
+    Mỗi danh sách trả về dài bằng `responses` (None ở câu không có ngữ cảnh) để chỉ số i khớp đúng câu hỏi i.
+    """
     co_ngu_canh = [bool(r.source_nodes) for r in responses]
     ket: dict[str, list[float | None]] = {}
     if any(co_ngu_canh):
@@ -83,7 +89,8 @@ def diem_evaluator(llm: LLM, cau_hoi: list[str], responses: list[Response]) -> d
             responses=[r for r, ok in zip(responses, co_ngu_canh) if ok],
         )
         for ten, ds in kq.items():
-            ket[ten] = [r.passing for r in ds]
+            diem = iter(ds)
+            ket[ten] = [next(diem).passing if ok else None for ok in co_ngu_canh]
     return ket
 
 
@@ -133,11 +140,13 @@ def main() -> None:
                 "dap_an_chuan": b.get("dap_an"),
                 "tra_loi": tra_loi,
                 "tu_choi": tu_choi,
-                "tu_choi_dung": (tu_choi and b.get("pham_vi") == "ngoai") if b.get("pham_vi") else None,
-                "tu_choi_sai": (tu_choi and b.get("pham_vi") == "trong") if b.get("pham_vi") else None,
+                # Mỗi chỉ số chỉ tính trên đúng nhóm câu của nó (None = không thuộc mẫu số): trước đây cả hai
+                # chia cho toàn bộ câu nên tỉ lệ từ chối đúng không thể vượt (số câu ngoài)/(tổng số câu).
+                "tu_choi_dung": tu_choi if b.get("pham_vi") == "ngoai" else None,
+                "tu_choi_sai": tu_choi if b.get("pham_vi") == "trong" else None,
                 "nguon": "; ".join(dict.fromkeys(node_label(n) for n in r.source_nodes)),
-                "faithfulness": diem.get("faithfulness", [None] * len(bo))[i - 1] if diem.get("faithfulness") else None,
-                "relevancy": diem.get("relevancy", [None] * len(bo))[i - 1] if diem.get("relevancy") else None,
+                "faithfulness": diem["faithfulness"][i - 1] if "faithfulness" in diem else None,
+                "relevancy": diem["relevancy"][i - 1] if "relevancy" in diem else None,
             })
             print(f"[{i}] từ chối={tu_choi} | {b['question'][:60]} -> {tra_loi[:90]}")
 
