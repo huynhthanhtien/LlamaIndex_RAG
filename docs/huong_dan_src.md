@@ -92,7 +92,10 @@ Biến môi trường (`.env`):
 Heading do `clean_md.py` dựng: `#` văn bản → `##` Chương → `###` Điều → `####` mục sửa đổi (QĐ 3183).
 
 - Mỗi `###` / `####` là một Node. Nội dung nằm ngay dưới `#` / `##` chỉ thành Node khi dài ≥ `MIN_TU_NOI_DUNG` (30 từ), dành cho văn bản không chia Điều.
-- Node dài hơn `MAX_TU` (1024 từ) được cắt bằng `SentenceSplitter`, metadata thêm `phan_doan`.
+- Node dài hơn `MAX_TU` (1024 **từ**, đếm theo khoảng trắng) được cắt bằng `SentenceSplitter`, metadata thêm `phan_doan`.
+  Lưu ý đơn vị: `chunk_size=1024` của `SentenceSplitter` tính theo **token tiktoken** (tokenizer mặc định của LlamaIndex),
+  không phải từ và không phải token của model. Theo tokenizer của `AITeamVN/Vietnamese_Reranker`, cặp (câu hỏi, Node)
+  dài nhất là 1233 token (dưới giới hạn 2048 của reranker); 63/118 Node vượt 256 token của embedding profile local.
 - Metadata: `van_ban`, `chuong`, `dieu`, `sua_doi_dieu`, `phan` (`chinh` / `sua_doi` / `ban_hanh` / `noi_dung`), `file`, `file_goc`, `url`, và `nguon_trich`.
 - **Metadata rỗng bị loại bỏ** khỏi Node (trước đây Node nào cũng mang `chuong: `, `dieu: `, `sua_doi_dieu: ` rỗng gây nhiễu vector).
 - **Chỉ `nguon_trich`** ("Điều 9 — Quy chế ... 2021") được đưa vào embedding; `file`, `file_goc`, `url`, `phan` không vào prompt (`KHONG_LLM`). Nhờ vậy "Điều 9" của hai văn bản khác nhau vẫn cho vector khác nhau mà vector không bị pha tạp bởi khóa kỹ thuật.
@@ -151,14 +154,14 @@ Khi khởi động, client gọi `/health` và báo lỗi nếu server chạy em
 
 | Lệnh | Việc |
 |---|---|
-| `make test` | 26 kiểm thử offline (`unittest`) cho `processed_loader`, `bm25`, `metrics`, `config`, corpus thật |
-| `make eval` | Đo truy hồi 4 cấu hình (vector / +rerank / hybrid / hybrid+rerank), ghi `eval/results/truy-hoi.{json,md}` |
+| `make test` | 54 kiểm thử (`unittest`): 44 offline cho `processed_loader`, `bm25`, `metrics`, `config`, luật chấm, lọc phiên bản, corpus thật; 10 của `test_llm.py` cần Ollama và bị skip nếu không đặt `RAG_TEST_LLM=1` |
+| `make eval` | Đo truy hồi 6 cấu hình (vector / rerank / loc / rerank+loc / hybrid / hybrid+rerank+loc), ghi `eval/results/truy-hoi.{json,md}` |
 | `make baseline` | Baseline BM25 và "không xếp hạng" — sàn so sánh cho báo cáo |
-| `make eval-answers` | Chấm câu trả lời bằng `FaithfulnessEvaluator`, `RelevancyEvaluator`, `CorrectnessEvaluator` của LlamaIndex (cần Ollama) |
+| `make eval-answers` | Chấm câu trả lời bằng `FaithfulnessEvaluator`, `RelevancyEvaluator` của LlamaIndex (giám khảo là chính LLM sinh câu trả lời) + tỉ lệ từ chối đúng/sai (cần Ollama) |
 | `make report` | Build PDF báo cáo |
 
 Chỉ số truy hồi do `eval/metrics.py` tính: Recall@k, MRR, nDCG, khoảng tin cậy bootstrap, kiểm định McNemar
-cho so sánh cặp. `eval/evaluate.py --kiem-chung` chấm chéo bằng `RetrieverEvaluator` của thư viện.
+cho so sánh cặp. `eval/evaluate.py --doi-chieu-thu-vien` chấm lại các bộ dev bằng `RetrieverEvaluator` của thư viện (`hit_rate` so với R@10; không phải tập kiểm chứng).
 
 ## 4. Lệnh thường dùng
 

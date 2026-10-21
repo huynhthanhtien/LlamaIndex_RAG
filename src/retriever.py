@@ -85,7 +85,8 @@ def get_postprocessors(cfg: RAGConfig, index: VectorStoreIndex | None = None) ->
     if cfg.loc_phien_ban:
         from phien_ban import UuTienSuaDoi
 
-        ps.append(UuTienSuaDoi(top_n=cfg.reranker_top_n if rerank else None))
+        # Không rerank thì điểm là cosine, không cùng thang với ngưỡng tỉ lệ (hiệu chỉnh trên điểm reranker)
+        ps.append(UuTienSuaDoi(top_n=cfg.reranker_top_n) if rerank else UuTienSuaDoi(ti_le_toi_thieu=None))
     return ps
 
 

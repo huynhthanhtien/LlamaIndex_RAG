@@ -1,3 +1,4 @@
+import dataclasses
 import os
 import unittest
 from pathlib import Path
@@ -56,6 +57,27 @@ class TestConfig(unittest.TestCase):
                 del os.environ["RAG_PROFILE"]
             else:
                 os.environ["RAG_PROFILE"] = cu
+
+    def test_replace_khong_ap_lai_bien_moi_truong(self) -> None:
+        """RAG_RERANK / RAG_LOC_PHIEN_BAN chỉ áp ở get_config(); cấu hình ablation dựng bằng replace() phải giữ đúng
+        giá trị yêu cầu (trước đây __post_init__ ép lại theo shell: cấu hình "vector" vẫn rerank + lọc phiên bản)."""
+        cu = {k: os.environ.get(k) for k in ("RAG_PROFILE", "RAG_RERANK", "RAG_LOC_PHIEN_BAN")}
+        os.environ.update(RAG_PROFILE="server", RAG_RERANK="0", RAG_LOC_PHIEN_BAN="0")
+        try:
+            cfg = get_config()
+            self.assertFalse(cfg.use_rerank)
+            self.assertFalse(cfg.loc_phien_ban)
+            vector = dataclasses.replace(cfg, use_rerank=True, loc_phien_ban=True)
+            self.assertTrue(vector.use_rerank)
+            self.assertTrue(vector.loc_phien_ban)
+            # get_config() trả bản sao: profile dùng chung giữ nguyên
+            self.assertTrue(PROFILES["server"].use_rerank)
+        finally:
+            for k, v in cu.items():
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
 
 
 if __name__ == "__main__":

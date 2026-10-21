@@ -3,6 +3,7 @@
 Mọi tham số ảnh hưởng tới kết quả đo đều nằm ở đây, và RAGConfig.mo_ta() trả về
 bản tóm tắt để phần đánh giá ghi kèm vào file kết quả ("con số này do cấu hình nào").
 """
+import dataclasses
 import logging
 import os
 from dataclasses import dataclass, field
@@ -103,19 +104,6 @@ class RAGConfig:
             self.persist_dir = f"storage/{self.name}/{corpus}"
         if "://" not in self.ollama_base_url:  # .env hay ghi thiếu, vd "1.2.3.4:11434"
             self.ollama_base_url = f"http://{self.ollama_base_url}"
-        # Cho phép ép từ môi trường khi máy không có GPU (CI, máy chấm bài)
-        if os.environ.get("RAG_EMBED_DEVICE"):
-            self.embed_device = os.environ["RAG_EMBED_DEVICE"]
-        if os.environ.get("RAG_SEED"):
-            self.seed = int(os.environ["RAG_SEED"])
-        if os.environ.get("RAG_TEMPERATURE"):
-            self.temperature = float(os.environ["RAG_TEMPERATURE"])
-        if os.environ.get("RAG_THINKING"):
-            self.thinking = os.environ["RAG_THINKING"] == "1"
-        if os.environ.get("RAG_RERANK"):  # ép bật/tắt rerank khi so sánh (RAG_RERANK=0 = cấu hình cũ)
-            self.use_rerank = os.environ["RAG_RERANK"] == "1"
-        if os.environ.get("RAG_LOC_PHIEN_BAN"):
-            self.loc_phien_ban = os.environ["RAG_LOC_PHIEN_BAN"] == "1"
 
     def mo_ta(self) -> dict[str, object]:
         """Tóm tắt cấu hình để ghi kèm vào kết quả đánh giá (tái lập được thí nghiệm)."""
@@ -171,15 +159,41 @@ PROFILES: dict[str, RAGConfig] = {
 }
 
 
+def theo_moi_truong(cfg: RAGConfig) -> RAGConfig:
+    """Bản sao của cfg có ghi đè từ biến môi trường RAG_* (ép từ môi trường khi máy không có GPU, khi so sánh...).
+
+    Chỉ áp một lần ở get_config(). Trước đây phần này nằm trong __post_init__, mà dataclasses.replace() chạy lại
+    __post_init__, nên mọi cấu hình ablation dựng bằng replace() trong eval/ bị ép theo RAG_RERANK /
+    RAG_LOC_PHIEN_BAN của shell (cấu hình "vector" vẫn chạy rerank + lọc phiên bản).
+    """
+    thay: dict[str, object] = {}
+    if os.environ.get("RAG_EMBED_DEVICE"):
+        thay["embed_device"] = os.environ["RAG_EMBED_DEVICE"]
+    if os.environ.get("RAG_SEED"):
+        thay["seed"] = int(os.environ["RAG_SEED"])
+    if os.environ.get("RAG_TEMPERATURE"):
+        thay["temperature"] = float(os.environ["RAG_TEMPERATURE"])
+    if os.environ.get("RAG_THINKING"):
+        thay["thinking"] = os.environ["RAG_THINKING"] == "1"
+    if os.environ.get("RAG_RERANK"):  # ép bật/tắt rerank khi so sánh (RAG_RERANK=0 = cấu hình cũ)
+        thay["use_rerank"] = os.environ["RAG_RERANK"] == "1"
+    if os.environ.get("RAG_LOC_PHIEN_BAN"):
+        thay["loc_phien_ban"] = os.environ["RAG_LOC_PHIEN_BAN"] == "1"
+    return dataclasses.replace(cfg, **thay)
+
+
 def get_config() -> RAGConfig:
-    """Lấy config theo profile đang chọn qua biến môi trường RAG_PROFILE."""
+    """Lấy config theo profile đang chọn qua biến môi trường RAG_PROFILE.
+
+    Trả về bản sao: sửa thuộc tính (vd `cfg.streaming = False`) không làm đổi profile dùng chung.
+    """
     profile_name = os.environ.get("RAG_PROFILE", "local")
     if profile_name not in PROFILES:
         raise ValueError(
             f"RAG_PROFILE='{profile_name}' không hợp lệ. "
             f"Chỉ chấp nhận: {list(PROFILES.keys())}"
         )
-    return PROFILES[profile_name]
+    return theo_moi_truong(PROFILES[profile_name])
 
 
 if __name__ == "__main__":

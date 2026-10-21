@@ -12,11 +12,14 @@ lỗi này nặng hơn (bộ 02: 90% -> 50%). Hai postprocessor dưới đây d�
          Node áp dụng được của cùng chuỗi văn bản (vd hỏi khóa 2020: bỏ QyĐ 2626/2101 khi đã có TB 2366/2451);
       3. lấy được Điều gốc mà Điều đó có mục sửa đổi -> kéo kèm mục sửa đổi (kể cả khi vector không lấy ra).
   - `UuTienSuaDoi` (đặt SAU rerank): văn bản sửa đổi/thay thế đứng ngay trước văn bản bị sửa, rồi mới cắt top_n.
-    Reranker vì thế phải giữ đủ Node (top_n = similarity_top_k), việc cắt dồn về đây.
+    Reranker vì thế phải giữ đủ Node (retriever.get_postprocessors đặt top_n đủ lớn), việc cắt dồn về đây.
     Mục sửa đổi theo Điều (`sua_doi_dieu`) luôn được đưa lên. Quan hệ sửa đổi cả văn bản thì không biết phần nào bị sửa
     (TB 2567 chỉ bổ sung PTE nhưng ghi `sua_doi` 2366/2451), nên chỉ đưa lên khi reranker cũng thấy văn bản mới liên
     quan: điểm >= `ti_le_toi_thieu` x điểm văn bản cũ. Đo 17/10 trên dev: các lần đưa lên đúng (QĐ 898 Điều 5 trên
     CV 3248) có tỉ lệ >= 0,92; các lần sai (2567 cho câu IELTS/VSTEP, 898 Điều khác cho câu khiếu nại) đều < 0,35.
+    Ngưỡng này hiệu chỉnh trên điểm reranker; khi không rerank (điểm là cosine của vector, các Node sát điểm nhau)
+    thì `ti_le_toi_thieu=None`: không so điểm, quan hệ sửa đổi cả văn bản luôn được đưa lên. Việc giữ/bỏ Node do
+    metadata hiệu lực quyết định (LocPhienBan); điểm chỉ ảnh hưởng thứ tự.
 """
 import re
 import unicodedata
@@ -148,7 +151,8 @@ class LocPhienBan(BaseNodePostprocessor):
 
 class UuTienSuaDoi(BaseNodePostprocessor):
     top_n: int | None = None  # None = không cắt (khi không rerank)
-    ti_le_toi_thieu: float = 0.5  # chỉ áp cho quan hệ cả văn bản, xem docstring đầu file
+    # Chỉ áp cho quan hệ cả văn bản và chỉ khi điểm là điểm rerank; None = không so điểm (xem docstring đầu file)
+    ti_le_toi_thieu: float | None = 0.5
 
     @classmethod
     def class_name(cls) -> str:
@@ -174,7 +178,9 @@ class UuTienSuaDoi(BaseNodePostprocessor):
         return ket if self.top_n is None else ket[: self.top_n]
 
     def du_lien_quan(self, moi: NodeWithScore, cu: NodeWithScore) -> bool:
-        if moi.node.metadata.get("sua_doi_dieu") or moi.score is None or cu.score is None:
+        if moi.node.metadata.get("sua_doi_dieu") or self.ti_le_toi_thieu is None:
+            return True
+        if moi.score is None or cu.score is None:
             return True
         return moi.score >= self.ti_le_toi_thieu * cu.score
 

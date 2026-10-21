@@ -15,9 +15,9 @@ https://docs.google.com/document/d/1TQZR0Qk_NSef59e24KFiL4X1CC3u3WQZq2tp6z1sjok/
 
 Script chạy trên Colab (T4 GPU): cài + chạy Ollama, dựng model server (embedding + reranker), mở URL công khai qua Cloudflare quick tunnel và in ra các dòng cần chép vào `.env` ở máy local (`OLLAMA_BASE_URL`, `MODEL_SERVER_URL`, ...). Sau đó index, retriever, query engine, đánh giá vẫn chạy ở máy local như bình thường. Notebook `notebooks/demo.ipynb` chứa sẵn hai lệnh trên.
 
-## Trạng thái hiện tại: 17 văn bản Đào tạo của SGU (108 Node)
+## Trạng thái hiện tại: 20 văn bản Đào tạo của SGU (118 Node, profile server)
 
-Index gồm Quy chế đào tạo SGU 2021 + QĐ sửa đổi 3183/2025 + 4 quy định, cộng 6 văn bản của đợt 1 (thi, phúc khảo, thủ tục, cố vấn học tập) và 5 văn bản của đợt 2 (quy đổi chứng chỉ tiếng Anh, bảng chép tay từ bản scan). Corpus là cả thư mục `data/processed/01_quy_che_dao_tao` (kể cả thư mục con); danh sách văn bản trong `src/corpus.py`, dict `SGU_HIEU_LUC`:
+Index gồm Quy chế đào tạo SGU 2021 + QĐ sửa đổi 3183/2025 + 4 quy định, cộng 6 văn bản của đợt 1 (thi, phúc khảo, thủ tục, cố vấn học tập), 5 văn bản của đợt 2 (quy đổi chứng chỉ tiếng Anh, bảng chép tay từ bản scan) và 3 văn bản của đợt 3 (quy trình phúc khảo, tiết học, chuẩn đầu ra). Corpus là cả thư mục `data/processed/01_quy_che_dao_tao` (kể cả thư mục con); danh sách văn bản trong `src/corpus.py`, dict `SGU_HIEU_LUC`:
 
 | Tiền tố file | Tên hiển thị (dùng khi embedding và trích nguồn) |
 |---|---|
@@ -38,6 +38,9 @@ Index gồm Quy chế đào tạo SGU 2021 + QĐ sửa đổi 3183/2025 + 4 quy 
 | `CV2626` | QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) |
 | `29_2101` | QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) |
 | `TB so 2567` | TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa) |
+| `HD-Quy trinh phuc khao` | HD 1181/2022 thực hiện quy trình phúc khảo bài thi kết thúc học phần |
+| `02.-Tiethoc_phonghoc` | Quy định thời gian tiết học, ca học và mã phòng học |
+| `TB_ChuanDauRa_2020` | TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp |
 
 Văn bản hết hiệu lực / văn bản của Bộ không nạp vào index: đã đo, chúng lấn át QC SGU 2021 khi truy hồi. `data/raw/` còn nhiều nhóm tài liệu khác (công tác sinh viên, chương trình đào tạo, khóa luận, biểu mẫu) chưa đưa vào index — xem `docs/ke_hoach_them_du_lieu_dao_tao.md`.
 
@@ -125,14 +128,14 @@ python scripts/clean_md.py data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc
 ## Kiểm thử và đánh giá
 
 ```bash
-make test           # 26 kiểm thử offline (không cần GPU/Ollama), CI chạy lệnh này
+make test           # 54 kiểm thử: 44 chạy offline (không cần GPU/Ollama), 10 của test_llm.py bị skip nếu không đặt RAG_TEST_LLM=1; CI chạy lệnh này
 make test-llm       # kiểm thử có LLM: gọi Ollama thật trong .env (RAG_PROFILE=server)
-make eval           # truy hồi 4 cấu hình vector/rerank/hybrid/hybrid+rerank: Recall@k, MRR, nDCG, CI bootstrap, McNemar
+make eval           # truy hồi 6 cấu hình vector/rerank/loc/rerank+loc/hybrid/hybrid+rerank+loc: Recall@k, MRR, nDCG, CI bootstrap, McNemar
 make baseline       # baseline BM25 / không xếp hạng
-make eval-answers   # chấm câu trả lời bằng evaluator của LlamaIndex (Faithfulness, Relevancy, Correctness, từ chối đúng/sai)
+make eval-answers   # chấm câu trả lời bằng evaluator của LlamaIndex (Faithfulness, Relevancy — LLM tự chấm) + từ chối đúng/sai
 ```
 
-Hoặc gọi trực tiếp: `RAG_PROFILE=server venv/bin/python eval/evaluate.py [--cau-hinh vector,rerank,hybrid] [--kiem-chung]`, `eval/baselines.py`, `eval/evaluate_answers.py --che-do ca-hai`. Kết quả (JSON + Markdown) ghi vào `eval/results/`, kèm tóm tắt cấu hình (`RAGConfig.mo_ta()`) để tái lập.
+Hoặc gọi trực tiếp: `RAG_PROFILE=server venv/bin/python eval/evaluate.py [--cau-hinh vector,rerank,hybrid] [--doi-chieu-thu-vien]`, `eval/baselines.py`, `eval/evaluate_answers.py --che-do ca-hai`. Kết quả (JSON + Markdown) ghi vào `eval/results/`, kèm tóm tắt cấu hình (`RAGConfig.mo_ta()`) để tái lập.
 
 ## Cấu trúc thư mục
 
@@ -185,7 +188,7 @@ Hoặc gọi trực tiếp: `RAG_PROFILE=server venv/bin/python eval/evaluate.py
 
 ## Trạng thái dự án
 
-Sáu giai đoạn của pipeline đã chạy được trên 17 văn bản Đào tạo: `scripts/extract_to_md.py` +
+Sáu giai đoạn của pipeline đã chạy được trên 20 văn bản Đào tạo: `scripts/extract_to_md.py` +
 `scripts/clean_md.py` (dữ liệu) → `src/processed_loader.py` (Node) → `src/index_builder.py` (index) →
 `src/retriever.py` (vector, tuỳ chọn hybrid BM25) → `src/query_engine.py` (LLM + trích nguồn) →
 `eval/` (truy hồi, baseline, chấm câu trả lời). Xem `docs/bao_cao_cai_tien_rag.md` và các báo cáo MD trong `docs/`.

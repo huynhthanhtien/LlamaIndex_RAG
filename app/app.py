@@ -9,6 +9,7 @@ Cách dùng (từ thư mục gốc repo):
 """
 import dataclasses
 import json
+import os
 import sys
 import time
 from collections.abc import Iterator
@@ -45,15 +46,20 @@ llm = make_llm(cfg)
 synthesizer = get_response_synthesizer(
     llm=llm, response_mode=ResponseMode(cfg.response_mode), streaming=True, text_qa_template=QA_PROMPT
 )
-_rerankers: list[BaseNodePostprocessor] | None = None  # nạp lần đầu khi bật rerank
-LOG_PATH = Path(__file__).resolve().parent.parent / "eval" / "results" / "questions_log.jsonl"
+# (rerank, lọc phiên bản) -> postprocessor; dựng lần đầu khi chọn tổ hợp đó (reranker nạp model, không dựng lại mỗi câu)
+_postprocessors: dict[tuple[bool, bool], list[BaseNodePostprocessor]] = {}
+# Log câu hỏi thật nằm ngoài git (logs/ trong .gitignore): trước đây ghi vào eval/results/ nên mỗi lần chạy thử
+# đều sinh diff và đưa câu hỏi của người dùng vào repo.
+ROOT = Path(__file__).resolve().parent.parent
+LOG_PATH = ROOT / os.environ.get("RAG_LOG_CAU_HOI", "logs/questions_log.jsonl")
 
 
-def rerankers() -> list[BaseNodePostprocessor]:
-    global _rerankers
-    if _rerankers is None:
-        _rerankers = get_postprocessors(dataclasses.replace(cfg, use_rerank=True), index)
-    return _rerankers
+def postprocessors(dung_rerank: bool, loc_phien_ban: bool) -> list[BaseNodePostprocessor]:
+    khoa = (dung_rerank, loc_phien_ban)
+    if khoa not in _postprocessors:
+        c = dataclasses.replace(cfg, use_rerank=dung_rerank, loc_phien_ban=loc_phien_ban)
+        _postprocessors[khoa] = get_postprocessors(c, index)
+    return _postprocessors[khoa]
 
 
 def ghi_log(question: str, nodes: list[NodeWithScore], tra_loi: str, cau_hinh: dict[str, object]) -> None:
@@ -94,7 +100,7 @@ def hien_thi_nguon(nodes: list[NodeWithScore]) -> str:
 
 
 def hoi(
-    question: str, history: list[Message], top_k: int, dung_rerank: bool, sinh_tra_loi: bool
+    question: str, history: list[Message], top_k: int, dung_rerank: bool, loc_phien_ban: bool, sinh_tra_loi: bool
 ) -> Iterator[tuple[list[Message], str, str]]:
     question = question.strip()
     if not question:
@@ -106,7 +112,8 @@ def hoi(
     yield history, "", ""
 
     c = dataclasses.replace(cfg, similarity_top_k=int(top_k))
-    nodes = search(index, c, question, rerankers() if dung_rerank else [])
+    # Trước đây bỏ chọn Rerank thì truyền [] nên tắt luôn cả lọc phiên bản; nay hai bước bật/tắt riêng
+    nodes = search(index, c, question, postprocessors(bool(dung_rerank), bool(loc_phien_ban)))
     nguon = hien_thi_nguon(nodes)
     if not sinh_tra_loi:
         tra_loi.content = f"_Chỉ truy hồi: {len(nodes)} trích đoạn, xem cột bên phải._"
@@ -127,7 +134,8 @@ def hoi(
     nhan = "; ".join(dict.fromkeys(node_label(n) for n in nodes))
     tra_loi.content += f"\n\n**Nguồn:** {nhan}"
     ghi_log(question, nodes, str(tra_loi.content), {"profile": cfg.name, "top_k": int(top_k),
-                                              "rerank": bool(dung_rerank), "sinh_tra_loi": bool(sinh_tra_loi)})
+                                              "rerank": bool(dung_rerank), "loc_phien_ban": bool(loc_phien_ban),
+                                              "sinh_tra_loi": bool(sinh_tra_loi)})
     yield history, "", nguon
 
 
@@ -154,6 +162,7 @@ with gr.Blocks(title="SGU RAG — chạy thử") as demo:
                     interactive=cfg.reranker_model_name is not None,
                     info=None if cfg.reranker_model_name else f"profile {cfg.name} không có reranker",
                 )
+                loc_phien_ban = gr.Checkbox(value=cfg.loc_phien_ban, label="Lọc phiên bản")
                 sinh_tra_loi = gr.Checkbox(value=True, label="Sinh câu trả lời (LLM)")
             with gr.Row():
                 gr.Button("Xoá hội thoại").click(lambda: ([], ""), outputs=[chat, o_hoi])
@@ -162,7 +171,8 @@ with gr.Blocks(title="SGU RAG — chạy thử") as demo:
             gr.Markdown("### Trích đoạn truy hồi")
             nguon = gr.Markdown()
 
-    o_hoi.submit(hoi, inputs=[o_hoi, chat, top_k, dung_rerank, sinh_tra_loi], outputs=[chat, o_hoi, nguon])
+    o_hoi.submit(hoi, inputs=[o_hoi, chat, top_k, dung_rerank, loc_phien_ban, sinh_tra_loi],
+                 outputs=[chat, o_hoi, nguon])
 
 
 if __name__ == "__main__":

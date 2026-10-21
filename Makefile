@@ -26,7 +26,7 @@ test-llm:
 
 eval:
 > @mkdir -p .tmp eval/results
-> RAG_PROFILE=server $(VENV) eval/evaluate.py --cau-hinh vector,rerank,loc,rerank+loc,hybrid,hybrid+rerank+loc --kiem-chung
+> RAG_PROFILE=server $(VENV) eval/evaluate.py --cau-hinh vector,rerank,loc,rerank+loc,hybrid,hybrid+rerank+loc --doi-chieu-thu-vien
 
 baseline:
 > @mkdir -p .tmp eval/results

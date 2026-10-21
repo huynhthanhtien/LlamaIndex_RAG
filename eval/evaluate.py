@@ -6,7 +6,9 @@ cho kết quả ảo: mỗi bộ câu hỏi có luật riêng xác định Node 
 Khác bản cũ:
   - Mọi chỉ số đi kèm khoảng tin cậy bootstrap và nDCG (eval/metrics.py).
   - Xuất kết quả ra JSON + bảng Markdown (eval/results/) để báo cáo lấy số tự động.
-  - Có thể kiểm chứng chéo bằng `RetrieverEvaluator` của LlamaIndex (--kiem-chung).
+  - Có thể đối chiếu cách đo với `RetrieverEvaluator` của LlamaIndex (--doi-chieu-thu-vien). Đây chỉ là chấm lại
+    các bộ dev bằng thư viện, KHÔNG phải chạy tập kiểm chứng eval/test_kiem_chung_*.json; `hit_rate` của thư viện
+    tính trên cả top-k (similarity_top_k = 10) nên so với R@10, không phải R@1.
   - So sánh nhiều cấu hình trên cùng bộ câu hỏi và kiểm định McNemar cho từng cặp.
 
 Luật chấm (một Node top-k được tính là đúng khi):
@@ -22,7 +24,7 @@ Luật chấm (một Node top-k được tính là đúng khi):
 Cách dùng (từ thư mục gốc repo):
     RAG_PROFILE=server RAG_EMBED_DEVICE=cpu venv/bin/python eval/evaluate.py
     ... eval/evaluate.py --cau-hinh vector,rerank,hybrid
-    ... eval/evaluate.py --cau-hinh vector --kiem-chung
+    ... eval/evaluate.py --cau-hinh vector --doi-chieu-thu-vien
 """
 import argparse
 import dataclasses
@@ -174,8 +176,11 @@ def in_ket_qua(kq: KetQua) -> None:
     print()
 
 
-def kiem_chung_thu_vien(cfg: RAGConfig, ten_file: str, dung: ChamDung, index: VectorStoreIndex) -> dict[str, float]:
-    """Chấm lại cùng bộ câu hỏi bằng `RetrieverEvaluator` của LlamaIndex để đối chiếu hai cách đo."""
+def doi_chieu_thu_vien(cfg: RAGConfig, ten_file: str, dung: ChamDung, index: VectorStoreIndex) -> dict[str, float]:
+    """Chấm lại cùng bộ câu hỏi bằng `RetrieverEvaluator` của LlamaIndex để đối chiếu hai cách đo.
+
+    hit_rate = có Node đúng trong cả similarity_top_k Node -> tương ứng R@k với k = similarity_top_k.
+    """
     from llama_index.core.evaluation import RetrieverEvaluator
 
     ev = RetrieverEvaluator.from_metric_names(["mrr", "hit_rate"], retriever=get_retriever(index, cfg))
@@ -223,7 +228,9 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--cau-hinh", default="vector",
                     help=f"danh sách cấu hình, cách nhau dấu phẩy. Có: {', '.join(CAU_HINH)}")
-    ap.add_argument("--kiem-chung", action="store_true", help="chấm chéo bằng RetrieverEvaluator của LlamaIndex (chỉ cấu hình vector)")
+    # "--kiem-chung" giữ làm tên cũ; tên mới tránh nhầm với tập kiểm chứng eval/test_kiem_chung_*.json
+    ap.add_argument("--doi-chieu-thu-vien", "--kiem-chung", dest="doi_chieu", action="store_true",
+                    help="chấm lại bằng RetrieverEvaluator của LlamaIndex (chỉ cấu hình vector; hit_rate so với R@10)")
     ap.add_argument("--cutoff", type=float, default=None, help="đặt similarity_cutoff cho mọi cấu hình")
     ap.add_argument("--json-out", default=str(ROOT / "eval" / "results" / "truy-hoi.json"))
     ap.add_argument("--md-out", default=str(ROOT / "eval" / "results" / "truy-hoi.md"))
@@ -253,10 +260,12 @@ def main() -> None:
             kq = danh_gia(ten_file, dung, tim, ten, cfg.mo_ta())
             in_ket_qua(kq)
             tat_ca.append(kq)
-            if args.kiem_chung and ten == "vector":
-                kq_tv = kiem_chung_thu_vien(cfg, ten_file, dung, index)
-                print(f"  Kiểm chứng bằng RetrieverEvaluator của LlamaIndex: "
-                      f"hit_rate={kq_tv.get('hit_rate', 0):.3f}, mrr={kq_tv.get('mrr', 0):.3f}\n")
+            if args.doi_chieu and ten == "vector":
+                kq_tv = doi_chieu_thu_vien(cfg, ten_file, dung, index)
+                k = cfg.similarity_top_k
+                print(f"  Đối chiếu bằng RetrieverEvaluator của LlamaIndex: "
+                      f"hit_rate={kq_tv.get('hit_rate', 0):.3f} (so với R@{k}={kq.recall(k):.3f}), "
+                      f"mrr={kq_tv.get('mrr', 0):.3f} (so với MRR={kq.mrr():.3f})\n")
         # Mỗi cấu hình rerank nạp một CrossEncoder riêng; không giải phóng thì cấu hình rerank thứ hai tràn card 4 GB
         del tim, posts, retriever
         giai_phong_gpu()
