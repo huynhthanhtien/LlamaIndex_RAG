@@ -1,6 +1,6 @@
 import unittest
 
-from evaluate import cac_dieu, chuan_hoa_nhan, dung_bo_01, dung_bo_02, dung_bo_dev
+from luat_cham import cac_dieu, chuan_hoa_nhan, dung_bo_01, dung_bo_02, dung_bo_dev
 from llama_index.core.schema import NodeWithScore, TextNode
 
 
