@@ -17,8 +17,14 @@ def auth_headers() -> dict[str, str]:
     return {"Authorization": f"Bearer {token}"} if token else {}
 
 
-def check_server(base_url: str, embed_model_name: str, reranker_model_name: str | None) -> None:
-    """Server phải nạp đúng model của profile, nếu không vector sẽ lệch với index đã build."""
+def check_server(
+    base_url: str, embed_model_name: str, reranker_model_name: str | None, reranker_max_length: int | None = None
+) -> None:
+    """Server phải nạp đúng model của profile, nếu không vector sẽ lệch với index đã build.
+
+    reranker_max_length: server cũ (trước 16/10) không trả khóa này và cắt Node ở 512 token -> báo lỗi
+    thay vì âm thầm cho điểm rerank sai.
+    """
     try:
         r = httpx.get(f"{base_url}/health", headers=auth_headers(), timeout=5)
         r.raise_for_status()
@@ -29,6 +35,11 @@ def check_server(base_url: str, embed_model_name: str, reranker_model_name: str 
         raise RuntimeError(f"Server đang chạy embedding {info['embed_model']!r}, config cần {embed_model_name!r}")
     if reranker_model_name and info["reranker_model"] != reranker_model_name:
         raise RuntimeError(f"Server đang chạy reranker {info['reranker_model']!r}, config cần {reranker_model_name!r}")
+    if reranker_model_name and reranker_max_length and info.get("reranker_max_length") != reranker_max_length:
+        raise RuntimeError(
+            f"Reranker trên server đọc {info.get('reranker_max_length') or 512} token, config cần {reranker_max_length}. "
+            "Chạy lại scripts/setup_server_v2.sh bản mới, hoặc bỏ MODEL_SERVER_URL để rerank trên máy."
+        )
 
 
 class RemoteEmbedding(BaseEmbedding):

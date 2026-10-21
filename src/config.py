@@ -57,10 +57,17 @@ class RAGConfig:
     # --- Thiết bị ---
     use_fp16: bool = False  # nạp embedding + reranker ở fp16 (chỉ khi cuda) để vừa GPU 4 GB
 
-    # --- Reranker (tuỳ chọn) — mặc định tắt: đã đo trên corpus hiện tại, rerank làm giảm Recall@1 ---
+    # --- Reranker (tuỳ chọn) ---
+    # Kết luận cũ "rerank làm giảm Recall@1" là do SentenceTransformerRerank cắt cứng 512 token: 28% Node (bảng,
+    # Điều dài) bị mất đúng đoạn cần tìm. Đọc 2048 token thì rerank top-3 tăng câu trả lời đúng 75,6% -> 86,7%
+    # (eval/results/logs/2026-10-13_dot2/15_rerank_va_cau_tra_loi.md); profile server bật mặc định.
     reranker_model_name: str | None = None
     reranker_top_n: int = 3
+    reranker_max_length: int = 2048  # token tối đa mỗi cặp (câu hỏi, Node); model hỗ trợ 8192
     use_rerank: bool = False
+
+    # --- Lọc phiên bản (src/phien_ban.py): bỏ văn bản hết hiệu lực, lọc theo khóa, đưa bản sửa đổi lên trước ---
+    loc_phien_ban: bool = True
 
     # --- Model server (tuỳ chọn) — có URL thì gọi src/model_server.py thay vì nạp model tại chỗ ---
     model_server_url: str | None = field(default_factory=lambda: os.environ.get("MODEL_SERVER_URL") or None)
@@ -105,6 +112,10 @@ class RAGConfig:
             self.temperature = float(os.environ["RAG_TEMPERATURE"])
         if os.environ.get("RAG_THINKING"):
             self.thinking = os.environ["RAG_THINKING"] == "1"
+        if os.environ.get("RAG_RERANK"):  # ép bật/tắt rerank khi so sánh (RAG_RERANK=0 = cấu hình cũ)
+            self.use_rerank = os.environ["RAG_RERANK"] == "1"
+        if os.environ.get("RAG_LOC_PHIEN_BAN"):
+            self.loc_phien_ban = os.environ["RAG_LOC_PHIEN_BAN"] == "1"
 
     def mo_ta(self) -> dict[str, object]:
         """Tóm tắt cấu hình để ghi kèm vào kết quả đánh giá (tái lập được thí nghiệm)."""
@@ -121,6 +132,8 @@ class RAGConfig:
             "use_rerank": bool(self.use_rerank and self.reranker_model_name),
             "reranker_model": self.reranker_model_name if self.use_rerank else None,
             "reranker_top_n": self.reranker_top_n,
+            "reranker_max_length": self.reranker_max_length if self.use_rerank else None,
+            "loc_phien_ban": self.loc_phien_ban,
             "use_hybrid": self.use_hybrid,
             "bm25_top_k": self.bm25_top_k if self.use_hybrid else None,
             "fusion_mode": self.fusion_mode if self.use_hybrid else None,
@@ -149,6 +162,7 @@ CONFIG_SERVER = RAGConfig(
     llm_model_name="qwen3:8b",
     ollama_base_url=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434"),
     reranker_model_name="AITeamVN/Vietnamese_Reranker",
+    use_rerank=True,
 )
 
 PROFILES: dict[str, RAGConfig] = {

@@ -1,8 +1,8 @@
-"""Truy hồi: vector top-k, tuỳ chọn trộn BM25 (hybrid) và xếp hạng lại (rerank)."""
+"""Truy hồi: vector top-k, tuỳ chọn trộn BM25 (hybrid), lọc phiên bản (src/phien_ban.py) và xếp hạng lại (rerank)."""
 import logging
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from llama_index.core import VectorStoreIndex
 from llama_index.core.postprocessor.types import BaseNodePostprocessor
@@ -53,8 +53,12 @@ def get_retriever(index: VectorStoreIndex, cfg: RAGConfig) -> BaseRetriever:
     )
 
 
-def get_postprocessors(cfg: RAGConfig) -> list[BaseNodePostprocessor]:
-    """Ngưỡng tương đồng (nếu đặt) rồi tới rerank (chỉ khi cfg.use_rerank và có reranker_model_name)."""
+def get_postprocessors(cfg: RAGConfig, index: VectorStoreIndex | None = None) -> list[BaseNodePostprocessor]:
+    """Thứ tự: ngưỡng tương đồng -> lọc phiên bản -> rerank -> đưa bản sửa đổi lên trước rồi cắt top_n.
+
+    `index` cho phép bước lọc phiên bản kéo kèm mục sửa đổi chưa được truy hồi (cần docstore);
+    thiếu `index` thì vẫn lọc hiệu lực/khóa và sắp xếp lại, chỉ không kéo thêm Node.
+    """
     ps: list[BaseNodePostprocessor] = []
     if cfg.similarity_cutoff is not None:
         if cfg.use_hybrid:
@@ -64,14 +68,24 @@ def get_postprocessors(cfg: RAGConfig) -> list[BaseNodePostprocessor]:
             from llama_index.core.postprocessor import SimilarityPostprocessor
 
             ps.append(SimilarityPostprocessor(similarity_cutoff=cfg.similarity_cutoff))
-    if not (cfg.use_rerank and cfg.reranker_model_name):
-        return ps
-    if cfg.model_server_url:
-        from remote_models import RemoteRerank
+    if cfg.loc_phien_ban:
+        from phien_ban import LocPhienBan
 
-        ps.append(RemoteRerank(base_url=cfg.model_server_url, top_n=cfg.reranker_top_n))
-        return ps
-    ps.append(make_local_reranker(cfg))
+        ps.append(LocPhienBan.tu_nodes(index.docstore.docs.values()) if index is not None else LocPhienBan())
+    rerank = bool(cfg.use_rerank and cfg.reranker_model_name)
+    if rerank:
+        # Có lọc phiên bản thì reranker giữ đủ Node; UuTienSuaDoi sắp lại theo quan hệ sửa đổi rồi mới cắt top_n
+        top_n = 1000 if cfg.loc_phien_ban else cfg.reranker_top_n
+        if cfg.model_server_url:
+            from remote_models import RemoteRerank
+
+            ps.append(RemoteRerank(base_url=cfg.model_server_url, top_n=top_n))
+        else:
+            ps.append(make_local_reranker(cfg, top_n))
+    if cfg.loc_phien_ban:
+        from phien_ban import UuTienSuaDoi
+
+        ps.append(UuTienSuaDoi(top_n=cfg.reranker_top_n if rerank else None))
     return ps
 
 
@@ -88,7 +102,7 @@ def search(
     và không nạp lại reranker mỗi câu.
     """
     nodes = (retriever or get_retriever(index, cfg)).retrieve(question)
-    for p in get_postprocessors(cfg) if postprocessors is None else postprocessors:
+    for p in get_postprocessors(cfg, index) if postprocessors is None else postprocessors:
         nodes = p.postprocess_nodes(nodes, QueryBundle(question))
     return nodes
 
@@ -103,7 +117,19 @@ def node_label(n: NodeWithScore) -> str:
     return str(m.get("van_ban", ""))  # văn bản không chia Điều
 
 
-def make_local_reranker(cfg: RAGConfig) -> "SentenceTransformerRerank":
+def dat_do_dai_toi_da(cross_encoder: Any, so_token: int) -> None:
+    """SentenceTransformerRerank tạo CrossEncoder với max_length=512 cố định, không cho truyền vào.
+
+    sentence-transformers >= 5 đổi tên thuộc tính thành `max_seq_length` (`max_length` còn nhưng báo deprecated);
+    bản cũ hơn chỉ có `max_length`. Dùng chung cho src/model_server.py qua bản sao trong file đó.
+    """
+    if isinstance(getattr(type(cross_encoder), "max_seq_length", None), property):
+        cross_encoder.max_seq_length = so_token
+    else:
+        cross_encoder.max_length = so_token
+
+
+def make_local_reranker(cfg: RAGConfig, top_n: int | None = None) -> "SentenceTransformerRerank":
     from llama_index.core.postprocessor import SentenceTransformerRerank
 
     if not cfg.reranker_model_name:
@@ -112,9 +138,10 @@ def make_local_reranker(cfg: RAGConfig) -> "SentenceTransformerRerank":
     fp16 = cfg.use_fp16 and device == "cuda"
     reranker = SentenceTransformerRerank(
         model=cfg.reranker_model_name,
-        top_n=cfg.reranker_top_n,
+        top_n=cfg.reranker_top_n if top_n is None else top_n,
         device="cpu" if fp16 else device,
     )
+    dat_do_dai_toi_da(reranker._model, cfg.reranker_max_length)  # pyright: ignore[reportPrivateUsage]
     if fp16:
         # SentenceTransformerRerank không nhận dtype: nạp trên CPU, ép fp16 rồi mới đưa lên GPU,
         # tránh việc bản fp32 chiếm VRAM cùng lúc với embedding (tràn card 4 GB).
