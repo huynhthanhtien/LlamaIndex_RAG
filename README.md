@@ -9,7 +9,7 @@ https://docs.google.com/document/d/1TQZR0Qk_NSef59e24KFiL4X1CC3u3WQZq2tp6z1sjok/
 
 ## Chạy LLM + embedding trên colab
 ```bash
-!wget -q -O setup_server_v2.sh https://raw.githubusercontent.com/huynhthanhtien/LlamaIndex_RAG/nghien-cuu-llamaindex-cai-tien/scripts/setup_server_v2.sh
+!wget -q -O setup_server_v2.sh https://raw.githubusercontent.com/huynhthanhtien/LlamaIndex_RAG/main/scripts/setup_server_v2.sh
 !bash setup_server_v2.sh
 ```
 
@@ -203,9 +203,9 @@ Sáu giai đoạn của pipeline đã chạy được trên 17 văn bản Đào 
 https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions/hands-on-labs/aspnet-mvc-4-entity-framework-scaffolding-and-migrations?fbclid=IwY2xjawU2p9dleHRuA2FlbQIxMQBwZG9mAXNydGMGYXBwX2lkEDIyMjAzOTE3ODgyMDA4OTIAAR5jGCWpCstzuv-IKmqc3X_ytbYl8mNtIrIJ5eK3C79lj0SrbEI1trXUr9V2yg_aem_QKHRO6FdJjWXUVYEtRp6TA
 ```
 
-[Tài liệu LlamaIndex(AI gen) ](https://htmlpreview.github.io/?https://github.com/huynhthanhtien/LlamaIndex_RAG/blob/nghien-cuu-llamaindex-cai-tien/docs/giao_trinh/co_so_ly_thuyet_rag.html)
+[Tài liệu LlamaIndex(AI gen) ](https://htmlpreview.github.io/?https://github.com/huynhthanhtien/LlamaIndex_RAG/blob/main/docs/giao_trinh/co_so_ly_thuyet_rag.html)
 
-[Tổng quan LlamaIndex](https://htmlpreview.github.io/?https://github.com/huynhthanhtien/LlamaIndex_RAG/blob/nghien-cuu-llamaindex-cai-tien/docs/llamaindex_tong_quan.html)
+[Tổng quan LlamaIndex](https://htmlpreview.github.io/?https://github.com/huynhthanhtien/LlamaIndex_RAG/blob/main/docs/llamaindex_tong_quan.html)
 
 ## Giấy phép
 
