@@ -70,6 +70,45 @@ class TestLocPhienBan(unittest.TestCase):
         self.assertEqual(chay(self.loc, "khóa 2023 rút học phần", QC7), ["sd7", "qc7"])
 
 
+class TestCaBienPhienBan(unittest.TestCase):
+    """Ca biên theo nhận xét tuần 6 (ý 5): khóa ở ranh giới, khóa áp dụng của TB 2366/2451, văn bản sửa đổi không thay
+    toàn bộ văn bản gốc. Ca hệ thống CHƯA xử lý được ghi bằng expectedFailure: báo cáo chỉ kết luận trên các ca chạy qua;
+    khi sửa được, test báo "unexpected success" để chuyển thành test thường."""
+
+    def setUp(self) -> None:
+        self.loc = LocPhienBan.tu_nodes(CORPUS)
+
+    def test_ranh_gioi_khoa_tieng_anh(self) -> None:
+        # 2366/2451: khóa 2020–2021; 2626: 2022–2023; 2101: từ 2024 — mỗi năm biên chỉ còn văn bản của khóa đó
+        self.assertEqual(chay(self.loc, "khóa 2021 có IELTS 5.0", QD2626, TB2366), ["2366"])
+        self.assertEqual(chay(self.loc, "khóa 2022 có IELTS 5.0", TB2366, QD2626), ["2626"])
+        self.assertEqual(chay(self.loc, "khóa 2023 có IELTS 5.0", QD2101, QD2626), ["2626"])
+        self.assertEqual(chay(self.loc, "khóa 2024 có IELTS 5.0", QD2626, QD2101), ["2101"])
+
+    def test_tb_2451_bo_sung_cho_2366_cung_khoa(self) -> None:
+        # 2451 chỉ bổ sung chứng chỉ cho 2366 (cùng khóa ≤ 2021): giữ cả hai, bỏ văn bản của khóa khác
+        self.assertEqual(chay(self.loc, "K21 có TOEIC 500", TB2451, QD2101, TB2366), ["2451", "2366"])
+
+    def test_khoa_cu_bo_muc_sua_doi_khi_co_dieu_goc(self) -> None:
+        # Khóa 2023 lấy được cả Điều 9 gốc và mục sửa Điều 9 (từ 2025): chỉ giữ bản gốc
+        self.assertEqual(chay(self.loc, "khóa 2023 có điểm B+ không", SD9, QC9), ["qc9"])
+
+    @unittest.expectedFailure
+    def test_khoa_cu_chi_lay_duoc_muc_sua_doi(self) -> None:
+        # CHƯA XỬ LÝ: chỉ lấy được mục sửa Điều 9 (áp dụng từ 2025) cho câu khóa 2023 -> bộ lọc giữ nó vì "không bỏ hết
+        # căn cứ", không thay bằng Điều 9 gốc từ docstore; LLM trả lời khóa 23 theo thang có B+ (thử giao diện 23/10)
+        self.assertEqual(chay(self.loc, "khóa 2023 8,4 điểm quy đổi hệ 4", SD9), ["qc9"])
+
+    @unittest.expectedFailure
+    def test_van_ban_sua_mot_phan_khong_dua_len_khi_khong_rerank(self) -> None:
+        # CHƯA XỬ LÝ: QĐ 898 chỉ sửa một phần CV 3248 (lệ phí phúc khảo). Không rerank thì không có điểm để biết văn bản
+        # mới có liên quan không, nên cả QĐ 898 bị đưa lên trước CV 3248 cho mọi câu — câu "khiếu nại điểm quá trình"
+        # rơi từ hạng 1 xuống 5 ở cấu hình vector+loc (eval/results/so-sanh-truy-hoi-2026-10-23-a6e63eb). Có rerank thì
+        # ngưỡng tỉ lệ điểm chặn được (test_van_ban_bo_sung_diem_thap_khong_len_truoc).
+        p = UuTienSuaDoi(ti_le_toi_thieu=None)
+        self.assertEqual(chay(p, "khiếu nại điểm quá trình", CV3248, QD898), ["3248", "898d6"])
+
+
 class TestUuTienSuaDoi(unittest.TestCase):
     def test_sua_doi_len_truoc_roi_cat(self) -> None:
         p = UuTienSuaDoi(top_n=2)

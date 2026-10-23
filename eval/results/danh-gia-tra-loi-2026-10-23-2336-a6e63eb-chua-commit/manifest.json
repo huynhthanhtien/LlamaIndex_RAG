@@ -1,0 +1,50 @@
+{
+ "thoi_diem": "2026-10-23 23:53:07",
+ "lenh": "notebooks/danh_gia_tra_loi_dev.ipynb",
+ "nhanh": "main",
+ "commit": "a6e63eb",
+ "co_thay_doi_chua_commit": true,
+ "cau_hinh": {
+  "profile": "server",
+  "embed_model": "AITeamVN/Vietnamese_Embedding",
+  "embed_device": "cuda",
+  "llm_model": "qwen3:8b",
+  "temperature": 0.0,
+  "seed": 42,
+  "thinking": false,
+  "similarity_top_k": 10,
+  "similarity_cutoff": null,
+  "use_rerank": true,
+  "reranker_model": "AITeamVN/Vietnamese_Reranker",
+  "reranker_top_n": 3,
+  "reranker_max_length": 2048,
+  "loc_phien_ban": true,
+  "use_hybrid": false,
+  "bm25_top_k": null,
+  "fusion_mode": null,
+  "response_mode": "compact",
+  "corpus_dir": "data/processed/01_quy_che_dao_tao",
+  "persist_dir": "storage/server/01_quy_che_dao_tao"
+ },
+ "llm": "qwen3:8b",
+ "ollama": "https://arch-stats-oil-river.trycloudflare.com",
+ "model_server": {
+  "url": "https://fans-compete-lang-himself.trycloudflare.com",
+  "health": {
+   "embed_model": "AITeamVN/Vietnamese_Embedding",
+   "reranker_model": "AITeamVN/Vietnamese_Reranker",
+   "reranker_max_length": 2048,
+   "device": "cuda",
+   "fp16": true
+  }
+ },
+ "may_local": {
+  "python": "3.14.8",
+  "llama-index-core": "0.14.24"
+ },
+ "bo_cau_hoi": {
+  "dev_questions_dot2.json": 15,
+  "dev_questions_dot3.json": 15,
+  "dev_questions_dot4.json": 69
+ }
+}

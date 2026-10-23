@@ -16,8 +16,8 @@ Luật chấm (một Node top-k được tính là đúng khi):
     `sua_doi_dieu` thuộc nhãn (mục sửa đổi chính Điều đó cũng là câu trả lời đúng).
   - Bộ 02 (QĐ 3183): chỉ Node có so_hieu 3183, với `sua_doi_dieu` thuộc nhãn hoặc Điều phần chính thuộc nhãn
     (nhãn "2 (QĐ 3183)" là Điều 2 của chính QĐ 3183).
-  - Bộ dev (đợt 1–3): nhãn "<tiền tố file>" (văn bản chỉ có 1 Node) hoặc "<tiền tố file>|<Điều>" (Điều
-    thuộc phần chính của văn bản đó).
+  - Bộ dev (đợt 1–4): nhãn "<tiền tố file>" (văn bản chỉ có 1 Node) hoặc "<tiền tố file>|<Điều>" (Điều
+    thuộc phần chính của văn bản đó); "|bh:<Điều>" là Điều của quyết định ban hành, "|sd:<Điều>" là mục sửa đổi.
   - Nhiều nhãn cùng đúng: viết "a;b" hoặc `"dieu_dung": ["a", "b"]`; Node khớp một nhãn bất kỳ là đúng.
     JSON cũ có `dieu_dung` là chuỗi (định dạng tập kiểm chứng K1/K2) vẫn đọc được như trước.
 
@@ -25,6 +25,7 @@ Cách dùng (từ thư mục gốc repo):
     RAG_PROFILE=server RAG_EMBED_DEVICE=cpu venv/bin/python eval/evaluate.py
     ... eval/evaluate.py --cau-hinh vector,rerank,hybrid
     ... eval/evaluate.py --cau-hinh vector --doi-chieu-thu-vien
+    ... eval/evaluate.py --tap-kiem-chung     # tập kiểm chứng: chỉ chạy sau `eval/dong_bang.py tao`, đúng một lần
 """
 import argparse
 import dataclasses
@@ -45,21 +46,13 @@ sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from config import RAGConfig, get_config
 from index_builder import build_or_load_index
-from luat_cham import ChamDung, chuan_hoa_nhan, dung_bo_01, dung_bo_02, dung_bo_dev
+from luat_cham import BO_CAU_HOI, BO_KIEM_CHUNG, ChamDung, chuan_hoa_nhan
 from metrics import bootstrap_ci, hang_dau_tien, mcnemar, mrr, ndcg_at_k, p95, recall_at_k
 from retriever import get_postprocessors, get_retriever, node_label, search
 
 TimKiem = Callable[[str], list[NodeWithScore]]
 KS = (1, 3, 5, 10)
 
-
-BO_CAU_HOI: list[tuple[str, ChamDung]] = [
-    ("test_questions_01.json", dung_bo_01),
-    ("test_questions_02.json", dung_bo_02),
-    ("dev_questions_dot1.json", dung_bo_dev),
-    ("dev_questions_dot2.json", dung_bo_dev),
-    ("dev_questions_dot3.json", dung_bo_dev),
-]
 
 # Tên cấu hình -> thay đổi so với config gốc. Dùng cho bảng ablation trong báo cáo.
 # Ghi tường minh use_rerank / loc_phien_ban vì profile server đã bật cả hai mặc định (16/10).
@@ -224,6 +217,58 @@ def so_sanh_cap(ds: list[KetQua]) -> None:
         print()
 
 
+def chay_tap_kiem_chung(chay_lai: bool) -> None:
+    """Chạy tập kiểm chứng ĐÚNG MỘT LẦN bằng cấu hình đã đóng băng (eval/dong_bang.py), báo riêng từng bộ và từng loại câu.
+
+    Chạy lại sau khi đã nhìn kết quả thì tập này không còn là tập kiểm chứng (đã có thể dùng để chỉnh): phải bật
+    --chay-lai-kiem-chung, kết quả được đánh dấu "chay_lai" để báo cáo ghi rõ.
+    """
+    from dong_bang import MANIFEST, kiem_khop
+
+    khop, dong = kiem_khop()
+    if not khop:
+        sys.exit("Trạng thái hiện tại không khớp manifest đóng băng, không chạy tập kiểm chứng:\n" + "\n".join(dong))
+    json_out = ROOT / "eval" / "results" / "truy-hoi-kiem-chung.json"
+    if json_out.exists() and not chay_lai:
+        sys.exit(f"Tập kiểm chứng đã chạy ({json_out.relative_to(ROOT)}). Chỉ chạy lại khi thật sự cần, bằng "
+                 "--chay-lai-kiem-chung, và ghi rõ trong báo cáo.")
+
+    cfg = get_config()  # cấu hình chốt của profile, đúng cấu hình đã ghi trong manifest
+    index = build_or_load_index(cfg)
+    retriever = get_retriever(index, cfg)
+    posts = get_postprocessors(cfg, index)
+    tim = lambda q: search(index, cfg, q, postprocessors=posts, retriever=retriever)  # noqa: E731
+    tim("khởi động")
+    tat_ca: list[KetQua] = []
+    theo_loai: dict[str, list[int | None]] = {}
+    for ten_file, dung in BO_KIEM_CHUNG:
+        kq = danh_gia(ten_file, dung, tim, "chot-dong-bang", cfg.mo_ta())
+        in_ket_qua(kq)
+        tat_ca.append(kq)
+        for q, hang in zip(doc_cau_hoi(ten_file), kq.hang, strict=True):
+            theo_loai.setdefault(q.get("loai", "-"), []).append(hang)
+
+    dong_loai = ["| Loại câu | Số câu | R@1 | R@3 | MRR |", "|---|---|---|---|---|"]
+    for loai, hang in sorted(theo_loai.items()):
+        dong_loai.append(f"| {loai} | {len(hang)} | {recall_at_k(hang, 1):.1%} | {recall_at_k(hang, 3):.1%} | "
+                         f"{mrr(hang):.3f} |")
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    json_out.write_text(json.dumps({
+        "thoi_diem": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "chay_lai": chay_lai,
+        "dong_bang": {"thoi_diem": manifest.get("thoi_diem"), "commit": manifest.get("commit")},
+        "ket_qua": [k.to_dict() for k in tat_ca],
+        "theo_loai": {loai: {"so_cau": len(h), "R@1": round(recall_at_k(h, 1), 4), "R@3": round(recall_at_k(h, 3), 4),
+                             "MRR": round(mrr(h), 4)} for loai, h in theo_loai.items()},
+    }, ensure_ascii=False, indent=1), encoding="utf-8")
+    md = (f"# Tập kiểm chứng — cấu hình đóng băng {manifest.get('thoi_diem')} (commit {manifest.get('commit')})"
+          f"{' — CHẠY LẠI' if chay_lai else ''}\n\n" + bang_markdown(tat_ca) + "\n### Theo loại câu\n\n"
+          + "\n".join(dong_loai) + "\n")
+    json_out.with_suffix(".md").write_text(md, encoding="utf-8")
+    print(md)
+    print(f"Đã ghi {json_out.relative_to(ROOT)} và .md")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--cau-hinh", default="vector",
@@ -232,9 +277,15 @@ def main() -> None:
     ap.add_argument("--doi-chieu-thu-vien", "--kiem-chung", dest="doi_chieu", action="store_true",
                     help="chấm lại bằng RetrieverEvaluator của LlamaIndex (chỉ cấu hình vector; hit_rate so với R@10)")
     ap.add_argument("--cutoff", type=float, default=None, help="đặt similarity_cutoff cho mọi cấu hình")
+    ap.add_argument("--tap-kiem-chung", action="store_true",
+                    help="chạy tập kiểm chứng bằng cấu hình đã đóng băng (eval/dong_bang.py), bỏ qua --cau-hinh")
+    ap.add_argument("--chay-lai-kiem-chung", action="store_true", help="cho phép chạy lại tập kiểm chứng (ghi rõ lý do)")
     ap.add_argument("--json-out", default=str(ROOT / "eval" / "results" / "truy-hoi.json"))
     ap.add_argument("--md-out", default=str(ROOT / "eval" / "results" / "truy-hoi.md"))
     args = ap.parse_args()
+    if args.tap_kiem_chung:
+        chay_tap_kiem_chung(args.chay_lai_kiem_chung)
+        return
 
     ten_cau_hinh = [t.strip() for t in args.cau_hinh.split(",") if t.strip()]
     la = [t for t in ten_cau_hinh if t not in CAU_HINH]

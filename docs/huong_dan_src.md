@@ -154,7 +154,7 @@ Khi khởi động, client gọi `/health` và báo lỗi nếu server chạy em
 
 | Lệnh | Việc |
 |---|---|
-| `make test` | 54 kiểm thử (`unittest`): 44 offline cho `processed_loader`, `bm25`, `metrics`, `config`, luật chấm, lọc phiên bản, corpus thật; 10 của `test_llm.py` cần Ollama và bị skip nếu không đặt `RAG_TEST_LLM=1` |
+| `make test` | 71 kiểm thử (`unittest`): 59 offline cho `processed_loader`, `bm25`, `metrics`, `config`, luật chấm, bộ câu hỏi, đóng băng, lọc phiên bản (gồm ca biên), corpus thật; 2 ca biên lọc phiên bản chưa xử lý ghi bằng `expectedFailure`; 10 của `test_llm.py` cần Ollama và bị skip nếu không đặt `RAG_TEST_LLM=1` |
 | `make eval` | Đo truy hồi 6 cấu hình (vector / rerank / loc / rerank+loc / hybrid / hybrid+rerank+loc), ghi `eval/results/truy-hoi.{json,md}` |
 | `make baseline` | Baseline BM25 và "không xếp hạng" — sàn so sánh cho báo cáo |
 | `make eval-answers` | Chấm câu trả lời bằng `FaithfulnessEvaluator`, `RelevancyEvaluator` của LlamaIndex (giám khảo là chính LLM sinh câu trả lời) + tỉ lệ từ chối đúng/sai (cần Ollama) |

@@ -93,3 +93,20 @@ def p95(gia_tri: Sequence[float]) -> float:
 def dinh_dang_ci(gt: Sequence[float]) -> str:
     tb, lo, hi = bootstrap_ci(gt)
     return f"{tb:.1%} [{lo:.1%}–{hi:.1%}]"
+
+
+def cohen_kappa(a: Sequence[str], b: Sequence[str]) -> float:
+    """Độ đồng thuận Cohen κ giữa hai người/cách chấm trên cùng các câu (nhãn phân loại bất kỳ).
+
+    1 = trùng hoàn toàn, 0 = chỉ ngang mức ngẫu nhiên. Dùng cho hai người chấm câu trả lời, và cho chỉ số tự động so
+    với người chấm (chỉ tin chỉ số tự động khi κ đủ cao).
+    """
+    if len(a) != len(b):
+        raise ValueError("hai dãy nhãn phải cùng độ dài")
+    if not a:
+        return 0.0
+    n = len(a)
+    quan_sat = sum(1 for x, y in zip(a, b) if x == y) / n
+    nhan = set(a) | set(b)
+    ky_vong = sum((sum(1 for x in a if x == k) / n) * (sum(1 for y in b if y == k) / n) for k in nhan)
+    return 1.0 if ky_vong == 1 else (quan_sat - ky_vong) / (1 - ky_vong)

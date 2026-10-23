@@ -1,0 +1,692 @@
+[
+  {
+    "id": "dot4_01",
+    "question": "Sinh viên đang bị kỷ luật thì có được xét chuyển sang ngành khác không?",
+    "dieu_dung": "2022-2375|1",
+    "dap_an": "Không. Một điều kiện để chuyển là không đang trong thời gian bị xử lý kỷ luật hoặc thuộc diện bị xem xét buộc thôi học.",
+    "trich_nguyen_van": "Không đang trong thời gian bị xử lý kỉ luật",
+    "loai": "tinh_huong",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_02",
+    "question": "Chuyển ngành rồi thì các học phần đã học ở ngành cũ được tính thế nào?",
+    "dieu_dung": "2022-2375|2",
+    "dap_an": "Học phần đã học và có trong chương trình chuyển đến được bảo lưu; học phần còn lại được quy đổi nếu ngành chuyển đến đồng ý về chuyên môn và Ban Giám hiệu phê duyệt; học phần không bảo lưu/quy đổi được thì sinh viên được đề nghị không ghi nhận kết quả.",
+    "trich_nguyen_van": "Các học phần được bảo lưu kết quá học tập là các học phần sinh viên đã học và có trong chương trình đào tạo chuyền đến",
+    "loai": "tinh_huong",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_03",
+    "question": "Sau khi chuyển ngành, thời gian học tối đa ở trường được tính từ lúc nào?",
+    "dieu_dung": "2022-2375|2",
+    "dap_an": "Từ thời điểm trúng tuyển của chương trình đào tạo, ngành đào tạo thứ nhất.",
+    "trich_nguyen_van": "Thời gian tối đa học tại trường của sinh viên được tính từ thời điểm trúng tuyển của chương trình đào tạo, ngành đào tạo thứ nhất",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_04",
+    "question": "Hồ sơ xin chuyển chương trình đào tạo gồm những giấy tờ gì?",
+    "dieu_dung": "2022-2375|3",
+    "dap_an": "Đơn đề nghị (Mẫu ĐT.ChuyenNganh.01), bảng điểm, bản sao chứng thực các minh chứng cho điều kiện chuyển (nếu có).",
+    "trich_nguyen_van": "Đơn đề nghị chuyền chương trình đào tạo, ngành đào tạo (Mẫu ĐT.ChuyenNganh.01)",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_05",
+    "question": "Quy định về chuyển chương trình, chuyển ngành đào tạo có hiệu lực từ bao giờ?",
+    "dieu_dung": "2022-2375|4",
+    "dap_an": "Có hiệu lực thi hành kể từ ngày ký.",
+    "trich_nguyen_van": "Quy định có hiệu lực thi hành kê từ ngày ký",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_06",
+    "question": "Tổng khối lượng đào tạo của hệ chính quy theo tín chỉ là bao nhiêu và gồm những phần nào?",
+    "dieu_dung": "22_quy-dinh-ve-khoi-luong",
+    "dap_an": "143 tín chỉ: 132 tín chỉ chuyên môn, 03 tín chỉ giáo dục thể chất, 08 tín chỉ giáo dục quốc phòng và an ninh.",
+    "trich_nguyen_van": "Khối lượng đào tạo chuyên môn: 132 tín chỉ",
+    "loai": "bang_so",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_07",
+    "question": "Giáo dục quốc phòng và an ninh chiếm mấy tín chỉ?",
+    "dieu_dung": "22_quy-dinh-ve-khoi-luong",
+    "dap_an": "08 tín chỉ.",
+    "trich_nguyen_van": "Giáo dục quốc phòng và an ninh 08 tín chỉ",
+    "loai": "khau_ngu",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_08",
+    "question": "Quy chế đào tạo trình độ đại học SGU 2021 áp dụng cho sinh viên từ khóa tuyển sinh nào?",
+    "dieu_dung": "25_quy-che-dao-tao|bh:2",
+    "dap_an": "Từ khóa tuyển sinh năm 2021 trở đi.",
+    "trich_nguyen_van": "Quy chế này được áp dụng đối với đào tạo trình độ đại học từ khóa tuyển sinh năm 2021 trở đi",
+    "loai": "khoa",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_09",
+    "question": "Quy chế đào tạo của trường cụ thể hóa văn bản nào của Bộ Giáo dục và Đào tạo?",
+    "dieu_dung": "25_quy-che-dao-tao|1",
+    "dap_an": "Quy chế đào tạo trình độ đại học ban hành kèm Thông tư số 08/2021/TT-BGDĐT ngày 18/3/2021.",
+    "trich_nguyen_van": "Thông tư số 08/2021/TT-BGDĐT ngày 18 tháng 3 năm 2021",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_10",
+    "question": "Ngành thuộc lĩnh vực sức khỏe có cấp chứng chỉ hành nghề có được liên kết đào tạo không?",
+    "dieu_dung": "25_quy-che-dao-tao|5",
+    "dap_an": "Không. Liên kết đào tạo chỉ thực hiện với hình thức vừa làm vừa học và không thực hiện với các ngành sức khỏe có cấp chứng chỉ hành nghề.",
+    "trich_nguyen_van": "Không thực hiện việc liên kết đào tạo đối với các ngành thuộc lĩnh vực sức khoẻ có cấp chứng chỉ hành nghề",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_11",
+    "question": "Trong liên kết đào tạo, giảng viên cơ hữu phải dạy tối thiểu bao nhiêu phần trăm chương trình?",
+    "dieu_dung": "25_quy-che-dao-tao|5",
+    "dap_an": "Tối thiểu 70% nội dung, khối lượng kiến thức của chương trình đào tạo.",
+    "trich_nguyen_van": "Bảo đảm đội ngũ giảng viên cơ hữu giảng dạy tối thiểu 70% nội dung",
+    "loai": "bang_so",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_12",
+    "question": "Quyết định trúng tuyển và bảng điểm gốc được nhà trường lưu trữ bao lâu?",
+    "dieu_dung": "25_quy-che-dao-tao|21",
+    "dap_an": "Bảo quản vĩnh viễn tại Trường.",
+    "trich_nguyen_van": "là tài liệu lưu trữ được bảo quản vĩnh viễn tại Trường",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_13",
+    "question": "Trường phải công khai quy chế đào tạo trên website chậm nhất bao lâu trước khi tổ chức đào tạo?",
+    "dieu_dung": "25_quy-che-dao-tao|21",
+    "dap_an": "Chậm nhất 45 ngày trước khi tổ chức đào tạo.",
+    "trich_nguyen_van": "chậm nhất 45 ngày trước khi tô chức đào tạo",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_14",
+    "question": "Em mới học năm nhất thì đã được đăng ký học thêm ngành thứ hai chưa?",
+    "dieu_dung": "8_QD810|3;25_quy-che-dao-tao|17",
+    "dap_an": "Chưa. Sớm nhất là khi đã được xếp trình độ năm thứ hai của chương trình thứ nhất (QĐ 810 Điều 3; QC 2021 Điều 17).",
+    "trich_nguyen_van": "sớm nhất khi đã được xếp trình độ năm thứ hai của chương trình thứ nhất",
+    "loai": "khau_ngu",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_15",
+    "question": "Theo quy định học cùng lúc hai chương trình hiện hành (QĐ 810), học lực ngành thứ nhất phải xếp loại gì mới được đăng ký?",
+    "dieu_dung": "8_QD810|3",
+    "dap_an": "Điểm trung bình tích lũy xếp loại giỏi trở lên (QĐ 810/2024). Quy chế 2021 Điều 17 ghi mức khá trở lên — QĐ 810 là quy định riêng, chặt hơn.",
+    "trich_nguyen_van": "có học lực của chương trình thứ nhất tính theo điểm trung bình tích lũy xếp loại giói trở lên",
+    "loai": "xung_dot",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_16",
+    "question": "Quyết định về học cùng lúc hai chương trình có hiệu lực khi nào?",
+    "dieu_dung": "8_QD810|bh:2;8_QD810|9",
+    "dap_an": "Có hiệu lực từ ngày ký.",
+    "trich_nguyen_van": "Quyết định này có hiệu lực từ ngày ký.",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_17",
+    "question": "Quy định học cùng lúc hai chương trình áp dụng cho ai?",
+    "dieu_dung": "8_QD810|1;8_QD810|9",
+    "dap_an": "Các đơn vị, cá nhân liên quan đào tạo trình độ đại học chính quy; tức sinh viên đại học hình thức chính quy.",
+    "trich_nguyen_van": "Quy định này áp dụng đối với các đơn vị và cá nhân liên quan đào tạo trình độ đại học chính quy",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_18",
+    "question": "Học song ngành ở trường được hiểu là gì?",
+    "dieu_dung": "8_QD810|2",
+    "dap_an": "Là hình thức sinh viên đăng ký học chương trình ngành thứ hai khi đang học ngành thứ nhất, để có thêm bằng tốt nghiệp ngành thứ hai khi đủ điều kiện.",
+    "trich_nguyen_van": "Học cùng lúc hai chương trình là hình thức sinh viên đăng ký học chương trình đào tạo ngành thứ hai",
+    "loai": "dong_nghia",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_19",
+    "question": "Muốn học thêm ngành Ngôn ngữ Anh làm ngành thứ hai thì cần chứng chỉ tiếng Anh như thế nào?",
+    "dieu_dung": "8_QD810|3",
+    "dap_an": "Chứng chỉ cấp trong vòng 02 năm, đạt tối thiểu ví dụ IELTS 5.5, TOEFL iBT 65 hoặc VSTEP 6.0.",
+    "trich_nguyen_van": "được cấp trong vòng 02 năm tính đến thời điểm đăng kí",
+    "loai": "tra_bang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_20",
+    "question": "Đang học song ngành mà ngành chính bị cảnh báo học tập thì sao?",
+    "dieu_dung": "8_QD810|4",
+    "dap_an": "Phải dừng học chương trình thứ hai từ học kỳ tiếp theo và bị loại khỏi danh sách học chương trình thứ hai.",
+    "trich_nguyen_van": "phải dừng học chương trình thứ hai ở học kì tiếp theo",
+    "loai": "tinh_huong",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_21",
+    "question": "Học cùng lúc hai chương trình thì được học tối đa bao lâu?",
+    "dieu_dung": "8_QD810|4",
+    "dap_an": "Bằng thời gian tối đa quy định cho chương trình thứ nhất.",
+    "trich_nguyen_van": "là thời gian tối đa quy định cho chương trình thứ nhất",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_22",
+    "question": "Học ngành thứ hai có được miễn giảm học phí không?",
+    "dieu_dung": "8_QD810|5",
+    "dap_an": "Không được miễn, giảm học phí khi học chương trình thứ hai.",
+    "trich_nguyen_van": "Sinh viên không được miễn, giảm học phí khi học chương trình thứ hai.",
+    "loai": "khau_ngu",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_23",
+    "question": "Điểm của ngành thứ hai có được dùng để xét học bổng không?",
+    "dieu_dung": "8_QD810|5",
+    "dap_an": "Không.",
+    "trich_nguyen_van": "không được sử dụng kết quả học tập ở chương trình thứ hai để xét học bồng",
+    "loai": "khau_ngu",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_24",
+    "question": "Mỗi năm trường cho đăng ký học chương trình thứ hai vào tháng nào?",
+    "dieu_dung": "8_QD810|6",
+    "dap_an": "Tháng 1 và tháng 7 hằng năm.",
+    "trich_nguyen_van": "Tháng 1 và Tháng 7 hàng năm",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_25",
+    "question": "Nộp hồ sơ đăng ký học chương trình thứ hai ở đâu?",
+    "dieu_dung": "8_QD810|6",
+    "dap_an": "Phòng Đào tạo thu hồ sơ đăng ký xét tuyển.",
+    "trich_nguyen_van": "Phòng Đào tạo chịu trách nhiệm thu hồ sơ đăng ký xét tuyên học chương trình thứ hai",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_26",
+    "question": "Khoa nào tổ chức thi và quản lý điểm cho sinh viên ở chương trình thứ hai?",
+    "dieu_dung": "8_QD810|7",
+    "dap_an": "Khoa/ngành quản lý chương trình thứ hai.",
+    "trich_nguyen_van": "Khoa/ngành quản lý học chương trình thứ hai có trách nhiệm tổ chức học tập cho sinh viên",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_27",
+    "question": "Phải đăng ký ngành thứ hai muộn nhất bao lâu trước khi xét tốt nghiệp ngành đó?",
+    "dieu_dung": "8_QD810|8",
+    "dap_an": "Muộn nhất 02 năm trước thời điểm xét tốt nghiệp chương trình thứ hai.",
+    "trich_nguyen_van": "muộn nhất 02 năm trước thời điểm xét tốt nghiệp chương trình thứ hai",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_28",
+    "question": "Hết thời gian học mà chưa đủ điều kiện tốt nghiệp ngành thứ hai thì được cấp gì?",
+    "dieu_dung": "8_QD810|8",
+    "dap_an": "Được cấp chứng nhận về các học phần đã tích lũy.",
+    "trich_nguyen_van": "cấp chứng nhận về các học phân đã tích luỹ trong chương trình đảo tạo",
+    "loai": "tinh_huong",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_29",
+    "question": "QĐ 3183/2025 sửa đổi quy chế được ban hành kèm theo quyết định số mấy?",
+    "dieu_dung": "QD 3183.2025|1",
+    "dap_an": "Quyết định số 258/QĐ-ĐHSG ngày 22/02/2022.",
+    "trich_nguyen_van": "ban hành kèm theo Quyết định số 258/QĐ-ĐHSG ngày 22/02/2022",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_30",
+    "question": "Những đơn vị nào chịu trách nhiệm thi hành QĐ 3183 sửa đổi quy chế đào tạo?",
+    "dieu_dung": "QD 3183.2025|3",
+    "dap_an": "Chánh Văn phòng, Trưởng Phòng Đào tạo, Trưởng Phòng Giáo dục Thường xuyên, Trưởng các khoa và các đơn vị liên quan.",
+    "trich_nguyen_van": "Chánh Văn phòng, Trưởng Phòng Đào tạo, Trưởng Phòng Giáo dục Thường xuyên",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_31",
+    "question": "Ngành Kỹ thuật phần mềm khóa 2019 học mấy năm và bao nhiêu tín chỉ?",
+    "dieu_dung": "Quydinh150tc",
+    "dap_an": "4,5 năm, 150 tín chỉ.",
+    "trich_nguyen_van": "thời gian đào tạo: 4,5 năm; khối lượng kiến thức tích lũy toàn khóa: 150 tín chỉ",
+    "loai": "khoa",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_32",
+    "question": "Kỹ sư khóa 2016 phải tích lũy bao nhiêu tín chỉ?",
+    "dieu_dung": "Quydinh150tc",
+    "dap_an": "132 tín chỉ, thời gian đào tạo 4 năm.",
+    "trich_nguyen_van": "thời gian đào tạo: 4.0 năm; khối lượng kiến thức tích lũy toàn khóa: 132 tín chỉ",
+    "loai": "khoa",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_33",
+    "question": "Quy định 2101 về tiếng Anh không chuyên áp dụng cho những khóa nào?",
+    "dieu_dung": "29_2101|1",
+    "dap_an": "Các khóa tuyển sinh từ năm 2024 trở đi.",
+    "trich_nguyen_van": "áp dụng cho các khóa tuyển sinh từ năm 2024 trở đi",
+    "loai": "khoa",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_34",
+    "question": "Theo quy định 2101, ai thu nhận chứng chỉ để quy đổi điểm tiếng Anh?",
+    "dieu_dung": "29_2101|3",
+    "dap_an": "Phòng Đào tạo.",
+    "trich_nguyen_van": "thu nhận chứng chỉ quy đổi điểm học tập theo biên chế năm học của Nhà trường",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_35",
+    "question": "Quy định 2101 thay thế văn bản nào?",
+    "dieu_dung": "29_2101|4",
+    "dap_an": "Thay thế Quy định số 2626/QyĐ-ĐHSG ngày 16/11/2022, đối với các khóa tuyển sinh từ năm 2024 trở đi.",
+    "trich_nguyen_van": "Quy định này áp dụng thay thế Quy định số 2626/QyĐ-ĐHSG ngày 16 tháng 11 năm 2022",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_36",
+    "question": "Quy định 2626 về tiếng Anh không chuyên áp dụng cho các khóa nào?",
+    "dieu_dung": "CV2626|1",
+    "dap_an": "Ghi là các khóa tuyển sinh từ năm 2022 trở đi; với khóa từ 2024 đã được QyĐ 2101 thay thế.",
+    "trich_nguyen_van": "áp dụng cho các khóa tuyển sinh từ năm 2022 trở đi",
+    "loai": "khoa",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_37",
+    "question": "Đơn vị nào tổ chức kỳ thi khảo sát tiếng Anh đầu vào?",
+    "dieu_dung": "CV2626|4",
+    "dap_an": "Trung tâm Khảo thí.",
+    "trich_nguyen_van": "Trung tâm Khảo thí: Tổ chức kỳ thi khảo sát tiếng Anh đầu vào.",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_38",
+    "question": "Khi cần sửa quy định 2626 thì đơn vị nào tham mưu ban hành quy định thay thế?",
+    "dieu_dung": "CV2626|5",
+    "dap_an": "Trung tâm Khảo thí tham mưu Ban Giám hiệu.",
+    "trich_nguyen_van": "giao Trung tâm Khảo thí tham mưu Ban Giám hiệu ban hành quy định thay thế",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_39",
+    "question": "Quy định tổ chức thi học kỳ năm 2025 thay thế quy định nào?",
+    "dieu_dung": "QD898|bh:3",
+    "dap_an": "Quy định số 3089/QyĐ-ĐHSG ngày 03/12/2020.",
+    "trich_nguyen_van": "thay thế Quy định số 3089",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_40",
+    "question": "QĐ 898 về tổ chức thi học kỳ có hiệu lực khi nào?",
+    "dieu_dung": "QD898|bh:2",
+    "dap_an": "Có hiệu lực thi hành kể từ ngày kí.",
+    "trich_nguyen_van": "Quyết định này có hiệu lực thi hành kể từ ngày kí.",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_41",
+    "question": "Đơn vị nào xếp lịch thi học kỳ?",
+    "dieu_dung": "QD898|1;QD898|3",
+    "dap_an": "Phòng Đào tạo (trừ một số học phần đặc thù do khoa tổ chức).",
+    "trich_nguyen_van": "xếp lịch thi học kì",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_42",
+    "question": "Đơn vị nào phụ trách thanh tra kỳ thi?",
+    "dieu_dung": "QD898|1",
+    "dap_an": "Phòng Thanh tra - Pháp chế tham mưu thành lập Đoàn Thanh tra kì thi.",
+    "trich_nguyen_van": "Phòng Thanh tra - Pháp chế tham mưu Ban Giám hiệu thành lập Đoàn Thanh tra kì thi",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_43",
+    "question": "Túi đề thi được giao cho Ban Coi thi trước giờ thi bao lâu?",
+    "dieu_dung": "QD898|2",
+    "dap_an": "Trước mỗi ca thi 30 phút.",
+    "trich_nguyen_van": "cho Ban Coi thi trước mỗi ca thi 30 phút",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_44",
+    "question": "Lịch thi phải được công bố trước đợt thi ít nhất bao lâu?",
+    "dieu_dung": "QD898|3",
+    "dap_an": "Ít nhất 01 tuần trước thời điểm bắt đầu đợt thi.",
+    "trich_nguyen_van": "ít nhất 01 tuần trước thời điểm bắt đầu đợt thi",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_45",
+    "question": "Một ngày thi có mấy ca, ca thi thứ ba bắt đầu lúc mấy giờ?",
+    "dieu_dung": "QD898|3",
+    "dap_an": "4 ca thi; ca 3 bắt đầu từ 12g30.",
+    "trich_nguyen_van": "Ca thi 3 bắt đầu từ 12g30",
+    "loai": "bang_so",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_46",
+    "question": "Đi thi mà quên mang căn cước thì phải làm sao?",
+    "dieu_dung": "QD898|3",
+    "dap_an": "Cán bộ coi thi yêu cầu sinh viên đến Phòng Hội đồng thi để xử lý theo quy định.",
+    "trich_nguyen_van": "yêu cầu sinh viên đến Phòng Hội đồng thi để xử lý theo quy định",
+    "loai": "tinh_huong",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_47",
+    "question": "Nộp bài thi tự luận thì sinh viên phải ghi và ký những gì?",
+    "dieu_dung": "QD898|3",
+    "dap_an": "Tự ghi đúng số tờ giấy thi đã nộp và ký tên vào Danh sách sinh viên dự thi.",
+    "trich_nguyen_van": "yêu cầu sinh viên tự ghi đúng số tờ giấy thi đã nộp và ký tên vào Danh sách sinh viên dự thi",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_48",
+    "question": "Giảng viên nữ từ bao nhiêu tuổi thì được miễn coi thi?",
+    "dieu_dung": "QD898|3",
+    "dap_an": "Từ 50 tuổi trở lên (giảng viên nam từ 55 tuổi).",
+    "trich_nguyen_van": "giảng viên nữ từ 50 tuôi trở lên được miễn nghĩa vụ coi thi",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_49",
+    "question": "Bài thi tự luận được mấy cán bộ chấm và chấm bằng mực gì?",
+    "dieu_dung": "QD898|4",
+    "dap_an": "02 cán bộ chấm, dùng 02 màu mực khác nhau (đỏ và xanh lá cây).",
+    "trich_nguyen_van": "Mỗi bài thi phải do 02 cán bộ chấm thi thực hiện trực tiếp trên bài bằng 02 màu mực khác nhau",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_50",
+    "question": "Hai lần chấm lệch nhau bao nhiêu điểm thì phải chấm lần thứ ba?",
+    "dieu_dung": "QD898|4",
+    "dap_an": "Lệch từ 1,0 điểm trở lên.",
+    "trich_nguyen_van": "lệch nhau từ 1,0 điểm trở lên",
+    "loai": "bang_so",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_51",
+    "question": "Thi xong bao lâu thì có điểm học phần?",
+    "dieu_dung": "QD898|6",
+    "dap_an": "Chậm nhất 12 ngày làm việc sau khi kết thúc đợt thi.",
+    "trich_nguyen_van": "chậm nhất 12 ngày làm việc sau khi kết thúc đợt thi",
+    "loai": "khau_ngu",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_52",
+    "question": "Bài thi kết thúc học phần được lưu giữ ít nhất bao lâu?",
+    "dieu_dung": "QD898|6",
+    "dap_an": "Ít nhất hai năm, tính từ ngày kết thúc thi học kì.",
+    "trich_nguyen_van": "Thời hạn lưu giữ các bài thi ít nhất là hai năm",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_53",
+    "question": "Giảng viên công bố điểm quá trình vào lúc nào?",
+    "dieu_dung": "QD898|6",
+    "dap_an": "Tại buổi học cuối cùng trước khi kết thúc mỗi học phần.",
+    "trich_nguyen_van": "Giảng viên công bố điểm đánh giá quá trình cho sinh viên tại buổi học cuối cùng",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_54",
+    "question": "Người làm lộ đề thi bị xử lý thế nào?",
+    "dieu_dung": "QD898|9",
+    "dap_an": "Buộc thôi việc hoặc đề nghị truy cứu trách nhiệm hình sự.",
+    "trich_nguyen_van": "Buộc thôi việc hoặc đề nghị truy cứu trách nhiệm hình sự",
+    "loai": "tinh_huong",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_55",
+    "question": "Quy chế cố vấn học tập có áp dụng cho các khóa đào tạo theo niên chế không?",
+    "dieu_dung": "QĐ_CVHT|1",
+    "dap_an": "Không.",
+    "trich_nguyen_van": "Quy chế này không áp dụng đối với các khóa đào tạo theo niên chế.",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_56",
+    "question": "Ai là Chủ tịch Hội đồng cố vấn học tập của trường?",
+    "dieu_dung": "QĐ_CVHT|2",
+    "dap_an": "Hiệu trưởng, hoặc Phó hiệu trưởng phụ trách đào tạo được Hiệu trưởng ủy quyền.",
+    "trich_nguyen_van": "là Chủ tịch hội đồng",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_57",
+    "question": "Một cố vấn học tập được phụ trách tối đa mấy lớp cùng lúc?",
+    "dieu_dung": "QĐ_CVHT|4",
+    "dap_an": "Từ 01 đến 02 lớp.",
+    "trich_nguyen_van": "mỗi CVHT chỉ phụ trách từ 01 đến 02 lớp SV",
+    "loai": "bang_so",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_58",
+    "question": "Đổi cố vấn học tập thì lớp được thông báo trong thời hạn bao lâu?",
+    "dieu_dung": "QĐ_CVHT|4",
+    "dap_an": "Trong 3 ngày làm việc kể từ ngày có quyết định của Hiệu trưởng.",
+    "trich_nguyen_van": "trong thời hạn 3 ngày làm việc",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_59",
+    "question": "Cố vấn học tập có những chức năng gì?",
+    "dieu_dung": "QĐ_CVHT|5",
+    "dap_an": "Tư vấn, trợ giúp sinh viên trong học tập, nghiên cứu khoa học, định hướng nghề nghiệp; quản lý sinh viên trong quá trình học tập và rèn luyện.",
+    "trich_nguyen_van": "Quản lí SV trong quá trình học tập và rèn luyện tại Trường.",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_60",
+    "question": "Cố vấn học tập được trang bị những công cụ gì?",
+    "dieu_dung": "QĐ_CVHT|8",
+    "dap_an": "Chương trình đào tạo, biên chế năm học và kế hoạch đào tạo, quy chế đào tạo, quy định công tác sinh viên, văn bản về học bổng/học phí/điểm rèn luyện, sổ tay, danh sách lớp, biểu mẫu…",
+    "trich_nguyen_van": "CVHT được trang bị bộ công cụ, gồm:",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_61",
+    "question": "Việc tư vấn của cố vấn học tập phải tuân thủ những yêu cầu nào?",
+    "dieu_dung": "QĐ_CVHT|9",
+    "dap_an": "Công bằng, công khai, đặt lợi ích sinh viên lên hàng đầu; nội dung chính xác, trung thực, đúng quy định; được ghi chép cẩn thận.",
+    "trich_nguyen_van": "Hoạt động của CVHT phải tuân thủ các yêu cầu Sau:",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_62",
+    "question": "Cố vấn học tập họp lớp mấy lần mỗi học kỳ?",
+    "dieu_dung": "QĐ_CVHT|10",
+    "dap_an": "2 lần/học kỳ; làm việc với Ban cán sự lớp 1 lần/tháng.",
+    "trich_nguyen_van": "lớp SV (2 lần/học kì)",
+    "loai": "bang_so",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_63",
+    "question": "Ai nhận xét, đánh giá hoạt động của cố vấn học tập khi kết thúc học kỳ?",
+    "dieu_dung": "QĐ_CVHT|11",
+    "dap_an": "Trưởng khoa/ngành, rồi thông báo cho Hội đồng CVHT Trường.",
+    "trich_nguyen_van": "Kết thúc học kì, Trưởng khoa/ngành nhận xét đánh giá hoạt động của CVHT",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_64",
+    "question": "Cuối học kỳ cố vấn học tập phải nộp gì cho trưởng khoa?",
+    "dieu_dung": "QĐ_CVHT|12",
+    "dap_an": "Hồ sơ làm việc của CVHT và biên bản họp với lớp sinh viên.",
+    "trich_nguyen_van": "Cuối mỗi học kì, CVHT phải nộp cho Trưởng khoa/ngành hồ sơ làm việc",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_65",
+    "question": "Các quy định cũ trái với quy chế cố vấn học tập thì xử lý thế nào?",
+    "dieu_dung": "QĐ_CVHT|14",
+    "dap_an": "Đều bị bãi bỏ; quy chế có hiệu lực từ ngày kí.",
+    "trich_nguyen_van": "Các quy chế, quy định trước đây của Trường trái với quy chế này đều bị bãi bỏ.",
+    "loai": "thang",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_66",
+    "question": "Sinh viên khóa 2021 có IELTS 5.0 thì học phần Tiếng Anh 1 được quy đổi mấy điểm?",
+    "dieu_dung": "202111_2366",
+    "dap_an": "9 điểm (TB 2366, khóa 2021 trở về trước).",
+    "trich_nguyen_van": "IELTS = 5.0 do IDP Education hoặc British Council cấp",
+    "loai": "khoa",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_67",
+    "question": "Sinh viên khóa 2023 có IELTS 5.0 thì học phần Tiếng Anh 1 được quy đổi mấy điểm?",
+    "dieu_dung": "CV2626|3",
+    "dap_an": "10 điểm (QyĐ 2626, khóa 2022–2023: IELTS ≥ 5.0).",
+    "trich_nguyen_van": "IELTS ≥ 5.0 do IDP Education hoặc British Council tổ chức",
+    "loai": "khoa",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_68",
+    "question": "Sinh viên khóa 2024 có IELTS 5.0 thì học phần Tiếng Anh 1 được quy đổi mấy điểm?",
+    "dieu_dung": "29_2101|2",
+    "dap_an": "10 điểm (QyĐ 2101, khóa từ 2024: IELTS ≥ 5.0).",
+    "trich_nguyen_van": "IELTS ≥ 5.0 do IDP Education hoặc British Council tổ chức",
+    "loai": "khoa",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  },
+  {
+    "id": "dot4_69",
+    "question": "Sinh viên khóa 2022 có điểm học phần 8,4 thì quy đổi sang thang điểm 4 được mấy điểm?",
+    "dieu_dung": "25_quy-che-dao-tao|9;25_quy-che-dao-tao|10",
+    "dap_an": "3 điểm: 8,4 là điểm B (Điều 9 bản gốc), B quy đổi thành 3 (Điều 10 bản gốc).",
+    "trich_nguyen_van": "B quy đồi thành 3",
+    "loai": "nhieu_doan",
+    "cong_cu_tao": "Claude (AI), 23/10/2026",
+    "nguoi_kiem": ""
+  }
+]

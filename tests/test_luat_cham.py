@@ -51,6 +51,18 @@ class TestLuatCham(unittest.TestCase):
         self.assertTrue(dung_bo_dev(cv, "202111_2366;CV2626|3"))
         self.assertFalse(dung_bo_dev(cv, "202111_2366;CV2626|2"))
 
+    def test_bo_dev_nhan_ban_hanh_va_sua_doi(self) -> None:
+        # "bh:" chỉ khớp Điều của quyết định ban hành, "sd:" chỉ khớp mục sửa đổi — không lẫn với Điều phần chính
+        bh2 = node(file="25_qc.md", phan="ban_hanh", dieu="2")
+        chinh2 = node(file="25_qc.md", phan="chinh", dieu="2")
+        self.assertTrue(dung_bo_dev(bh2, "25_qc|bh:2"))
+        self.assertFalse(dung_bo_dev(chinh2, "25_qc|bh:2"))
+        self.assertFalse(dung_bo_dev(bh2, "25_qc|2"))
+        sd9 = node(file="QD 3183.md", phan="sua_doi", sua_doi_dieu="9")
+        self.assertTrue(dung_bo_dev(sd9, "QD 3183|sd:9"))
+        self.assertFalse(dung_bo_dev(sd9, "QD 3183|9"))
+        self.assertFalse(dung_bo_dev(node(file="QD 3183.md", phan="chinh", dieu="9"), "QD 3183|sd:9"))
+
 
 if __name__ == "__main__":
     unittest.main()

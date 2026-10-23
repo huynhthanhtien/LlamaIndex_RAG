@@ -1,0 +1,434 @@
+﻿bo,id,question,dap_an,tra_loi,nguon,ngu_canh_co_doan_dung,khop_su_kien,tu_choi,ket_qua,ly_do,nguoi_cham
+dev_questions_dot2.json,1,Sinh viên khóa 2024 có IELTS 4.5 thì được quy đổi Tiếng Anh 1 mấy điểm?,9,"Theo Điều 2 — QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024), sinh viên có IELTS = 4.5 được quy đổi điểm học tập học phần Tiếng Anh 1 là 9 điểm.","QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 2; TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa); TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp",True,du,False,,,
+dev_questions_dot2.json,2,"Sinh viên khóa 2022 có TOEIC Nghe và Đọc 520, Nói 110, Viết 110 được quy đổi mấy điểm tiếng Anh?",9,"Theo bảng quy đổi tại Điều 3 — QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023), sinh viên có TOEIC 4 kỹ năng: Nghe và Đọc từ 501 - 549; Nói từ 101 - 119; Viết từ 101 - 119 được quy đổi thành **9 điểm** cho cả 3 học phần Tiếng Anh 1, 2, 3.
+
+Trả lời: Sinh viên được quy đổi **9 điểm** cho cả 3 học phần Tiếng Anh 1, 2, 3.","QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10",True,du,False,,,
+dev_questions_dot2.json,3,Sinh viên khóa 2021 có IELTS 5.5 thì điểm Tiếng Anh III được quy đổi là bao nhiêu?,10,"Theo Điều 3, khoản 3 của Thông báo 2366/2021, sinh viên khóa 2021 có IELTS ≥ 5.5 sẽ được quy đổi điểm học tập học phần Tiếng Anh III là 10.","TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước); TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước); Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10",True,du,False,,,
+dev_questions_dot2.json,4,Sinh viên khóa 2020 có chứng chỉ VSTEP 4.0 được quy đổi mấy điểm tiếng Anh?,8,"Theo Điều 9, khoản 3, bảng 1 của Thông báo số 536/TB-ĐHSG-ĐT ngày 30/03/2020, sinh viên có chứng chỉ VSTEP 4.0 được quy đổi thành **8 điểm** học phần tiếng Anh.",TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước); TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp,True,du,False,,,
+dev_questions_dot2.json,5,Sinh viên khóa 2023 có PTE Academic 50 điểm được quy đổi mấy điểm tiếng Anh?,9,"Theo quy định tại **Điều 3 — QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023)**, sinh viên khóa 2023 có PTE Academic từ 50 - 57 do Pearson cấp được quy đổi **9 điểm** cho các học phần Tiếng Anh 1, 2, 3. 
+
+Trả lời: **9 điểm**.","TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa); QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3",True,du,False,,,
+dev_questions_dot2.json,6,Sinh viên khóa 2021 có PTE Academic 50 điểm được quy đổi mấy điểm tiếng Anh?,8,"Theo Điều 10, khoản 2, Quy chế đào tạo trình độ đại học SGU 2021 (số 258/QĐ-ĐHSG), điểm chữ không quy định tại khoản 2 không được tính vào các điểm trung bình. Tuy nhiên, theo Điều 10, khoản 3, điểm chữ được quy đổi sang thang điểm 4 (""hệ 4"") chỉ để tính điểm trung bình.
+
+Trong văn bản TB 2451/2024, bảng quy đổi chứng chỉ tiếng Anh cho khóa 2021 trở về trước, PTE Academic từ 50 - 57 do Pearson cấp được quy đổi thành **9** điểm tiếng Anh II và III.
+
+Do đó, sinh viên khóa 2021 có PTE Academic 50 điểm được quy đổi **9** điểm tiếng Anh.",TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa); TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước); Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10,True,khong,False,,,
+dev_questions_dot2.json,7,Chứng chỉ tiếng Anh dùng để quy đổi điểm cho khóa 2024 phải được cấp trong thời gian bao lâu?,không quá 02 năm tính đến ngày nộp hồ sơ,"Theo quy định tại **Điều 2 — QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024)**, các chứng chỉ tiếng Anh dùng để quy đổi phải được cấp trong thời gian **không quá 02 năm tính đến ngày nộp hồ sơ**.
+
+Trả lời: Chứng chỉ tiếng Anh dùng để quy đổi điểm cho khóa 2024 phải được cấp trong thời gian **không quá 02 năm tính đến ngày nộp hồ sơ**.","QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 2; TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa); QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 3",True,du,False,,,
+dev_questions_dot2.json,8,"Sinh viên khóa 2024 phải nộp chứng chỉ tiếng Anh trước khi nào để được quy đổi cả 3 học phần Tiếng Anh 1, 2, 3?",trước thời điểm bắt đầu học kỳ 2 năm thứ nhất tối thiểu 10 ngày,"Theo Điều 2 — QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024):
+
+> ""Trước thời điểm bắt đầu học kỳ 2 của năm thứ nhất tối thiểu 10 ngày: SV nộp chứng chỉ hợp lệ thì được quy đổi kết quả học tập học phần Tiếng Anh 1, 2 và 3.""
+
+**Trả lời:** Sinh viên khóa 2024 phải nộp chứng chỉ tiếng Anh trước thời điểm bắt đầu học kỳ 2 của năm thứ nhất tối thiểu 10 ngày để được quy đổi cả 3 học phần Tiếng Anh 1, 2, 3.","QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 2; QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 3; TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)",True,du,False,,,
+dev_questions_dot2.json,9,Thi khảo sát tiếng Anh đầu vào được 92 điểm thì được gì?,quy đổi điểm 8 Tiếng Anh 1 và được đăng ký học Tiếng Anh 2,"Theo Điều 4 khoản 4, điểm 92 thuộc phạm vi từ 90 trở lên, được quy đổi thành điểm 8 (theo thang điểm 10) đối với học phần Tiếng Anh 1 và sinh viên được đăng ký học phần Tiếng Anh 2. 
+
+**Căn cứ:** Điều 4 khoản 4 — QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023).","QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3; TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước); TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước)",True,du,False,,,
+dev_questions_dot2.json,10,Học phần Tiếng Anh 1 theo chương trình mới có bao nhiêu tín chỉ?,03 tín chỉ (mã 866401),"Theo Điều 3, QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023):
+
+| Mã học phần | Tên học phần | Số tín chỉ |
+|---|---|---|
+| 866401 | Tiếng Anh 1 | 03 |
+
+**Trả lời:** Học phần Tiếng Anh 1 theo chương trình mới có 03 tín chỉ.","QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3; TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)",True,du,False,,,
+dev_questions_dot2.json,11,Sinh viên khóa 2022 có chứng chỉ APTIS đạt B1 được quy đổi thế nào?,điểm 10 cho cả 3 học phần,"Theo Điều 3 — QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023):
+
+> (*) Đối với chứng chỉ APTIS do cách tính điểm đặc thù, vì vậy SV khi nộp chứng chỉ đạt B1 thì được quy đổi thang điểm 10 cho tất cả 3 học phần tiếng Anh 1, 2 và 3.
+
+**Trả lời:** Sinh viên khóa 2022 có chứng chỉ APTIS đạt B1 được quy đổi thang điểm 10 cho tất cả 3 học phần Tiếng Anh 1, 2 và 3.","QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3; TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp",True,du,False,,,
+dev_questions_dot2.json,12,Học phần Tiếng Anh 2 dùng giáo trình gì?,"Cambridge English Empower Pre-intermediate (B1), Unit 1 – Unit 6","Học phần Tiếng Anh 2 dùng giáo trình: [1] Doff, A., Thaine, C., Puchta, H., Lewis-Jones, P., Stranks, J., & Burton, G. (2015). Cambridge English Empower Pre-intermediate (B1). Cambridge University Press. [2] Tài liệu học trực tuyến kèm theo sách Cambridge English Empower Pre-intermediate (B1). (Điều 3 — QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023)).","QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3; QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 2",True,thieu,False,,,
+dev_questions_dot2.json,13,Sinh viên khóa 2021 có TOEFL ITP 500 điểm được quy đổi mấy điểm tiếng Anh?,9,"Theo Điều 10, khoản 2, quy định về quy đổi điểm chữ thành điểm số trong hệ 4:  
+**A quy đổi thành 4; B quy đổi thành 3; C quy đổi thành 2; D quy đổi thành 1; F quy đổi thành 0.**
+
+Tuy nhiên, để xác định điểm chữ tương ứng với điểm số 500 trên thang điểm TOEFL ITP, cần tra bảng quy đổi trong **TB 2451/2024** (bổ sung cho bảng của TB 2366/2021):
+
+| TT | Điểm chứng chỉ tiếng Anh (khóa 2021 trở về trước) | Tiếng Anh I | Tiếng Anh II | Tiếng Anh III |
+|---|---|---|---|---|
+| 1 | TOEFL ITP từ 477 - 493 do ETS cấp; ... | 8 | 8 | 8 |
+| 2 | TOEFL ITP từ 494 - 512 do ETS cấp; ... | 9 | 9 | 9 |
+| 3 | TOEFL ITP ≥ 513 do ETS cấp; ... | 10 | 10 | 10 |
+
+Với điểm TOEFL ITP 500 thuộc khoảng **494 - 512**, sinh viên được quy đổi **9 điểm** cho các học phần Tiếng Anh I, II, III.  
+
+**Trả lời:** Sinh viên khóa 2021 có TOEFL ITP 500 điểm được quy đổi **9 điểm** tiếng Anh.",TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước); Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10; TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa),True,du,False,,,
+dev_questions_dot2.json,14,Ngành nào không phải học các học phần tiếng Anh không chuyên?,"Sư phạm Anh, Ngôn ngữ Anh, Quốc tế học, CNTT chất lượng cao","Theo Điều 2, các học phần tiếng Anh không chuyên **không áp dụng cho** các ngành đào tạo chuyên ngành Tiếng Anh (Sư phạm Anh, Ngôn ngữ Anh) và các ngành đã có khối kiến thức ngoại ngữ thay thế các học phần này trong chương trình đào tạo (Quốc tế học, Công nghệ thông tin chất lượng cao). 
+
+**Trích nguyên văn:**  
+*""Các học phần tiếng Anh không chuyên là các học phần bắt buộc, thuộc chương trình đào tạo của sinh viên (SV) hệ chính quy và hệ vừa làm vừa học đào tạo theo học chế tín chỉ trừ các ngành đào tạo chuyên ngành Tiếng Anh (Sư phạm Anh, Ngôn ngữ Anh) và các ngành đã có khối kiến thức ngoại ngữ thay thế các học phần này trong chương trình đào tạo (Quốc tế học, Công nghệ thông tin chất lượng cao).""*  
+**Nguồn:** Điều 2 — QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023).","QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 2; TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước); TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước)",True,khong_ap_dung,False,,,
+dev_questions_dot2.json,15,Sinh viên khóa 2024 có Linguaskill 155 điểm được quy đổi mấy điểm tiếng Anh?,9,"Theo Điều 2, QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024):
+
+""**Linguaskill ≥ 159 do Cambridge cấp**"" được quy đổi thành **10 điểm** học phần Tiếng Anh 1, 2, 3.
+
+Trả lời: Sinh viên khóa 2024 có Linguaskill 155 điểm **không được quy đổi** thành điểm học tập các học phần tiếng Anh không chuyên, vì điểm này **không đạt** yêu cầu **≥ 159** theo quy định.","QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 2; TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa); TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp",True,khong,False,,,
+dev_questions_dot3.json,dot3_01,Quy trình phúc khảo bài thi kết thúc học phần gồm mấy bước và đó là những bước nào?,Gồm 4 bước: Bước 1: Tiếp nhận đơn phúc khảo; Bước 2: Thành lập Ban phúc khảo và các Tổ chấm phúc khảo; Bước 3: Tổ chức chấm phúc khảo; Bước 4: Công bố kết quả phúc khảo,"Quy trình phúc khảo bài thi kết thúc học phần gồm 4 bước, cụ thể như sau:
+
+1. Tiếp nhận đơn phúc khảo  
+2. Thành lập Ban phúc khảo và các Tổ chấm phúc khảo  
+3. Tổ chức chấm phúc khảo  
+4. Công bố kết quả phúc khảo  
+
+*(Căn cứ Điều 1, Văn bản HD 1181/2022)*",HD 1181/2022 thực hiện quy trình phúc khảo bài thi kết thúc học phần,True,du,False,,,
+dev_questions_dot3.json,dot3_02,Sinh viên muốn phúc khảo bài thi kết thúc học phần thì phải nộp đơn trong thời hạn bao lâu kể từ khi công bố điểm?,Chậm nhất 07 ngày làm việc kể từ thời điểm Trường công bố điểm thi trên trang thông tin đào tạo (thongtindaotao.sgu.edu.vn),"Theo Điều 5, QĐ 898/2025: Sinh viên có nguyện vọng phúc khảo bài thi kết thúc học phần làm đơn đề nghị phúc khảo gửi Phòng Đào tạo... chậm nhất 07 ngày làm việc kể từ khi điểm thi được công bố trên trang Thông tin đào tạo của Trường.
+
+Trả lời: Sinh viên phải nộp đơn phúc khảo trong thời hạn 07 ngày làm việc kể từ khi công bố điểm.","QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 5; Quy định 3248/2018 giải quyết thắc mắc, khiếu nại kết quả học tập; HD 1181/2022 thực hiện quy trình phúc khảo bài thi kết thúc học phần",True,du,False,,,
+dev_questions_dot3.json,dot3_03,Sau bao lâu kể từ thời điểm thành lập Ban phúc khảo thì kết quả chấm phúc khảo được công bố?,Sau 15 ngày kể từ thời điểm thành lập Ban phúc khảo,"Theo Điều 5, QĐ 898/2025:  
+*""Kết quả chấm phúc khảo được công bồ trên trang web Phòng Đào tạo và cập nhật vào hệ thống quản lý điểm của Trường sau 15 ngày kể từ thời điểm thành lập Ban phúc khảo.""*  
+
+Trả lời: Sau 15 ngày kể từ thời điểm thành lập Ban phúc khảo thì kết quả chấm phúc khảo được công bố.",HD 1181/2022 thực hiện quy trình phúc khảo bài thi kết thúc học phần; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 5,True,du,False,,,
+dev_questions_dot3.json,dot3_04,Sinh viên phúc khảo bài thi có được nhận lại lệ phí phúc khảo không và trong trường hợp nào?,Được nhận lại lệ phí phúc khảo nếu kết quả chấm phúc khảo thay đổi so với kết quả chấm lần đầu (liên hệ Phòng Kế hoạch Tài chính),"Theo Điều 5, QĐ 898/2025: ""Sinh viên có kết quả phúc khảo thay đổi so với kết quả chấm lần đầu liên hệ Phòng Kế hoạch Tài chính để nhận lại lệ phí phúc khảo.""
+
+Trả lời: Sinh viên được nhận lại lệ phí phúc khảo trong trường hợp kết quả phúc khảo thay đổi so với kết quả chấm lần đầu.","QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 5; Quy định 3248/2018 giải quyết thắc mắc, khiếu nại kết quả học tập; HD 1181/2022 thực hiện quy trình phúc khảo bài thi kết thúc học phần",True,khong_ap_dung,False,,,
+dev_questions_dot3.json,dot3_05,Ca 1 học từ mấy giờ đến mấy giờ và bao gồm những tiết nào?,"Từ 07g00 đến 11g30, bao gồm tiết 1 đến tiết 5 (có 20 phút nghỉ giải lao từ 08g40 đến 09g00 giữa tiết 2 và tiết 3)","Ca 1 học từ 07g00 đến 11g30 và bao gồm những tiết từ tiết 1 đến tiết 5.  
+**Căn cứ:** *Bảng chi tiết khung giờ từng tiết học* trong văn bản *Quy định thời gian tiết học, ca học và mã phòng học* (QyĐ-ĐHSG (Tiết học - Phòng học)).","Quy định thời gian tiết học, ca học và mã phòng học; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 6",True,thieu,False,,,
+dev_questions_dot3.json,dot3_06,Ca 2 và Ca 3 trong ngày gồm những tiết nào và khung giờ học cụ thể ra sao?,Ca 2 gồm tiết 6 đến tiết 10 từ 12g00 đến 16g30 (nghỉ 20 phút giữa tiết 7 và 8 từ 13g40 đến 14g00); Ca 3 gồm tiết 11 đến tiết 13 từ 17g00 đến 19g30,"Theo quy định tại **Điều 1.1 - Quy định thời gian tiết học, ca học và thông tin mã phòng học (QyĐ-ĐHSG (Tiết học - Phòng học))**, ca 2 và ca 3 trong ngày gồm những tiết và khung giờ học cụ thể như sau:
+
+- **Ca 2 (Buổi chiều)**: Gồm 5 tiết (từ tiết 6 đến tiết 10). Nghỉ giải lao 20 phút giữa tiết 7 và tiết 8 (từ 13g40 đến 14g00).  
+  - Tiết 6: 12g00 đến 12g50  
+  - Tiết 7: 12g50 đến 13g40  
+  - Nghỉ: 13g40 đến 14g00  
+  - Tiết 8: 14g00 đến 14g50  
+  - Tiết 9: 14g50 đến 15g40  
+  - Tiết 10: 15g40 đến 16g30  
+
+- **Ca 3 (Buổi tối)**: Gồm 3 tiết (từ tiết 11 đến tiết 13). Học liên tục không có giờ giải lao.  
+  - Tiết 11: 17g00 đến 17g50  
+  - Tiết 12: 17g50 đến 18g40  
+  - Tiết 13: 18g40 đến 19g30","Quy định thời gian tiết học, ca học và mã phòng học; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 2",True,du,False,,,
+dev_questions_dot3.json,dot3_07,Mỗi tiết học tại Trường Đại học Sài Gòn kéo dài bao nhiêu phút và thời gian giải lao giữa các tiết học trong ca là bao lâu?,Mỗi tiết kéo dài 50 phút; nghỉ giải lao 20 phút sau tiết 2 (Ca 1: 08g40-09g00) và sau tiết 7 (Ca 2: 13g40-14g00),"Theo quy định tại **Điều 1.1 - Quy định thời gian tiết học, ca học và mã phòng học (QyĐ-ĐHSG (Tiết học - Phòng học))**, thời gian mỗi tiết học là **50 phút**. Thời gian giải lao giữa các tiết học trong ca là **20 phút**.","Quy định thời gian tiết học, ca học và mã phòng học; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 6",True,thieu,False,,,
+dev_questions_dot3.json,dot3_08,Ký tự đầu tiên của mã phòng học quy định cơ sở nào tại Trường Đại học Sài Gòn?,"C: cơ sở chính (273 An Dương Vương, Q.5); 1: cơ sở 1 (105 Bà Huyện Thanh Quan, Q.3); 2: cơ sở 2 (04 Tôn Đức Thắng, Q.1); 3: cơ sở 3 (20 Ngô Thời Nhiệm, Q.3)","Ký tự đầu tiên của mã phòng học quy định cơ sở học như sau:
+
+- **C**: Cơ sở chính (273 An Dương Vương, Phường 3, Quận 5).
+- **1**: Cơ sở 1 (105 Bà Huyện Thanh Quan, Phường Võ Thị Sáu, Quận 3).
+- **2**: Cơ sở 2 (04 Tôn Đức Thắng, Phường Bến Nghé, Quận 1).
+- **3**: Cơ sở 3 (20 Ngô Thời Nhiệm, Phường Võ Thị Sáu, Quận 3).
+
+*(Căn cứ vào Điều 1.2 – van_ban: Quy định thời gian tiết học, ca học và mã phòng học)*.","Quy định thời gian tiết học, ca học và mã phòng học; QĐ 810 về học cùng lúc hai chương trình – Điều 9; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3",True,du,False,,,
+dev_questions_dot3.json,dot3_09,Sinh viên đại học chính quy cần thỏa mãn những điều kiện gì để được xét và công nhận tốt nghiệp?,"Tích lũy đủ học phần, số tín chỉ và đạt chuẩn đầu ra của CTĐT; điểm trung bình tích lũy toàn khóa đạt từ 2,00 trở lên (từ trung bình trở lên); không bị truy cứu trách nhiệm hình sự hoặc đang bị kỷ luật đình chỉ học tập","Theo Điều 13, Quy chế đào tạo trình độ đại học SGU 2021 (số 258/QĐ-ĐHSG, ngày 2022-02-22), sinh viên đại học chính quy cần thỏa mãn các điều kiện sau để được xét và công nhận tốt nghiệp:
+
+1. Tích lũy đủ học phần, số tín chỉ và hoàn thành các nội dung bắt buộc khác theo yêu cầu của chương trình đào tạo cùng với việc đạt chuẩn đầu ra của chương trình đào tạo;  
+2. Điểm trung bình tích lũy của toàn khóa học đạt từ trung bình trở lên;  
+3. Tại thời điểm xét tốt nghiệp không bị truy cứu trách nhiệm hình sự hoặc không đang trong thời gian bị kỷ luật ở mức đình chỉ học tập.",Quy chế đào tạo trình độ đại học SGU 2021 – Điều 13; TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp; QĐ 810 về học cùng lúc hai chương trình – Điều 8,True,du,False,,,
+dev_questions_dot3.json,dot3_10,Sinh viên đại học không chuyên tiếng Anh tốt nghiệp từ năm 2021 trở đi cần đạt chứng chỉ ngoại ngữ gì để đủ chuẩn đầu ra tốt nghiệp?,"Chứng chỉ Bậc 3/6 Khung năng lực ngoại ngữ Việt Nam, hoặc B1 (Khung Châu Âu), PET (Pass), Aptis (B1), TOEIC 450, TOEFL PBT 450, TOEFL iBT 45, IELTS 4.5","Theo Điều 2, khoản a) của Văn bản số 536/TB-ĐHSG-ĐT, sinh viên đại học không chuyên tiếng Anh tốt nghiệp từ năm 2021 trở đi cần đạt các chứng chỉ sau để đủ chuẩn đầu ra tốt nghiệp:
+
+- Chứng chỉ Bậc 3/6 (Khung năng lực ngoại ngữ Việt Nam);
+- Chứng chỉ B1 (Khung tham chiếu Châu Âu);
+- Chứng chỉ PET (Pass);
+- Chứng chỉ Aptis (B1);
+- Chứng chỉ TOEIC 450;
+- Chứng chỉ TOEFL PBT 450;
+- Chứng chỉ TOEFL iBT 45;
+- Chứng chỉ IELTS 4.5.",TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp,True,du,False,,,
+dev_questions_dot3.json,dot3_11,Sinh viên ngành Sư phạm Tiếng Anh và Ngôn ngữ Anh tốt nghiệp từ năm 2021 trở đi cần đạt chuẩn đầu ra ngoại ngữ 2 ở mức nào?,Chứng chỉ Bậc 3/6 (Khung năng lực ngoại ngữ Việt Nam) hoặc chứng chỉ quốc tế tương đương: Tiếng Pháp DELF B1 / TCF Niveau 3; Tiếng Trung HSK cấp 3; Tiếng Nhật Cấp độ 3 / JLPT N4; Tiếng Hàn Cấp độ III (TOPIK 2); Tiếng Tây Ban Nha DELE B1; Tiếng Nga TRKI cấp 1; Tiếng Đức ZD B1,"Theo Điều 2, khoản 2, văn bản **TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp**, sinh viên ngành Sư phạm Tiếng Anh và Ngôn ngữ Anh tốt nghiệp từ năm 2021 trở đi cần đạt chuẩn đầu ra ngoại ngữ 2 ở mức **Bậc 3/6 (Khung năng lực ngoại ngữ Việt Nam)** hoặc **chứng chỉ (Quốc tế) tương đương theo bảng dưới đây**:
+
+| TT | Ngoại ngữ | Chứng chỉ tương đương |
+|---|---|---|
+| 1 | Tiếng Pháp | DELF B1 hoặc TCF Niveau 3 |
+| 2 | Tiếng Trung | HSK cấp độ 3 |
+| 3 | Tiếng Nhật | Cấp độ 3 hoặc JLPT N4 |
+| 4 | Tiếng Hàn | Cấp độ III (Topik 2) |
+| 5 | Tiếng Tây Ban Nha | DELE B1 |
+| 6 | Tiếng Nga | TRKI cấp độ 1 |
+| 7 | Tiếng Đức | ZD B1 |",TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp,True,du,False,,,
+dev_questions_dot3.json,dot3_12,"Sau khi sinh viên đáp ứng đầy đủ điều kiện tốt nghiệp và hoàn thành nghĩa vụ, Hiệu trưởng ra quyết định công nhận và cấp bằng tốt nghiệp trong thời hạn bao lâu?",Trong thời hạn 03 tháng tính từ thời điểm đáp ứng đầy đủ điều kiện tốt nghiệp và hoàn thành các nghĩa vụ với cơ sở đào tạo,"Theo Điều 13, khoản 2 của Quy chế đào tạo trình độ đại học SGU 2021 (số 258/QĐ-ĐHSG, ngày 2022-02-22), người học đủ điều kiện tốt nghiệp được Hiệu trưởng ra quyết định công nhận và cấp bằng tốt nghiệp trong thời hạn 03 tháng tính từ thời điểm người học đáp ứng đầy đủ điều kiện tốt nghiệp và hoàn thành các nghĩa vụ với cơ sở đào tạo.
+
+Trả lời: Hiệu trưởng ra quyết định công nhận và cấp bằng tốt nghiệp trong thời hạn 03 tháng tính từ thời điểm người học đáp ứng đầy đủ điều kiện tốt nghiệp và hoàn thành các nghĩa vụ với cơ sở đào tạo.",Quy chế đào tạo trình độ đại học SGU 2021 – Điều 13; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 4,True,du,False,,,
+dev_questions_dot3.json,dot3_13,"Thời gian tối đa để hoàn thành chương trình cử nhân chính quy theo Quy chế đào tạo 2021 là bao lâu, và con số này khác như thế nào so với Quyết định 736/2014 trước đây?","Theo Quy chế 2021 (Điều 2 khoản 5), thời gian tối đa không vượt quá 02 lần thời gian theo kế hoạch học tập chuẩn toàn khóa (cử nhân 4 năm là tối đa 8 năm). Trước đây theo QĐ 736/2014 (Mục 1.1), thời gian tối đa là thời gian thiết kế cộng thêm 06 học kỳ (cử nhân 4 năm cộng 6 học kỳ = 7 năm).","Theo Điều 4 khoản 1, thời gian tối đa để hoàn thành chương trình cử nhân chính quy theo Quy chế đào tạo 2021 là **02 lần thời gian theo kế hoạch học tập chuẩn toàn khóa**, tức là **8 năm** (vì thời gian chuẩn là 4 năm).
+
+Trong khi đó, theo Quyết định 736/2014 (không có trích đoạn cụ thể trong tài liệu này), thời gian tối đa để hoàn thành chương trình cử nhân chính quy trước đây **không được nêu rõ** trong các trích đoạn cung cấp. Do đó, **không tìm thấy thông tin** về thời gian tối đa theo Quyết định 736/2014 trong các văn bản quy định được cung cấp.",Quy chế đào tạo trình độ đại học SGU 2021 – Điều 2; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 6; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 6,True,thieu,True,,,
+dev_questions_dot3.json,dot3_14,"Lệ phí phúc khảo bài thi kết thúc học phần theo quy định hiện hành là bao nhiêu tiền, và trước đây theo Quy định 3248/2018 là bao nhiêu?","Hiện hành là 150.000 đồng/bài thi (theo Hướng dẫn 1181/HD-ĐHSG năm 2022 và QĐ 898/QĐ-ĐHSG năm 2025 Điều 5). Trước đây là 100.000 đồng/học phần (theo Quy định 3248/QyĐ-ĐHSG-ĐT năm 2018 Mục 2, nay đã bị thay thế).","Theo quy định hiện hành (QĐ 898/2025), lệ phí phúc khảo bài thi kết thúc học phần là **150.000 đồng/học phần** (Điều 5, QĐ 898/2025).  
+
+Theo Quy định 3248/2018 (đã bị sửa đổi), lệ phí phúc khảo bài thi kết thúc học phần là **100.000 đồng/học phần** (Điều 2, Quy định 3248/2018).","QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 5; Quy định 3248/2018 giải quyết thắc mắc, khiếu nại kết quả học tập; HD 1181/2022 thực hiện quy trình phúc khảo bài thi kết thúc học phần",True,thieu,False,,,
+dev_questions_dot3.json,dot3_15,"Theo quy định hiện hành, sinh viên nộp đơn phúc khảo bài thi học phần chuyên ngành ở đâu, và điểm này khác gì so với Quy định 3248/2018?","Theo quy định hiện hành (HD 1181 và QĐ 898), sinh viên nộp đơn và đóng lệ phí trực tiếp tại Phòng Đào tạo cho mọi học phần (sau đó Phòng Đào tạo mới chuyển danh sách về khoa). Trước đây theo QĐ 3248/2018, sinh viên nộp đơn môn chung tại Phòng Đào tạo và nộp đơn môn chuyên ngành trực tiếp tại Trưởng các khoa.","Sinh viên nộp đơn phúc khảo bài thi học phần chuyên ngành tại **Phòng Đào tạo**. 
+
+Theo **Điều 5.1** của **QĐ 898/2025**, sinh viên làm đơn đề nghị phúc khảo gửi **Phòng Đào tạo** kèm theo lệ phí 150.000đ/học phần. Trong khi đó, theo **Quy định 3248/2018**, sinh viên nộp đơn phúc khảo bài thi kết thúc học phần gửi **Phòng Đào tạo** (đối với các học phần môn chung) và gửi **Trưởng các khoa** (đối với các học phần còn lại). Do đó, **điểm khác biệt** là: theo quy định hiện hành (QĐ 898/2025), sinh viên nộp đơn phúc khảo bài thi học phần chuyên ngành **chỉ gửi Phòng Đào tạo**, không cần gửi Trưởng khoa.","Quy định 3248/2018 giải quyết thắc mắc, khiếu nại kết quả học tập; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 5; HD 1181/2022 thực hiện quy trình phúc khảo bài thi kết thúc học phần",True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_01,Sinh viên đang bị kỷ luật thì có được xét chuyển sang ngành khác không?,Không. Một điều kiện để chuyển là không đang trong thời gian bị xử lý kỷ luật hoặc thuộc diện bị xem xét buộc thôi học.,"Theo Điều 1, khoản 2 của QĐ 2375/2022 về chuyển chương trình, ngành đào tạo:  
+*""Không đang là sinh viên trình độ năm thứ nhất hoặc năm cuối khóa; không đang trong thời gian bị xử lý kỷ luật hoặc thuộc diện bị xem xét buộc thôi học và còn đủ thời gian học tập theo quy định tại khoản 5 Điều 2 của Quy chế đào tạo trình độ đại học Trường Đại học Sài Gòn;""*  
+
+Vì vậy, sinh viên đang bị kỷ luật **không được xét chuyển sang ngành khác**.","QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 15; QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 3",True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_02,Chuyển ngành rồi thì các học phần đã học ở ngành cũ được tính thế nào?,Học phần đã học và có trong chương trình chuyển đến được bảo lưu; học phần còn lại được quy đổi nếu ngành chuyển đến đồng ý về chuyên môn và Ban Giám hiệu phê duyệt; học phần không bảo lưu/quy đổi được thì sinh viên được đề nghị không ghi nhận kết quả.,"Theo Điều 12, Quy chế đào tạo trình độ đại học SGU 2021:  
+""Kết quả học tập của người học đã tích lũy từ một trình độ đào tạo, một ngành đào tạo hoặc một chương trình đào tạo khác... được cơ sở đào tạo xem xét công nhận, chuyển đổi sang tín chỉ của những học phần trong chương trình đào tạo theo học.""
+
+Các học phần đã học ở ngành cũ được xem xét công nhận, chuyển đổi sang tín chỉ của chương trình đào tạo mới.","QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 15; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 12",True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_03,"Sau khi chuyển ngành, thời gian học tối đa ở trường được tính từ lúc nào?","Từ thời điểm trúng tuyển của chương trình đào tạo, ngành đào tạo thứ nhất.","Theo Điều 2, khoản 5, Quy chế đào tạo trình độ đại học SGU 2021 (số 258/QĐ-ĐHSG), thời gian tối đa để người học hoàn thành khoá học không vượt quá 02 lần thời gian theo kế hoạch học tập chuẩn toàn khóa.  
+
+Tuy nhiên, theo Điều 2, khoản 5, QĐ 2375/2022 về chuyển chương trình, ngành đào tạo, thời gian tối đa học tại trường của sinh viên được tính từ thời điểm trúng tuyển của chương trình đào tạo, ngành đào tạo thứ nhất.  
+
+Vì vậy, câu trả lời là: **Thời gian tối đa học tại trường được tính từ thời điểm trúng tuyển của chương trình đào tạo, ngành đào tạo thứ nhất.** (Căn cứ vào Điều 2, QĐ 2375/2022).","QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 15; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 2",True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_04,Hồ sơ xin chuyển chương trình đào tạo gồm những giấy tờ gì?,"Đơn đề nghị (Mẫu ĐT.ChuyenNganh.01), bảng điểm, bản sao chứng thực các minh chứng cho điều kiện chuyển (nếu có).","Theo Điều 3, QĐ 2375/2022 về chuyển chương trình, ngành đào tạo:
+
+""1. Sinh viên làm và nộp hồ sơ a) Sinh viên làm hồ sơ đề nghị chuyển chương trình, chuyển ngành đào tạo (gọi tắt là hồ sơ), gồm có:
+
+- Đơn đề nghị chuyển chương trình đào tạo, ngành đào tạo (Mẫu ĐT.ChuyenNganh.01);
+
+- Bảng điểm của sinh viên;
+
+- Bản sao chứng thực các minh chứng cho các điều kiện chuyển chương trình đào tạo, ngành đào tạo (nêu có).""
+
+**Trả lời:** Hồ sơ xin chuyển chương trình đào tạo gồm: Đơn đề nghị chuyển chương trình đào tạo, ngành đào tạo (Mẫu ĐT.ChuyenNganh.01), Bảng điểm của sinh viên, và Bản sao chứng thực các minh chứng cho các điều kiện chuyển chương trình đào tạo, ngành đào tạo (nêu có).","QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 3; QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 4; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 15",True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_05,"Quy định về chuyển chương trình, chuyển ngành đào tạo có hiệu lực từ bao giờ?",Có hiệu lực thi hành kể từ ngày ký.,"Theo Điều 4 — QĐ 2375/2022 về chuyển chương trình, ngành đào tạo, quy định có hiệu lực thi hành kể từ ngày ký.  
+
+**Trả lời:** Quy định về chuyển chương trình, chuyển ngành đào tạo có hiệu lực từ ngày 18/10/2022.","QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 4; QĐ 2375/2022 về chuyển chương trình, ngành đào tạo; QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2",True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_06,Tổng khối lượng đào tạo của hệ chính quy theo tín chỉ là bao nhiêu và gồm những phần nào?,"143 tín chỉ: 132 tín chỉ chuyên môn, 03 tín chỉ giáo dục thể chất, 08 tín chỉ giáo dục quốc phòng và an ninh.","Tổng khối lượng đào tạo của hệ chính quy theo tín chỉ là **143 tín chỉ**, gồm các phần sau:
+
+- Khối lượng đào tạo chuyên môn: **132 tín chỉ**
+- Giáo dục thể chất: **03 tín chỉ**
+- Giáo dục quốc phòng và an ninh: **08 tín chỉ**
+
+*(Căn cứ Điều 2, Quy định khối lượng đào tạo hệ chính quy theo tín chỉ, số 1625/QyĐ-ĐHSG-ĐT ngày 31/07/2018)*.","Quy định khối lượng đào tạo hệ chính quy theo tín chỉ; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 2; TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)",True,du,False,,,
+dev_questions_dot4.json,dot4_07,Giáo dục quốc phòng và an ninh chiếm mấy tín chỉ?,08 tín chỉ.,"Trích nguyên văn: ""Giáo dục quốc phòng và an ninh 08 tín chỉ"" (theo **Quy định khối lượng đào tạo hệ chính quy theo tín chỉ**, Điều 2, Văn bản số 1625/QyĐ-ĐHSG-ĐT ngày 31/07/2018).
+
+Trả lời: **Giáo dục quốc phòng và an ninh chiếm 08 tín chỉ.**",Quy định khối lượng đào tạo hệ chính quy theo tín chỉ; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10,True,du,False,,,
+dev_questions_dot4.json,dot4_08,Quy chế đào tạo trình độ đại học SGU 2021 áp dụng cho sinh viên từ khóa tuyển sinh nào?,Từ khóa tuyển sinh năm 2021 trở đi.,"Theo Điều 2 — Quyết định ban hành – Quy chế đào tạo trình độ đại học SGU 2021, quy chế này được áp dụng đối với đào tạo trình độ đại học từ khóa tuyển sinh năm 2021 trở đi.",Quy chế đào tạo trình độ đại học SGU 2021 – Điều 20; Quyết định ban hành – Quy chế đào tạo trình độ đại học SGU 2021 – Điều 2; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 6,True,du,False,,,
+dev_questions_dot4.json,dot4_09,Quy chế đào tạo của trường cụ thể hóa văn bản nào của Bộ Giáo dục và Đào tạo?,Quy chế đào tạo trình độ đại học ban hành kèm Thông tư số 08/2021/TT-BGDĐT ngày 18/3/2021.,"Theo Điều 1, Quy chế đào tạo trình độ đại học SGU 2021 cụ thể hóa **Thông tư số 08/2021/TT-BGDĐT ngày 18 tháng 3 năm 2021 của Bộ trưởng Bộ Giáo dục và Đào tạo**.",Quy chế đào tạo trình độ đại học SGU 2021 – Điều 1; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 4; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 21,True,du,False,,,
+dev_questions_dot4.json,dot4_10,Ngành thuộc lĩnh vực sức khỏe có cấp chứng chỉ hành nghề có được liên kết đào tạo không?,Không. Liên kết đào tạo chỉ thực hiện với hình thức vừa làm vừa học và không thực hiện với các ngành sức khỏe có cấp chứng chỉ hành nghề.,"Theo Điều 5, khoản 1, Quy chế đào tạo trình độ đại học SGU 2021 (số 258/QĐ-ĐHSG):
+
+> ""Liên kết đào tạo chỉ thực hiện đối với hình thức vừa làm vừa học... Không thực hiện việc liên kết đào tạo đối với các ngành thuộc lĩnh vực sức khoẻ có cấp chứng chỉ hành nghề.""
+
+**Trả lời:** Không được liên kết đào tạo.","Quy chế đào tạo trình độ đại học SGU 2021 – Điều 5; QĐ 2375/2022 về chuyển chương trình, ngành đào tạo; QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 2",True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_11,"Trong liên kết đào tạo, giảng viên cơ hữu phải dạy tối thiểu bao nhiêu phần trăm chương trình?","Tối thiểu 70% nội dung, khối lượng kiến thức của chương trình đào tạo.","Theo Điều 5, khoản 3, điểm c, Quy chế đào tạo trình độ đại học SGU 2021:  
+"" Bảo đảm đội ngũ giảng viên cơ hữu giảng dạy tối thiểu 70% nội dung, khối lượng kiến thức của chương trình đào tạo.""
+
+Trả lời: Giảng viên cơ hữu phải dạy tối thiểu 70% chương trình.",Quy chế đào tạo trình độ đại học SGU 2021 – Điều 5; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 16; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 8,True,du,False,,,
+dev_questions_dot4.json,dot4_12,Quyết định trúng tuyển và bảng điểm gốc được nhà trường lưu trữ bao lâu?,Bảo quản vĩnh viễn tại Trường.,"Theo Điều 21, khoản 1, điểm a) của Quy chế đào tạo trình độ đại học SGU 2021 (số 258/QĐ-ĐHSG, ngày 22/02/2022):
+
+*""Quyết định trúng tuyển, bảng điểm gốc, quyết định công nhận tốt nghiệp, số gốc cấp phát bằng tốt nghiệp là tài liệu lưu trữ được bảo quản vĩnh viễn tại Trường.""*
+
+Trả lời: Quyết định trúng tuyển và bảng điểm gốc được nhà trường lưu trữ vĩnh viễn.",Quy chế đào tạo trình độ đại học SGU 2021 – Điều 21; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 4,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_13,Trường phải công khai quy chế đào tạo trên website chậm nhất bao lâu trước khi tổ chức đào tạo?,Chậm nhất 45 ngày trước khi tổ chức đào tạo.,"Trường phải công khai quy chế đào tạo trên trang thông tin điện tử của Trường chậm nhất **45 ngày trước khi tổ chức đào tạo**.
+
+Căn cứ: **Điều 21 — Quy chế đào tạo trình độ đại học SGU 2021** (số 258/QĐ-ĐHSG, ngày 2022-02-22).",Quy chế đào tạo trình độ đại học SGU 2021 – Điều 21; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 6; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 6,True,du,False,,,
+dev_questions_dot4.json,dot4_14,Em mới học năm nhất thì đã được đăng ký học thêm ngành thứ hai chưa?,Chưa. Sớm nhất là khi đã được xếp trình độ năm thứ hai của chương trình thứ nhất (QĐ 810 Điều 3; QC 2021 Điều 17).,"Theo Điều 3, khoản 1 — QĐ 810 về học cùng lúc hai chương trình:  
+*""Sinh viên được đăng ký học chương trình thứ hai (trừ các chương trình đào tạo giáo viên) sớm nhất khi đã được xếp trình độ năm thứ hai của chương trình thứ nhất.""*  
+
+Do đó, sinh viên mới học năm nhất chưa đủ điều kiện đăng ký học thêm ngành thứ hai.",QĐ 810 về học cùng lúc hai chương trình – Điều 2; QĐ 810 về học cùng lúc hai chương trình – Điều 3; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 17,True,khong,False,,,
+dev_questions_dot4.json,dot4_15,"Theo quy định học cùng lúc hai chương trình hiện hành (QĐ 810), học lực ngành thứ nhất phải xếp loại gì mới được đăng ký?","Điểm trung bình tích lũy xếp loại giỏi trở lên (QĐ 810/2024). Quy chế 2021 Điều 17 ghi mức khá trở lên — QĐ 810 là quy định riêng, chặt hơn.","Theo Điều 3, khoản 1 của QĐ 810/QĐ-ĐHSG, sinh viên được đăng ký học chương trình thứ hai (trừ các chương trình đào tạo giáo viên) sớm nhất khi đã được xếp trình độ năm thứ hai của chương trình thứ nhất và có học lực của chương trình thứ nhất tính theo điểm trung bình tích lũy xếp loại giói trở lên.
+
+Trả lời: Học lực ngành thứ nhất phải xếp loại giói trở lên.",QĐ 810 về học cùng lúc hai chương trình – Điều 3; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 17; QĐ 810 về học cùng lúc hai chương trình – Điều 2,True,khong,False,,,
+dev_questions_dot4.json,dot4_16,Quyết định về học cùng lúc hai chương trình có hiệu lực khi nào?,Có hiệu lực từ ngày ký.,"Theo Điều 2 — QĐ 810 về học cùng lúc hai chương trình, Quyết định này có hiệu lực từ ngày ký.",Quyết định ban hành – QĐ 810 về học cùng lúc hai chương trình – Điều 2; QĐ 810 về học cùng lúc hai chương trình – Điều 2; QĐ 810 về học cùng lúc hai chương trình – Điều 9,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_17,Quy định học cùng lúc hai chương trình áp dụng cho ai?,"Các đơn vị, cá nhân liên quan đào tạo trình độ đại học chính quy; tức sinh viên đại học hình thức chính quy.","Theo Điều 1, Văn bản quy định học cùng lúc hai chương trình áp dụng đối với các đơn vị và cá nhân liên quan đào tạo trình độ đại học chính quy của Trường Đại học Sài Gòn.",QĐ 810 về học cùng lúc hai chương trình – Điều 1; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 17; QĐ 810 về học cùng lúc hai chương trình – Điều 9,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_18,Học song ngành ở trường được hiểu là gì?,"Là hình thức sinh viên đăng ký học chương trình ngành thứ hai khi đang học ngành thứ nhất, để có thêm bằng tốt nghiệp ngành thứ hai khi đủ điều kiện.","Theo Điều 2 — QĐ 810 về học cùng lúc hai chương trình:  
+**""Học cùng lúc hai chương trình là hình thức sinh viên đăng ký học chương trình đào tạo ngành thứ hai khi đang học chương trình đào tạo ngành thứ nhất để có thêm bằng tốt nghiệp ngành thứ hai khi đủ các điều kiện về xét công nhận tốt nghiệp và cấp bằng tốt nghiệp.""**  
+
+Vậy, học song ngành ở trường được hiểu là hình thức sinh viên học thêm một chương trình đào tạo ngành thứ hai khi đang học chương trình ngành thứ nhất, nhằm có thêm bằng tốt nghiệp ngành thứ hai nếu đáp ứng đủ điều kiện.",QĐ 810 về học cùng lúc hai chương trình – Điều 2; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 17; QĐ 810 về học cùng lúc hai chương trình – Điều 4,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_19,Muốn học thêm ngành Ngôn ngữ Anh làm ngành thứ hai thì cần chứng chỉ tiếng Anh như thế nào?,"Chứng chỉ cấp trong vòng 02 năm, đạt tối thiểu ví dụ IELTS 5.5, TOEFL iBT 65 hoặc VSTEP 6.0.","Theo Điều 2, khoản 2 của QĐ 810/QĐ-ĐHSG, sinh viên đăng ký học chương trình thứ hai ngành Ngôn ngữ Anh phải có một trong các chứng chỉ tiếng Anh (được cấp trong vòng 02 năm tính đến thời điểm đăng ký và do các đơn vị được Bộ Giáo dục và Đào tạo cấp phép tổ chức thi) đạt mức điểm tối thiểu: IELTS 5.5; TOEEL, ITP 513; TOEFL iBT 65; TOEIC (4 kĩ năng) - Nghe 400, Đọc 385, Nói 160, Viết 150; Linguaskill 162; Apus ESOL (General) 153; Aptis 11SOI, (Advanced) 126; VSTEP 6.0.","QĐ 810 về học cùng lúc hai chương trình – Điều 3; TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp; QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3",True,du,False,,,
+dev_questions_dot4.json,dot4_20,Đang học song ngành mà ngành chính bị cảnh báo học tập thì sao?,Phải dừng học chương trình thứ hai từ học kỳ tiếp theo và bị loại khỏi danh sách học chương trình thứ hai.,"Theo Điều 4, khoản 2 — QĐ 810 về học cùng lúc hai chương trình:  
+*""Trong quá trình sinh viên học cùng lúc hai chương trình, nếu điểm trung bình tích lũy của chương trình thứ nhất đạt dưới điểm trung bình hoặc thuộc diện cảnh báo kết quả học tập thì sinh viên phải dừng học chương trình thứ hai ở học kì tiếp theo và bị loại khỏi danh sách đã đăng ký học chương trình thứ hai.""*  
+
+Vì vậy, nếu ngành chính (chương trình thứ nhất) bị cảnh báo kết quả học tập, sinh viên học song ngành phải dừng học chương trình thứ hai ở học kỳ tiếp theo và bị loại khỏi danh sách đăng ký học chương trình thứ hai.",QĐ 810 về học cùng lúc hai chương trình – Điều 3; QĐ 810 về học cùng lúc hai chương trình – Điều 4; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_21,Học cùng lúc hai chương trình thì được học tối đa bao lâu?,Bằng thời gian tối đa quy định cho chương trình thứ nhất.,"Theo Điều 4, khoản 3 của QĐ 810/QĐ-ĐHSG:
+
+*""Thời gian tối đa được phép học đối với sinh viên học cùng lúc hai chương trình là thời gian tối đa quy định cho chương trình thứ nhất, quy định tại Quy chế đào tạo trình độ đại học của Trường Đại học Sài Gòn.""*
+
+Vậy, học cùng lúc hai chương trình thì được học tối đa trong thời gian quy định cho chương trình thứ nhất.",Quy chế đào tạo trình độ đại học SGU 2021 – Điều 17; QĐ 810 về học cùng lúc hai chương trình – Điều 4; QĐ 810 về học cùng lúc hai chương trình – Điều 3,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_22,Học ngành thứ hai có được miễn giảm học phí không?,"Không được miễn, giảm học phí khi học chương trình thứ hai.","Theo Điều 5 — QĐ 810 về học cùng lúc hai chương trình, sinh viên học chương trình thứ hai **không được miễn, giảm học phí** khi học chương trình thứ hai.
+
+Trả lời: **Không được miễn, giảm học phí** theo quy định tại Điều 5 — QĐ 810/QĐ-ĐHSG.","QĐ 810 về học cùng lúc hai chương trình – Điều 5; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 18; TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)",True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_23,Điểm của ngành thứ hai có được dùng để xét học bổng không?,Không.,"Theo Điều 5, khoản 2 — QĐ 810 về học cùng lúc hai chương trình:  
+*""Sinh viên học chương trình thứ hai không được sử dụng kết quả học tập ở chương trình thứ hai để xét học bổng cũng như không được xem xét đề hưởng các chế độ ưu tiên như sinh viên học chương trình thứ nhất.""*  
+
+Trả lời: **Không**, điểm của ngành thứ hai không được dùng để xét học bổng.",QĐ 810 về học cùng lúc hai chương trình – Điều 5; QĐ 810 về học cùng lúc hai chương trình – Điều 8; QĐ 810 về học cùng lúc hai chương trình – Điều 3,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_24,Mỗi năm trường cho đăng ký học chương trình thứ hai vào tháng nào?,Tháng 1 và tháng 7 hằng năm.,"Theo Điều 6 — QĐ 810 về học cùng lúc hai chương trình, thời gian đăng ký học chương trình thứ hai là **Tháng 1 và Tháng 7 hàng năm**.
+
+Trả lời: Mỗi năm trường cho đăng ký học chương trình thứ hai vào **Tháng 1 và Tháng 7 hàng năm**.",QĐ 810 về học cùng lúc hai chương trình – Điều 6; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 17; QĐ 810 về học cùng lúc hai chương trình – Điều 3,True,du,False,,,
+dev_questions_dot4.json,dot4_25,Nộp hồ sơ đăng ký học chương trình thứ hai ở đâu?,Phòng Đào tạo thu hồ sơ đăng ký xét tuyển.,"Theo Điều 6 — QĐ 810 về học cùng lúc hai chương trình:  
+*""Phòng Đào tạo chịu trách nhiệm thu hồ sơ đăng ký xét tuyển học chương trình thứ hai...""*  
+
+Trả lời: Hồ sơ đăng ký học chương trình thứ hai được nộp tại Phòng Đào tạo.",QĐ 810 về học cùng lúc hai chương trình – Điều 6; QĐ 810 về học cùng lúc hai chương trình – Điều 8; QĐ 810 về học cùng lúc hai chương trình – Điều 3,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_26,Khoa nào tổ chức thi và quản lý điểm cho sinh viên ở chương trình thứ hai?,Khoa/ngành quản lý chương trình thứ hai.,"Theo Điều 7, QĐ 810/QĐ-ĐHSG:  
+""Khoa/ngành quản lý học chương trình thứ hai có trách nhiệm tổ chức học tập cho sinh viên; quản lý, hỗ trợ sinh viên trong quá trình học tập; tổ chức giảng dạy, tổ chức thi, quản lý kết quả học tập của sinh viên học chương trình thứ hai như học ở chương trình thứ nhất.""
+
+**Trả lời:** Khoa/ngành quản lý học chương trình thứ hai tổ chức thi và quản lý điểm cho sinh viên ở chương trình thứ hai.",QĐ 810 về học cùng lúc hai chương trình – Điều 7; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_27,Phải đăng ký ngành thứ hai muộn nhất bao lâu trước khi xét tốt nghiệp ngành đó?,Muộn nhất 02 năm trước thời điểm xét tốt nghiệp chương trình thứ hai.,"Theo Điều 8 - QĐ 810 về học cùng lúc hai chương trình, sinh viên chỉ được xét tốt nghiệp chương trình thứ hai, nếu ""đã đăng ký chương trình thứ hai muộn nhất 02 năm trước thời điểm xét tốt nghiệp chương trình thứ hai"".
+
+Trả lời: Phải đăng ký ngành thứ hai muộn nhất 02 năm trước khi xét tốt nghiệp ngành đó.",QĐ 810 về học cùng lúc hai chương trình – Điều 8; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 17; QĐ 810 về học cùng lúc hai chương trình – Điều 3,True,du,False,,,
+dev_questions_dot4.json,dot4_28,Hết thời gian học mà chưa đủ điều kiện tốt nghiệp ngành thứ hai thì được cấp gì?,Được cấp chứng nhận về các học phần đã tích lũy.,"Theo Điều 8 - QĐ 810 về học cùng lúc hai chương trình:  
+""Sinh viên đã đăng ký học cùng lúc hai chương trình nhưng hết thời gian cho phép học tại trường mà chưa đủ điều kiện tốt nghiệp ngành thứ hai hoặc cả hai ngành thì được cấp chứng nhận về các học phần đã tích lũy trong chương trình đào tạo.""
+
+**Trả lời:** Được cấp chứng nhận về các học phần đã tích lũy trong chương trình đào tạo.",QĐ 810 về học cùng lúc hai chương trình – Điều 8; QĐ 810 về học cùng lúc hai chương trình – Điều 2; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 13,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_29,QĐ 3183/2025 sửa đổi quy chế được ban hành kèm theo quyết định số mấy?,Quyết định số 258/QĐ-ĐHSG ngày 22/02/2022.,"Trích nguyên văn: ""Quyết định này có hiệu lực kể từ ngày ký. Khoản 3, 4, 5 Điều 1 áp dụng đối với các khóa tuyển sinh từ năm 2025 trở đi."" (Điều 2 — QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021).
+
+Trả lời: QĐ 3183/2025 sửa đổi quy chế được ban hành kèm theo quyết định số 258/QĐ-ĐHSG.",QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – Điều 1; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – Điều 2,True,thieu,False,,,
+dev_questions_dot4.json,dot4_30,Những đơn vị nào chịu trách nhiệm thi hành QĐ 3183 sửa đổi quy chế đào tạo?,"Chánh Văn phòng, Trưởng Phòng Đào tạo, Trưởng Phòng Giáo dục Thường xuyên, Trưởng các khoa và các đơn vị liên quan.","Theo Điều 3 — QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021:  
+*""Chánh Văn phòng, Trưởng Phòng Đào tạo, Trưởng Phòng Giáo dục Thường xuyên, Trưởng các khoa và Trưởng các đơn vị có liên quan chịu trách nhiệm thi hành Quyết định này.""*  
+
+Trả lời: Chánh Văn phòng, Trưởng Phòng Đào tạo, Trưởng Phòng Giáo dục Thường xuyên, Trưởng các khoa và Trưởng các đơn vị có liên quan.",QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – Điều 3; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – Điều 1; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – Điều 2,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_31,Ngành Kỹ thuật phần mềm khóa 2019 học mấy năm và bao nhiêu tín chỉ?,"4,5 năm, 150 tín chỉ.","Theo quy định tại **Điều 2** - **Quy định số tín chỉ tối thiểu kỹ sư CNTT (khóa 2017 trở đi)**, ngành **Kỹ thuật phần mềm** (khóa tuyển sinh 2019) thuộc đối tượng **điều chỉnh chương trình đào tạo chu kỳ 2016-2020** với thời gian đào tạo là **4,5 năm** và khối lượng kiến thức tích lũy toàn khóa là **150 tín chỉ**.
+
+**Trả lời:** Ngành Kỹ thuật phần mềm khóa 2019 học **4,5 năm** và **150 tín chỉ**.","Quy định số tín chỉ tối thiểu kỹ sư CNTT (khóa 2017 trở đi); QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 6; QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3",True,du,False,,,
+dev_questions_dot4.json,dot4_32,Kỹ sư khóa 2016 phải tích lũy bao nhiêu tín chỉ?,"132 tín chỉ, thời gian đào tạo 4 năm.","Theo quy định tại **Điều 1** (trích đoạn không có nội dung cụ thể về số tín chỉ), nhưng căn cứ vào **Thông báo số 535/TB-ĐHSG** ngày 30/03/2020, kỹ sư khóa 2016 phải tích lũy **132 tín chỉ**.",Quy định số tín chỉ tối thiểu kỹ sư CNTT (khóa 2017 trở đi); Quy chế đào tạo trình độ đại học SGU 2021 – Điều 2; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6,True,thieu,False,,,
+dev_questions_dot4.json,dot4_33,Quy định 2101 về tiếng Anh không chuyên áp dụng cho những khóa nào?,Các khóa tuyển sinh từ năm 2024 trở đi.,"Theo Điều 1 — QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024):  
+""Quy định này áp dụng đối với sinh viên học các học phần tiếng Anh không chuyên áp dụng cho các khóa tuyển sinh từ năm 2024 trở đi, các Phòng, Ban, Khoa, Trung tâm có liên quan.""
+
+**Trả lời:** Quy định 2101 áp dụng cho các khóa tuyển sinh từ năm 2024 trở đi.","QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 1; QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 1; QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 3",True,du,False,,,
+dev_questions_dot4.json,dot4_34,"Theo quy định 2101, ai thu nhận chứng chỉ để quy đổi điểm tiếng Anh?",Phòng Đào tạo.,"Theo quy định 2101/2024, Phòng Đào tạo thu nhận chứng chỉ để quy đổi điểm tiếng Anh.  
+
+**Căn cứ:** Điều 3 — QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024).","QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 3; QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 4; QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 2",True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_35,Quy định 2101 thay thế văn bản nào?,"Thay thế Quy định số 2626/QyĐ-ĐHSG ngày 16/11/2022, đối với các khóa tuyển sinh từ năm 2024 trở đi.","Theo Điều 4 — QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024), Quy định này áp dụng thay thế Quy định số 2626/QyĐ-ĐHSG ngày 16 tháng 11 năm 2022 của Trường Đại học Sài Gòn đối với các khóa tuyển sinh từ năm 2024 trở đi.","QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 4; TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước); QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 3",True,du,False,,,
+dev_questions_dot4.json,dot4_36,Quy định 2626 về tiếng Anh không chuyên áp dụng cho các khóa nào?,Ghi là các khóa tuyển sinh từ năm 2022 trở đi; với khóa từ 2024 đã được QyĐ 2101 thay thế.,"Theo Điều 1, QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023):  
+""Quy định này áp dụng đối với sinh viên học các học phần tiếng Anh không chuyên theo chương trình mới áp dụng cho các khóa tuyển sinh từ năm 2022 trở đi, các Phòng, Ban, Khoa, Trung tâm có liên quan.""
+
+**Trả lời:** Quy định 2626 áp dụng cho các khóa tuyển sinh từ năm 2022 trở đi.","QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 1; QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 1; QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 2",True,thieu,False,,,
+dev_questions_dot4.json,dot4_37,Đơn vị nào tổ chức kỳ thi khảo sát tiếng Anh đầu vào?,Trung tâm Khảo thí.,"Trích nguyên văn: ""Kỳ thi Khảo sát tiếng Anh đầu vào (KSTAĐV) do Nhà trường tổ chức"" (Điều 4, QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023)).
+
+Trả lời: Nhà trường tổ chức kỳ thi khảo sát tiếng Anh đầu vào.","QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 4; TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước); QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3",True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_38,Khi cần sửa quy định 2626 thì đơn vị nào tham mưu ban hành quy định thay thế?,Trung tâm Khảo thí tham mưu Ban Giám hiệu.,"Theo Điều 5 — QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023):  
+*""Trong quá trình triển khai nếu có sửa đổi, bổ sung thì giao Trung tâm Khảo thí tham mưu Ban Giám hiệu ban hành quy định thay thế.""*  
+
+Trả lời: Trung tâm Khảo thí.","QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 5; QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 4; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 1",True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_39,Quy định tổ chức thi học kỳ năm 2025 thay thế quy định nào?,Quy định số 3089/QyĐ-ĐHSG ngày 03/12/2020.,"Theo Điều 3, Quyết định này thay thế Quy định số 3089/QyÐ-ÐHSG ngày 03/12/2020 của Hiệu trưởng Trường Đại học Sài Gòn quy định về công tác tổ chức thi học kì.",Quyết định ban hành – QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 1; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3,True,du,False,,,
+dev_questions_dot4.json,dot4_40,QĐ 898 về tổ chức thi học kỳ có hiệu lực khi nào?,Có hiệu lực thi hành kể từ ngày kí.,"Theo Điều 2, Quyết định này có hiệu lực thi hành kể từ ngày kí.  
+**Nguồn:** Điều 2 — QĐ 898/2025 ban hành Quy định tổ chức thi học kì.",Quyết định ban hành – QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 2; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 1; Quyết định ban hành – QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_41,Đơn vị nào xếp lịch thi học kỳ?,Phòng Đào tạo (trừ một số học phần đặc thù do khoa tổ chức).,"Trả lời: Phòng Đào tạo xếp lịch thi học kỳ.  
+Căn cứ: Điều 3.1.a — QĐ 898/2025 ban hành Quy định tổ chức thi học kì.",QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 1; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 2,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_42,Đơn vị nào phụ trách thanh tra kỳ thi?,Phòng Thanh tra - Pháp chế tham mưu thành lập Đoàn Thanh tra kì thi.,"Trích nguyên văn: ""Phòng Thanh tra - Pháp chế tham mưu Ban Giám hiệu thành lập Đoàn Thanh tra kì thi, tổ chức và điều hành các hoạt động thanh tra thi."" — Điều 1 — QĐ 898/2025 ban hành Quy định tổ chức thi học kì.
+
+Trả lời: Phòng Thanh tra - Pháp chế phụ trách thanh tra kỳ thi.",QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 1; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 4; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_43,Túi đề thi được giao cho Ban Coi thi trước giờ thi bao lâu?,Trước mỗi ca thi 30 phút.,"Theo Điều 2, khoản 1 của QĐ 898/2025 ban hành Quy định tổ chức thi học kì:
+
+> ""Phòng KT&ÐBCLGD phối hợp với các khoa/ngành tổ chức làm đề thi, đáp án, nhân bản đề thi (cùng Phiếu trả lời trắc nghiệm đối với học phần thi trắc nghiệm) theo số lượng sinh viên từng phòng thi, đóng gói, niêm phong và bàn giao Túi đề thì (cùng Phiếu trả lời trắc nghiệm đối với học phần thi trắc nghiệm) cho Ban Coi thi trước mỗi ca thi 30 phút.""
+
+**Trả lời:** Túi đề thi được giao cho Ban Coi thi trước giờ thi **30 phút**.",QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 2; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 4; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3,True,du,False,,,
+dev_questions_dot4.json,dot4_44,Lịch thi phải được công bố trước đợt thi ít nhất bao lâu?,Ít nhất 01 tuần trước thời điểm bắt đầu đợt thi.,"Lịch thi phải được công bố trên trang Thông tin đào tạo của Trường ít nhất 01 tuần trước thời điểm bắt đầu đợt thi.
+
+**Căn cứ:** Điều 3.2 - QĐ 898/2025 ban hành Quy định tổ chức thi học kì.",QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3; QĐ 3260/2025 về việc hoãn thi; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6,True,du,False,,,
+dev_questions_dot4.json,dot4_45,"Một ngày thi có mấy ca, ca thi thứ ba bắt đầu lúc mấy giờ?",4 ca thi; ca 3 bắt đầu từ 12g30.,"Theo Điều 3, khoản 3 của QĐ 898/2025:  
+""Mỗi ngày thi được bố trí 04 ca thi: Ca thi 1 bắt đầu từ 7g00; Ca thi 2 bắt đầu từ 9g30; Ca thi 3 bắt đầu từ 12g30; Ca thi 4 bắt đầu từ 15g00.""
+
+Trả lời: Một ngày thi có 04 ca. Ca thi thứ ba bắt đầu lúc 12 giờ 30 phút.","QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 2; Quy định thời gian tiết học, ca học và mã phòng học",True,du,False,,,
+dev_questions_dot4.json,dot4_46,Đi thi mà quên mang căn cước thì phải làm sao?,Cán bộ coi thi yêu cầu sinh viên đến Phòng Hội đồng thi để xử lý theo quy định.,"Theo Điều 3, QĐ 898/2025 ban hành Quy định tổ chức thi học kì:  
+*""Trong trường hợp sinh viên không mang Giấy tờ tùy thân theo quy định, yêu cầu sinh viên đến Phòng Hội đồng thi để xử lý theo quy định.""*  
+
+Vì vậy, nếu quên mang căn cước, sinh viên phải đến Phòng Hội đồng thi để được xử lý theo quy định.",QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 7; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 8,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_47,Nộp bài thi tự luận thì sinh viên phải ghi và ký những gì?,Tự ghi đúng số tờ giấy thi đã nộp và ký tên vào Danh sách sinh viên dự thi.,"Theo Điều 7, khoản 1, điểm g) của QĐ 898/2025 ban hành Quy định tổ chức thi học kì:
+
+> ""Khi hết giờ làm bài, phải ngừng làm bài ngay, bảo quản bài thi. Khi nộp bài thi tự luận, phải ghi rõ số tờ giấy thi đã nộp và ký xác nhận vào Danh sách sinh viên dự thi; sinh viên không làm được bài cũng phải nộp tờ giấy thi (đối với bài thi tự luận), Phiếu TLTN (đối với bài thi trắc nghiệm).""
+
+**Trả lời:** Sinh viên phải ghi rõ số tờ giấy thi đã nộp và ký xác nhận vào Danh sách sinh viên dự thi.",QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 7; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_48,Giảng viên nữ từ bao nhiêu tuổi thì được miễn coi thi?,Từ 50 tuổi trở lên (giảng viên nam từ 55 tuổi).,"Theo Điều 4.2, khoản 1, QĐ 898/2025:
+
+> ""Lãnh đạo đơn vị, giảng viên có chức danh giáo sư, phó giáo sư, giảng viên nữ từ 50 tuổi trở lên được miễn nghĩa vụ coi thi.""
+
+**Trả lời:** Giảng viên nữ từ **50 tuổi trở lên** được miễn coi thi.","QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3; QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3; TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)",True,thieu,False,,,
+dev_questions_dot4.json,dot4_49,Bài thi tự luận được mấy cán bộ chấm và chấm bằng mực gì?,"02 cán bộ chấm, dùng 02 màu mực khác nhau (đỏ và xanh lá cây).","Theo Điều 4, khoản 4, Điều 4 — QĐ 898/2025 ban hành Quy định tổ chức thi học kì:
+
+> ""Mỗi bài thi phải do 02 cán bộ chấm thi thực hiện trực tiếp trên bài bằng 02 màu mực khác nhau (màu đỏ và màu xanh lá cây).""
+
+**Trả lời:** Bài thi tự luận được 02 cán bộ chấm và chấm bằng mực đỏ và mực xanh lá cây.",QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 4; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 7; HD 1181/2022 thực hiện quy trình phúc khảo bài thi kết thúc học phần,True,du,False,,,
+dev_questions_dot4.json,dot4_50,Hai lần chấm lệch nhau bao nhiêu điểm thì phải chấm lần thứ ba?,"Lệch từ 1,0 điểm trở lên.","Theo quy định tại điểm b khoản 4 Điều 33 Quy chế Thi tốt nghiệp trung học phổ thông ban hành kèm theo Thông tư số 24/2024/TT-BGDĐT ngày 24 tháng 12 năm 2024 của Bộ trưởng Bộ Giáo dục và Đào tạo, **điểm toàn bài hoặc điểm thành phần lệch nhau từ 1,0 điểm trở lên** thì phải chấm lần thứ ba.
+
+Trả lời: **1,0 điểm trở lên**.",QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 4; HD 1181/2022 thực hiện quy trình phúc khảo bài thi kết thúc học phần; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10,True,du,False,,,
+dev_questions_dot4.json,dot4_51,Thi xong bao lâu thì có điểm học phần?,Chậm nhất 12 ngày làm việc sau khi kết thúc đợt thi.,"Theo Điều 6, khoản 1, điểm a: ""Thời điểm công bố điểm học phần: chậm nhất 12 ngày làm việc sau khi kết thúc đợt thi.""
+
+**Trả lời:** Thi xong chậm nhất 12 ngày làm việc thì có điểm học phần.","QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6; TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước); QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 5",True,du,False,,,
+dev_questions_dot4.json,dot4_52,Bài thi kết thúc học phần được lưu giữ ít nhất bao lâu?,"Ít nhất hai năm, tính từ ngày kết thúc thi học kì.","Theo Điều 6, khoản 3, QĐ 898/2025:
+
+""Thời hạn lưu giữ các bài thi ít nhất là hai năm (tính từ ngày kết thúc thi học kì).""
+
+Trả lời: Bài thi kết thúc học phần được lưu giữ ít nhất là hai năm.",QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 4; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 5,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_53,Giảng viên công bố điểm quá trình vào lúc nào?,Tại buổi học cuối cùng trước khi kết thúc mỗi học phần.,"Theo Điều 6, khoản 1, điểm a) của Quy định tổ chức thi học kì (QĐ 898/2025):
+
+""Giảng viên công bố điểm đánh giá quá trình cho sinh viên tại buổi học cuối cùng trước khi kết thúc mỗi học phần.""
+
+Trả lời: Giảng viên công bố điểm quá trình vào buổi học cuối cùng trước khi kết thúc mỗi học phần.","QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6; Quy định 3248/2018 giải quyết thắc mắc, khiếu nại kết quả học tập; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11",True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_54,Người làm lộ đề thi bị xử lý thế nào?,Buộc thôi việc hoặc đề nghị truy cứu trách nhiệm hình sự.,"Theo Điều 9, khoản 1, điểm d, QĐ 898/2025 ban hành Quy định tổ chức thi học kì:
+
+""Buộc thôi việc hoặc đề nghị truy cứu trách nhiệm hình sự đối với người có một trong các hành vi vi phạm sau đây:
+
+- Làm lộ đề thi, mua, bán đề thi.""
+
+Vì vậy, người làm lộ đề thi sẽ bị buộc thôi việc hoặc đề nghị truy cứu trách nhiệm hình sự.",QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 9; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 8; QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 7,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_55,Quy chế cố vấn học tập có áp dụng cho các khóa đào tạo theo niên chế không?,Không.,"Theo Điều 1, khoản 2 — Quy chế công tác cố vấn học tập (QĐ 367/2019):
+
+*""Quy chế này không áp dụng đối với các khóa đào tạo theo niên chế.""*
+
+Trả lời: Không, quy chế cố vấn học tập không áp dụng cho các khóa đào tạo theo niên chế.",Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 1; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 3; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 8,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_56,Ai là Chủ tịch Hội đồng cố vấn học tập của trường?,"Hiệu trưởng, hoặc Phó hiệu trưởng phụ trách đào tạo được Hiệu trưởng ủy quyền.","Theo Điều 2, khoản 3, Quy chế công tác cố vấn học tập (QĐ 367/2019):
+
+""Hiệu trưởng hoặc Hiệu trưởng ủy quyền cho Phó hiệu trưởng phụ trách đào tạo là Chủ tịch hội đồng.""
+
+Trả lời: Hiệu trưởng hoặc Phó hiệu trưởng phụ trách đào tạo là Chủ tịch Hội đồng cố vấn học tập của trường.",Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 2; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 11; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 3,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_57,Một cố vấn học tập được phụ trách tối đa mấy lớp cùng lúc?,Từ 01 đến 02 lớp.,"Theo Điều 4, khoản 3 — Quy chế công tác cố vấn học tập (QĐ 367/2019):  
+""Vào cùng một thời điểm, mỗi CVHT chỉ phụ trách từ 01 đến 02 lớp SV.""
+
+Trả lời: Một cố vấn học tập được phụ trách tối đa 02 lớp cùng lúc.",Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 4; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 3; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 7,True,du,False,,,
+dev_questions_dot4.json,dot4_58,Đổi cố vấn học tập thì lớp được thông báo trong thời hạn bao lâu?,Trong 3 ngày làm việc kể từ ngày có quyết định của Hiệu trưởng.,"Theo Điều 5, khoản 5 của Quy chế công tác cố vấn học tập (QĐ 367/2019):
+
+> ""Việc thay thế CVHT phải được thông báo bằng văn bản cho lớp SV và các đơn vị có liên quan trong thời hạn 3 ngày làm việc, kể từ ngày có quyết định của Hiệu trưởng.""
+
+**Trả lời:** Lớp được thông báo trong thời hạn 3 ngày làm việc kể từ ngày có quyết định của Hiệu trưởng.",Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 4; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 3; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 5,True,du,False,,,
+dev_questions_dot4.json,dot4_59,Cố vấn học tập có những chức năng gì?,"Tư vấn, trợ giúp sinh viên trong học tập, nghiên cứu khoa học, định hướng nghề nghiệp; quản lý sinh viên trong quá trình học tập và rèn luyện.","Theo Điều 5 — Quy chế công tác cố vấn học tập (QĐ 367/2019):
+
+1. Tư vấn, trợ giúp SV trong học tập, nghiên cứu khoa học, định hướng nghề nghiệp.  
+2. Quản lí SV trong quá trình học tập và rèn luyện tại Trường.
+
+Trả lời: Cố vấn học tập có chức năng tư vấn, trợ giúp sinh viên trong học tập, nghiên cứu khoa học, định hướng nghề nghiệp và quản lí sinh viên trong quá trình học tập và rèn luyện tại Trường.",Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 5; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 3,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_60,Cố vấn học tập được trang bị những công cụ gì?,"Chương trình đào tạo, biên chế năm học và kế hoạch đào tạo, quy chế đào tạo, quy định công tác sinh viên, văn bản về học bổng/học phí/điểm rèn luyện, sổ tay, danh sách lớp, biểu mẫu…","Theo Điều 8 — Quy chế công tác cố vấn học tập (QĐ 367/2019):
+
+“CVHT được trang bị bộ công cụ, gồm:
+
+| 1. Chương trình đào tạo của ngành đào tạo.
+
+2. Biên chế năm học và kế hoạch đào tạo mỗi học kì.
+
+3. Quy chế đào tạo đại học, cao đẳng theo hệ thống tín chỉ.
+
+4. Quy định về công tác: quản lí SV.
+
+5. Các văn bản về học bỗng, học phí, đánh giá điểm rèn luyện SV..
+
+6. Số tay CVHT, số công tác; số tay SV..
+
+7. Danh sách lớp SV.
+
+8. Các biểu mẫu phục vụ công tác CVHT. |
+
+9. Các tài liệu khác liên quan đến SV trong quá trình học tập tại Trường.”
+
+**Trả lời:** Cố vấn học tập được trang bị bộ công cụ gồm chương trình đào tạo của ngành, biên chế năm học và kế hoạch đào tạo mỗi học kỳ, quy chế đào tạo theo hệ thống tín chỉ, quy định về công tác quản lý sinh viên, các văn bản về học bổng, học phí, đánh giá điểm rèn luyện sinh viên, số tay CVHT, số công tác, số tay sinh viên, danh sách lớp sinh viên, các biểu mẫu phục vụ công tác, và các tài liệu khác liên quan đến sinh viên trong quá trình học tập tại Trường.",Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 8; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 3; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 7,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_61,Việc tư vấn của cố vấn học tập phải tuân thủ những yêu cầu nào?,"Công bằng, công khai, đặt lợi ích sinh viên lên hàng đầu; nội dung chính xác, trung thực, đúng quy định; được ghi chép cẩn thận.","Việc tư vấn của cố vấn học tập phải tuân thủ các yêu cầu sau:
+
+- **Điều 9, Quy chế công tác cố vấn học tập (QĐ 367/2019):**  
+  1. Việc tư vấn, trợ giúp cho SV phải được tiến hành công bằng, công khai và đặt mục tiêu lợi ích của SV lên hàng đầu.  
+  2. Nội dung tư vấn phải chính xác, trung thực, không trái pháp luật và các quy chế, quy định của Trường.  
+  3. Hoạt động tư vấn phải được ghi chép cần thận tại các biên bản về cuộc họp với lớp SV, các biểu mẫu theo quy định.",Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 9; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 3; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_62,Cố vấn học tập họp lớp mấy lần mỗi học kỳ?,2 lần/học kỳ; làm việc với Ban cán sự lớp 1 lần/tháng.,"Theo Điều 10, khoản 2, mục 2.1 của Quy chế công tác cố vấn học tập (QĐ 367/2019):  
+""Phổ biến những thay đổi trong các quy định hiện hành (nếu có);  
+Phổ biến quy định chuẩn đầu ra về ngoại ngữ và tin học đối với ngành đào tạo;  
+Phổ biến các công việc khác theo yêu cầu quản lý của Trường và Khoa/ngành có liên quan đến lớp (nếu có).""
+
+**Trả lời:** Cố vấn học tập họp lớp **2 lần mỗi học kỳ**.",Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 10; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 7; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 3,True,thieu,False,,,
+dev_questions_dot4.json,dot4_63,"Ai nhận xét, đánh giá hoạt động của cố vấn học tập khi kết thúc học kỳ?","Trưởng khoa/ngành, rồi thông báo cho Hội đồng CVHT Trường.","Theo Điều 11, khoản 3 — Quy chế công tác cố vấn học tập (QĐ 367/2019):
+
+""Trưởng khoa/ngành trực tiếp quản lí hoạt động của CVHT. Kết thúc học kì, Trưởng khoa/ngành nhận xét đánh giá hoạt động của CVHT và thông báo cho Hội đồng CVHT Trường. Kế quả đánh giá này là cơ sở để khen thưởng, kỉ luật đối với CVHT.""
+
+**Trả lời:** Trưởng khoa/ngành nhận xét, đánh giá hoạt động của cố vấn học tập khi kết thúc học kỳ.",Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 11; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 10; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 12,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_64,Cuối học kỳ cố vấn học tập phải nộp gì cho trưởng khoa?,Hồ sơ làm việc của CVHT và biên bản họp với lớp sinh viên.,"Theo Điều 12, khoản 2 — Quy chế công tác cố vấn học tập (QĐ 367/2019):
+
+> ""Cuối mỗi học kì, CVHT phải nộp cho Trưởng khoa/ngành hồ sơ làm việc của CVHT và biên bản họp với lớp SV để làm cơ sở đánh giá CVHT hàng năm.""
+
+**Trả lời:** Cuối học kỳ, cố vấn học tập phải nộp hồ sơ làm việc của mình và biên bản họp với lớp sinh viên cho Trưởng khoa.",Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 12; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 11; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 10,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_65,Các quy định cũ trái với quy chế cố vấn học tập thì xử lý thế nào?,Đều bị bãi bỏ; quy chế có hiệu lực từ ngày kí.,"Theo Điều 14, các quy chế, quy định trước đây của Trường trái với quy chế này đều bị bãi bỏ.  
+
+**Căn cứ:** Điều 14 — Quy chế công tác cố vấn học tập (QĐ 367/2019).",Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 14; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 4; Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 3,True,khong_ap_dung,False,,,
+dev_questions_dot4.json,dot4_66,Sinh viên khóa 2021 có IELTS 5.0 thì học phần Tiếng Anh 1 được quy đổi mấy điểm?,"9 điểm (TB 2366, khóa 2021 trở về trước).","Theo Điều 3, khoản 2 của Thông báo 2366/2021, sinh viên có IELTS = 5.0 được quy đổi thành điểm 9 cho học phần Tiếng Anh II, nhưng đối với học phần Tiếng Anh I, sinh viên này được quy đổi thành điểm 8. 
+
+Trả lời: Sinh viên khóa 2021 có IELTS 5.0 thì học phần Tiếng Anh 1 được quy đổi 8 điểm.","TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước); TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước); Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10",True,du,False,,,
+dev_questions_dot4.json,dot4_67,Sinh viên khóa 2023 có IELTS 5.0 thì học phần Tiếng Anh 1 được quy đổi mấy điểm?,"10 điểm (QyĐ 2626, khóa 2022–2023: IELTS ≥ 5.0).","Theo Điều 3 — QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023):
+
+> ""IELTS ≥ 5.0 do IDP Education hoặc British Council tổ chức; [...] được quy đổi thành điểm học tập [...] Tiếng Anh 1: 10"".
+
+**Trả lời:** Sinh viên khóa 2023 có IELTS 5.0 thì học phần Tiếng Anh 1 được quy đổi **10 điểm**.","QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",True,du,False,,,
+dev_questions_dot4.json,dot4_68,Sinh viên khóa 2024 có IELTS 5.0 thì học phần Tiếng Anh 1 được quy đổi mấy điểm?,"10 điểm (QyĐ 2101, khóa từ 2024: IELTS ≥ 5.0).","Theo Điều 2, QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024):  
+""IELTS ≥ 5.0 do IDP Education hoặc British Council tổ chức; [...] được quy đổi thành điểm học tập học phần Tiếng Anh 1, 2 và 3 là 10 điểm.""
+
+Trả lời: Học phần Tiếng Anh 1 được quy đổi 10 điểm.","QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 2; QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10; QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 3",True,du,False,,,
+dev_questions_dot4.json,dot4_69,"Sinh viên khóa 2022 có điểm học phần 8,4 thì quy đổi sang thang điểm 4 được mấy điểm?","3 điểm: 8,4 là điểm B (Điều 9 bản gốc), B quy đổi thành 3 (Điều 10 bản gốc).","Theo khoản 3 Điều 9, điểm học phần 8,4 thuộc khoảng điểm ""B: từ 7,0 đến 8,4"". Do đó, điểm chữ là B.  
+
+Theo khoản 2 Điều 10, điểm chữ B quy đổi thành 3.  
+
+**Trích dẫn quy định:**  
+- Điều 9: ""B: từ 7,0 đến 8,4"".  
+- Điều 10: ""B quy đổi thành 3"".  
+
+**Kết luận:** Sinh viên khóa 2022 có điểm học phần 8,4 quy đổi sang thang điểm 4 được **3 điểm**.","Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10; QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3; Quy chế đào tạo trình độ đại học SGU 2021 – Điều 9",True,du,False,,,

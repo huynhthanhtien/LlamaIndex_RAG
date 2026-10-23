@@ -44,11 +44,21 @@ def dung_bo_02(n: NodeWithScore, d: str) -> bool:
 
 def dung_bo_dev(n: NodeWithScore, d: str) -> bool:
     """Bộ dev theo đợt: nhãn "<tiền tố file>" (văn bản 1 Node) hoặc "<tiền tố file>|<Điều>" (Điều của phần chính);
-    nhiều nhãn đúng ngăn bởi ";" (cùng nội dung có ở nhiều văn bản, vd KSTAĐV trong TB 2366 và QyĐ 2626)."""
+    "<tiền tố>|bh:<Điều>" là Điều của quyết định ban hành (vd QC 2021 "áp dụng từ khóa 2021"), "<tiền tố>|sd:<Điều>" là mục
+    sửa đổi Điều đó — để nhắm đúng một Node thay vì nhãn cả văn bản (nhãn cả văn bản làm độ bao phủ và R@k bị thổi phồng).
+    Nhiều nhãn đúng ngăn bởi ";" (cùng nội dung có ở nhiều văn bản, vd KSTAĐV trong TB 2366 và QyĐ 2626)."""
     m = n.node.metadata
     for nhan in d.split(";"):
         tien_to, _, dieu = nhan.partition("|")
-        if str(m.get("file", "")).startswith(tien_to) and (not dieu or (m.get("phan") == "chinh" and m.get("dieu") == dieu)):
+        if not str(m.get("file", "")).startswith(tien_to):
+            continue
+        if not dieu:
+            return True
+        loai, _, so = dieu.rpartition(":")
+        if loai == "sd":
+            if m.get("phan") == "sua_doi" and m.get("sua_doi_dieu") == so:
+                return True
+        elif m.get("phan") == ("ban_hanh" if loai == "bh" else "chinh") and m.get("dieu") == so:
             return True
     return False
 
@@ -56,3 +66,24 @@ def dung_bo_dev(n: NodeWithScore, d: str) -> bool:
 def chuan_hoa_nhan(nhan: str | list[str]) -> str:
     """`dieu_dung` dạng list (nhiều nhãn đúng) -> chuỗi "a;b" mà các hàm dung_bo_* đọc; chuỗi giữ nguyên."""
     return nhan if isinstance(nhan, str) else ";".join(x.strip() for x in nhan if x.strip())
+
+
+# Tập phát triển (dev): đã dùng để chỉnh loader, prompt và chọn cấu hình -> chỉ số có thể lạc quan.
+BO_CAU_HOI: list[tuple[str, ChamDung]] = [
+    ("test_questions_01.json", dung_bo_01),
+    ("test_questions_02.json", dung_bo_02),
+    ("dev_questions_dot1.json", dung_bo_dev),
+    ("dev_questions_dot2.json", dung_bo_dev),
+    ("dev_questions_dot3.json", dung_bo_dev),
+    # Đợt 4 (23/10): phủ các văn bản/Điều chưa có câu hỏi và câu phụ thuộc khóa; do AI soạn, có trường cong_cu_tao
+    ("dev_questions_dot4.json", dung_bo_dev),
+]
+
+# Tập kiểm chứng (test): chưa dùng để chỉnh, chỉ chạy một lần sau khi đóng băng (eval/dong_bang.py,
+# evaluate.py --tap-kiem-chung). Chỉ phủ QC 2021 và QĐ 3183, nên không đại diện cho cả corpus (eval/bao_phu.py).
+BO_KIEM_CHUNG: list[tuple[str, ChamDung]] = [
+    ("test_kiem_chung_qc2021.json", dung_bo_01),
+    ("test_kiem_chung_3183.json", dung_bo_02),
+]
+# Câu ngoài phạm vi của tập kiểm chứng: không có nhãn Node, chấm bằng hành vi (từ chối) ở eval/tra_loi_dev.py
+BO_NGOAI_PHAM_VI = "test_kiem_chung_ngoai.json"

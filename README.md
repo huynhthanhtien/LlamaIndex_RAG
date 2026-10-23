@@ -128,12 +128,15 @@ python scripts/clean_md.py data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc
 ## Kiểm thử và đánh giá
 
 ```bash
-make test           # 54 kiểm thử: 44 chạy offline (không cần GPU/Ollama), 10 của test_llm.py bị skip nếu không đặt RAG_TEST_LLM=1; CI chạy lệnh này
+make test           # 71 kiểm thử: 59 chạy offline (không cần GPU/Ollama), 2 ca biên lọc phiên bản chưa xử lý (expected failure),
+                    # 10 của test_llm.py bị skip nếu không đặt RAG_TEST_LLM=1; CI chạy lệnh này
 make test-llm       # kiểm thử có LLM: gọi Ollama thật trong .env (RAG_PROFILE=server)
 make eval           # truy hồi 6 cấu hình vector/rerank/loc/rerank+loc/hybrid/hybrid+rerank+loc: Recall@k, MRR, nDCG, CI bootstrap, McNemar
 make baseline       # baseline BM25 / không xếp hạng
 make eval-answers   # chấm câu trả lời bằng evaluator của LlamaIndex (Faithfulness, Relevancy — LLM tự chấm) + từ chối đúng/sai
 ```
+
+Tập kiểm chứng chỉ chạy **một lần**, sau khi đóng băng: `eval/dong_bang.py tao` (ghi `eval/results/dong-bang.json`: sha256 mã nguồn, corpus, cấu hình chốt, luật chấm, file câu hỏi; code phải đã commit) → commit manifest → `eval/evaluate.py --tap-kiem-chung` (từ chối chạy nếu lệch manifest hoặc đã chạy). Trước đó: `eval/kiem_tra_trung.py [--embedding]` (câu kiểm chứng gần trùng dev → `trung-lap.md`) và `eval/bao_phu.py` (Node/văn bản mỗi bộ chạm tới → `bao-phu.md`). Câu trả lời sinh (`eval/tra_loi_dev.py`) ghi outcome từng câu (`loi` / `chua_cham`, chấm tay theo `docs/rubric-cham-tra-loi.md`, đếm lại bằng `--tong-hop`), evidence và chạy bổ sung câu lỗi bằng `--chi-cau-loi`.
 
 Hoặc gọi trực tiếp: `RAG_PROFILE=server venv/bin/python eval/evaluate.py [--cau-hinh vector,rerank,hybrid] [--doi-chieu-thu-vien]`, `eval/baselines.py`, `eval/evaluate_answers.py --che-do ca-hai`. Kết quả (JSON + Markdown) ghi vào `eval/results/`, kèm tóm tắt cấu hình (`RAGConfig.mo_ta()`) để tái lập.
 
