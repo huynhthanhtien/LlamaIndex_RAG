@@ -15,5 +15,10 @@ jobs:
       # Chỉ cài phần tối thiểu để chạy kiểm thử offline: không torch, không model, không Ollama.
       - name: Cài phụ thuộc tối thiểu
         run: pip install "llama-index-core==0.14.24" "python-dotenv==1.2.3"
+      # SentenceSplitter (cắt Điều dài trong processed_loader) nạp stopwords NLTK mà llama-index-core đóng gói sẵn trong
+      # _static/nltk_cache. NLTK bản mới từ chối nạp dữ liệu nằm trong thư mục mà tài khoản khác ghi được, và
+      # site-packages của runner (/opt/hostedtoolcache) đang mở quyền ghi đó -> LookupError ở tests.test_corpus.
+      - name: Khóa quyền ghi nltk_cache của llama-index
+        run: chmod -R go-w "$(python -c "import llama_index.core, os; print(os.path.join(os.path.dirname(llama_index.core.__file__), '_static', 'nltk_cache'))")"
       - name: Kiểm thử
         run: python -m unittest discover -s tests -t . -v
