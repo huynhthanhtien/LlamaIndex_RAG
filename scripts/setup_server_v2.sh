@@ -2,7 +2,7 @@
 # setup_server.sh v2 — như setup_server.sh nhưng chạy được trên Google Colab và tự mở URL công khai.
 #
 #   - Ollama: tự cài nếu chưa có, chạy nền, pull LLM_MODEL, gọi thử.
-#   - Model server (embedding + reranker, file model_server.py nhúng ở giữa script): cài thư viện,
+#   - Model server (embedding + reranker): tải src/model_server.py của nhánh REPO_BRANCH trên GitHub, cài thư viện,
 #     bật bằng uvicorn chạy nền.
 #   - URL công khai qua Cloudflare quick tunnel (*.trycloudflare.com, không cần tài khoản) cho cả hai cổng.
 #   - In ra các dòng cần chép vào .env trên máy local (URL thật, không phải <IP>:<CỔNG>).
@@ -28,6 +28,7 @@
 #   PUBLIC_TUNNEL=cloudflared   (none = như v1: nghe 0.0.0.0, tự ánh xạ cổng)
 #   USE_VENV=     (mặc định 0 trên Colab, 1 nơi khác)   TORCH_INDEX_URL=   (chỉ dùng khi USE_VENV=1)
 #   SKIP_LLM=0    (1 = không cài/pull/kiểm tra LLM, chỉ dựng model server)
+#   REPO_BRANCH=main  (nhánh lấy src/model_server.py)   REPO_RAW=https://raw.githubusercontent.com/huynhthanhtien/LlamaIndex_RAG
 set -euo pipefail
 
 IS_COLAB=0; { [ -n "${COLAB_RELEASE_TAG:-}" ] || [ -d /content ]; } && IS_COLAB=1
@@ -42,6 +43,8 @@ TORCH_INDEX_URL="${TORCH_INDEX_URL:-}"
 MODEL_SERVER_TOKEN="${MODEL_SERVER_TOKEN:-}"
 PUBLIC_TUNNEL="${PUBLIC_TUNNEL:-cloudflared}"
 SKIP_LLM="${SKIP_LLM:-0}"
+REPO_RAW="${REPO_RAW:-https://raw.githubusercontent.com/huynhthanhtien/LlamaIndex_RAG}"
+REPO_BRANCH="${REPO_BRANCH:-main}"
 export HF_HOME="${HF_HOME:-$WORKDIR/hf_cache}"   # cache model HuggingFace, giữ lại giữa các lần chạy
 
 OLLAMA_URL="http://127.0.0.1:$OLLAMA_PORT"
@@ -141,134 +144,19 @@ else
 fi
 "$PY" -c "import torch; print('[torch]', torch.__version__, '| CUDA:', torch.cuda.is_available())"
 
-# ---------- 5. model_server.py (nhúng nguyên văn từ src/model_server.py) ----------
-cat >"$WORKDIR/model_server.py" <<'MODEL_SERVER_PY_EOF'
-"""Model server: nạp embedding + reranker lên GPU một lần, các tiến trình RAG gọi qua HTTP.
-
-File này độc lập, không import code nào khác của dự án: có thể chép riêng nó lên máy GPU (cloud) để chạy,
-còn index, retriever, query engine vẫn chạy trên máy local và gọi sang qua MODEL_SERVER_URL.
-Cách nạp model giống hệt make_local_embedding() / make_local_reranker() trong src/ để vector trùng khớp;
-client (remote_models.check_server) báo lỗi nếu server chạy model khác config.
-
-Biến môi trường (mặc định = profile "server"):
-    EMBED_MODEL          AITeamVN/Vietnamese_Embedding
-    RERANK_MODEL         AITeamVN/Vietnamese_Reranker   (để rỗng = không bật rerank)
-    RERANK_MAX_LENGTH    2048  (token mỗi cặp câu hỏi–Node; SentenceTransformerRerank mặc định cắt ở 512)
-    DEVICE               cuda nếu có GPU, ngược lại cpu
-    FP16                 1  (chỉ có tác dụng khi DEVICE=cuda)
-    MODEL_SERVER_TOKEN   nếu đặt: mọi request phải có header "Authorization: Bearer <token>"
-
-Chạy trên máy local:
-    venv/bin/uvicorn model_server:app --app-dir src --port 8001
-Chạy trên máy cloud (chỉ cần file này):
-    pip install fastapi uvicorn torch sentence-transformers llama-index-core llama-index-embeddings-huggingface
-    MODEL_SERVER_TOKEN=<bí mật> uvicorn model_server:app --host 0.0.0.0 --port 8001
-Phía client đặt trong .env: MODEL_SERVER_URL=http://<ip>:<port>, MODEL_SERVER_TOKEN=<bí mật>.
-"""
-import os
-import secrets
-import threading
-from collections.abc import AsyncGenerator
-from contextlib import asynccontextmanager
-from typing import Literal
-
-import torch
-from fastapi import Depends, FastAPI, Header, HTTPException
-from llama_index.core.postprocessor import SentenceTransformerRerank
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from pydantic import BaseModel
-
-EMBED_MODEL = os.environ.get("EMBED_MODEL", "AITeamVN/Vietnamese_Embedding")
-RERANK_MODEL = os.environ.get("RERANK_MODEL", "AITeamVN/Vietnamese_Reranker") or None
-RERANK_MAX_LENGTH = int(os.environ.get("RERANK_MAX_LENGTH", "2048"))
-DEVICE = os.environ.get("DEVICE") or ("cuda" if torch.cuda.is_available() else "cpu")
-FP16 = os.environ.get("FP16", "1") == "1" and DEVICE == "cuda"
-TOKEN = os.environ.get("MODEL_SERVER_TOKEN") or None
-
-embed_model: HuggingFaceEmbedding | None = None
-reranker: SentenceTransformerRerank | None = None
-gpu_lock = threading.Lock()  # endpoint sync chạy trong threadpool: mỗi lúc chỉ 1 request dùng GPU
-
-
-def load_embedding() -> HuggingFaceEmbedding:
-    # Giữ giống make_local_embedding() trong src/index_builder.py
-    return HuggingFaceEmbedding(
-        model_name=EMBED_MODEL,
-        device=DEVICE,
-        embed_batch_size=4 if FP16 else 10,  # batch nhỏ để không tràn VRAM trên card 4 GB
-        model_kwargs={"torch_dtype": torch.float16} if FP16 else {},
-    )
-
-
-def load_reranker(model_name: str) -> SentenceTransformerRerank:
-    # Giữ giống make_local_reranker() trong src/retriever.py
-    rerank = SentenceTransformerRerank(model=model_name, device="cpu" if FP16 else DEVICE)
-    # Như dat_do_dai_toi_da() trong src/retriever.py: sentence-transformers >= 5 dùng max_seq_length
-    if isinstance(getattr(type(rerank._model), "max_seq_length", None), property):  # pyright: ignore[reportPrivateUsage]
-        rerank._model.max_seq_length = RERANK_MAX_LENGTH  # pyright: ignore[reportPrivateUsage]
-    else:
-        rerank._model.max_length = RERANK_MAX_LENGTH  # pyright: ignore[reportPrivateUsage]
-    if FP16:
-        # SentenceTransformerRerank không nhận dtype: nạp trên CPU, ép fp16 rồi mới đưa lên GPU
-        rerank._model.half().to(DEVICE)  # pyright: ignore[reportPrivateUsage]
-        rerank.device = DEVICE
-    return rerank
-
-
-@asynccontextmanager
-async def lifespan(_: FastAPI) -> AsyncGenerator[None]:
-    global embed_model, reranker
-    embed_model = load_embedding()
-    reranker = load_reranker(RERANK_MODEL) if RERANK_MODEL else None
-    yield
-    embed_model = reranker = None
-
-
-def check_token(authorization: str | None = Header(default=None)) -> None:
-    if TOKEN and not (authorization and secrets.compare_digest(authorization, f"Bearer {TOKEN}")):
-        raise HTTPException(status_code=401, detail="Sai hoặc thiếu token (header Authorization: Bearer ...)")
-
-
-app = FastAPI(lifespan=lifespan, dependencies=[Depends(check_token)])
-
-
-class EmbedRequest(BaseModel):
-    texts: list[str]
-    kind: Literal["query", "text"] = "text"
-
-
-class RerankRequest(BaseModel):
-    query: str
-    texts: list[str]
-
-
-@app.get("/health")
-def health() -> dict[str, str | int | bool | None]:
-    return {"embed_model": EMBED_MODEL, "reranker_model": RERANK_MODEL, "reranker_max_length": RERANK_MAX_LENGTH,
-            "device": DEVICE, "fp16": FP16}
-
-
-@app.post("/embed")
-def embed(req: EmbedRequest) -> dict[str, list[list[float]]]:
-    if embed_model is None:
-        raise HTTPException(status_code=503, detail="Model embedding chưa nạp xong")
-    with gpu_lock:
-        if req.kind == "query":
-            vectors = [embed_model.get_query_embedding(q) for q in req.texts]
-        else:
-            vectors = embed_model.get_text_embedding_batch(req.texts)
-    return {"embeddings": vectors}
-
-
-@app.post("/rerank")
-def rerank(req: RerankRequest) -> dict[str, list[float]]:
-    if reranker is None:
-        raise HTTPException(status_code=400, detail="Server không bật reranker (RERANK_MODEL rỗng)")
-    with gpu_lock:
-        scores = reranker._model.predict([(req.query, t) for t in req.texts])  # pyright: ignore[reportPrivateUsage]
-    return {"scores": [float(s) for s in scores]}
-MODEL_SERVER_PY_EOF
-log "Đã ghi $WORKDIR/model_server.py"
+# ---------- 5. model_server.py (tải đúng một file src/model_server.py từ GitHub) ----------
+# Trước đây nhúng nguyên văn file vào script nên phải chép tay mỗi lần src/model_server.py đổi (từng lệch: server cũ
+# cắt rerank ở 512 token). Nay tải file của REPO_BRANCH; tải hỏng thì giữ bản đã tải lần trước (nếu có).
+SERVER_PY_URL="$REPO_RAW/$REPO_BRANCH/src/model_server.py"
+if curl -fsSL --max-time 60 -o "$WORKDIR/model_server.py.tmp" "$SERVER_PY_URL" \
+        && "$PY" -m py_compile "$WORKDIR/model_server.py.tmp"; then
+    mv "$WORKDIR/model_server.py.tmp" "$WORKDIR/model_server.py"
+    log "Đã tải model_server.py từ nhánh $REPO_BRANCH ($(md5sum <"$WORKDIR/model_server.py" | cut -c1-8))"
+else
+    rm -f "$WORKDIR/model_server.py.tmp"
+    [ -s "$WORKDIR/model_server.py" ] || die "Không tải được $SERVER_PY_URL"
+    log "CẢNH BÁO: không tải được $SERVER_PY_URL — dùng bản đã tải lần trước"
+fi
 
 # ---------- 6. Token (tuỳ chọn: chỉ khi tự đặt MODEL_SERVER_TOKEN) ----------
 AUTH=()

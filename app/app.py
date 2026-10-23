@@ -112,8 +112,15 @@ def hoi(
     yield history, "", ""
 
     c = dataclasses.replace(cfg, similarity_top_k=int(top_k))
-    # Trước đây bỏ chọn Rerank thì truyền [] nên tắt luôn cả lọc phiên bản; nay hai bước bật/tắt riêng
-    nodes = search(index, c, question, postprocessors(bool(dung_rerank), bool(loc_phien_ban)))
+    try:
+        # Trước đây bỏ chọn Rerank thì truyền [] nên tắt luôn cả lọc phiên bản; nay hai bước bật/tắt riêng
+        nodes = search(index, c, question, postprocessors(bool(dung_rerank), bool(loc_phien_ban)))
+    except httpx.HTTPError as e:
+        # Embedding/rerank gọi model server: lỗi ở đây trước đây không được bắt, Gradio chỉ hiện "Error"
+        tra_loi.content = (f"⚠️ Không gọi được model server `{cfg.model_server_url}` (`{type(e).__name__}: {e}`). "
+                           "Kiểm tra tunnel trên Colab còn chạy và URL trong `.env` đúng, rồi hỏi lại.")
+        yield history, "", ""
+        return
     nguon = hien_thi_nguon(nodes)
     if not sinh_tra_loi:
         tra_loi.content = f"_Chỉ truy hồi: {len(nodes)} trích đoạn, xem cột bên phải._"
