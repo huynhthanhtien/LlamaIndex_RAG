@@ -1,0 +1,125 @@
+[
+  {
+    "id": "ngoai_01",
+    "question": "Điểm rèn luyện là gì?",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: điểm rèn luyện thuộc văn bản công tác sinh viên, không có trong corpus",
+    "nguon_cau": "eval/cau_hoi_danh_gia.json",
+    "nguoi_gan_pham_vi": "nhóm (eval/cau_hoi_danh_gia.json)"
+  },
+  {
+    "id": "ngoai_02",
+    "question": "Bao nhiêu tiền một tín chỉ?",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: học phí không có trong corpus",
+    "nguon_cau": "eval/cau_hoi_danh_gia.json",
+    "nguoi_gan_pham_vi": "nhóm (eval/cau_hoi_danh_gia.json)"
+  },
+  {
+    "id": "ngoai_03",
+    "question": "IELTS 5.5 có được miễn học phần tiếng Anh không?",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/cau_hoi_danh_gia.json",
+    "nguoi_gan_pham_vi": "nhóm (eval/cau_hoi_danh_gia.json)",
+    "ghi_chu": "Nhãn gốc ghi lý do 'corpus chưa có văn bản quy đổi chuẩn tiếng Anh'; nay corpus đã có TB 2366/2451, QyĐ 2626/2101 (quy đổi điểm, không miễn học phần) — cần xem lại nhãn"
+  },
+  {
+    "id": "ngoai_04",
+    "question": "Có những quy định nào về điẻm rèn luyện",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/results/cau-hoi01.md #13",
+    "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)"
+  },
+  {
+    "id": "ngoai_05",
+    "question": "Điểm rèn luyện là gì",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/results/cau-hoi01.md #14",
+    "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)"
+  },
+  {
+    "id": "ngoai_06",
+    "question": "trách nhiệm của ban giám hiệu là gì",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/results/cau-hoi01.md #23",
+    "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)"
+  },
+  {
+    "id": "ngoai_07",
+    "question": "nếu bây giờ tôi chán học thì tôi nên làm gì nhỉ ?",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/results/cau-hoi01.md #25",
+    "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)"
+  },
+  {
+    "id": "ngoai_08",
+    "question": "Tôi muốn báo cáo giáo viên thì cần làm gì ?",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/results/cau-hoi01.md #31",
+    "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)"
+  },
+  {
+    "id": "ngoai_09",
+    "question": "tao nên học theo lộ trình nào",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/results/cau-hoi01.md #36",
+    "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)"
+  },
+  {
+    "id": "ngoai_10",
+    "question": "tôi học ngu quá nên mua bằng giả tiếng anh thì có được không ?",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/results/cau-hoi01.md #38",
+    "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)",
+    "ghi_chu": "Lần chạy 10/10 trích Quy chế 2021 Điều 19 khoản 3 (dùng văn bằng giả) — cần xem lại nhãn"
+  },
+  {
+    "id": "ngoai_11",
+    "question": "tôi mua bằng giả tiếng anh nộp cho trường có được không ?",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/results/cau-hoi01.md #39",
+    "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)",
+    "ghi_chu": "Như ngoai_10 — cần xem lại nhãn"
+  },
+  {
+    "id": "ngoai_12",
+    "question": "học hè chán vl",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/results/cau-hoi01.md #44",
+    "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)"
+  },
+  {
+    "id": "ngoai_13",
+    "question": "chán",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/results/cau-hoi01.md #50",
+    "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)"
+  },
+  {
+    "id": "ngoai_14",
+    "question": "bao nhiêu tiền 01 tín",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/results/cau-hoi01.md #54",
+    "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)"
+  },
+  {
+    "id": "ngoai_15",
+    "question": "nếu tôi vi phạm pháp luật bên ngoài thì có bị kỉ luật không ?",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
+    "nguon_cau": "eval/results/cau-hoi01.md #56",
+    "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)"
+  }
+]
