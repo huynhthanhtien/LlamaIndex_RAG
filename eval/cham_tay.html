@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chấm tay câu trả lời – SGU RAG</title>
+<!--
+  Trang chấm tay cho một lượt chạy eval/results/danh-gia-tra-loi-*/ (rubric: docs/rubric-cham-tra-loi.md).
+  Mở thẳng bằng trình duyệt (file://), không cần server, không gửi dữ liệu đi đâu.
+    1. Kéo thả tra-loi.jsonl (bắt buộc) và cham-tay-claude.csv (nhãn AI, tùy chọn) vào trang.
+    2. Chấm từng câu; nhãn AI bị ẩn cho tới khi câu đó có nhãn của bạn (chấm độc lập, nhận xét tuần 7 ý 3, ý 10).
+    3. Bấm "Xuất CSV" -> cham-tay-<tên>.csv, đặt vào đúng thư mục lượt chạy rồi chạy
+       venv/bin/python eval/doi_chieu_cham.py <thư mục lượt chạy>
+  Bài đang chấm tự lưu trong localStorage của trình duyệt; nạp lại cham-tay-<tên>.csv để chấm tiếp trên máy khác.
+-->
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #fff; --text: #1f2328; --muted: #5d6670; --line: #d8dde3;
+    --accent: #2f5fb3; --ok: #1f7a3f; --ok-bg: #e6f4ea; --bad: #b42318; --bad-bg: #fdecea;
+    --warn: #8a5a00; --warn-bg: #fff4d6; --mark: #ffe58a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--text); background: var(--bg); }
+  header { position: sticky; top: 0; z-index: 5; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+           padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 16px; margin: 0 8px 0 0; }
+  header input[type=text] { padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; width: 170px; }
+  button { font: inherit; padding: 5px 12px; border: 1px solid var(--line); border-radius: 6px; background: #fff; cursor: pointer; }
+  button:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .progress { color: var(--muted); font-size: 14px; }
+  .progress b { color: var(--text); }
+  label.toggle { display: inline-flex; gap: 6px; align-items: center; font-size: 14px; color: var(--muted); }
+  main { display: grid; grid-template-columns: 270px 1fr; min-height: calc(100vh - 54px); }
+  aside { border-right: 1px solid var(--line); background: var(--panel); overflow-y: auto; max-height: calc(100vh - 54px); position: sticky; top: 54px; }
+  aside .filters { padding: 10px; border-bottom: 1px solid var(--line); display: grid; gap: 6px; }
+  aside select, aside textarea { width: 100%; font: inherit; font-size: 13px; padding: 4px; border: 1px solid var(--line); border-radius: 6px; }
+  aside textarea { height: 52px; resize: vertical; }
+  aside ul { list-style: none; margin: 0; padding: 0; }
+  aside li { padding: 6px 10px; border-bottom: 1px solid #eef0f3; cursor: pointer; font-size: 13px; display: flex; gap: 8px; align-items: center; }
+  aside li:hover { background: #f1f4f8; }
+  aside li.active { background: #e3ebf8; }
+  aside li .q { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: #c9ced6; flex: none; }
+  .dot.dung { background: var(--ok); } .dot.sai { background: var(--bad); } .dot.khac { background: var(--warn); }
+  .flag { font-size: 11px; padding: 0 5px; border-radius: 4px; }
+  .flag.lech { background: var(--bad-bg); color: var(--bad); }
+  .flag.mau { background: #e8e1f7; color: #5b3a9e; }
+  section#view { padding: 18px 24px 80px; max-width: 1180px; }
+  .empty { margin: 60px auto; max-width: 620px; text-align: center; color: var(--muted); border: 2px dashed var(--line); border-radius: 12px; padding: 40px; background: var(--panel); }
+  .empty.drag { border-color: var(--accent); color: var(--accent); }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; margin-bottom: 14px; }
+  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0 0 8px; }
+  .meta { font-size: 13px; color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+  .question { font-size: 18px; font-weight: 600; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .text { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .answer-key { background: #f3f7ff; border-left: 4px solid var(--accent); padding: 8px 12px; border-radius: 6px; }
+  mark { background: var(--mark); padding: 0 1px; border-radius: 2px; }
+  .ev { border: 1px solid var(--line); border-radius: 8px; margin-top: 8px; }
+  .ev summary { padding: 8px 12px; cursor: pointer; display: flex; gap: 10px; align-items: baseline; }
+  .ev summary .score { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; }
+  .ev .body { padding: 0 12px 10px; font-size: 13.5px; max-height: 420px; overflow: auto; }
+  .ev .loc { font-family: ui-monospace, monospace; font-size: 12px; color: var(--muted); }
+  .badges { display: flex; gap: 8px; flex-wrap: wrap; font-size: 12.5px; }
+  .badge { padding: 2px 8px; border-radius: 10px; background: #eef0f3; color: var(--muted); }
+  .badge.ok { background: var(--ok-bg); color: var(--ok); } .badge.bad { background: var(--bad-bg); color: var(--bad); }
+  .grade { display: grid; gap: 12px; }
+  .choices { display: flex; gap: 8px; flex-wrap: wrap; }
+  .choices label { border: 1px solid var(--line); border-radius: 8px; padding: 7px 14px; cursor: pointer; user-select: none; }
+  .choices input { display: none; }
+  .choices label:has(input:checked) { border-color: var(--accent); background: #e3ebf8; font-weight: 600; }
+  .choices label.c-dung:has(input:checked), .choices label.c-tu_choi_dung:has(input:checked) { border-color: var(--ok); background: var(--ok-bg); color: var(--ok); }
+  .choices label.c-sai:has(input:checked), .choices label.c-bia:has(input:checked) { border-color: var(--bad); background: var(--bad-bg); color: var(--bad); }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .row select, .row input[type=text] { font: inherit; padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; }
+  .row input[type=text] { flex: 1; min-width: 260px; }
+  .ai { border-radius: 8px; padding: 10px 12px; background: #f7f7f9; border: 1px dashed var(--line); font-size: 14px; }
+  .ai.hidden { color: var(--muted); font-style: italic; }
+  .ai.same { border: 1px solid #b7dfc3; background: var(--ok-bg); }
+  .ai.diff { border: 1px solid #f3b8b2; background: var(--bad-bg); }
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+  kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 4px; background: #fff; }
+  .help { font-size: 12.5px; color: var(--muted); }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } aside { position: static; max-height: 260px; } .cols { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Chấm tay câu trả lời</h1>
+  <input type="text" id="nguoi" placeholder="Tên người chấm (bắt buộc)" autocomplete="off">
+  <button id="btnMo">Mở file…</button>
+  <input type="file" id="fileInput" multiple hidden>
+  <label class="toggle"><input type="checkbox" id="anAI" checked> Ẩn nhãn AI tới khi mình chấm</label>
+  <span class="progress" id="progress"></span>
+  <span id="thongBao" hidden style="color:var(--bad);font-size:14px"></span>
+  <span style="flex:1"></span>
+  <button class="primary" id="btnXuat" disabled>Xuất CSV</button>
+</header>
+<main>
+  <aside>
+    <div class="filters">
+      <select id="loc">
+        <option value="tat_ca">Tất cả câu</option>
+        <option value="chua">Chưa chấm</option>
+        <option value="uu_tien">Ưu tiên: AI tự tin thấp / trung bình</option>
+        <option value="mau">Mẫu ngẫu nhiên (dán bên dưới)</option>
+        <option value="lech">Lệch với AI (đã mở nhãn AI)</option>
+        <option value="sai">Mình chấm sai / trích sai</option>
+      </select>
+      <textarea id="mau" placeholder="Dán dòng in ra từ: doi_chieu_cham.py <thư mục> --mau 15"></textarea>
+    </div>
+    <ul id="ds"></ul>
+  </aside>
+  <section id="view">
+    <div class="empty" id="drop">
+      <p style="font-size:17px;margin-top:0"><b>Kéo thả file vào đây</b> hoặc bấm “Mở file…”</p>
+      <p><code>tra-loi.jsonl</code> của lượt chạy (bắt buộc)<br>
+         <code>cham-tay-claude.csv</code> (nhãn AI, tùy chọn)<br>
+         <code>cham-tay-&lt;tên&gt;.csv</code> đã xuất trước đó (tùy chọn, để chấm tiếp)</p>
+      <p class="help">Dữ liệu chỉ nằm trong trình duyệt của bạn. Rubric: <code>docs/rubric-cham-tra-loi.md</code>.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+"use strict";
+// ---- Trạng thái ----
+const S = { cau: [], ai: new Map(), nhan: new Map(), mo: new Set(), i: 0, ten: "", luot: "" };
+const LOAI_LOI = ["", "nhan", "thieu_van_ban", "retrieval", "rerank", "synthesis"];
+const NHAN_TRONG = [["dung", "Đúng", "D"], ["sai", "Sai", "S"]];
+const NHAN_NGOAI = [["tu_choi_dung", "Từ chối đúng", "D"], ["dung", "Trả lời có căn cứ", "C"], ["bia", "Bịa", "B"], ["sai", "Sai / lạc đề", "S"]];
+const $ = (id) => document.getElementById(id);
+const khoa = (c) => c.bo + "\u0000" + c.id;
+const laNgoai = (c) => c.pham_vi === "ngoai";
+
+// ---- CSV (RFC 4180: ngoặc kép, xuống dòng trong ô) ----
+function docCSV(text) {
+  text = text.replace(/^﻿/, "");
+  const rows = []; let row = [], cell = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) {
+      if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; }
+      else cell += ch;
+    } else if (ch === '"') q = true;
+    else if (ch === ",") { row.push(cell); cell = ""; }
+    else if (ch === "\n" || ch === "\r") {
+      if (ch === "\r" && text[i + 1] === "\n") i++;
+      row.push(cell); rows.push(row); row = []; cell = "";
+    } else cell += ch;
+  }
+  if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
+  const [head, ...data] = rows.filter((r) => r.length > 1 || r[0] !== "");
+  return data.map((r) => Object.fromEntries(head.map((h, j) => [h.trim(), (r[j] ?? "").trim()])));
+}
+const oCSV = (v) => /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+
+// ---- Nạp file ----
+async function napFiles(files) {
+  try { await napFilesTho(files); } catch (e) { baoLoi("Không đọc được file: " + e.message); console.error(e); }
+}
+async function napFilesTho(files) {
+  if (!files.length) return;
+  // .jsonl trước: nhãn đã lưu trong trình duyệt gắn với lượt chạy, phải biết lượt chạy rồi mới gộp file CSV chấm dở
+  files = [...files].sort((a, b) => Number(b.name.endsWith(".jsonl")) - Number(a.name.endsWith(".jsonl")));
+  const boQua = files.filter((f) => !/\.(jsonl|csv)$/i.test(f.name)).map((f) => f.name);
+  for (const f of files) {
+    const text = await f.text();
+    if (/\.jsonl$/i.test(f.name)) {
+      S.cau = text.split("\n").filter((l) => l.trim()).map((l, j) => {
+        try { return JSON.parse(l); } catch { throw new Error(`${f.name} dòng ${j + 1} không phải JSON hợp lệ`); }
+      });
+      if (!S.cau.every((c) => "question" in c && "tra_loi" in c))
+        throw new Error(`${f.name} không phải tra-loi.jsonl của eval/results/danh-gia-tra-loi-*/ (thiếu question/tra_loi)`);
+      S.luot = f.name + ":" + S.cau.length + ":" + (S.cau[0]?.bo ?? "");
+      napLuu();
+    } else if (/\.csv$/i.test(f.name)) {
+      const rows = docCSV(text);
+      const laAI = /claude|(^|-)ai\b/i.test(f.name) || rows.some((r) => /claude|\(ai\)/i.test(r.nguoi_cham || ""));
+      for (const r of rows) {
+        const k = r.bo + "\u0000" + r.id;
+        if (laAI) S.ai.set(k, r);
+        else if (r.ket_qua && r.ket_qua !== "loi") {
+          S.nhan.set(k, { ket_qua: r.ket_qua, trich_dan_sai: r.trich_dan_sai || "", ly_do: r.ly_do || "",
+                          cham_khi_thay_ai: r.cham_khi_thay_ai || "" });
+          if (!S.ten && r.nguoi_cham) { S.ten = r.nguoi_cham; $("nguoi").value = S.ten; }
+        }
+      }
+      if (!laAI) luu();
+    }
+  }
+  if (!S.cau.length) { baoLoi("Chưa có câu nào: cần chọn cả tra-loi.jsonl của lượt chạy (đã nhận: " + files.map((f) => f.name).join(", ") + ")."); return; }
+  baoLoi(boQua.length ? "Bỏ qua file không phải .jsonl/.csv: " + boQua.join(", ") : "");
+  S.cau.forEach((c) => { if (S.nhan.has(khoa(c))) S.mo.add(khoa(c)); });
+  $("btnXuat").disabled = false;
+  veDS(); ve();
+}
+function baoLoi(msg) { const el = $("thongBao"); el.textContent = msg; el.hidden = !msg; }
+
+// ---- Lưu tự động ----
+const khoaLuu = () => "cham-tay:" + S.luot;
+function luu() {
+  if (!S.luot) return;
+  localStorage.setItem(khoaLuu(), JSON.stringify({ ten: S.ten, nhan: [...S.nhan], mo: [...S.mo], i: S.i }));
+}
+function napLuu() {
+  const raw = localStorage.getItem(khoaLuu()); if (!raw) return;
+  const d = JSON.parse(raw);
+  S.nhan = new Map(d.nhan); S.mo = new Set(d.mo); S.i = d.i || 0;
+  if (d.ten) { S.ten = d.ten; $("nguoi").value = d.ten; }
+}
+
+// ---- Danh sách bên trái ----
+function mauDaDan() {
+  const ds = new Set();
+  for (const m of $("mau").value.matchAll(/([\w]+)#([\w.-]+)/g)) ds.add(m[1] + "#" + m[2]);
+  return ds;
+}
+const tenNgan = (c) => c.bo.replace(/^dev_questions_/, "").replace(/\.json$/, "") + "#" + c.id;
+function lechAI(c) {
+  const n = S.nhan.get(khoa(c)), a = S.ai.get(khoa(c));
+  if (!n || !a || !S.mo.has(khoa(c))) return false;
+  return n.ket_qua !== a.ket_qua || Boolean(n.trich_dan_sai) !== Boolean(a.trich_dan_sai);
+}
+function chiSoLoc() {
+  const loc = $("loc").value, mau = mauDaDan();
+  return S.cau.map((c, i) => [c, i]).filter(([c]) => {
+    const n = S.nhan.get(khoa(c)), a = S.ai.get(khoa(c));
+    if (loc === "chua") return !n;
+    if (loc === "uu_tien") return a && a.do_tu_tin && a.do_tu_tin !== "cao";
+    if (loc === "mau") return mau.has(tenNgan(c));
+    if (loc === "lech") return lechAI(c);
+    if (loc === "sai") return n && (n.ket_qua === "sai" || n.ket_qua === "bia" || n.trich_dan_sai);
+    return true;
+  }).map(([, i]) => i);
+}
+function veDS() {
+  const ul = $("ds"); ul.innerHTML = "";
+  const mau = mauDaDan();
+  for (const i of chiSoLoc()) {
+    const c = S.cau[i], n = S.nhan.get(khoa(c));
+    const li = document.createElement("li");
+    if (i === S.i) li.className = "active";
+    const lop = !n ? "" : (n.ket_qua === "dung" || n.ket_qua === "tu_choi_dung") ? (n.trich_dan_sai ? "khac" : "dung") : "sai";
+    li.innerHTML = `<span class="dot ${lop}"></span><span class="q"><b>${esc(tenNgan(c))}</b> ${esc(c.question)}</span>` +
+      (mau.has(tenNgan(c)) ? '<span class="flag mau">mẫu</span>' : "") + (lechAI(c) ? '<span class="flag lech">lệch</span>' : "");
+    li.onclick = () => { S.i = i; luu(); veDS(); ve(); };
+    ul.appendChild(li);
+  }
+  const da = S.cau.filter((c) => S.nhan.has(khoa(c))).length;
+  const mo = S.cau.filter((c) => S.mo.has(khoa(c)) && S.ai.has(khoa(c)) && S.nhan.has(khoa(c)));
+  const trung = mo.filter((c) => !lechAI(c)).length;
+  // Hai lượt chạy cùng tên file tra-loi.jsonl (99 câu dev / 15 câu ngoài phạm vi): ghi rõ đang mở bộ nào
+  const bo = {};
+  for (const c of S.cau) { const t = c.bo.replace(/^dev_questions_/, "").replace(/\.json$/, ""); bo[t] = (bo[t] || 0) + 1; }
+  $("progress").innerHTML = `[${Object.entries(bo).map(([t, n]) => `${esc(t)} ${n}`).join(" · ")}] ` +
+    `Đã chấm <b>${da}/${S.cau.length}</b>` + (mo.length ? ` · trùng AI ${trung}/${mo.length}` : "");
+}
+
+// ---- Hiển thị một câu ----
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+// Tô các con số của đáp án (9; 3,6; 03 tuần...) trong câu trả lời và trích đoạn, để so nhanh bằng mắt
+function soCuaDapAn(c) {
+  const so = new Set();
+  for (const m of String(c.dap_an || "").matchAll(/\d+(?:[.,]\d+)?/g)) so.add(m[0]);
+  return [...so].sort((a, b) => b.length - a.length);
+}
+function to(text, so) {
+  let h = esc(text).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+  if (!so.length) return h;
+  const re = new RegExp("(?<![\\d.,])(" + so.map((x) => x.replace(/[.]/g, "\\.")).join("|") + ")(?![\\d]|[.,]\\d)", "g");
+  return h.replace(re, "<mark>$1</mark>");
+}
+function ve() {
+  const v = $("view");
+  if (!S.cau.length) return;
+  S.i = Math.min(Math.max(S.i, 0), S.cau.length - 1);
+  const c = S.cau[S.i], k = khoa(c), n = S.nhan.get(k) || {}, a = S.ai.get(k), so = soCuaDapAn(c);
+  const nhanSet = laNgoai(c) ? NHAN_NGOAI : NHAN_TRONG;
+  const ev = (c.bang_chung || []).map((b, j) => `
+    <details class="ev"${j === 0 ? " open" : ""}>
+      <summary><b>[${j + 1}]</b> <span>${esc(b.nguon)}</span><span class="score">điểm ${b.diem ?? "—"}</span></summary>
+      <div class="body">${b.vi_tri ? `<div class="loc">${esc(b.vi_tri)}</div>` : ""}<div class="text">${to(b.doan, so)}</div></div>
+    </details>`).join("");
+  const anAI = $("anAI").checked && !n.ket_qua;
+  let aiHtml;
+  if (!a) aiHtml = '<div class="ai hidden">Chưa nạp nhãn AI (cham-tay-claude.csv).</div>';
+  else if (anAI) aiHtml = '<div class="ai hidden">Nhãn AI đang ẩn: chấm xong câu này sẽ hiện để so.</div>';
+  else {
+    const lech = n.ket_qua && (n.ket_qua !== a.ket_qua || Boolean(n.trich_dan_sai) !== Boolean(a.trich_dan_sai));
+    aiHtml = `<div class="ai ${n.ket_qua ? (lech ? "diff" : "same") : ""}">
+      <b>AI:</b> ${esc(a.ket_qua)}${a.trich_dan_sai ? " + trích sai" : ""} · tự tin <b>${esc(a.do_tu_tin || "—")}</b>
+      ${n.ket_qua ? (lech ? " · <b>LỆCH</b> với bạn" : " · trùng với bạn") : ""}
+      ${a.ly_do ? `<div style="margin-top:4px">${esc(a.ly_do)}</div>` : ""}</div>`;
+  }
+  const [maLoi, ...phan] = (n.ly_do || "").split(":");
+  const coMa = LOAI_LOI.includes(maLoi.trim());
+  const lyDoTu = coMa ? phan.join(":").trim() : (n.ly_do || "");
+  v.innerHTML = `
+    <div class="card">
+      <div class="meta"><span><b>${esc(tenNgan(c))}</b> (${S.i + 1}/${S.cau.length})</span>
+        ${c.loai && c.loai !== "None" ? `<span>loại: ${esc(c.loai)}</span>` : ""}
+        ${c.dieu_dung ? `<span>nhãn Điều: <code>${esc(c.dieu_dung)}</code></span>` : ""}
+        <span>${laNgoai(c) ? "NGOÀI phạm vi" : "trong phạm vi"}</span></div>
+      <div class="question">${esc(c.question)}</div>
+    </div>
+    <div class="cols">
+      <div class="card"><h2>Đáp án chuẩn</h2>
+        <div class="answer-key text">${c.dap_an ? to(c.dap_an, []) : "<i>(không có — câu ngoài phạm vi: mong đợi hệ thống từ chối)</i>"}</div>
+        <div class="badges" style="margin-top:10px">
+          ${c.ngu_canh_co_doan_dung !== undefined ? `<span class="badge ${String(c.ngu_canh_co_doan_dung) === "true" ? "ok" : "bad"}">ngữ cảnh có đoạn đúng: ${c.ngu_canh_co_doan_dung}</span>` : ""}
+          ${c.khop_su_kien ? `<span class="badge">khớp con số: ${esc(c.khop_su_kien)}</span>` : ""}
+          ${c.tu_choi !== undefined ? `<span class="badge">từ chối: ${c.tu_choi}</span>` : ""}
+          ${c.thoi_gian_s ? `<span class="badge">${c.thoi_gian_s}s · ${c.token_vao ?? "?"}→${c.token_ra ?? "?"} token</span>` : ""}
+        </div>
+      </div>
+      <div class="card"><h2>Câu trả lời của hệ thống</h2><div class="text">${to(c.tra_loi, so)}</div></div>
+    </div>
+    <div class="card"><h2>Trích đoạn đã đưa vào LLM (${(c.bang_chung || []).length})</h2>${ev || "<i>Không có trích đoạn.</i>"}</div>
+    <div class="card grade">
+      <h2>Nhãn của bạn</h2>
+      <div class="choices">${nhanSet.map(([val, txt, ph]) =>
+        `<label class="c-${val}"><input type="radio" name="kq" value="${val}"${n.ket_qua === val ? " checked" : ""}>${txt} <kbd>${ph}</kbd></label>`).join("")}
+        <label><input type="checkbox" id="tds"${n.trich_dan_sai ? " checked" : ""}>Trích sai Điều / văn bản <kbd>T</kbd></label>
+      </div>
+      <div class="row">
+        <select id="maLoi" title="Loại lỗi (ghi vào đầu ly_do)">
+          ${LOAI_LOI.map((m) => `<option value="${m}"${coMa && maLoi.trim() === m ? " selected" : ""}>${m || "— loại lỗi —"}</option>`).join("")}
+        </select>
+        <input type="text" id="lyDo" placeholder="Lý do ngắn: chỗ sai, căn cứ đúng (Điều/khoản)…" value="${esc(lyDoTu)}">
+      </div>
+      ${aiHtml}
+      <div class="nav"><button id="truoc">← Câu trước <kbd>K</kbd></button>
+        <span class="help">Chấm theo văn bản gốc, không theo trí nhớ · <kbd>J</kbd>/<kbd>K</kbd> chuyển câu · <kbd>Ctrl</kbd>+<kbd>S</kbd> xuất CSV</span>
+        <button id="sau">Câu sau → <kbd>J</kbd></button></div>
+    </div>`;
+  v.querySelectorAll('input[name=kq]').forEach((r) => r.onchange = ghi);
+  $("tds").onchange = ghi; $("maLoi").onchange = ghi; $("lyDo").oninput = ghi;
+  $("truoc").onclick = () => chuyen(-1); $("sau").onclick = () => chuyen(1);
+}
+
+function ghi() {
+  const c = S.cau[S.i], k = khoa(c);
+  const kq = document.querySelector('input[name=kq]:checked')?.value || "";
+  const cu = S.nhan.get(k);
+  const ma = $("maLoi").value, tu = $("lyDo").value.trim();
+  const nhan = { ket_qua: kq, trich_dan_sai: $("tds").checked ? "co" : "", ly_do: ma ? (tu ? `${ma}: ${tu}` : ma) : tu,
+                 cham_khi_thay_ai: cu?.cham_khi_thay_ai || "" };
+  // Đặt hoặc đổi nhãn khi nhãn AI của câu đang hiện: ghi lại để khi tính κ biết câu nào có thể bị nhãn AI dẫn dắt
+  const thayAI = S.ai.has(k) && (S.mo.has(k) || !$("anAI").checked);
+  if (thayAI && (cu?.ket_qua || "") !== nhan.ket_qua || thayAI && cu && cu.trich_dan_sai !== nhan.trich_dan_sai)
+    nhan.cham_khi_thay_ai = "co";
+  if (!kq) S.nhan.delete(k); else S.nhan.set(k, nhan);
+  const vuaCham = kq && !S.mo.has(k);
+  if (kq) S.mo.add(k);
+  luu(); veDS();
+  if (vuaCham || document.activeElement?.name === "kq") ve();
+}
+function chuyen(d) {
+  const ds = chiSoLoc(); if (!ds.length) return;
+  const vt = ds.indexOf(S.i);
+  S.i = vt < 0 ? ds[0] : ds[Math.min(Math.max(vt + d, 0), ds.length - 1)];
+  luu(); veDS(); ve(); window.scrollTo(0, 0);
+}
+
+// ---- Xuất CSV đúng định dạng eval/doi_chieu_cham.py đọc ----
+function xuat() {
+  const ten = $("nguoi").value.trim();
+  if (!ten) { $("nguoi").focus(); $("nguoi").style.borderColor = "var(--bad)"; return; }
+  S.ten = ten; luu();
+  const cot = ["bo", "id", "question", "pham_vi", "dap_an", "tra_loi", "ket_qua", "trich_dan_sai", "ly_do", "nguoi_cham", "cham_khi_thay_ai"];
+  const dong = S.cau.map((c) => {
+    const n = S.nhan.get(khoa(c)) || {};
+    const r = { ...c, pham_vi: c.pham_vi || "", ket_qua: n.ket_qua || "", trich_dan_sai: n.trich_dan_sai || "",
+                ly_do: n.ly_do || "", nguoi_cham: n.ket_qua ? ten : "", cham_khi_thay_ai: n.cham_khi_thay_ai || "" };
+    return cot.map((h) => oCSV(String(r[h] ?? ""))).join(",");
+  });
+  const blob = new Blob(["﻿" + [cot.join(","), ...dong].join("\r\n") + "\r\n"], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  const slug = ten.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D")
+                  .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  a.href = URL.createObjectURL(blob); a.download = `cham-tay-${slug || "nguoi"}.csv`; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+// ---- Sự kiện ----
+$("btnMo").onclick = () => $("fileInput").click();
+$("fileInput").onchange = (e) => { napFiles([...e.target.files]); e.target.value = ""; };  // chọn lại cùng file vẫn nạp
+$("btnXuat").onclick = xuat;
+$("nguoi").oninput = (e) => { S.ten = e.target.value.trim(); e.target.style.borderColor = ""; luu(); };
+$("anAI").onchange = ve;
+$("loc").onchange = () => { veDS(); };
+$("mau").oninput = () => { veDS(); };
+for (const ev of ["dragover", "dragenter"]) document.addEventListener(ev, (e) => { e.preventDefault(); $("drop")?.classList.add("drag"); });
+document.addEventListener("dragleave", () => $("drop")?.classList.remove("drag"));
+document.addEventListener("drop", (e) => { e.preventDefault(); napFiles([...e.dataTransfer.files]); });
+document.addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "s") { e.preventDefault(); if (S.cau.length) xuat(); return; }
+  if (!S.cau.length || /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName) &&
+      document.activeElement.type !== "radio" && document.activeElement.type !== "checkbox") return;
+  const c = S.cau[S.i], phim = e.key.toUpperCase();
+  if (phim === "J") return chuyen(1);
+  if (phim === "K") return chuyen(-1);
+  if (phim === "T") { $("tds").checked = !$("tds").checked; return ghi(); }
+  const hit = (laNgoai(c) ? NHAN_NGOAI : NHAN_TRONG).find(([, , ph]) => ph === phim);
+  if (hit) { document.querySelector(`input[name=kq][value=${hit[0]}]`).checked = true; ghi(); }
+});
+</script>
+</body>
+</html>
