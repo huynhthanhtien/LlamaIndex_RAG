@@ -1,7 +1,7 @@
 import unittest
 
 from llama_index.core.schema import MetadataMode
-from processed_loader import front_matter, load_processed, nguon_trich, thong_ke
+from processed_loader import dong_bat_dau, front_matter, load_processed, nguon_trich, thong_ke
 from tests import tmp_dir
 
 VAN_BAN = """---
@@ -72,6 +72,21 @@ class TestProcessedLoader(unittest.TestCase):
         tk = thong_ke(self.nodes)
         self.assertEqual(tk["tong_so_node"], 2)
         self.assertEqual(tk["so_van_ban"], 1)
+
+    def test_dong_bat_dau(self) -> None:
+        """Trích dẫn mở được đúng dòng heading của Node trong file tầng 2 (nhận xét tuần 7, ý 8)."""
+        dong = VAN_BAN.splitlines()
+        self.assertEqual(dong[dong_bat_dau(self.path, self.nodes[0].text) - 1], "### Điều 1. Nội dung một")  # type: ignore[operator]
+        self.assertEqual(dong[dong_bat_dau(self.path, self.nodes[1].text) - 1], "#### Sửa đổi Điều 1")  # type: ignore[operator]
+        self.assertIsNone(dong_bat_dau(self.path, "Điều 99. Không có trong file"))
+
+    def test_dong_bat_dau_heading_trung(self) -> None:
+        """Quyết định ban hành và quy chế kèm theo cùng có "Điều 1.": phải khớp cả dòng nội dung sau heading."""
+        p = self.path.with_name("trung.md")
+        p.write_text("---\n---\n# Quyết định ban hành\n### Điều 1. Phạm vi\nBan hành kèm theo Quyết định này.\n"
+                     "# Quy chế\n### Điều 1. Phạm vi\nQuy chế áp dụng cho sinh viên chính quy.\n", encoding="utf-8")
+        self.assertEqual(dong_bat_dau(p, "Điều 1. Phạm vi\nQuy chế áp dụng cho sinh viên chính quy."), 7)
+        self.assertEqual(dong_bat_dau(p, "Điều 1. Phạm vi\nBan hành kèm theo Quyết định này."), 4)
 
 
 if __name__ == "__main__":

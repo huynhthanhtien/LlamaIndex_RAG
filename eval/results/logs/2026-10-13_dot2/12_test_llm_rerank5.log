@@ -1,0 +1,655 @@
+rerank bật: top_n=5, max_length=2048, similarity_top_k=10
+test_buoc_thoi_hoc_hai_lan_lien_tiep (tests.test_llm.TestLLM.test_buoc_thoi_hoc_hai_lan_lien_tiep)
+FAIL
+test_diem_a_he_10 (tests.test_llm.TestLLM.test_diem_a_he_10)
+A ứng với 8,5--10 trên thang 10; trước khi sửa prompt, LLM trả lời "4,0 điểm hệ 10". ... ok
+test_diem_d_cong_he_10 (tests.test_llm.TestLLM.test_diem_d_cong_he_10)
+QĐ 3183: D+ từ 4,8 đến 5,4 trên thang 10. ... ok
+test_khong_lo_suy_luan (tests.test_llm.TestLLM.test_khong_lo_suy_luan)
+thinking=False: câu trả lời không chứa khối <think> hay chuỗi điều khiển /no_think. ... ok
+test_rut_hoc_phan (tests.test_llm.TestLLM.test_rut_hoc_phan)
+QĐ 3183 sửa đổi khoản 4 Điều 7: rút học phần trong 03 tuần đầu của học kỳ. ... ERROR
+test_tat_dinh (tests.test_llm.TestLLM.test_tat_dinh)
+temperature=0 + seed: cùng prompt gọi hai lần cho cùng kết quả. ... ERROR
+test_tin_chi_cu_nhan (tests.test_llm.TestLLM.test_tin_chi_cu_nhan)
+Quy chế 2021, Điều 2: cử nhân tối thiểu 120 tín chỉ. ... ERROR
+test_tu_choi_diem_ren_luyen (tests.test_llm.TestLLM.test_tu_choi_diem_ren_luyen) ... ERROR
+test_tu_choi_hoc_phi (tests.test_llm.TestLLM.test_tu_choi_hoc_phi) ... ERROR
+test_xep_loai_xuat_sac (tests.test_llm.TestLLM.test_xep_loai_xuat_sac)
+Quy chế 2021, khoản 4 Điều 10: xuất sắc từ 3,6 đến 4,0. ... ERROR
+
+======================================================================
+ERROR: test_rut_hoc_phan (tests.test_llm.TestLLM.test_rut_hoc_phan)
+QĐ 3183 sửa đổi khoản 4 Điều 7: rút học phần trong 03 tuần đầu của học kỳ.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpcore/_sync/connection.py", line 103, in handle_request
+    return self._connection.handle_request(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpcore/_sync/http11.py", line 136, in handle_request
+    raise exc
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpcore/_sync/http11.py", line 106, in handle_request
+    ) = self._receive_response_headers(**kwargs)
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpcore/_sync/http11.py", line 177, in _receive_response_headers
+    event = self._receive_event(timeout=timeout)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpcore/_sync/http11.py", line 217, in _receive_event
+    data = self._network_stream.read(
+        self.READ_NUM_BYTES, timeout=timeout
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpcore/_backends/sync.py", line 126, in read
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/usr/lib64/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ReadTimeout: The read operation timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 95, in test_rut_hoc_phan
+    tra_loi, nguon = self.hoi("Sinh viên được rút học phần trong thời gian nào?")
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 67, in hoi
+    response = TestLLM.engine.query(cau_hoi)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/base/base_query_engine.py", line 44, in query
+    query_result = self._query(str_or_query_bundle)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/query_engine/retriever_query_engine.py", line 209, in _query
+    response = self._response_synthesizer.synthesize(
+        query=query_bundle,
+        nodes=nodes,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/base.py", line 288, in synthesize
+    response_str = self.get_response(
+        query_str=query.query_str,
+    ...<4 lines>...
+        **response_kwargs,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/compact_and_refine.py", line 43, in get_response
+    return super().get_response(
+           ~~~~~~~~~~~~~~~~~~~~^
+        query_str=query_str,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 592, in get_response
+    return self._run_refine_loop(
+           ~~~~~~~~~~~~~~~~~~~~~^
+        query_str=query_str,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 482, in _run_refine_loop
+    if resp := self._update_response(program, prompt_kwargs, response_kwargs):
+               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 336, in _update_response
+    program(
+    ~~~~~~~^
+        **program_kwargs,
+        ^^^^^^^^^^^^^^^^^
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    ),
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 109, in __call__
+    answer = self._llm.predict(
+        self._prompt,
+        **kwds,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/llm.py", line 637, in predict
+    chat_response = self.chat(messages)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/callbacks.py", line 179, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/llms/ollama/base.py", line 407, in chat
+    response = self.client.chat(
+        model=self.model,
+    ...<6 lines>...
+        keep_alive=self.keep_alive,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 387, in chat
+    return self._request(
+           ~~~~~~~~~~~~~^
+      ChatResponse,
+      ^^^^^^^^^^^^^
+    ...<14 lines>...
+      stream=stream,
+      ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 199, in _request
+    return cls(**self._request_raw(*args, **kwargs).json())
+                 ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 139, in _request_raw
+    r = self._client.request(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpx/_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib64/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ReadTimeout: The read operation timed out
+
+======================================================================
+ERROR: test_tat_dinh (tests.test_llm.TestLLM.test_tat_dinh)
+temperature=0 + seed: cùng prompt gọi hai lần cho cùng kết quả.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 80, in test_tat_dinh
+    self.assertEqual(llm.complete(prompt).text, llm.complete(prompt).text)
+                     ~~~~~~~~~~~~^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/callbacks.py", line 443, in wrapped_llm_predict
+    f_return_val = f(_self, *args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/llms/ollama/base.py", line 669, in complete
+    return chat_to_completion_decorator(self.chat)(prompt, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/base/llms/generic_utils.py", line 184, in wrapper
+    chat_response = func(messages, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/callbacks.py", line 179, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/llms/ollama/base.py", line 407, in chat
+    response = self.client.chat(
+        model=self.model,
+    ...<6 lines>...
+        keep_alive=self.keep_alive,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 387, in chat
+    return self._request(
+           ~~~~~~~~~~~~~^
+      ChatResponse,
+      ^^^^^^^^^^^^^
+    ...<14 lines>...
+      stream=stream,
+      ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 199, in _request
+    return cls(**self._request_raw(*args, **kwargs).json())
+                 ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 145, in _request_raw
+    raise ConnectionError(CONNECTION_ERROR_MESSAGE) from None
+ConnectionError: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download
+
+======================================================================
+ERROR: test_tin_chi_cu_nhan (tests.test_llm.TestLLM.test_tin_chi_cu_nhan)
+Quy chế 2021, Điều 2: cử nhân tối thiểu 120 tín chỉ.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 101, in test_tin_chi_cu_nhan
+    tra_loi, _ = self.hoi("Học cử nhân cần tích lũy tối thiểu bao nhiêu tín chỉ?")
+                 ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 67, in hoi
+    response = TestLLM.engine.query(cau_hoi)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/base/base_query_engine.py", line 44, in query
+    query_result = self._query(str_or_query_bundle)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/query_engine/retriever_query_engine.py", line 209, in _query
+    response = self._response_synthesizer.synthesize(
+        query=query_bundle,
+        nodes=nodes,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/base.py", line 288, in synthesize
+    response_str = self.get_response(
+        query_str=query.query_str,
+    ...<4 lines>...
+        **response_kwargs,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/compact_and_refine.py", line 43, in get_response
+    return super().get_response(
+           ~~~~~~~~~~~~~~~~~~~~^
+        query_str=query_str,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 592, in get_response
+    return self._run_refine_loop(
+           ~~~~~~~~~~~~~~~~~~~~~^
+        query_str=query_str,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 482, in _run_refine_loop
+    if resp := self._update_response(program, prompt_kwargs, response_kwargs):
+               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 336, in _update_response
+    program(
+    ~~~~~~~^
+        **program_kwargs,
+        ^^^^^^^^^^^^^^^^^
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    ),
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 109, in __call__
+    answer = self._llm.predict(
+        self._prompt,
+        **kwds,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/llm.py", line 637, in predict
+    chat_response = self.chat(messages)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/callbacks.py", line 179, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/llms/ollama/base.py", line 407, in chat
+    response = self.client.chat(
+        model=self.model,
+    ...<6 lines>...
+        keep_alive=self.keep_alive,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 387, in chat
+    return self._request(
+           ~~~~~~~~~~~~~^
+      ChatResponse,
+      ^^^^^^^^^^^^^
+    ...<14 lines>...
+      stream=stream,
+      ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 199, in _request
+    return cls(**self._request_raw(*args, **kwargs).json())
+                 ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 145, in _request_raw
+    raise ConnectionError(CONNECTION_ERROR_MESSAGE) from None
+ConnectionError: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download
+
+======================================================================
+ERROR: test_tu_choi_diem_ren_luyen (tests.test_llm.TestLLM.test_tu_choi_diem_ren_luyen)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 149, in test_tu_choi_diem_ren_luyen
+    tra_loi, _ = self.hoi("Điểm rèn luyện được tính như thế nào?")
+                 ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 67, in hoi
+    response = TestLLM.engine.query(cau_hoi)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/base/base_query_engine.py", line 44, in query
+    query_result = self._query(str_or_query_bundle)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/query_engine/retriever_query_engine.py", line 209, in _query
+    response = self._response_synthesizer.synthesize(
+        query=query_bundle,
+        nodes=nodes,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/base.py", line 288, in synthesize
+    response_str = self.get_response(
+        query_str=query.query_str,
+    ...<4 lines>...
+        **response_kwargs,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/compact_and_refine.py", line 43, in get_response
+    return super().get_response(
+           ~~~~~~~~~~~~~~~~~~~~^
+        query_str=query_str,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 592, in get_response
+    return self._run_refine_loop(
+           ~~~~~~~~~~~~~~~~~~~~~^
+        query_str=query_str,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 482, in _run_refine_loop
+    if resp := self._update_response(program, prompt_kwargs, response_kwargs):
+               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 336, in _update_response
+    program(
+    ~~~~~~~^
+        **program_kwargs,
+        ^^^^^^^^^^^^^^^^^
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    ),
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 109, in __call__
+    answer = self._llm.predict(
+        self._prompt,
+        **kwds,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/llm.py", line 637, in predict
+    chat_response = self.chat(messages)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/callbacks.py", line 179, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/llms/ollama/base.py", line 407, in chat
+    response = self.client.chat(
+        model=self.model,
+    ...<6 lines>...
+        keep_alive=self.keep_alive,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 387, in chat
+    return self._request(
+           ~~~~~~~~~~~~~^
+      ChatResponse,
+      ^^^^^^^^^^^^^
+    ...<14 lines>...
+      stream=stream,
+      ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 199, in _request
+    return cls(**self._request_raw(*args, **kwargs).json())
+                 ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 145, in _request_raw
+    raise ConnectionError(CONNECTION_ERROR_MESSAGE) from None
+ConnectionError: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download
+
+======================================================================
+ERROR: test_tu_choi_hoc_phi (tests.test_llm.TestLLM.test_tu_choi_hoc_phi)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 143, in test_tu_choi_hoc_phi
+    tra_loi, _ = self.hoi("Bao nhiêu tiền một tín chỉ?")
+                 ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 67, in hoi
+    response = TestLLM.engine.query(cau_hoi)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/base/base_query_engine.py", line 44, in query
+    query_result = self._query(str_or_query_bundle)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/query_engine/retriever_query_engine.py", line 209, in _query
+    response = self._response_synthesizer.synthesize(
+        query=query_bundle,
+        nodes=nodes,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/base.py", line 288, in synthesize
+    response_str = self.get_response(
+        query_str=query.query_str,
+    ...<4 lines>...
+        **response_kwargs,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/compact_and_refine.py", line 43, in get_response
+    return super().get_response(
+           ~~~~~~~~~~~~~~~~~~~~^
+        query_str=query_str,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 592, in get_response
+    return self._run_refine_loop(
+           ~~~~~~~~~~~~~~~~~~~~~^
+        query_str=query_str,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 482, in _run_refine_loop
+    if resp := self._update_response(program, prompt_kwargs, response_kwargs):
+               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 336, in _update_response
+    program(
+    ~~~~~~~^
+        **program_kwargs,
+        ^^^^^^^^^^^^^^^^^
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    ),
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 109, in __call__
+    answer = self._llm.predict(
+        self._prompt,
+        **kwds,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/llm.py", line 637, in predict
+    chat_response = self.chat(messages)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/callbacks.py", line 179, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/llms/ollama/base.py", line 407, in chat
+    response = self.client.chat(
+        model=self.model,
+    ...<6 lines>...
+        keep_alive=self.keep_alive,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 387, in chat
+    return self._request(
+           ~~~~~~~~~~~~~^
+      ChatResponse,
+      ^^^^^^^^^^^^^
+    ...<14 lines>...
+      stream=stream,
+      ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 199, in _request
+    return cls(**self._request_raw(*args, **kwargs).json())
+                 ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 145, in _request_raw
+    raise ConnectionError(CONNECTION_ERROR_MESSAGE) from None
+ConnectionError: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download
+
+======================================================================
+ERROR: test_xep_loai_xuat_sac (tests.test_llm.TestLLM.test_xep_loai_xuat_sac)
+Quy chế 2021, khoản 4 Điều 10: xuất sắc từ 3,6 đến 4,0.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 106, in test_xep_loai_xuat_sac
+    tra_loi, _ = self.hoi("Điểm trung bình tích lũy bao nhiêu thì được xếp loại xuất sắc?")
+                 ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 67, in hoi
+    response = TestLLM.engine.query(cau_hoi)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/base/base_query_engine.py", line 44, in query
+    query_result = self._query(str_or_query_bundle)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/query_engine/retriever_query_engine.py", line 209, in _query
+    response = self._response_synthesizer.synthesize(
+        query=query_bundle,
+        nodes=nodes,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/base.py", line 288, in synthesize
+    response_str = self.get_response(
+        query_str=query.query_str,
+    ...<4 lines>...
+        **response_kwargs,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/compact_and_refine.py", line 43, in get_response
+    return super().get_response(
+           ~~~~~~~~~~~~~~~~~~~~^
+        query_str=query_str,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 592, in get_response
+    return self._run_refine_loop(
+           ~~~~~~~~~~~~~~~~~~~~~^
+        query_str=query_str,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 482, in _run_refine_loop
+    if resp := self._update_response(program, prompt_kwargs, response_kwargs):
+               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 336, in _update_response
+    program(
+    ~~~~~~~^
+        **program_kwargs,
+        ^^^^^^^^^^^^^^^^^
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    ),
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 109, in __call__
+    answer = self._llm.predict(
+        self._prompt,
+        **kwds,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/llm.py", line 637, in predict
+    chat_response = self.chat(messages)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/callbacks.py", line 179, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/llms/ollama/base.py", line 407, in chat
+    response = self.client.chat(
+        model=self.model,
+    ...<6 lines>...
+        keep_alive=self.keep_alive,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 387, in chat
+    return self._request(
+           ~~~~~~~~~~~~~^
+      ChatResponse,
+      ^^^^^^^^^^^^^
+    ...<14 lines>...
+      stream=stream,
+      ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 199, in _request
+    return cls(**self._request_raw(*args, **kwargs).json())
+                 ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 145, in _request_raw
+    raise ConnectionError(CONNECTION_ERROR_MESSAGE) from None
+ConnectionError: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download
+
+======================================================================
+FAIL: test_buoc_thoi_hoc_hai_lan_lien_tiep (tests.test_llm.TestLLM.test_buoc_thoi_hoc_hai_lan_lien_tiep)
+Khoản 2 Điều 11: buộc thôi học khi *quá hai lần* bị cảnh báo *liên tiếp*.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 117, in test_buoc_thoi_hoc_hai_lan_lien_tiep
+    self.assertRegex(tra_loi, r"\bkhông\b")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Regex didn't match: '\\bkhông\\b' not found in 'theo điều 11, quy chế đào tạo trình độ đại học sgu 2021: "người học bị buộc thôi học trong các trường hợp sau: a) quá hai lần bị cảnh báo liên tiếp đối với kết quả học tập trong thời gian theo học tại trường: ..." trong trường hợp của bạn, bạn đã bị cảnh báo ở kỳ 1 và kỳ 3, tức là hai lần bị cảnh báo liên tiếp. do đó, bạn sẽ bị buộc thôi học. **trả lời:** có, bạn sẽ bị buộc thôi học theo điều 11, quy chế đào tạo trình độ đại học sgu 2021.'
+
+----------------------------------------------------------------------
+Ran 10 tests in 248.973s
+
+FAILED (failures=1, errors=6)

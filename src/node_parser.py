@@ -18,7 +18,8 @@ def extract_dieu_number(text: str) -> str:
     match = DIEU_NUMBER_PATTERN.match(text.strip())
     return match.group(1) if match else "khong_ro"
 
-
+# trích xuát văn bản theo đặc trưng 
+# đặc trưng của văn bản đào tạo được trích xuất theo từng điẻu ví dụ đièu 1 khoản 1, ....
 def parse_by_dieu(documents: list[Document], max_chunk_tokens: int = 1024) -> list[TextNode]:
     """Phân tách danh sách Document thành các TextNode theo từng Điều.
 
@@ -26,13 +27,15 @@ def parse_by_dieu(documents: list[Document], max_chunk_tokens: int = 1024) -> li
     - Giữ nguyên toàn bộ metadata gốc của Document và gắn thêm metadata['dieu'].
     - Trường hợp Document không có 'Điều', giữ nguyên toàn bộ và gắn dieu='khong_co_dieu'.
     """
+    # khai báo số lượng token tối đa, chuck_overlap là chồng lấp tức là sẽ có một đoạn văn bản xuất hiện ở 2 node mục tiêu là không làm mất ngữ cảnh của văn bản khi nó quá dài, cắt ngang
     sub_splitter = SentenceSplitter(chunk_size=max_chunk_tokens, chunk_overlap=50)
     all_nodes: list[TextNode] = []
     dieu_khong_khop = 0
-
+    # điều đọc lạo bàng biểu thức re bên trên DIEU_PATTERN
     for doc in documents:
+        # trả về danh sách diều trong document này 
         matches = DIEU_PATTERN.findall(doc.text)
-
+        # if khôgn tìm tháy <==> danh sách rỗng 
         if not matches:
             dieu_khong_khop += 1
             all_nodes.append(
@@ -42,12 +45,13 @@ def parse_by_dieu(documents: list[Document], max_chunk_tokens: int = 1024) -> li
                 )
             )
             continue
-
+        # tách nội dung text theo điều X 
         for dieu_text in matches:
             dieu_so = extract_dieu_number(dieu_text)
             base_metadata = {"dieu": dieu_so, **doc.metadata}
             estimated_tokens = len(dieu_text.split())
-
+            # nếu đội dài <= max_chunk_tokens thì sẽ được lưu thành 1 node 
+            # nguợc lại dữ liệu quá dài không lưu được một node thì sẽ chia ra nhiều phần, thêm metadata để nhận biết 
             if estimated_tokens <= max_chunk_tokens:
                 all_nodes.append(TextNode(text=dieu_text.strip(), metadata=base_metadata))
             else:
@@ -59,13 +63,13 @@ def parse_by_dieu(documents: list[Document], max_chunk_tokens: int = 1024) -> li
                             metadata={**base_metadata, "phan": j + 1},
                         )
                     )
-
+    # log văn bản này có cấu trúc theo điều
     if dieu_khong_khop:
         logger.warning(f"{dieu_khong_khop} Document không khớp mẫu 'Điều X'.")
 
     return all_nodes
 
-
+# đánh giá 
 def validate_nodes(nodes: list[TextNode]) -> dict[str, Any]:
     """Thống kê định lượng chất lượng của danh sách TextNode sau khi parse."""
     total = len(nodes)

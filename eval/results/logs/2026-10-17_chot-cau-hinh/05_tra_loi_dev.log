@@ -1,0 +1,183 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:01<01:17,  5.00it/s]Loading weights: 100%|██████████| 391/391 [00:01<00:00, 384.30it/s]
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights:  58%|█████▊    | 229/393 [00:00<00:00, 2281.65it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 2277.21it/s]
+=== moi | dev_questions_dot1.json (20 câu) ===
+1/20 xong (9.06s, lượt LLM 1, token 3552/110)
+2/20 xong (8.55s, lượt LLM 1, token 4082/111)
+3/20 xong (7.83s, lượt LLM 1, token 3309/110)
+4/20 xong (6.15s, lượt LLM 1, token 2311/91)
+5/20 xong (7.92s, lượt LLM 1, token 2821/99)
+6/20 xong (11.17s, lượt LLM 1, token 3549/185)
+7/20 xong (7.84s, lượt LLM 1, token 3329/144)
+8/20 xong (9.12s, lượt LLM 1, token 3899/94)
+9/20 xong (5.74s, lượt LLM 1, token 2468/44)
+10/20 xong (7.86s, lượt LLM 1, token 2442/144)
+11/20 xong (13.17s, lượt LLM 1, token 2148/246)
+12/20 xong (6.56s, lượt LLM 1, token 2460/98)
+13/20 xong (11.78s, lượt LLM 1, token 2898/185)
+14/20 xong (5.92s, lượt LLM 1, token 2668/80)
+15/20 xong (9.21s, lượt LLM 1, token 3064/111)
+16/20 xong (14.77s, lượt LLM 1, token 3554/276)
+17/20 xong (49.74s, lượt LLM 1, token 2016/1049)
+18/20 xong (9.37s, lượt LLM 1, token 1210/153)
+19/20 xong (16.15s, lượt LLM 1, token 1398/305)
+20/20 xong (6.45s, lượt LLM 1, token 1572/87)
+{"so_cau": 20, "so_cau_loi": 0, "so_cau_phai_thu_lai": 0, "thoi_gian_trung_vi_s": 8.8, "thoi_gian_p90_s": 14.77, "token_vao_tb": 2738, "token_ra_tb": 186, "token_moi_giay_tb": 24.8, "so_luot_llm_toi_da": 1, "so_cau_nhieu_luot_llm": 0}
+Đã ghi /mnt/data/1_Projects/sgu-rag-llamaindex/eval/results/tra-loi-dev-dot1-moi-2026-10-17.md / .json
+=== moi | dev_questions_dot2.json (15 câu) ===
+1/15 xong (8.19s, lượt LLM 1, token 3400/73)
+  lỗi lần 1: ResponseError: {"type":"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-error
+  lỗi lần 2: ResponseError: <!DOCTYPE html>
+
+
+
+ <html class="no-js" lang="en-US"> 
+<head>
+<title>Cloudflare Tunnel error | horses-poc
+  lỗi lần 3: ResponseError: <!DOCTYPE html>
+
+
+
+ <html class="no-js" lang="en-US"> 
+<head>
+<title>Cloudflare Tunnel error | horses-poc
+  lỗi lần 4: ResponseError: {"type":"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-1xxx-erro
+2/15 xong (Nones, lượt LLM None, token None/None)
+  lỗi lần 1: ResponseError: {"type":"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-1xxx-erro
+  lỗi lần 2: ResponseError: {"type":"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-1xxx-erro
+  lỗi lần 3: ResponseError: {"type":"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-1xxx-erro
+  lỗi lần 4: ResponseError: {"type":"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-1xxx-erro
+3/15 xong (Nones, lượt LLM None, token None/None)
+  lỗi lần 1: ResponseError: {"type":"https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-1xxx-erro
+  lỗi lần 2: ResponseError: model runner has unexpectedly stopped, this may be due to resource limitations or an internal error, chec
+4/15 xong (36.9s, lượt LLM 1, token 2838/100)
+5/15 xong (8.06s, lượt LLM 1, token 3147/112)
+6/15 xong (7.42s, lượt LLM 1, token 3218/127)
+7/15 xong (8.69s, lượt LLM 1, token 2986/138)
+8/15 xong (8.3s, lượt LLM 1, token 2999/158)
+9/15 xong (10.46s, lượt LLM 1, token 3483/144)
+10/15 xong (8.88s, lượt LLM 1, token 3197/115)
+11/15 xong (9.22s, lượt LLM 1, token 2617/155)
+12/15 xong (9.31s, lượt LLM 1, token 1999/163)
+13/15 xong (10.25s, lượt LLM 1, token 3221/170)
+14/15 xong (14.37s, lượt LLM 1, token 3071/247)
+15/15 xong (8.35s, lượt LLM 1, token 3487/147)
+{"so_cau": 15, "so_cau_loi": 2, "so_cau_phai_thu_lai": 3, "thoi_gian_trung_vi_s": 8.88, "thoi_gian_p90_s": 14.37, "token_vao_tb": 3051, "token_ra_tb": 142, "token_moi_giay_tb": 27.3, "so_luot_llm_toi_da": 1, "so_cau_nhieu_luot_llm": 0}
+Đã ghi /mnt/data/1_Projects/sgu-rag-llamaindex/eval/results/tra-loi-dev-dot2-moi-2026-10-17.md / .json
+=== moi | dev_questions_dot3.json (15 câu) ===
+1/15 xong (7.2s, lượt LLM 1, token 2425/85)
+2/15 xong (7.75s, lượt LLM 1, token 2481/99)
+3/15 xong (7.37s, lượt LLM 1, token 2131/97)
+4/15 xong (6.14s, lượt LLM 1, token 2453/88)
+5/15 xong (8.8s, lượt LLM 1, token 2730/119)
+6/15 xong (16.6s, lượt LLM 1, token 2814/366)
+7/15 xong (5.25s, lượt LLM 1, token 2745/87)
+8/15 xong (10.08s, lượt LLM 1, token 3278/164)
+9/15 xong (11.81s, lượt LLM 1, token 2032/210)
+10/15 xong (10.58s, lượt LLM 1, token 2407/166)
+11/15 xong (5.53s, lượt LLM 1, token 2413/107)
+12/15 xong (8.13s, lượt LLM 1, token 2258/120)
+13/15 xong (8.77s, lượt LLM 1, token 1911/133)
+14/15 xong (6.59s, lượt LLM 1, token 2477/120)
+15/15 xong (16.03s, lượt LLM 1, token 2473/285)
+{"so_cau": 15, "so_cau_loi": 0, "so_cau_phai_thu_lai": 0, "thoi_gian_trung_vi_s": 8.13, "thoi_gian_p90_s": 16.03, "token_vao_tb": 2469, "token_ra_tb": 150, "token_moi_giay_tb": 24.7, "so_luot_llm_toi_da": 1, "so_cau_nhieu_luot_llm": 0}
+Đã ghi /mnt/data/1_Projects/sgu-rag-llamaindex/eval/results/tra-loi-dev-dot3-moi-2026-10-17.md / .json
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/eval/tra_loi_dev.py", line 197, in <module>
+    main()
+    ~~~~^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/eval/tra_loi_dev.py", line 169, in main
+    engine.query("Một năm học có bao nhiêu học kỳ?")  # khởi động (nạp model LLM/reranker), không tính
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/base/base_query_engine.py", line 44, in query
+    query_result = self._query(str_or_query_bundle)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/query_engine/retriever_query_engine.py", line 209, in _query
+    response = self._response_synthesizer.synthesize(
+        query=query_bundle,
+        nodes=nodes,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/base.py", line 288, in synthesize
+    response_str = self.get_response(
+        query_str=query.query_str,
+    ...<4 lines>...
+        **response_kwargs,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/compact_and_refine.py", line 43, in get_response
+    return super().get_response(
+           ~~~~~~~~~~~~~~~~~~~~^
+        query_str=query_str,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 592, in get_response
+    return self._run_refine_loop(
+           ~~~~~~~~~~~~~~~~~~~~~^
+        query_str=query_str,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 482, in _run_refine_loop
+    if resp := self._update_response(program, prompt_kwargs, response_kwargs):
+               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 336, in _update_response
+    program(
+    ~~~~~~~^
+        **program_kwargs,
+        ^^^^^^^^^^^^^^^^^
+        **response_kwargs,
+        ^^^^^^^^^^^^^^^^^^
+    ),
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/response_synthesizers/refine.py", line 109, in __call__
+    answer = self._llm.predict(
+        self._prompt,
+        **kwds,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/llm.py", line 637, in predict
+    chat_response = self.chat(messages)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/llms/callbacks.py", line 179, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/llms/ollama/base.py", line 407, in chat
+    response = self.client.chat(
+        model=self.model,
+    ...<6 lines>...
+        keep_alive=self.keep_alive,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 387, in chat
+    return self._request(
+           ~~~~~~~~~~~~~^
+      ChatResponse,
+      ^^^^^^^^^^^^^
+    ...<14 lines>...
+      stream=stream,
+      ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 199, in _request
+    return cls(**self._request_raw(*args, **kwargs).json())
+                 ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/ollama/_client.py", line 143, in _request_raw
+    raise ResponseError(e.response.text, e.response.status_code) from None
+ollama._types.ResponseError: model runner has unexpectedly stopped, this may be due to resource limitations or an internal error, check ollama server logs for details (status code: 500)

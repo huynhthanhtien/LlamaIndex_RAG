@@ -5,6 +5,8 @@ storage/
 # data/raw/*.pdf
 .env
 *.log
+# Log thí nghiệm là minh chứng báo cáo dẫn tới (make test, eval, pyright): phải commit cùng kết quả
+!eval/results/logs/**/*.log
 .tmp/
 # docs/
 # log câu hỏi của giao diện Gradio (app/app.py)

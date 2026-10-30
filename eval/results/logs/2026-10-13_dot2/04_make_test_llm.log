@@ -1,0 +1,73 @@
+RAG_TEST_LLM=1 RAG_PROFILE=server venv/bin/python -m unittest tests.test_llm -v
+test_buoc_thoi_hoc_hai_lan_lien_tiep (tests.test_llm.TestLLM.test_buoc_thoi_hoc_hai_lan_lien_tiep)
+Khoản 2 Điều 11: buộc thôi học khi *quá hai lần* bị cảnh báo *liên tiếp*. ... Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+FAIL
+test_diem_a_he_10 (tests.test_llm.TestLLM.test_diem_a_he_10)
+A ứng với 8,5--10 trên thang 10; trước khi sửa prompt, LLM trả lời "4,0 điểm hệ 10". ... ok
+test_diem_d_cong_he_10 (tests.test_llm.TestLLM.test_diem_d_cong_he_10)
+QĐ 3183: D+ từ 4,8 đến 5,4 trên thang 10. ... ok
+test_khong_lo_suy_luan (tests.test_llm.TestLLM.test_khong_lo_suy_luan)
+thinking=False: câu trả lời không chứa khối <think> hay chuỗi điều khiển /no_think. ... ok
+test_rut_hoc_phan (tests.test_llm.TestLLM.test_rut_hoc_phan)
+QĐ 3183 sửa đổi khoản 4 Điều 7: rút học phần trong 03 tuần đầu của học kỳ. ... FAIL
+test_tat_dinh (tests.test_llm.TestLLM.test_tat_dinh)
+temperature=0 + seed: cùng prompt gọi hai lần cho cùng kết quả. ... ok
+test_tin_chi_cu_nhan (tests.test_llm.TestLLM.test_tin_chi_cu_nhan)
+Quy chế 2021, Điều 2: cử nhân tối thiểu 120 tín chỉ. ... /usr/lib64/python3.14/typing.py:2308: ResourceWarning: unclosed <ssl.SSLSocket fd=41, family=2, type=1, proto=6, laddr=('192.168.43.107', 43712), raddr=('104.16.230.132', 443)>
+  def cast(typ, val):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_tu_choi_diem_ren_luyen (tests.test_llm.TestLLM.test_tu_choi_diem_ren_luyen) ... FAIL
+test_tu_choi_hoc_phi (tests.test_llm.TestLLM.test_tu_choi_hoc_phi) ... FAIL
+test_xep_loai_xuat_sac (tests.test_llm.TestLLM.test_xep_loai_xuat_sac)
+Quy chế 2021, khoản 4 Điều 10: xuất sắc từ 3,6 đến 4,0. ... ok
+
+======================================================================
+FAIL: test_buoc_thoi_hoc_hai_lan_lien_tiep (tests.test_llm.TestLLM.test_buoc_thoi_hoc_hai_lan_lien_tiep)
+Khoản 2 Điều 11: buộc thôi học khi *quá hai lần* bị cảnh báo *liên tiếp*.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 117, in test_buoc_thoi_hoc_hai_lan_lien_tiep
+    self.assertRegex(tra_loi, r"\bkhông\b")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Regex didn't match: '\\bkhông\\b' not found in 'theo quy định, nếu bạn bị cảnh báo học tập ở kỳ 1 và kỳ 3, điều này có nghĩa là bạn đã bị cảnh báo **hai lần liên tiếp** trong thời gian theo học tại trường. do đó, bạn **sẽ bị buộc thôi học**.'
+
+======================================================================
+FAIL: test_rut_hoc_phan (tests.test_llm.TestLLM.test_rut_hoc_phan)
+QĐ 3183 sửa đổi khoản 4 Điều 7: rút học phần trong 03 tuần đầu của học kỳ.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 96, in test_rut_hoc_phan
+    self.assertRegex(tra_loi, r"\b0?3 tuần")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Regex didn't match: '\\b0?3 tuần' not found in 'sinh viên được rút học phần trong thời gian sau 02 tuần kể từ đầu học kì chính và sau 01 tuần kể từ đầu học kì phụ, nhưng không muộn quá 05 tuần đối với học kì chính và 02 tuần đối với học kì phụ.'
+
+======================================================================
+FAIL: test_tu_choi_diem_ren_luyen (tests.test_llm.TestLLM.test_tu_choi_diem_ren_luyen)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 150, in test_tu_choi_diem_ren_luyen
+    self.assertTuChoi(tra_loi)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 140, in assertTuChoi
+    self.assertRegex(tra_loi, TU_CHOI)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: Regex didn't match: 'không tìm thấy|không có thông tin|không đề cập|không nêu|không (được )?quy định trong' not found in 'điểm rèn luyện được tính dựa trên các tiêu chí và quy định cụ thể trong quy chế công tác cố vấn học tập, bao gồm việc đánh giá kết quả rèn luyện của sinh viên theo quy định của nhà trường. cụ thể, cố vấn học tập có trách nhiệm nắm vững cách đánh giá kết quả rèn luyện của sinh viên và hướng dẫn sinh viên thực hiện đúng các quy định liên quan.'
+
+======================================================================
+FAIL: test_tu_choi_hoc_phi (tests.test_llm.TestLLM.test_tu_choi_hoc_phi)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 144, in test_tu_choi_hoc_phi
+    self.assertTuChoi(tra_loi)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 140, in assertTuChoi
+    self.assertRegex(tra_loi, TU_CHOI)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: Regex didn't match: 'không tìm thấy|không có thông tin|không đề cập|không nêu|không (được )?quy định trong' not found in '/ no_think'
+
+----------------------------------------------------------------------
+Ran 10 tests in 181.771s
+
+FAILED (failures=4)
+make: *** [Makefile:25: test-llm] Error 1

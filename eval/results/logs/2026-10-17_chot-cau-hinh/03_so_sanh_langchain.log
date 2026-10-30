@@ -1,0 +1,64 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:01<02:05,  3.07it/s]Loading weights: 100%|██████████| 391/391 [00:01<00:00, 232.23it/s]
+LangChain: embed 118 Node trong 16.9 s (cuda)
+
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:01<02:14,  2.86it/s]Loading weights: 100%|██████████| 391/391 [00:01<00:00, 220.33it/s]
+test_questions_01.json | llamaindex (31 câu): R@1=81% [68%–94%]  R@3=97% [90%–100%]  R@5=97% [90%–100%]  R@10=100% [100%–100%]
+  MRR=0.882  MRR@3=0.876  nDCG@1=0.806  thời gian/câu: 42.0 ms (p95 46.1 ms)
+  Văn bản của Node top-1: [('Quy chế đào tạo trình độ đại học SGU 202', 23), ('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 4), ('QĐ 810 về học cùng lúc hai chương trình', 3), ('QĐ 2375/2022 về chuyển chương trình, ngà', 1)]
+  ngoài top-3: Sinh viên năm thứ hai được xác định dựa trên tiêu chí nào? | đúng Điều 10 | top-3: ['QĐ 810 về học cùng lúc hai chương trình – Điều 3', 'TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp', 'TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp']
+
+test_questions_01.json | langchain (31 câu): R@1=81% [68%–94%]  R@3=97% [90%–100%]  R@5=97% [90%–100%]  R@10=100% [100%–100%]
+  MRR=0.882  MRR@3=0.876  nDCG@1=0.806  thời gian/câu: 39.5 ms (p95 48.6 ms)
+  Văn bản của Node top-1: [('Quy chế đào tạo trình độ đại học SGU 202', 23), ('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 4), ('QĐ 810 về học cùng lúc hai chương trình', 3), ('QĐ 2375/2022 về chuyển chương trình, ngà', 1)]
+  ngoài top-3: Sinh viên năm thứ hai được xác định dựa trên tiêu chí nào? | đúng Điều 10 | top-3: ['QĐ 810 về học cùng lúc hai chương trình – Điều 3', 'TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp', 'TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp']
+
+  -> test_questions_01.json: 0 câu có hạng câu trả lời đúng khác nhau giữa hai bên []
+
+test_questions_02.json | llamaindex (10 câu): R@1=90% [70%–100%]  R@3=90% [70%–100%]  R@5=90% [70%–100%]  R@10=90% [70%–100%]
+  MRR=0.900  MRR@3=0.900  nDCG@1=0.900  thời gian/câu: 42.5 ms (p95 46.4 ms)
+  Văn bản của Node top-1: [('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 9), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 1)]
+  ngoài top-3: Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào? | đúng Điều 2 (QĐ 3183) | top-3: ['TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)', 'TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước)', 'TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)']
+
+test_questions_02.json | langchain (10 câu): R@1=90% [70%–100%]  R@3=90% [70%–100%]  R@5=90% [70%–100%]  R@10=90% [70%–100%]
+  MRR=0.900  MRR@3=0.900  nDCG@1=0.900  thời gian/câu: 41.6 ms (p95 44.8 ms)
+  Văn bản của Node top-1: [('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 9), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 1)]
+  ngoài top-3: Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào? | đúng Điều 2 (QĐ 3183) | top-3: ['TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)', 'TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước)', 'TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)']
+
+  -> test_questions_02.json: 0 câu có hạng câu trả lời đúng khác nhau giữa hai bên []
+
+dev_questions_dot1.json | llamaindex (20 câu): R@1=95% [85%–100%]  R@3=95% [85%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.963  MRR@3=0.950  nDCG@1=0.950  thời gian/câu: 41.8 ms (p95 46.9 ms)
+  Văn bản của Node top-1: [('QĐ 898/2025 ban hành Quy định tổ chức th', 6), ('QĐ 3260/2025 về việc hoãn thi', 4), ('Quy chế công tác cố vấn học tập (QĐ 367/', 4), ('Quy định cấp bảng điểm học tập (2018)', 2), ('Quy định cấp bản sao văn bằng, chứng chỉ', 2), ('Quy định 3248/2018 giải quyết thắc mắc, ', 1), ('Quy chế đào tạo trình độ đại học SGU 202', 1)]
+  ngoài top-3: Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai? | đúng Điều CV_3248 | top-3: ['Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11', 'Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6']
+
+dev_questions_dot1.json | langchain (20 câu): R@1=95% [85%–100%]  R@3=95% [85%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.963  MRR@3=0.950  nDCG@1=0.950  thời gian/câu: 38.0 ms (p95 40.7 ms)
+  Văn bản của Node top-1: [('QĐ 898/2025 ban hành Quy định tổ chức th', 6), ('QĐ 3260/2025 về việc hoãn thi', 4), ('Quy chế công tác cố vấn học tập (QĐ 367/', 4), ('Quy định cấp bảng điểm học tập (2018)', 2), ('Quy định cấp bản sao văn bằng, chứng chỉ', 2), ('Quy định 3248/2018 giải quyết thắc mắc, ', 1), ('Quy chế đào tạo trình độ đại học SGU 202', 1)]
+  ngoài top-3: Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai? | đúng Điều CV_3248 | top-3: ['Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11', 'Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6']
+
+  -> dev_questions_dot1.json: 0 câu có hạng câu trả lời đúng khác nhau giữa hai bên []
+
+dev_questions_dot2.json | llamaindex (15 câu): R@1=67% [40%–87%]  R@3=93% [80%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.813  MRR@3=0.800  nDCG@1=0.667  thời gian/câu: 42.7 ms (p95 48.8 ms)
+  Văn bản của Node top-1: [('QyĐ 2626/2022 tiếng Anh không chuyên, qu', 5), ('TB 2366/2021 tiếng Anh không chuyên, quy', 4), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 2), ('QyĐ 2101/2024 tiếng Anh không chuyên, qu', 2), ('TB 2451/2024 bổ sung chứng chỉ quy đổi t', 2)]
+  ngoài top-3: Sinh viên khóa 2020 có chứng chỉ VSTEP 4.0 được quy đổi mấy điểm tiếng Anh? | đúng Điều 30_TB so 2451 | top-3: ['TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)', 'TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)', 'TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp']
+
+dev_questions_dot2.json | langchain (15 câu): R@1=67% [40%–87%]  R@3=93% [80%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.813  MRR@3=0.800  nDCG@1=0.667  thời gian/câu: 40.1 ms (p95 44.9 ms)
+  Văn bản của Node top-1: [('QyĐ 2626/2022 tiếng Anh không chuyên, qu', 5), ('TB 2366/2021 tiếng Anh không chuyên, quy', 4), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 2), ('QyĐ 2101/2024 tiếng Anh không chuyên, qu', 2), ('TB 2451/2024 bổ sung chứng chỉ quy đổi t', 2)]
+  ngoài top-3: Sinh viên khóa 2020 có chứng chỉ VSTEP 4.0 được quy đổi mấy điểm tiếng Anh? | đúng Điều 30_TB so 2451 | top-3: ['TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)', 'TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)', 'TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp']
+
+  -> dev_questions_dot2.json: 0 câu có hạng câu trả lời đúng khác nhau giữa hai bên []
+
+dev_questions_dot3.json | llamaindex (15 câu): R@1=80% [60%–100%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.900  MRR@3=0.900  nDCG@1=0.800  thời gian/câu: 43.2 ms (p95 50.5 ms)
+  Văn bản của Node top-1: [('QĐ 898/2025 ban hành Quy định tổ chức th', 3), ('Quy định thời gian tiết học, ca học và m', 3), ('Quy chế đào tạo trình độ đại học SGU 202', 3), ('HD 1181/2022 thực hiện quy trình phúc kh', 2), ('TB 536/2020 áp dụng chuẩn đầu ra ngoại n', 2), ('Quy định 3248/2018 giải quyết thắc mắc, ', 2)]
+
+dev_questions_dot3.json | langchain (15 câu): R@1=80% [60%–100%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.900  MRR@3=0.900  nDCG@1=0.800  thời gian/câu: 38.9 ms (p95 40.5 ms)
+  Văn bản của Node top-1: [('QĐ 898/2025 ban hành Quy định tổ chức th', 3), ('Quy định thời gian tiết học, ca học và m', 3), ('Quy chế đào tạo trình độ đại học SGU 202', 3), ('HD 1181/2022 thực hiện quy trình phúc kh', 2), ('TB 536/2020 áp dụng chuẩn đầu ra ngoại n', 2), ('Quy định 3248/2018 giải quyết thắc mắc, ', 2)]
+
+  -> dev_questions_dot3.json: 0 câu có hạng câu trả lời đúng khác nhau giữa hai bên []
+
+Tổng số câu lệch hạng: 0

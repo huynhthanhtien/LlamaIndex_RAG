@@ -1,0 +1,16 @@
+rerank bật: top_n=5, max_length=2048, similarity_top_k=10
+'[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1082)' thrown while requesting HEAD https://huggingface.co/AITeamVN/Vietnamese_Embedding/resolve/main/adapter_config.json
+Retrying in 1s [Retry 1/5].
+'[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1082)' thrown while requesting HEAD https://huggingface.co/AITeamVN/Vietnamese_Embedding/resolve/main/adapter_config.json
+Retrying in 2s [Retry 2/5].
+'[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1082)' thrown while requesting HEAD https://huggingface.co/AITeamVN/Vietnamese_Embedding/resolve/main/adapter_config.json
+Retrying in 4s [Retry 3/5].
+'[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1082)' thrown while requesting HEAD https://huggingface.co/AITeamVN/Vietnamese_Embedding/resolve/main/adapter_config.json
+Retrying in 8s [Retry 4/5].
+'[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1082)' thrown while requesting HEAD https://huggingface.co/AITeamVN/Vietnamese_Embedding/resolve/main/adapter_config.json
+Retrying in 8s [Retry 5/5].
+'[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate (_ssl.c:1082)' thrown while requesting HEAD https://huggingface.co/AITeamVN/Vietnamese_Embedding/resolve/main/adapter_config.json
+1: lỗi lần 1: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download
+1: lỗi lần 2: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download
+1: lỗi lần 3: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download
+Dừng ở câu 1

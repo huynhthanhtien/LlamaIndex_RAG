@@ -1,0 +1,114 @@
+Index: storage/server/01_quy_che_dao_tao | 108 Node | embedding: AITeamVN/Vietnamese_Embedding
+
+=== vector ===
+test_questions_01.json | vector (31 câu): R@1=81% [68%–94%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.887  MRR@3=0.887  nDCG@1=0.806  thời gian/câu: 702.1 ms (p95 1213.8 ms)
+  Văn bản của Node top-1: [('Quy chế đào tạo trình độ đại học SGU 202', 23), ('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 4), ('QĐ 810 về học cùng lúc hai chương trình', 3), ('QĐ 2375/2022 về chuyển chương trình, ngà', 1)]
+
+test_questions_02.json | vector (10 câu): R@1=90% [70%–100%]  R@3=90% [70%–100%]  R@5=90% [70%–100%]  R@10=90% [70%–100%]
+  MRR=0.900  MRR@3=0.900  nDCG@1=0.900  thời gian/câu: 2948.1 ms (p95 10197.2 ms)
+  Văn bản của Node top-1: [('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 9), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 1)]
+  ngoài top-3: Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào? | đúng Điều 2 (QĐ 3183) | top-3: ['TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)', 'TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước)', 'TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)']
+
+dev_questions_dot1.json | vector (20 câu): R@1=95% [85%–100%]  R@3=95% [85%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.963  MRR@3=0.950  nDCG@1=0.950  thời gian/câu: 2089.4 ms (p95 12467.7 ms)
+  Văn bản của Node top-1: [('QĐ 898/2025 ban hành Quy định tổ chức th', 6), ('QĐ 3260/2025 về việc hoãn thi', 4), ('Quy chế công tác cố vấn học tập (QĐ 367/', 4), ('Quy định cấp bảng điểm học tập (2018)', 2), ('Quy định cấp bản sao văn bằng, chứng chỉ', 2), ('Quy định 3248/2018 giải quyết thắc mắc, ', 1), ('Quy chế đào tạo trình độ đại học SGU 202', 1)]
+  ngoài top-3: Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai? | đúng Điều CV_3248 | top-3: ['Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11', 'Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6']
+
+dev_questions_dot2.json | vector (15 câu): R@1=67% [40%–87%]  R@3=93% [80%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.817  MRR@3=0.800  nDCG@1=0.667  thời gian/câu: 3616.6 ms (p95 28287.0 ms)
+  Văn bản của Node top-1: [('QyĐ 2626/2022 tiếng Anh không chuyên, qu', 5), ('TB 2366/2021 tiếng Anh không chuyên, quy', 4), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 2), ('QyĐ 2101/2024 tiếng Anh không chuyên, qu', 2), ('TB 2451/2024 bổ sung chứng chỉ quy đổi t', 2)]
+  ngoài top-3: Sinh viên khóa 2020 có chứng chỉ VSTEP 4.0 được quy đổi mấy điểm tiếng Anh? | đúng Điều 30_TB so 2451 | top-3: ['TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)', 'TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3']
+
+=== rerank ===
+test_questions_01.json | rerank (31 câu): R@1=81% [65%–94%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.892  MRR@3=0.892  nDCG@1=0.806  thời gian/câu: 1140.6 ms (p95 1229.3 ms)
+  Văn bản của Node top-1: [('Quy chế đào tạo trình độ đại học SGU 202', 25), ('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 3), ('QĐ 810 về học cùng lúc hai chương trình', 2), ('QĐ 2375/2022 về chuyển chương trình, ngà', 1)]
+
+test_questions_02.json | rerank (10 câu): R@1=60% [30%–90%]  R@3=90% [70%–100%]  R@5=90% [70%–100%]  R@10=90% [70%–100%]
+  MRR=0.750  MRR@3=0.750  nDCG@1=0.600  thời gian/câu: 1249.2 ms (p95 1634.7 ms)
+  Văn bản của Node top-1: [('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 9), ('Quy chế đào tạo trình độ đại học SGU 202', 1)]
+  ngoài top-3: Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào? | đúng Điều 2 (QĐ 3183) | top-3: ['QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10', 'QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3']
+
+dev_questions_dot1.json | rerank (20 câu): R@1=80% [60%–95%]  R@3=95% [85%–100%]  R@5=95% [85%–100%]  R@10=95% [85%–100%]
+  MRR=0.867  MRR@3=0.867  nDCG@1=0.800  thời gian/câu: 1187.5 ms (p95 1333.9 ms)
+  Văn bản của Node top-1: [('QĐ 898/2025 ban hành Quy định tổ chức th', 6), ('Quy chế công tác cố vấn học tập (QĐ 367/', 5), ('QĐ 3260/2025 về việc hoãn thi', 4), ('Quy định 3248/2018 giải quyết thắc mắc, ', 2), ('Quy định cấp bản sao văn bằng, chứng chỉ', 2), ('Quy định cấp bảng điểm học tập (2018)', 1)]
+  ngoài top-3: Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai? | đúng Điều CV_3248 | top-3: ['Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 14']
+
+dev_questions_dot2.json | rerank (15 câu): R@1=73% [53%–93%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.856  MRR@3=0.856  nDCG@1=0.733  thời gian/câu: 1853.9 ms (p95 4307.5 ms)
+  Văn bản của Node top-1: [('QyĐ 2101/2024 tiếng Anh không chuyên, qu', 6), ('QyĐ 2626/2022 tiếng Anh không chuyên, qu', 5), ('TB 2366/2021 tiếng Anh không chuyên, quy', 2), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 1), ('TB 2451/2024 bổ sung chứng chỉ quy đổi t', 1)]
+
+=== rerank-top10 ===
+test_questions_01.json | rerank-top10 (31 câu): R@1=81% [65%–94%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.892  MRR@3=0.892  nDCG@1=0.806  thời gian/câu: 2492.1 ms (p95 4658.4 ms)
+  Văn bản của Node top-1: [('Quy chế đào tạo trình độ đại học SGU 202', 25), ('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 3), ('QĐ 810 về học cùng lúc hai chương trình', 2), ('QĐ 2375/2022 về chuyển chương trình, ngà', 1)]
+
+test_questions_02.json | rerank-top10 (10 câu): R@1=60% [30%–90%]  R@3=90% [70%–100%]  R@5=90% [70%–100%]  R@10=90% [70%–100%]
+  MRR=0.750  MRR@3=0.750  nDCG@1=0.600  thời gian/câu: 1286.2 ms (p95 1637.2 ms)
+  Văn bản của Node top-1: [('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 9), ('Quy chế đào tạo trình độ đại học SGU 202', 1)]
+  ngoài top-3: Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào? | đúng Điều 2 (QĐ 3183) | top-3: ['QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10', 'QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3']
+
+dev_questions_dot1.json | rerank-top10 (20 câu): R@1=80% [60%–95%]  R@3=95% [85%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.879  MRR@3=0.867  nDCG@1=0.800  thời gian/câu: 1208.7 ms (p95 1330.3 ms)
+  Văn bản của Node top-1: [('QĐ 898/2025 ban hành Quy định tổ chức th', 6), ('Quy chế công tác cố vấn học tập (QĐ 367/', 5), ('QĐ 3260/2025 về việc hoãn thi', 4), ('Quy định 3248/2018 giải quyết thắc mắc, ', 2), ('Quy định cấp bản sao văn bằng, chứng chỉ', 2), ('Quy định cấp bảng điểm học tập (2018)', 1)]
+  ngoài top-3: Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai? | đúng Điều CV_3248 | top-3: ['Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 14']
+
+dev_questions_dot2.json | rerank-top10 (15 câu): R@1=73% [53%–93%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.856  MRR@3=0.856  nDCG@1=0.733  thời gian/câu: 1376.9 ms (p95 2240.7 ms)
+  Văn bản của Node top-1: [('QyĐ 2101/2024 tiếng Anh không chuyên, qu', 6), ('QyĐ 2626/2022 tiếng Anh không chuyên, qu', 5), ('TB 2366/2021 tiếng Anh không chuyên, quy', 2), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 1), ('TB 2451/2024 bổ sung chứng chỉ quy đổi t', 1)]
+
+=== hybrid+rerank ===
+test_questions_01.json | hybrid+rerank (31 câu): R@1=84% [71%–97%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.909  MRR@3=0.909  nDCG@1=0.839  thời gian/câu: 1236.8 ms (p95 1748.3 ms)
+  Văn bản của Node top-1: [('Quy chế đào tạo trình độ đại học SGU 202', 26), ('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 2), ('QĐ 810 về học cùng lúc hai chương trình', 2), ('QĐ 2375/2022 về chuyển chương trình, ngà', 1)]
+
+test_questions_02.json | hybrid+rerank (10 câu): R@1=60% [30%–90%]  R@3=90% [70%–100%]  R@5=90% [70%–100%]  R@10=90% [70%–100%]
+  MRR=0.733  MRR@3=0.733  nDCG@1=0.600  thời gian/câu: 1202.3 ms (p95 1340.8 ms)
+  Văn bản của Node top-1: [('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 9), ('Quy chế đào tạo trình độ đại học SGU 202', 1)]
+  ngoài top-3: Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào? | đúng Điều 2 (QĐ 3183) | top-3: ['QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10', 'QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3']
+
+dev_questions_dot1.json | hybrid+rerank (20 câu): R@1=80% [60%–95%]  R@3=90% [75%–100%]  R@5=90% [75%–100%]  R@10=90% [75%–100%]
+  MRR=0.850  MRR@3=0.850  nDCG@1=0.800  thời gian/câu: 1199.0 ms (p95 1366.3 ms)
+  Văn bản của Node top-1: [('QĐ 898/2025 ban hành Quy định tổ chức th', 6), ('Quy chế công tác cố vấn học tập (QĐ 367/', 5), ('QĐ 3260/2025 về việc hoãn thi', 4), ('Quy định 3248/2018 giải quyết thắc mắc, ', 2), ('Quy định cấp bản sao văn bằng, chứng chỉ', 2), ('Quy định cấp bảng điểm học tập (2018)', 1)]
+  ngoài top-3: Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai? | đúng Điều CV_3248 | top-3: ['Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 14']
+  ngoài top-3: Xin bảng điểm thì bao lâu mới nhận được? | đúng Điều QuyDinh_CapBangDiem | top-3: ['QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6', 'Quy định 3248/2018 giải quyết thắc mắc, khiếu nại kết quả học tập', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 4']
+
+dev_questions_dot2.json | hybrid+rerank (15 câu): R@1=80% [60%–100%]  R@3=93% [80%–100%]  R@5=93% [80%–100%]  R@10=93% [80%–100%]
+  MRR=0.867  MRR@3=0.867  nDCG@1=0.800  thời gian/câu: 1241.7 ms (p95 1674.4 ms)
+  Văn bản của Node top-1: [('QyĐ 2626/2022 tiếng Anh không chuyên, qu', 6), ('QyĐ 2101/2024 tiếng Anh không chuyên, qu', 5), ('TB 2366/2021 tiếng Anh không chuyên, quy', 2), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 1), ('TB 2451/2024 bổ sung chứng chỉ quy đổi t', 1)]
+  ngoài top-3: Sinh viên khóa 2020 có chứng chỉ VSTEP 4.0 được quy đổi mấy điểm tiếng Anh? | đúng Điều 30_TB so 2451 | top-3: ['QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 2', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3', 'QĐ 810 về học cùng lúc hai chương trình – Điều 3']
+
+So sánh cặp (McNemar, R@1) — test_questions_01.json:
+  vector vs rerank: chỉ vector đúng 3, chỉ rerank đúng 3, p=1.000
+  vector vs rerank-top10: chỉ vector đúng 3, chỉ rerank-top10 đúng 3, p=1.000
+  vector vs hybrid+rerank: chỉ vector đúng 2, chỉ hybrid+rerank đúng 3, p=1.000
+  rerank vs rerank-top10: chỉ rerank đúng 0, chỉ rerank-top10 đúng 0, p=1.000
+  rerank vs hybrid+rerank: chỉ rerank đúng 0, chỉ hybrid+rerank đúng 1, p=1.000
+  rerank-top10 vs hybrid+rerank: chỉ rerank-top10 đúng 0, chỉ hybrid+rerank đúng 1, p=1.000
+
+So sánh cặp (McNemar, R@1) — test_questions_02.json:
+  vector vs rerank: chỉ vector đúng 3, chỉ rerank đúng 0, p=0.250
+  vector vs rerank-top10: chỉ vector đúng 3, chỉ rerank-top10 đúng 0, p=0.250
+  vector vs hybrid+rerank: chỉ vector đúng 3, chỉ hybrid+rerank đúng 0, p=0.250
+  rerank vs rerank-top10: chỉ rerank đúng 0, chỉ rerank-top10 đúng 0, p=1.000
+  rerank vs hybrid+rerank: chỉ rerank đúng 0, chỉ hybrid+rerank đúng 0, p=1.000
+  rerank-top10 vs hybrid+rerank: chỉ rerank-top10 đúng 0, chỉ hybrid+rerank đúng 0, p=1.000
+
+So sánh cặp (McNemar, R@1) — dev_questions_dot1.json:
+  vector vs rerank: chỉ vector đúng 3, chỉ rerank đúng 0, p=0.250
+  vector vs rerank-top10: chỉ vector đúng 3, chỉ rerank-top10 đúng 0, p=0.250
+  vector vs hybrid+rerank: chỉ vector đúng 3, chỉ hybrid+rerank đúng 0, p=0.250
+  rerank vs rerank-top10: chỉ rerank đúng 0, chỉ rerank-top10 đúng 0, p=1.000
+  rerank vs hybrid+rerank: chỉ rerank đúng 0, chỉ hybrid+rerank đúng 0, p=1.000
+  rerank-top10 vs hybrid+rerank: chỉ rerank-top10 đúng 0, chỉ hybrid+rerank đúng 0, p=1.000
+
+So sánh cặp (McNemar, R@1) — dev_questions_dot2.json:
+  vector vs rerank: chỉ vector đúng 2, chỉ rerank đúng 3, p=1.000
+  vector vs rerank-top10: chỉ vector đúng 2, chỉ rerank-top10 đúng 3, p=1.000
+  vector vs hybrid+rerank: chỉ vector đúng 1, chỉ hybrid+rerank đúng 3, p=0.625
+  rerank vs rerank-top10: chỉ rerank đúng 0, chỉ rerank-top10 đúng 0, p=1.000
+  rerank vs hybrid+rerank: chỉ rerank đúng 0, chỉ hybrid+rerank đúng 1, p=1.000
+  rerank-top10 vs hybrid+rerank: chỉ rerank-top10 đúng 0, chỉ hybrid+rerank đúng 1, p=1.000
+
+Đã ghi eval/results/truy-hoi-rerank-dot2.json và eval/results/truy-hoi-rerank-dot2.md

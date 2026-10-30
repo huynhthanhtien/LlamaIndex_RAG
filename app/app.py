@@ -28,6 +28,7 @@ from llama_index.core.schema import NodeWithScore
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from config import get_config
 from index_builder import build_or_load_index
+from processed_loader import vi_tri_goc
 from query_engine import QA_PROMPT, make_llm
 from retriever import get_postprocessors, node_label, search
 
@@ -92,8 +93,10 @@ def hien_thi_nguon(nodes: list[NodeWithScore]) -> str:
     parts: list[str] = []
     for i, n in enumerate(nodes, start=1):
         noi_dung = n.node.get_content().strip()
+        # Mở đúng đoạn gốc: file tầng 2 + số dòng (mức truy nguồn là văn bản/Điều, không có số trang PDF)
         parts.append(
             f"**[{i}] {node_label(n)}** — score `{n.score or 0:.4f}`\n\n"
+            f"`{vi_tri_goc(cfg, n.node.metadata, noi_dung)}`\n\n"
             f"<details><summary>{' '.join(noi_dung[:120].split())}…</summary>\n\n{noi_dung}\n\n</details>"
         )
     return "\n\n---\n\n".join(parts)

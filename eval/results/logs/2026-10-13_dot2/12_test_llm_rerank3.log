@@ -1,0 +1,34 @@
+rerank bật: top_n=3, max_length=2048, similarity_top_k=10
+test_buoc_thoi_hoc_hai_lan_lien_tiep (tests.test_llm.TestLLM.test_buoc_thoi_hoc_hai_lan_lien_tiep)
+ok
+test_diem_a_he_10 (tests.test_llm.TestLLM.test_diem_a_he_10)
+A ứng với 8,5--10 trên thang 10; trước khi sửa prompt, LLM trả lời "4,0 điểm hệ 10". ... ok
+test_diem_d_cong_he_10 (tests.test_llm.TestLLM.test_diem_d_cong_he_10)
+QĐ 3183: D+ từ 4,8 đến 5,4 trên thang 10. ... ok
+test_khong_lo_suy_luan (tests.test_llm.TestLLM.test_khong_lo_suy_luan)
+thinking=False: câu trả lời không chứa khối <think> hay chuỗi điều khiển /no_think. ... ok
+test_rut_hoc_phan (tests.test_llm.TestLLM.test_rut_hoc_phan)
+QĐ 3183 sửa đổi khoản 4 Điều 7: rút học phần trong 03 tuần đầu của học kỳ. ... FAIL
+test_tat_dinh (tests.test_llm.TestLLM.test_tat_dinh)
+temperature=0 + seed: cùng prompt gọi hai lần cho cùng kết quả. ... ok
+test_tin_chi_cu_nhan (tests.test_llm.TestLLM.test_tin_chi_cu_nhan)
+Quy chế 2021, Điều 2: cử nhân tối thiểu 120 tín chỉ. ... ok
+test_tu_choi_diem_ren_luyen (tests.test_llm.TestLLM.test_tu_choi_diem_ren_luyen) ... ok
+test_tu_choi_hoc_phi (tests.test_llm.TestLLM.test_tu_choi_hoc_phi) ... ok
+test_xep_loai_xuat_sac (tests.test_llm.TestLLM.test_xep_loai_xuat_sac)
+Quy chế 2021, khoản 4 Điều 10: xuất sắc từ 3,6 đến 4,0. ... ok
+
+======================================================================
+FAIL: test_rut_hoc_phan (tests.test_llm.TestLLM.test_rut_hoc_phan)
+QĐ 3183 sửa đổi khoản 4 Điều 7: rút học phần trong 03 tuần đầu của học kỳ.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/tests/test_llm.py", line 96, in test_rut_hoc_phan
+    self.assertRegex(tra_loi, r"\b0?3 tuần")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Regex didn't match: '\\b0?3 tuần' not found in 'theo quy định hiện hành, sinh viên được rút học phần trong thời gian sau: **"việc rút bớt học phần trong khối lượng học tập đã đăng ký được thực hiện sau 02 tuần kể từ đầu học kì chính và sau 01 tuần kể từ đầu học kì phụ, nhưng không muộn quá 05 tuần đối với học kì chính và 02 tuần đối với học kì phụ."** *(điều 7 — quy chế đào tạo trình độ đại học sgu 2021)*'
+
+----------------------------------------------------------------------
+Ran 10 tests in 98.055s
+
+FAILED (failures=1)

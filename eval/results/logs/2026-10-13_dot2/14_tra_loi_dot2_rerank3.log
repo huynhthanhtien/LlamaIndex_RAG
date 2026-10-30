@@ -1,0 +1,18 @@
+rerank bật: top_n=3, max_length=2048, similarity_top_k=10
+1/15 xong (11.9s)
+2/15 xong (11.0s)
+3/15 xong (10.9s)
+4/15 xong (11.4s)
+5/15 xong (8.7s)
+6/15 xong (14.7s)
+7/15 xong (6.3s)
+8/15 xong (9.4s)
+9: lỗi lần 1: [Errno 104] Connection reset by peer
+9/15 xong (929.3s)
+10/15 xong (9.3s)
+11/15 xong (9.3s)
+12/15 xong (10.6s)
+13/15 xong (9.6s)
+14/15 xong (15.1s)
+15/15 xong (9.2s)
+Đã ghi /mnt/data/1_Projects/sgu-rag-llamaindex/eval/results/tra-loi-dev-dot2-rerank3.md

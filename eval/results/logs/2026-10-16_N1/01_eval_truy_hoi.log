@@ -1,0 +1,206 @@
+RAG_PROFILE=server venv/bin/python eval/evaluate.py --cau-hinh vector,rerank,loc,rerank+loc,hybrid,hybrid+rerank+loc --kiem-chung
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:00<00:54,  7.09it/s]Loading weights:  31%|███       | 121/391 [00:00<00:01, 198.93it/s]Loading weights:  48%|████▊     | 186/391 [00:01<00:00, 235.28it/s]Loading weights:  60%|██████    | 235/391 [00:01<00:00, 256.75it/s]Loading weights:  71%|███████   | 278/391 [00:01<00:00, 280.14it/s]Loading weights:  83%|████████▎ | 325/391 [00:01<00:00, 311.82it/s]Loading weights:  95%|█████████▌| 373/391 [00:01<00:00, 346.60it/s]Loading weights: 100%|██████████| 391/391 [00:01<00:00, 253.63it/s]
+Index: storage/server/01_quy_che_dao_tao | 118 Node | embedding: AITeamVN/Vietnamese_Embedding
+
+=== vector ===
+test_questions_01.json | vector (31 câu): R@1=81% [68%–94%]  R@3=97% [90%–100%]  R@5=97% [90%–100%]  R@10=100% [100%–100%]
+  MRR=0.882  MRR@3=0.876  nDCG@1=0.806  thời gian/câu: 14.3 ms (p95 16.0 ms)
+  Văn bản của Node top-1: [('Quy chế đào tạo trình độ đại học SGU 202', 23), ('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 4), ('QĐ 810 về học cùng lúc hai chương trình', 3), ('QĐ 2375/2022 về chuyển chương trình, ngà', 1)]
+  ngoài top-3: Sinh viên năm thứ hai được xác định dựa trên tiêu chí nào? | đúng Điều 10 | top-3: ['QĐ 810 về học cùng lúc hai chương trình – Điều 3', 'TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp', 'TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp']
+
+  Kiểm chứng bằng RetrieverEvaluator của LlamaIndex: hit_rate=1.000, mrr=0.882
+
+test_questions_02.json | vector (10 câu): R@1=90% [70%–100%]  R@3=90% [70%–100%]  R@5=90% [70%–100%]  R@10=90% [70%–100%]
+  MRR=0.900  MRR@3=0.900  nDCG@1=0.900  thời gian/câu: 13.6 ms (p95 15.6 ms)
+  Văn bản của Node top-1: [('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 9), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 1)]
+  ngoài top-3: Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào? | đúng Điều 2 (QĐ 3183) | top-3: ['TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)', 'TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước)', 'TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)']
+
+  Kiểm chứng bằng RetrieverEvaluator của LlamaIndex: hit_rate=0.900, mrr=0.900
+
+dev_questions_dot1.json | vector (20 câu): R@1=95% [85%–100%]  R@3=95% [85%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.963  MRR@3=0.950  nDCG@1=0.950  thời gian/câu: 13.4 ms (p95 14.5 ms)
+  Văn bản của Node top-1: [('QĐ 898/2025 ban hành Quy định tổ chức th', 6), ('QĐ 3260/2025 về việc hoãn thi', 4), ('Quy chế công tác cố vấn học tập (QĐ 367/', 4), ('Quy định cấp bảng điểm học tập (2018)', 2), ('Quy định cấp bản sao văn bằng, chứng chỉ', 2), ('Quy định 3248/2018 giải quyết thắc mắc, ', 1), ('Quy chế đào tạo trình độ đại học SGU 202', 1)]
+  ngoài top-3: Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai? | đúng Điều CV_3248 | top-3: ['Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11', 'Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6']
+
+  Kiểm chứng bằng RetrieverEvaluator của LlamaIndex: hit_rate=1.000, mrr=0.963
+
+dev_questions_dot2.json | vector (15 câu): R@1=67% [40%–87%]  R@3=93% [80%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.813  MRR@3=0.800  nDCG@1=0.667  thời gian/câu: 14.3 ms (p95 17.6 ms)
+  Văn bản của Node top-1: [('QyĐ 2626/2022 tiếng Anh không chuyên, qu', 5), ('TB 2366/2021 tiếng Anh không chuyên, quy', 4), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 2), ('QyĐ 2101/2024 tiếng Anh không chuyên, qu', 2), ('TB 2451/2024 bổ sung chứng chỉ quy đổi t', 2)]
+  ngoài top-3: Sinh viên khóa 2020 có chứng chỉ VSTEP 4.0 được quy đổi mấy điểm tiếng Anh? | đúng Điều 30_TB so 2451 | top-3: ['TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)', 'TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)', 'TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp']
+
+  Kiểm chứng bằng RetrieverEvaluator của LlamaIndex: hit_rate=1.000, mrr=0.813
+
+dev_questions_dot3.json | vector (15 câu): R@1=80% [60%–100%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.900  MRR@3=0.900  nDCG@1=0.800  thời gian/câu: 13.3 ms (p95 14.4 ms)
+  Văn bản của Node top-1: [('QĐ 898/2025 ban hành Quy định tổ chức th', 3), ('Quy định thời gian tiết học, ca học và m', 3), ('Quy chế đào tạo trình độ đại học SGU 202', 3), ('HD 1181/2022 thực hiện quy trình phúc kh', 2), ('TB 536/2020 áp dụng chuẩn đầu ra ngoại n', 2), ('Quy định 3248/2018 giải quyết thắc mắc, ', 2)]
+
+  Kiểm chứng bằng RetrieverEvaluator của LlamaIndex: hit_rate=1.000, mrr=0.900
+
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights:  21%|██        | 81/393 [00:00<00:00, 786.77it/s]Loading weights:  41%|████      | 160/393 [00:00<00:00, 781.52it/s]Loading weights:  61%|██████    | 239/393 [00:00<00:00, 746.30it/s]Loading weights:  96%|█████████▌| 376/393 [00:00<00:00, 982.96it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 938.96it/s]
+=== rerank ===
+test_questions_01.json | rerank (31 câu): R@1=87% [74%–97%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.930  MRR@3=0.930  nDCG@1=0.871  thời gian/câu: 496.0 ms (p95 628.2 ms)
+  Văn bản của Node top-1: [('Quy chế đào tạo trình độ đại học SGU 202', 26), ('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 2), ('QĐ 810 về học cùng lúc hai chương trình', 2), ('QĐ 2375/2022 về chuyển chương trình, ngà', 1)]
+
+test_questions_02.json | rerank (10 câu): R@1=50% [20%–80%]  R@3=90% [70%–100%]  R@5=90% [70%–100%]  R@10=90% [70%–100%]
+  MRR=0.683  MRR@3=0.683  nDCG@1=0.500  thời gian/câu: 612.9 ms (p95 634.5 ms)
+  Văn bản của Node top-1: [('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 8), ('Quy chế đào tạo trình độ đại học SGU 202', 2)]
+  ngoài top-3: Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào? | đúng Điều 2 (QĐ 3183) | top-3: ['QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10', 'QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3']
+
+dev_questions_dot1.json | rerank (20 câu): R@1=90% [75%–100%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.950  MRR@3=0.950  nDCG@1=0.900  thời gian/câu: 505.4 ms (p95 636.9 ms)
+  Văn bản của Node top-1: [('QĐ 3260/2025 về việc hoãn thi', 4), ('QĐ 898/2025 ban hành Quy định tổ chức th', 4), ('Quy định 3248/2018 giải quyết thắc mắc, ', 4), ('Quy chế công tác cố vấn học tập (QĐ 367/', 4), ('Quy định cấp bảng điểm học tập (2018)', 2), ('Quy định cấp bản sao văn bằng, chứng chỉ', 2)]
+
+dev_questions_dot2.json | rerank (15 câu): R@1=93% [80%–100%]  R@3=93% [80%–100%]  R@5=93% [80%–100%]  R@10=93% [80%–100%]
+  MRR=0.933  MRR@3=0.933  nDCG@1=0.933  thời gian/câu: 593.5 ms (p95 599.8 ms)
+  Văn bản của Node top-1: [('QyĐ 2626/2022 tiếng Anh không chuyên, qu', 6), ('QyĐ 2101/2024 tiếng Anh không chuyên, qu', 5), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 2), ('TB 2366/2021 tiếng Anh không chuyên, quy', 1), ('TB 2451/2024 bổ sung chứng chỉ quy đổi t', 1)]
+  ngoài top-3: Sinh viên khóa 2020 có chứng chỉ VSTEP 4.0 được quy đổi mấy điểm tiếng Anh? | đúng Điều 30_TB so 2451 | top-3: ['QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 2', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3']
+
+dev_questions_dot3.json | rerank (15 câu): R@1=80% [60%–100%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.900  MRR@3=0.900  nDCG@1=0.800  thời gian/câu: 601.2 ms (p95 645.4 ms)
+  Văn bản của Node top-1: [('Quy định thời gian tiết học, ca học và m', 4), ('Quy định 3248/2018 giải quyết thắc mắc, ', 3), ('Quy chế đào tạo trình độ đại học SGU 202', 3), ('HD 1181/2022 thực hiện quy trình phúc kh', 2), ('TB 536/2020 áp dụng chuẩn đầu ra ngoại n', 2), ('QĐ 898/2025 ban hành Quy định tổ chức th', 1)]
+
+=== loc ===
+test_questions_01.json | loc (31 câu): R@1=81% [68%–94%]  R@3=97% [90%–100%]  R@5=97% [90%–100%]  R@10=100% [100%–100%]
+  MRR=0.876  MRR@3=0.871  nDCG@1=0.806  thời gian/câu: 17.5 ms (p95 18.8 ms)
+  Văn bản của Node top-1: [('Quy chế đào tạo trình độ đại học SGU 202', 17), ('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 10), ('QĐ 810 về học cùng lúc hai chương trình', 3), ('QĐ 2375/2022 về chuyển chương trình, ngà', 1)]
+  ngoài top-3: Sinh viên năm thứ hai được xác định dựa trên tiêu chí nào? | đúng Điều 10 | top-3: ['QĐ 810 về học cùng lúc hai chương trình – Điều 3', 'TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp', 'TB 536/2020 áp dụng chuẩn đầu ra ngoại ngữ xét công nhận tốt nghiệp']
+
+test_questions_02.json | loc (10 câu): R@1=90% [70%–100%]  R@3=90% [70%–100%]  R@5=90% [70%–100%]  R@10=90% [70%–100%]
+  MRR=0.900  MRR@3=0.900  nDCG@1=0.900  thời gian/câu: 18.1 ms (p95 21.5 ms)
+  Văn bản của Node top-1: [('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 9), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 1)]
+  ngoài top-3: Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào? | đúng Điều 2 (QĐ 3183) | top-3: ['TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)', 'TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước)', 'TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)']
+
+dev_questions_dot1.json | loc (20 câu): R@1=90% [75%–100%]  R@3=90% [75%–100%]  R@5=95% [85%–100%]  R@10=100% [100%–100%]
+  MRR=0.918  MRR@3=0.900  nDCG@1=0.900  thời gian/câu: 16.8 ms (p95 18.8 ms)
+  Văn bản của Node top-1: [('QĐ 898/2025 ban hành Quy định tổ chức th', 7), ('QĐ 3260/2025 về việc hoãn thi', 4), ('Quy chế công tác cố vấn học tập (QĐ 367/', 4), ('Quy định cấp bảng điểm học tập (2018)', 2), ('Quy định cấp bản sao văn bằng, chứng chỉ', 2), ('Quy chế đào tạo trình độ đại học SGU 202', 1)]
+  ngoài top-3: Muốn khiếu nại điểm quá trình thì làm thế nào? | đúng Điều CV_3248 | top-3: ['QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 5', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 8']
+  ngoài top-3: Có thắc mắc về việc bị cảnh báo kết quả học tập thì liên hệ ai? | đúng Điều CV_3248 | top-3: ['Quy chế đào tạo trình độ đại học SGU 2021 – Điều 11', 'Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6']
+
+dev_questions_dot2.json | loc (15 câu): R@1=73% [47%–93%]  R@3=93% [80%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.839  MRR@3=0.822  nDCG@1=0.733  thời gian/câu: 17.1 ms (p95 18.8 ms)
+  Văn bản của Node top-1: [('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 6), ('QyĐ 2626/2022 tiếng Anh không chuyên, qu', 5), ('QyĐ 2101/2024 tiếng Anh không chuyên, qu', 4)]
+  ngoài top-3: Học phần Tiếng Anh 1 theo chương trình mới có bao nhiêu tín chỉ? | đúng Điều CV2626|3 | top-3: ['TB 2567/2024 bổ sung chứng chỉ PTE Academic quy đổi tiếng Anh (các khóa)', 'TB 2451/2024 bổ sung chứng chỉ quy đổi tiếng Anh (khóa tuyển sinh 2021 trở về trước)', 'TB 2366/2021 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2021 trở về trước)']
+
+dev_questions_dot3.json | loc (15 câu): R@1=93% [80%–100%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.967  MRR@3=0.967  nDCG@1=0.933  thời gian/câu: 16.8 ms (p95 19.1 ms)
+  Văn bản của Node top-1: [('QĐ 898/2025 ban hành Quy định tổ chức th', 5), ('Quy định thời gian tiết học, ca học và m', 3), ('Quy chế đào tạo trình độ đại học SGU 202', 3), ('HD 1181/2022 thực hiện quy trình phúc kh', 2), ('TB 536/2020 áp dụng chuẩn đầu ra ngoại n', 2)]
+
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 6531.16it/s]
+[W1016 20:41:24.045545857 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 513802240 bytes (free: 491323392, total: 4010278912).
+[W1016 20:41:25.594354511 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 77594624 bytes (free: 27852800, total: 4010278912).
+[W1016 20:41:25.035338623 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 104857600 bytes (free: 99155968, total: 4010278912).
+[W1016 20:41:25.053807543 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 104857600 bytes (free: 25755648, total: 4010278912).
+[W1016 20:41:25.053979681 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 104857600 bytes (free: 25755648, total: 4010278912).
+=== rerank+loc ===
+Traceback (most recent call last):
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/eval/evaluate.py", line 302, in <module>
+    main()
+    ~~~~^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/eval/evaluate.py", line 281, in main
+    kq = danh_gia(ten_file, dung, tim, ten, cfg.mo_ta())
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/eval/evaluate.py", line 184, in danh_gia
+    res = tim(q["question"])
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/eval/evaluate.py", line 277, in <lambda>
+    tim = lambda q, r=retriever, p=posts: search(index, cfg, q, postprocessors=p, retriever=r)  # noqa: E731
+                                          ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/src/retriever.py", line 106, in search
+    nodes = p.postprocess_nodes(nodes, QueryBundle(question))
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/postprocessor/types.py", line 48, in postprocess_nodes
+    return self._postprocess_nodes(nodes, query_bundle)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/llama_index/core/postprocessor/sbert_rerank.py", line 89, in _postprocess_nodes
+    scores = self._model.predict(query_and_nodes)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/sentence_transformers/util/decorators.py", line 46, in wrapper
+    return func(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/sentence_transformers/util/decorators.py", line 203, in wrapper
+    return func(self, *args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/sentence_transformers/cross_encoder/model.py", line 717, in predict
+    out_features = self(features, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/sentence_transformers/base/model.py", line 569, in forward
+    input = module(input, **module_kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/sentence_transformers/base/modules/transformer.py", line 1650, in forward
+    model_output = model_method(**filtered_kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/transformers/utils/generic.py", line 939, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/transformers/models/xlm_roberta/modeling_xlm_roberta.py", line 954, in forward
+    outputs = self.roberta(
+        input_ids,
+    ...<5 lines>...
+        **kwargs,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/transformers/utils/generic.py", line 1068, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/transformers/utils/output_capturing.py", line 286, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/transformers/models/xlm_roberta/modeling_xlm_roberta.py", line 637, in forward
+    encoder_outputs = self.encoder(
+        embedding_output,
+    ...<6 lines>...
+        **kwargs,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/transformers/models/xlm_roberta/modeling_xlm_roberta.py", line 531, in forward
+    hidden_states = layer_module(
+        hidden_states,
+    ...<4 lines>...
+        **kwargs,
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/transformers/modeling_layers.py", line 109, in __call__
+    return super().__call__(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/transformers/models/xlm_roberta/modeling_xlm_roberta.py", line 455, in forward
+    layer_output = apply_chunking_to_forward(
+        self.feed_forward_chunk, self.chunk_size_feed_forward, self.seq_len_dim, attention_output
+    )
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/transformers/pytorch_utils.py", line 199, in apply_chunking_to_forward
+    return forward_fn(*input_tensors)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/transformers/models/xlm_roberta/modeling_xlm_roberta.py", line 461, in feed_forward_chunk
+    intermediate_output = self.intermediate(attention_output)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/transformers/models/xlm_roberta/modeling_xlm_roberta.py", line 383, in forward
+    hidden_states = self.intermediate_act_fn(hidden_states)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/data/1_Projects/sgu-rag-llamaindex/venv/lib64/python3.14/site-packages/transformers/activations.py", line 89, in forward
+    return self.act(input)
+           ~~~~~~~~^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 100.00 MiB. GPU 0 has a total capacity of 3.73 GiB of which 24.56 MiB is free. Process 2572 has 6.54 MiB memory in use. Including non-PyTorch memory, this process has 3.67 GiB memory in use. Of the allocated memory 3.37 GiB is allocated by PyTorch, and 181.57 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+make: *** [Makefile:29: eval] Error 1

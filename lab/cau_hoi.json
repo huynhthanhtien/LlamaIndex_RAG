@@ -1,0 +1,16 @@
+[
+ {"id": "Q01", "loai": "trong", "nguon": "qc2021", "dieu": "2", "question": "Thời gian tối đa để hoàn thành khóa học là bao lâu?", "dap_an": "Không vượt quá 02 lần thời gian theo kế hoạch học tập chuẩn toàn khóa."},
+ {"id": "Q02", "loai": "trong", "nguon": "qc2021", "dieu": "4", "question": "Giờ học chính quy được tổ chức trong khung giờ nào, ngày nào trong tuần?", "dap_an": "Từ 06 giờ đến 20 giờ, từ Thứ 2 đến Thứ 7."},
+ {"id": "Q03", "loai": "trong", "nguon": "qc2021", "dieu": "7", "question": "Mỗi học kỳ chính sinh viên phải đăng ký khối lượng học tập tối thiểu và tối đa là bao nhiêu?", "dap_an": "Tối thiểu 2/3 và tối đa 3/2 khối lượng trung bình một học kỳ theo kế hoạch học tập chuẩn."},
+ {"id": "Q04", "loai": "trong", "nguon": "qc2021", "dieu": "9", "question": "Vắng thi không có lý do chính đáng thì bị điểm bao nhiêu?", "dap_an": "Nhận điểm 0."},
+ {"id": "Q05", "loai": "trong", "nguon": "qc2021", "dieu": "10", "question": "Điểm trung bình bao nhiêu thì được xếp loại học lực Giỏi?", "dap_an": "Từ 3,2 đến cận 3,6 (thang điểm 4)."},
+ {"id": "Q06", "loai": "trong", "nguon": "qc2021", "dieu": "11", "question": "Điểm trung bình học kỳ dưới bao nhiêu thì bị cảnh báo kết quả học tập?", "dap_an": "Dưới 0,80 với học kỳ đầu của khóa học, dưới 1,00 với các học kỳ tiếp theo."},
+ {"id": "Q07", "loai": "trong", "nguon": "qc2021", "dieu": "12", "question": "Số tín chỉ được công nhận, chuyển đổi tối đa là bao nhiêu phần trăm?", "dap_an": "Không vượt quá 50% khối lượng học tập tối thiểu của chương trình đào tạo."},
+ {"id": "Q08", "loai": "trong", "nguon": "qc2021", "dieu": "13", "question": "Sau khi đủ điều kiện tốt nghiệp thì trong bao lâu sinh viên được cấp bằng?", "dap_an": "Trong thời hạn 03 tháng kể từ khi đáp ứng đủ điều kiện tốt nghiệp và hoàn thành nghĩa vụ với nhà trường."},
+ {"id": "Q09", "loai": "trong", "nguon": "qc2021", "dieu": "14", "question": "Sinh viên được xin nghỉ học tạm thời trong những trường hợp nào?", "dap_an": "Điều động vào lực lượng vũ trang; đại diện quốc gia thi đấu quốc tế; ốm, thai sản, tai nạn phải điều trị dài; lý do cá nhân khác khi đã học tối thiểu 01 học kỳ."},
+ {"id": "Q10", "loai": "trong", "nguon": "qc2021", "dieu": "17", "question": "Sớm nhất khi nào sinh viên được đăng ký học chương trình thứ hai?", "dap_an": "Khi đã được xếp trình độ năm thứ hai của chương trình thứ nhất."},
+ {"id": "V01", "loai": "phien_ban", "nguon": "qd3183", "dieu": "9", "question": "Sinh viên khóa 2025 có điểm học phần 8,0 thì được xếp loại điểm chữ gì?", "dap_an": "B+ (từ 7,8 đến 8,4) theo QĐ 3183/2025 sửa đổi điểm a khoản 3 Điều 9, áp dụng từ khóa 2025."},
+ {"id": "V02", "loai": "phien_ban", "nguon": "qc2021", "dieu": "9", "question": "Sinh viên khóa 2022 có điểm học phần 8,0 thì được xếp loại điểm chữ gì?", "dap_an": "B (từ 7,0 đến 8,4) theo Quy chế 2021 Điều 9, vì sửa đổi của QĐ 3183 chỉ áp dụng từ khóa 2025."},
+ {"id": "O01", "loai": "ngoai", "nguon": "", "dieu": "", "question": "Học phí mỗi tín chỉ năm học 2025-2026 là bao nhiêu?", "dap_an": "Không có trong văn bản: hệ thống phải từ chối."},
+ {"id": "O02", "loai": "ngoai", "nguon": "", "dieu": "", "question": "Ký túc xá của trường có bao nhiêu phòng?", "dap_an": "Không có trong văn bản: hệ thống phải từ chối."}
+]

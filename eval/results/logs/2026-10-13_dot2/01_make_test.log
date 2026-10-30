@@ -1,0 +1,52 @@
+venv/bin/python -m unittest discover -s tests -t . -v
+test_bm25_tinh_toan (tests.test_bm25.TestBM25.test_bm25_tinh_toan) ... ok
+test_bo_dau_va_tach_tu (tests.test_bm25.TestBM25.test_bo_dau_va_tach_tu) ... ok
+test_diem_giam_dan (tests.test_bm25.TestBM25.test_diem_giam_dan) ... ok
+test_khong_khop_thi_tra_rong (tests.test_bm25.TestBM25.test_khong_khop_thi_tra_rong) ... ok
+test_truy_hoi_khi_thieu_dau (tests.test_bm25.TestBM25.test_truy_hoi_khi_thieu_dau) ... ok
+test_truy_hoi_theo_ky_hieu (tests.test_bm25.TestBM25.test_truy_hoi_theo_ky_hieu)
+Điểm yếu của embedding: ký hiệu B+ / số hiệu. BM25 phải bắt được. ... ok
+test_hai_profile (tests.test_corpus.TestConfig.test_hai_profile) ... ok
+test_mo_ta_du_khoa (tests.test_corpus.TestConfig.test_mo_ta_du_khoa) ... ok
+test_profile_khong_hop_le (tests.test_corpus.TestConfig.test_profile_khong_hop_le) ... ok
+test_resolve_device_cpu (tests.test_corpus.TestConfig.test_resolve_device_cpu) ... ok
+test_moi_tien_to_khop_dung_mot_file (tests.test_corpus.TestCorpusThat.test_moi_tien_to_khop_dung_mot_file) ... ok
+test_node_co_nguon_trich_va_khong_rong (tests.test_corpus.TestCorpusThat.test_node_co_nguon_trich_va_khong_rong) ... ok
+test_thong_ke_khop (tests.test_corpus.TestCorpusThat.test_thong_ke_khop) ... ok
+test_buoc_thoi_hoc_hai_lan_lien_tiep (tests.test_llm.TestLLM.test_buoc_thoi_hoc_hai_lan_lien_tiep)
+Khoản 2 Điều 11: buộc thôi học khi *quá hai lần* bị cảnh báo *liên tiếp*. ... skipped 'đặt RAG_TEST_LLM=1 để chạy kiểm thử có LLM'
+test_diem_a_he_10 (tests.test_llm.TestLLM.test_diem_a_he_10)
+A ứng với 8,5--10 trên thang 10; trước khi sửa prompt, LLM trả lời "4,0 điểm hệ 10". ... skipped 'đặt RAG_TEST_LLM=1 để chạy kiểm thử có LLM'
+test_diem_d_cong_he_10 (tests.test_llm.TestLLM.test_diem_d_cong_he_10)
+QĐ 3183: D+ từ 4,8 đến 5,4 trên thang 10. ... skipped 'đặt RAG_TEST_LLM=1 để chạy kiểm thử có LLM'
+test_khong_lo_suy_luan (tests.test_llm.TestLLM.test_khong_lo_suy_luan)
+thinking=False: câu trả lời không chứa khối <think> hay chuỗi điều khiển /no_think. ... skipped 'đặt RAG_TEST_LLM=1 để chạy kiểm thử có LLM'
+test_rut_hoc_phan (tests.test_llm.TestLLM.test_rut_hoc_phan)
+QĐ 3183 sửa đổi khoản 4 Điều 7: rút học phần trong 03 tuần đầu của học kỳ. ... skipped 'đặt RAG_TEST_LLM=1 để chạy kiểm thử có LLM'
+test_tat_dinh (tests.test_llm.TestLLM.test_tat_dinh)
+temperature=0 + seed: cùng prompt gọi hai lần cho cùng kết quả. ... skipped 'đặt RAG_TEST_LLM=1 để chạy kiểm thử có LLM'
+test_tin_chi_cu_nhan (tests.test_llm.TestLLM.test_tin_chi_cu_nhan)
+Quy chế 2021, Điều 2: cử nhân tối thiểu 120 tín chỉ. ... skipped 'đặt RAG_TEST_LLM=1 để chạy kiểm thử có LLM'
+test_tu_choi_diem_ren_luyen (tests.test_llm.TestLLM.test_tu_choi_diem_ren_luyen) ... skipped 'đặt RAG_TEST_LLM=1 để chạy kiểm thử có LLM'
+test_tu_choi_hoc_phi (tests.test_llm.TestLLM.test_tu_choi_hoc_phi) ... skipped 'đặt RAG_TEST_LLM=1 để chạy kiểm thử có LLM'
+test_xep_loai_xuat_sac (tests.test_llm.TestLLM.test_xep_loai_xuat_sac)
+Quy chế 2021, khoản 4 Điều 10: xuất sắc từ 3,6 đến 4,0. ... skipped 'đặt RAG_TEST_LLM=1 để chạy kiểm thử có LLM'
+test_bootstrap_ci_bao_quanh_trung_binh (tests.test_metrics.TestMetrics.test_bootstrap_ci_bao_quanh_trung_binh) ... ok
+test_bootstrap_tat_dinh (tests.test_metrics.TestMetrics.test_bootstrap_tat_dinh) ... ok
+test_hang_dau_tien (tests.test_metrics.TestMetrics.test_hang_dau_tien) ... ok
+test_mcnemar (tests.test_metrics.TestMetrics.test_mcnemar) ... ok
+test_ndcg_giam_theo_hang (tests.test_metrics.TestMetrics.test_ndcg_giam_theo_hang) ... ok
+test_p95 (tests.test_metrics.TestMetrics.test_p95) ... ok
+test_recall_va_mrr (tests.test_metrics.TestMetrics.test_recall_va_mrr) ... ok
+test_chi_nguon_trich_duoc_embed (tests.test_processed_loader.TestProcessedLoader.test_chi_nguon_trich_duoc_embed) ... ok
+test_front_matter (tests.test_processed_loader.TestProcessedLoader.test_front_matter) ... ok
+test_metadata_rong_bi_loai (tests.test_processed_loader.TestProcessedLoader.test_metadata_rong_bi_loai)
+Trước đây Node nào cũng mang chuong/dieu/sua_doi_dieu rỗng, làm nhiễu embedding. ... ok
+test_nguon_trich (tests.test_processed_loader.TestProcessedLoader.test_nguon_trich) ... ok
+test_so_node_va_nhan_dieu (tests.test_processed_loader.TestProcessedLoader.test_so_node_va_nhan_dieu) ... ok
+test_thong_ke (tests.test_processed_loader.TestProcessedLoader.test_thong_ke) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 0.663s
+
+OK (skipped=10)

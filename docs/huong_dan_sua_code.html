@@ -1,0 +1,1904 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sổ tay sửa code SGU RAG</title>
+<style>
+:root{
+  --bg:#fbfaf7; --panel:#ffffff; --ink:#1d1f23; --muted:#5d6470; --line:#e3e0d8;
+  --accent:#1f5fae; --accent-soft:#e8f0fb; --code-bg:#f3f1ec; --code-ink:#24292f;
+  --warn:#9a5b00; --warn-bg:#fff4e0; --bad:#a3262a; --bad-bg:#fdeceb; --ok:#1e6b3a; --ok-bg:#e7f5ec;
+  --kw:#8a2bb5; --str:#0a7d3e; --com:#7a7f87;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15171a; --panel:#1c1f23; --ink:#e7e9ec; --muted:#9aa3ae; --line:#2e333a;
+    --accent:#7fb2f0; --accent-soft:#1d2a3b; --code-bg:#202429; --code-ink:#e2e6ea;
+    --warn:#f0b45a; --warn-bg:#33270f; --bad:#f08a8d; --bad-bg:#3a1c1d; --ok:#7fd29b; --ok-bg:#17301f;
+    --kw:#d29bf5; --str:#8fd6a5; --com:#8a919b;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15171a; --panel:#1c1f23; --ink:#e7e9ec; --muted:#9aa3ae; --line:#2e333a;
+  --accent:#7fb2f0; --accent-soft:#1d2a3b; --code-bg:#202429; --code-ink:#e2e6ea;
+  --warn:#f0b45a; --warn-bg:#33270f; --bad:#f08a8d; --bad-bg:#3a1c1d; --ok:#7fd29b; --ok-bg:#17301f;
+  --kw:#d29bf5; --str:#8fd6a5; --com:#8a919b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+.layout{display:grid;grid-template-columns:270px minmax(0,1fr);max-width:1280px;margin:0 auto}
+nav.toc{position:sticky;top:0;height:100vh;overflow:auto;padding:24px 16px 40px;border-right:1px solid var(--line);font-size:14px}
+nav.toc h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 8px}
+nav.toc a{display:block;color:var(--ink);text-decoration:none;padding:3px 8px;border-radius:6px}
+nav.toc a:hover{background:var(--accent-soft);color:var(--accent)}
+nav.toc .sub{padding-left:20px;color:var(--muted);font-size:13px}
+main{padding:32px 40px 120px;min-width:0}
+header.hero{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:28px}
+header.hero h1{font-size:30px;line-height:1.25;margin:0 0 8px}
+header.hero p{color:var(--muted);margin:4px 0}
+h2{font-size:24px;margin:56px 0 12px;padding-top:12px;border-top:1px solid var(--line);scroll-margin-top:16px}
+h3{font-size:19px;margin:32px 0 8px;scroll-margin-top:16px}
+h4{font-size:16px;margin:22px 0 6px}
+p,li{max-width:80ch}
+a{color:var(--accent)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:.88em;background:var(--code-bg);color:var(--code-ink);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+pre{background:var(--code-bg);color:var(--code-ink);padding:14px 16px;border-radius:8px;overflow:auto;font-size:13.5px;line-height:1.5;border:1px solid var(--line)}
+pre code{background:none;padding:0;font-size:inherit;overflow-wrap:normal}
+.k{color:var(--kw)} .s{color:var(--str)} .c{color:var(--com);font-style:italic}
+table{border-collapse:collapse;width:100%;margin:12px 0 18px;font-size:14.5px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+.box{border-left:4px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.warn{border-left-color:var(--warn);background:var(--warn-bg)}
+.bad{border-left-color:var(--bad);background:var(--bad-bg)}
+.ok{border-left-color:var(--ok);background:var(--ok-bg)}
+.box strong:first-child{display:block;margin-bottom:4px}
+.flow{display:flex;flex-direction:column;gap:6px;margin:16px 0}
+.flow .step{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+.flow .arrow{color:var(--muted);padding-left:22px;font-size:13px}
+.step b{color:var(--accent)}
+.pill{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;background:var(--code-bg);color:var(--muted);border:1px solid var(--line);margin-left:6px;vertical-align:2px}
+details{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 14px;margin:10px 0}
+details summary{cursor:pointer;font-weight:600}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 16px}
+.theme-btn{position:fixed;right:16px;top:12px;background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:13px;z-index:5}
+ol.steps li{margin-bottom:6px}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  nav.toc{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line);max-height:320px}
+  main{padding:20px 16px 80px}
+  .grid2{grid-template-columns:1fr}
+  header.hero h1{font-size:24px}
+}
+</style>
+</head>
+<body>
+<button class="theme-btn" id="themeBtn" type="button">Sáng / Tối</button>
+<div class="layout">
+<nav class="toc">
+  <h2>Mục lục</h2>
+  <a href="#cach-doc">0. Cách dùng tài liệu</a>
+  <a href="#moi-truong">1. Môi trường &amp; lệnh chạy</a>
+  <a href="#tong-quan">2. Bức tranh tổng thể</a>
+  <a href="#llamaindex">3. Khái niệm LlamaIndex cần biết</a>
+  <a href="#du-lieu">4. Dữ liệu 3 tầng</a>
+  <a class="sub" href="#extract">4.1 extract_to_md.py</a>
+  <a class="sub" href="#clean">4.2 clean_md.py</a>
+  <a class="sub" href="#front-matter">4.3 Front matter</a>
+  <a href="#corpus">5. corpus.py</a>
+  <a href="#config">6. config.py</a>
+  <a href="#loader">7. processed_loader.py</a>
+  <a href="#index">8. index_builder.py</a>
+  <a href="#retriever">9. retriever.py</a>
+  <a href="#phien-ban">10. phien_ban.py</a>
+  <a href="#bm25">11. bm25.py</a>
+  <a href="#query">12. query_engine.py</a>
+  <a href="#app">13. pipeline.py &amp; app.py</a>
+  <a href="#server">14. model_server &amp; remote_models</a>
+  <a href="#eval">15. Đánh giá (eval/)</a>
+  <a class="sub" href="#luat-cham">15.1 luat_cham.py</a>
+  <a class="sub" href="#metrics">15.2 metrics.py</a>
+  <a class="sub" href="#evaluate">15.3 evaluate.py</a>
+  <a class="sub" href="#eval-khac">15.4 Các script khác</a>
+  <a href="#tests">16. Kiểm thử</a>
+  <a href="#cong-thuc">17. Công thức sửa code</a>
+  <a href="#bay">18. Bẫy thường gặp</a>
+  <a href="#tra-nhanh">19. Bảng tra nhanh</a>
+  <a href="#debug">20. Gỡ lỗi</a>
+  <h2 style="margin-top:18px">Phần II — Đọc code từng dòng</h2>
+  <a href="#python">21. Cú pháp Python hay gặp</a>
+  <a href="#d-loader">22. load_processed</a>
+  <a href="#d-index">23. build_or_load_index</a>
+  <a href="#d-retriever">24. get_postprocessors &amp; search</a>
+  <a href="#d-unionfind">25. chuoi_van_ban (union-find)</a>
+  <a href="#d-loc">26. LocPhienBan</a>
+  <a href="#d-uutien">27. UuTienSuaDoi &amp; moi_hon</a>
+  <a href="#d-query">28. Prompt thực tế gửi LLM</a>
+  <a href="#d-app">29. app.hoi (generator)</a>
+  <a href="#d-bm25">30. BM25 tính tay</a>
+  <a href="#d-remote">31. goi_server (thử lại)</a>
+  <a href="#d-clean">32. clean_md: join_lines, split_parts</a>
+  <a href="#d-eval">33. evaluate &amp; metrics</a>
+  <a href="#d-eval2">34. tra_loi_dev, dong_bang, evaluate_answers…</a>
+  <a href="#d-tests">35. Đọc hiểu file test</a>
+  <h2 style="margin-top:18px">Phần III — Lõi LlamaIndex &amp; giải đề</h2>
+  <a href="#li-ban-do">36. Bản đồ chỗ dùng LlamaIndex</a>
+  <a href="#li-query">37. Bên trong engine.query()</a>
+  <a href="#li-node">38. Document, Node, Splitter</a>
+  <a href="#li-index">39. Embedding &amp; VectorStoreIndex</a>
+  <a href="#li-retriever">40. Retriever</a>
+  <a href="#li-post">41. Postprocessor</a>
+  <a href="#li-synth">42. Synthesizer &amp; prompt</a>
+  <a href="#li-llm">43. LLM (Ollama)</a>
+  <a href="#li-chat">44. Chat engine</a>
+  <a href="#li-tool">45. Tool, Router, Agent</a>
+  <a href="#li-eval">46. Evaluation &amp; callback</a>
+  <a href="#de">47. Đề mẫu &amp; lời giải</a>
+  <a href="#de-meo">48. Mẹo làm đề tại chỗ</a>
+</nav>
+<main>
+<header class="hero">
+  <h1>Sổ tay sửa code — Hệ thống hỏi đáp RAG quy chế đào tạo SGU</h1>
+  <p>Giải thích từng phần chính của repo <code>sgu-rag-llamaindex</code> đủ chi tiết để tự đọc, tự sửa, tự kiểm tra mà không cần trợ lý AI.</p>
+  <p>Viết theo code ngày 24/10/2026 (commit <code>af0290a</code>). Số dòng ghi dạng <code>file.py:123</code> là vị trí lúc viết; nếu code đã đổi thì tìm theo tên hàm.</p>
+</header>
+
+<!-- ============================================================ -->
+<h2 id="cach-doc">0. Cách dùng tài liệu này</h2>
+<ul>
+  <li>Đọc mục <b>2</b> (bức tranh tổng thể) và <b>3</b> (khái niệm LlamaIndex) trước. Không nắm được hai mục này thì đọc code sẽ rất rối.</li>
+  <li>Mục <b>4 → 14</b> đi theo đúng thứ tự dữ liệu chạy qua hệ thống: PDF → Markdown → Node → Index → truy hồi → LLM → giao diện.</li>
+  <li>Mục <b>17</b> là các "công thức" từng bước cho những sửa đổi hay gặp. Mục <b>18</b> là các bẫy đã từng làm nhóm mất thời gian.</li>
+  <li>Quy ước đặt tên: code dùng tiếng Việt không dấu (<code>cau_hoi</code>, <code>van_ban</code>, <code>dieu</code>, <code>khoa</code>…). Gặp tên lạ thì đọc to lên bằng tiếng Việt là hiểu.</li>
+</ul>
+<div class="box">
+<strong>Từ điển nhanh tên biến</strong>
+<code>dieu</code> = Điều · <code>sua_doi_dieu</code> = mục sửa đổi Điều · <code>van_ban</code> = văn bản · <code>so_hieu</code> = số hiệu (vd "3183/QĐ-ĐHSG") · <code>khoa</code> = khóa tuyển sinh · <code>tinh_trang</code> = tình trạng hiệu lực · <code>phan</code> = phần (chính/ban hành/sửa đổi) · <code>nguon_trich</code> = nguồn trích · <code>hang</code> = hạng · <code>dung</code> = đúng · <code>tim</code> = tìm · <code>ket</code>/<code>ket_qua</code> = kết quả · <code>cau_hinh</code> = cấu hình · <code>bo_cau_hoi</code> = bộ câu hỏi · <code>chuoi</code> = chuỗi · <code>loc</code> = lọc · <code>uu_tien</code> = ưu tiên · <code>tu</code> = từ · <code>diem</code> = điểm.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="moi-truong">1. Môi trường &amp; lệnh chạy</h2>
+<h3>1.1 Cài đặt</h3>
+<pre><code>python3 -m venv venv
+source venv/bin/activate.fish      <span class="c"># bash/zsh: source venv/bin/activate</span>
+pip install -r requirements.txt    <span class="c"># phiên bản đã ghim; đừng nâng tùy tiện</span>
+cp .env.example .env               <span class="c"># rồi sửa giá trị</span></code></pre>
+<p><b>Luôn chạy lệnh từ thư mục gốc repo.</b> Mọi đường dẫn trong code (<code>data/processed/...</code>, <code>storage/...</code>) được tính từ <code>ROOT = Path(__file__).resolve().parent.parent</code>, nhưng một số script và <code>.env</code> vẫn phụ thuộc thư mục hiện tại.</p>
+
+<h3>1.2 Biến môi trường (<code>.env</code>)</h3>
+<table>
+<tr><th>Biến</th><th>Ý nghĩa</th><th>Đọc ở đâu</th></tr>
+<tr><td><code>RAG_PROFILE</code></td><td><code>local</code> (mặc định) hoặc <code>server</code></td><td><code>config.get_config()</code></td></tr>
+<tr><td><code>OLLAMA_BASE_URL</code></td><td>Địa chỉ Ollama. Chỉ profile <code>server</code> đọc. Thiếu <code>http://</code> thì tự thêm.</td><td><code>CONFIG_SERVER</code>, <code>__post_init__</code></td></tr>
+<tr><td><code>MODEL_SERVER_URL</code></td><td>Có giá trị → embedding + rerank gọi HTTP sang model server thay vì nạp model trên máy</td><td><code>RAGConfig.model_server_url</code></td></tr>
+<tr><td><code>MODEL_SERVER_TOKEN</code></td><td>Token Bearer gửi kèm request tới model server</td><td><code>remote_models.auth_headers()</code></td></tr>
+<tr><td><code>RAG_EMBED_DEVICE</code></td><td>Ép <code>cpu</code> hoặc <code>cuda</code></td><td><code>theo_moi_truong()</code></td></tr>
+<tr><td><code>RAG_TEMPERATURE</code>, <code>RAG_SEED</code></td><td>Ghi đè độ ngẫu nhiên của LLM</td><td><code>theo_moi_truong()</code></td></tr>
+<tr><td><code>RAG_THINKING=1</code></td><td>Bật chế độ suy luận của qwen3 (đúng hơn khi tra bảng, chậm ~4 lần)</td><td><code>theo_moi_truong()</code></td></tr>
+<tr><td><code>RAG_RERANK=0/1</code>, <code>RAG_LOC_PHIEN_BAN=0/1</code></td><td>Ép tắt/bật rerank và lọc phiên bản</td><td><code>theo_moi_truong()</code></td></tr>
+<tr><td><code>RAG_TEST_LLM=1</code></td><td>Cho phép chạy <code>tests/test_llm.py</code> (gọi Ollama thật)</td><td><code>tests/test_llm.py</code></td></tr>
+<tr><td><code>RAG_LOG_CAU_HOI</code></td><td>Đường dẫn file log câu hỏi của giao diện Gradio</td><td><code>app/app.py</code></td></tr>
+</table>
+
+<h3>1.3 Các lệnh hay dùng</h3>
+<table>
+<tr><th>Lệnh</th><th>Làm gì</th><th>Cần gì</th></tr>
+<tr><td><code>python3 src/config.py</code></td><td>In cấu hình đang dùng</td><td>—</td></tr>
+<tr><td><code>venv/bin/python src/processed_loader.py</code></td><td>In số Node theo từng file, ví dụ chuỗi đưa vào embedding</td><td>—</td></tr>
+<tr><td><code>venv/bin/python src/index_builder.py [--rebuild]</code></td><td>Build hoặc nạp index</td><td>Model embedding</td></tr>
+<tr><td><code>venv/bin/python src/retriever.py "câu hỏi" [--rerank] [--hybrid]</code></td><td>Xem các Node truy hồi được</td><td>Embedding (+ reranker)</td></tr>
+<tr><td><code>venv/bin/python src/query_engine.py</code></td><td>Hỏi thử một câu cố định</td><td>+ Ollama</td></tr>
+<tr><td><code>venv/bin/python src/pipeline.py</code></td><td>Hỏi đáp trên terminal</td><td>+ Ollama</td></tr>
+<tr><td><code>venv/bin/python app/app.py [--share]</code></td><td>Giao diện web Gradio ở <code>http://127.0.0.1:7860</code></td><td>+ Ollama</td></tr>
+<tr><td><code>make test</code></td><td>Kiểm thử offline</td><td>Không cần GPU hay Ollama</td></tr>
+<tr><td><code>make eval</code></td><td>Đo truy hồi 6 cấu hình</td><td>Embedding + reranker</td></tr>
+<tr><td><code>make baseline</code></td><td>Mốc BM25 / không xếp hạng</td><td>Index đã build</td></tr>
+</table>
+<div class="box warn"><strong>Kiểm tra kiểu (Pylance strict)</strong>Dự án bật <code>typeCheckingMode: strict</code> trong <code>.vscode/settings.json</code>. Mỗi tham số và giá trị trả về phải có kiểu; dùng <code>dict[str, str]</code> chứ không viết <code>dict</code> trần; biến kiểu <code>X | None</code> phải được thu hẹp (<code>if x is None: ...</code>) trước khi dùng. Mở VS Code là thấy lỗi gạch đỏ; chạy ngoài editor: <code>npx -y pyright@1 src eval</code>.</div>
+
+<!-- ============================================================ -->
+<h2 id="tong-quan">2. Bức tranh tổng thể</h2>
+<p>RAG = <b>R</b>etrieval-<b>A</b>ugmented <b>G</b>eneration: thay vì để LLM tự nhớ quy chế, hệ thống <i>tìm</i> các Điều liên quan rồi đưa chúng vào prompt để LLM trả lời <i>dựa trên đó</i>.</p>
+
+<h3>2.1 Giai đoạn chuẩn bị (offline, chạy một lần cho mỗi văn bản)</h3>
+<div class="flow">
+  <div class="step"><b>data/raw/</b> — PDF/DOCX gốc tải về từ web trường</div>
+  <div class="arrow">↓ <code>scripts/extract_to_md.py</code> (pdftotext + OCR Tesseract, chọn bản tốt hơn cho từng trang)</div>
+  <div class="step"><b>data/ocr/</b> — tầng 1, Markdown thô theo trang. <u>Nơi sửa tay lỗi OCR, chép bảng.</u></div>
+  <div class="arrow">↓ <code>scripts/clean_md.py</code> (bỏ quốc hiệu, chữ ký, nối dòng, dựng heading)</div>
+  <div class="step"><b>data/processed/</b> — tầng 2, Markdown sạch: <code>#</code> văn bản / <code>##</code> Chương / <code>###</code> Điều / <code>####</code> mục sửa đổi, kèm front matter metadata</div>
+</div>
+
+<h3>2.2 Giai đoạn chạy (mỗi lần khởi động và mỗi câu hỏi)</h3>
+<div class="flow">
+  <div class="step"><b>corpus.py + config.py</b> — chọn văn bản nào, model nào, tham số nào</div>
+  <div class="arrow">↓</div>
+  <div class="step"><b>processed_loader.py</b> — đọc tầng 2 → danh sách <code>TextNode</code> (118 Node từ 20 văn bản)</div>
+  <div class="arrow">↓</div>
+  <div class="step"><b>index_builder.py</b> — embedding mọi Node → <code>VectorStoreIndex</code>, lưu ở <code>storage/&lt;profile&gt;/01_quy_che_dao_tao/</code></div>
+  <div class="arrow">↓ (mỗi câu hỏi)</div>
+  <div class="step"><b>retriever.py</b> — embedding câu hỏi → 10 Node gần nhất → <code>LocPhienBan</code> → rerank → <code>UuTienSuaDoi</code> → còn 3 Node</div>
+  <div class="arrow">↓</div>
+  <div class="step"><b>query_engine.py</b> — ghép 3 Node vào <code>QA_PROMPT</code> → Ollama (qwen3) → câu trả lời + nguồn</div>
+  <div class="arrow">↓</div>
+  <div class="step"><b>pipeline.py</b> (terminal) / <b>app/app.py</b> (web)</div>
+</div>
+
+<h3>2.3 Một câu hỏi gọi model mấy lần?</h3>
+<ol>
+  <li><b>Embedding câu hỏi</b> (1 lần) — model <code>AITeamVN/Vietnamese_Embedding</code>.</li>
+  <li><b>Rerank</b> (1 lần, chấm 10 cặp câu hỏi–Node) — model <code>AITeamVN/Vietnamese_Reranker</code>.</li>
+  <li><b>LLM</b> (thường 1 lần; <code>compact</code> có thể chia nhiều lượt nếu ngữ cảnh quá dài) — <code>qwen3:8b</code> qua Ollama.</li>
+</ol>
+<p>Traceback có <code>llms/ollama</code> hoặc <code>response_synthesizers</code> → lỗi ở bước 3. Có <code>remote_models.py</code>, <code>/embed</code>, <code>/rerank</code>, <code>HuggingFaceEmbedding</code> → lỗi ở bước 1–2.</p>
+
+<h3>2.4 Sơ đồ phụ thuộc giữa các file <code>src/</code></h3>
+<pre><code>corpus.py  ←  config.py  ←  processed_loader.py  ←  index_builder.py  ←  retriever.py  ←  query_engine.py  ←  pipeline.py
+                                                         ↑                  ↑ ↑                                  ←  app/app.py
+                                              remote_models.py      bm25.py  phien_ban.py
+model_server.py : độc lập hoàn toàn (không import gì của dự án)</code></pre>
+<p>Mỗi file trong <code>src/</code> có dòng <code>sys.path.insert(0, str(Path(__file__).resolve().parent))</code> để import kiểu <code>from config import ...</code> chạy được dù gọi từ đâu. Thư mục <code>eval/</code> và <code>tests/</code> cũng tự thêm <code>src/</code> vào <code>sys.path</code>. Vì vậy <b>không có package</b>, không có <code>__init__.py</code> trong <code>src/</code>; import luôn là tên file trần.</p>
+
+<!-- ============================================================ -->
+<h2 id="llamaindex">3. Khái niệm LlamaIndex cần biết</h2>
+<p>Dự án dùng <code>llama-index-core==0.14.24</code>. Chỉ cần nắm các lớp sau:</p>
+<table>
+<tr><th>Lớp / khái niệm</th><th>Là gì</th><th>Dùng ở đâu trong dự án</th></tr>
+<tr><td><code>TextNode</code></td><td>Một mẩu văn bản + <code>metadata</code> (dict) + <code>node_id</code>. Đơn vị nhỏ nhất được embedding và truy hồi.</td><td><code>processed_loader.load_processed()</code> tạo; mỗi Điều = 1 Node</td></tr>
+<tr><td><code>metadata</code>, <code>excluded_embed_metadata_keys</code>, <code>excluded_llm_metadata_keys</code></td><td>Metadata được <b>ghép vào đầu nội dung</b> khi embedding hoặc khi đưa vào prompt, trừ những khóa nằm trong danh sách loại trừ.</td><td><code>processed_loader._gan_metadata()</code></td></tr>
+<tr><td><code>MetadataMode</code></td><td><code>EMBED</code> = chuỗi đem đi embedding; <code>LLM</code> = chuỗi đưa vào prompt; <code>NONE</code> = chỉ text. Gọi <code>node.get_content(metadata_mode=...)</code> để xem.</td><td>BM25, reranker dùng <code>EMBED</code></td></tr>
+<tr><td><code>NodeWithScore</code></td><td>Node + điểm (<code>score</code>). Kết quả truy hồi luôn là <code>list[NodeWithScore]</code>.</td><td>Mọi retriever / postprocessor</td></tr>
+<tr><td><code>QueryBundle</code></td><td>Gói câu hỏi (<code>query_str</code>) truyền vào retriever / postprocessor.</td><td><code>retriever.search()</code></td></tr>
+<tr><td><code>Settings</code></td><td>Biến toàn cục: <code>Settings.embed_model</code>, <code>Settings.llm</code>. Index dùng <code>Settings.embed_model</code> nếu không truyền riêng.</td><td><code>index_builder.setup_embedding()</code>, <code>query_engine.build_query_engine()</code></td></tr>
+<tr><td><code>VectorStoreIndex</code></td><td>Kho vector trong bộ nhớ. <code>index.docstore.docs</code> = dict mọi Node. <code>index.as_retriever(similarity_top_k=k)</code> = retriever cosine.</td><td><code>index_builder</code></td></tr>
+<tr><td><code>StorageContext.persist / load_index_from_storage</code></td><td>Lưu / nạp index thành các file JSON trong một thư mục.</td><td><code>build_or_load_index()</code></td></tr>
+<tr><td><code>BaseRetriever</code></td><td>Lớp cha của retriever. Lớp con viết <code>_retrieve(query_bundle) -&gt; list[NodeWithScore]</code>; gọi qua <code>.retrieve("câu hỏi")</code>.</td><td><code>bm25.BM25Retriever</code></td></tr>
+<tr><td><code>QueryFusionRetriever</code></td><td>Trộn kết quả của nhiều retriever (RRF, relative_score…).</td><td>Hybrid trong <code>retriever.get_retriever()</code></td></tr>
+<tr><td><code>BaseNodePostprocessor</code></td><td>Bước xử lý <i>sau</i> truy hồi: lọc, sắp lại, cắt bớt. Lớp con viết <code>_postprocess_nodes(nodes, query_bundle)</code>; gọi qua <code>.postprocess_nodes(...)</code>. Là model Pydantic → khai báo thuộc tính dạng <code>ten: kieu = mac_dinh</code>.</td><td><code>phien_ban.LocPhienBan</code>, <code>UuTienSuaDoi</code>, <code>remote_models.RemoteRerank</code></td></tr>
+<tr><td><code>SentenceTransformerRerank</code></td><td>Postprocessor rerank bằng cross-encoder.</td><td><code>retriever.make_local_reranker()</code></td></tr>
+<tr><td><code>BaseEmbedding</code></td><td>Lớp cha của model embedding. Lớp con viết <code>_get_query_embedding</code>, <code>_get_text_embedding</code>…</td><td><code>remote_models.RemoteEmbedding</code></td></tr>
+<tr><td><code>PromptTemplate</code></td><td>Chuỗi prompt có chỗ trống <code>{context_str}</code> (các Node) và <code>{query_str}</code> (câu hỏi).</td><td><code>query_engine.QA_PROMPT</code></td></tr>
+<tr><td>Response synthesizer, <code>ResponseMode.COMPACT</code></td><td>Ghép các Node vào prompt rồi gọi LLM. <code>compact</code> nhồi càng nhiều Node vào một lượt càng tốt; không vừa thì chia lượt và "refine" câu trả lời.</td><td><code>query_engine</code>, <code>app.py</code></td></tr>
+<tr><td><code>RetrieverQueryEngine</code></td><td>= retriever + danh sách postprocessor + synthesizer. <code>engine.query("...")</code> chạy trọn chuỗi.</td><td><code>build_query_engine()</code></td></tr>
+<tr><td><code>StreamingResponse</code> / <code>Response</code></td><td>Kết quả của <code>query()</code>; có <code>.source_nodes</code> (các Node đã dùng). Streaming thì đọc từng token qua <code>response_gen</code>.</td><td><code>query_engine.ask()</code></td></tr>
+</table>
+
+<div class="box"><strong>Thí nghiệm nhỏ để hiểu metadata</strong>
+<pre><code><span class="k">from</span> llama_index.core.schema <span class="k">import</span> TextNode, MetadataMode
+n = TextNode(text=<span class="s">"Một năm học có 02 học kì chính."</span>,
+             metadata={<span class="s">"nguon_trich"</span>: <span class="s">"Điều 6 — QC 2021"</span>, <span class="s">"file"</span>: <span class="s">"x.md"</span>})
+n.excluded_embed_metadata_keys = [<span class="s">"file"</span>]
+print(n.get_content(metadata_mode=MetadataMode.EMBED))
+<span class="c"># nguon_trich: Điều 6 — QC 2021
+#
+# Một năm học có 02 học kì chính.</span></code></pre>
+Khóa <code>file</code> không xuất hiện vì đã bị loại trừ. Đây chính là cơ chế dự án dùng để chỉ đưa <code>nguon_trich</code> vào vector.</div>
+
+<!-- ============================================================ -->
+<h2 id="du-lieu">4. Dữ liệu 3 tầng</h2>
+<table>
+<tr><th>Tầng</th><th>Thư mục</th><th>Ai tạo</th><th>Được sửa tay?</th></tr>
+<tr><td>Gốc</td><td><code>data/raw/</code> (5 nhóm: <code>01_quy_che_dao_tao</code>, <code>02_cong_tac_sinh_vien</code>, <code>03_chuong_trinh_dao_tao</code>, <code>04_khoa_luan_thuc_tap</code>, <code>05_bieu_mau_thu_tuc</code>)</td><td>Tải từ web; sắp xếp bằng <code>scripts/reorganize_raw.py</code>. <code>metadata_manifest.csv</code> ghi sha256, URL, bản trùng.</td><td>Không</td></tr>
+<tr><td>Tầng 1</td><td><code>data/ocr/</code></td><td><code>extract_to_md.py</code></td><td><b>Có</b> — sửa lỗi OCR, chép bảng thành <code>| a | b |</code></td></tr>
+<tr><td>Tầng 2</td><td><code>data/processed/</code></td><td><code>clean_md.py</code></td><td>Về nguyên tắc là không — <b>nhưng hiện tại có</b>, xem cảnh báo ở 4.2</td></tr>
+</table>
+<p>Hiện chỉ <code>data/processed/01_quy_che_dao_tao/</code> được nạp vào index (gồm các thư mục con <code>1_quy_che_dao_tao_dai_hoc</code>, <code>2_quy_doi_tieng_anh</code>, <code>3_cong_tac_thi_ket_thuc_hoc_phan</code>, <code>5_quy_dinh_hoc_vu_khac</code>…). <code>data/bang_quy_doi/*.csv</code> là các bảng quy đổi tiếng Anh chép tay, chưa được code dùng.</p>
+
+<h3 id="extract">4.1 <code>scripts/extract_to_md.py</code> — PDF/DOCX → Markdown thô</h3>
+<p>Chạy: <code>python scripts/extract_to_md.py data/raw/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc [--force] [--dpi 400]</code></p>
+<h4>Thuật toán cho mỗi trang PDF</h4>
+<ol>
+  <li><code>convert_from_path(pdf, dpi)</code> render toàn bộ PDF thành ảnh.</li>
+  <li><code>text_layer(pdf, i)</code>: chạy <code>pdftotext -layout -f i -l i</code> lấy chữ có sẵn trong PDF, gom khoảng trắng.</li>
+  <li><code>ocr(image)</code>: Tesseract <code>lang="vie"</code>, model <code>~/.local/share/tessdata_best/vie.traineddata</code> (thiếu file này script dừng ngay).</li>
+  <li><code>quality(text)</code> trả về (tỷ lệ từ là <b>âm tiết tiếng Việt hợp lệ</b>, số từ). Regex <code>SYLLABLE</code> = phụ âm đầu + 1–3 nguyên âm + phụ âm cuối. Text hỏng font (VNI, dấu tách rời) cho tỷ lệ thấp.</li>
+  <li>Chọn text layer nếu <code>n_layer &gt;= 0.8 * n_ocr</code> <i>và</i> <code>q_layer &gt;= q_ocr - 0.01</code>; ngược lại dùng OCR.</li>
+</ol>
+<p>DOCX: <code>extract_docx()</code> mở file zip, đọc <code>word/document.xml</code>, nối các <code>&lt;w:t&gt;</code>; bảng thành dòng <code>ô | ô | ô</code>.</p>
+<h4>Kết quả</h4>
+<pre><code>---
+file_goc: "01_quy_che_dao_tao/.../25_quy-che-....pdf"
+sha256: 62e1...
+tieu_de: "..."  url: "..."  trung_noi_dung_voi: [...]
+so_trang: 12  trang_ocr: 3  trang_text_layer: 9  diem_chat_luong: 0.973
+da_sua_tay: false
+---
+## Trang 1 (nguon: text, diem: 0.981)
+
+...nội dung...
+
+## Trang 2 (nguon: ocr, diem: 0.942)
+...</code></pre>
+<p>Dòng <code>## Trang N (nguon: ..., diem: ...)</code> <b>phải giữ nguyên định dạng</b> khi sửa tay, vì <code>clean_md.py</code> tách trang bằng regex <code>PAGE_SPLIT</code>.</p>
+<p>Bỏ qua: file trùng sha256 với file đã xử lý (theo manifest), và file <code>.md</code> đã tồn tại (để không mất bản sửa tay) — trừ khi có <code>--force</code>.</p>
+
+<h3 id="clean">4.2 <code>scripts/clean_md.py</code> — tầng 1 → tầng 2</h3>
+<p>Chạy: <code>python scripts/clean_md.py data/ocr/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc</code> (tham số là <b>một thư mục</b>, không đệ quy thư mục con).</p>
+<h4>Các bước trong <code>main()</code> cho mỗi file</h4>
+<ol>
+  <li><code>read_tier1()</code>: tách front matter và các trang.</li>
+  <li><code>clean_page()</code> cho từng trang:
+    <ul>
+      <li>bỏ số trang ở dòng đầu/cuối (<code>"- 3 -"</code>);</li>
+      <li>trong 10 dòng có chữ đầu tiên, bỏ dòng khớp <code>HEADER</code> (CỘNG HÒA XÃ HỘI…, Độc lập…, Số:…, TRƯỜNG ĐẠI HỌC SÀI GÒN);</li>
+      <li>từ "Nơi nhận" tới hết trang là khối chữ ký → bỏ, trừ khi gặp "Điều"/"Chương" mới (văn bản sau bắt đầu ngay trên trang đó);</li>
+      <li>bỏ dòng chữ ký ngắn khớp <code>SIGN</code> (HIỆU TRƯỞNG, KT. HIỆU TRƯỞNG, (Đã ký)).</li>
+    </ul></li>
+  <li><code>join_lines()</code>: nối các dòng bị ngắt giữa câu thành đoạn. Một dòng <b>bắt đầu đoạn mới</b> khi: khớp <code>MARKER</code> (Điều, Chương, "1.", "a)", gạch đầu dòng…) và không bắt đầu bằng chữ thường; hoặc dòng này / dòng trước là tiêu đề IN HOA; hoặc dòng trước kết thúc bằng <code>. ; : ! ?</code>; hoặc có dòng trống phía trước. Dòng bảng <code>| … |</code> được giữ thành một khối riêng, không nối. Sửa lỗi OCR <code>"2, Kế hoạch"</code> → <code>"2. Kế hoạch"</code>.</li>
+  <li><code>split_parts()</code>: khi số Điều quay về 1 → tách phần. Thường gặp: "Quyết định ban hành" (Điều 1–3) + "Quy chế" (Điều 1–40) trong cùng một PDF. Phần nào không phải phần cuối và có tối đa 5 Điều được đặt tiêu đề <code>"Quyết định ban hành"</code>.</li>
+  <li><code>to_markdown()</code>: <code>CHUONG</code> → <code>## Chương …</code>; <code>DIEU</code> → <code>### Điều N. …</code>; <code>SUA_DOI</code> ("1. Sửa đổi, bổ sung khoản 2 Điều 6:") → <code>#### …</code>.</li>
+  <li><code>check()</code>: số Điều thiếu/trùng/nhảy, khoảng "từ a đến b" với a &gt; b, trang rỗng hoặc điểm &lt; 0,9 → ghi vào <code>_bao_cao_kiem_tra.md</code>. <b>Không tự sửa</b>; người duyệt sửa ở tầng 1.</li>
+  <li>Front matter tầng 2 = vài khóa từ tầng 1 + các cột của <code>&lt;thư mục tầng 1&gt;/_metadata_van_ban.csv</code> (<code>META_FIELDS</code>: ten_van_ban, loai, so_hieu, co_quan, ngay_ban_hanh, ap_dung, tinh_trang, bi_sua_doi_boi, ghi_chu).</li>
+</ol>
+<p>Regex <code>DIEU</code> chịu được lỗi OCR: <code>"Diều 5."</code>, <code>"Ðiều"</code>, <code>"Điều 13, Nghỉ ốm"</code>. File gốc là <code>.docx</code> (mẫu đơn) thì bỏ, không đưa sang tầng 2.</p>
+
+<div class="box bad"><strong>⚠ CẢNH BÁO QUAN TRỌNG: chạy lại clean_md.py sẽ làm MẤT metadata phiên bản</strong>
+Đã kiểm chứng ngày 24/10 trên một bản sao: chạy lại <code>clean_md.py</code> cho <code>1_quy_che_dao_tao_dai_hoc</code> thì file tầng 2 của QĐ 3183 <b>mất</b> các dòng <code>sua_doi: ["258/QĐ-ĐHSG"]</code> và <code>ap_dung_khoa_tu_theo_dieu: {"9": 2025, "10": 2025}</code>; phần thân cũng khác bản đang commit.
+Nguyên nhân: các trường dùng cho lọc phiên bản (<code>sua_doi</code>, <code>thay_the</code>, <code>bi_thay_the_boi</code>, <code>ap_dung_khoa_tu</code>, <code>ap_dung_khoa_den</code>, <code>ap_dung_khoa_tu_theo_dieu</code>) <b>không nằm trong <code>META_FIELDS</code> và CSV</b>, mà được thêm tay thẳng vào tầng 2 (commit <code>50e73f0</code> "xac minh hieu luc va cap nhat metadata phien ban").
+<br><b>Hậu quả nếu lỡ chạy:</b> <code>LocPhienBan</code>/<code>UuTienSuaDoi</code> mất căn cứ, kết quả truy hồi tụt mà không có lỗi nào được báo.
+<br><b>Cách làm an toàn:</b> (a) trước khi chạy, ghi chú lại front matter hiện tại; chạy xong thì <code>git diff data/processed</code> và chép lại các dòng bị mất; hoặc (b) sửa gốc rễ: thêm các trường này vào <code>META_FIELDS</code> + CSV (xem công thức 17.3).</div>
+
+<h3 id="front-matter">4.3 Front matter tầng 2 — từng trường dùng để làm gì</h3>
+<p>Ví dụ thật (QĐ 3183):</p>
+<pre><code>---
+file_goc: "01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - ....pdf"
+ten_van_ban: "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021"
+so_hieu: "3183/QĐ-ĐHSG"
+ngay_ban_hanh: "2025-04-14"
+tinh_trang: "con_hieu_luc"
+sua_doi: ["258/QĐ-ĐHSG"]
+ap_dung_khoa_tu_theo_dieu: {"9": 2025, "10": 2025}
+...
+---</code></pre>
+<table>
+<tr><th>Trường</th><th>Kiểu viết</th><th>Ai đọc</th><th>Tác dụng</th></tr>
+<tr><td><code>ten_van_ban</code></td><td>chuỗi</td><td>loader (dự phòng)</td><td>Tên hiển thị khi văn bản không có trong <code>SGU_HIEU_LUC</code></td></tr>
+<tr><td><code>so_hieu</code></td><td>"3183/QĐ-ĐHSG"</td><td>phien_ban, luat_cham</td><td>Định danh văn bản. Chỉ lấy phần trước dấu <code>/</code> ("3183") để so sánh</td></tr>
+<tr><td><code>tinh_trang</code></td><td><code>con_hieu_luc</code> / <code>bi_sua_doi</code> / <code>het_hieu_luc</code> / <code>bi_thay_the</code></td><td><code>LocPhienBan</code></td><td><code>het_hieu_luc</code>, <code>bi_thay_the</code> → Node bị bỏ</td></tr>
+<tr><td><code>sua_doi</code>, <code>bi_sua_doi_boi</code>, <code>thay_the</code>, <code>bi_thay_the_boi</code></td><td>list JSON <code>["a", "b"]</code></td><td><code>phien_ban</code></td><td>Quan hệ giữa các văn bản → gom chuỗi, đưa bản mới lên trước</td></tr>
+<tr><td><code>ap_dung_khoa_tu</code>, <code>ap_dung_khoa_den</code></td><td>số nguyên (2021)</td><td><code>LocPhienBan</code></td><td>Lọc theo khóa nêu trong câu hỏi</td></tr>
+<tr><td><code>ap_dung_khoa_tu_theo_dieu</code></td><td>dict JSON <code>{"9": 2025}</code></td><td>loader</td><td>Ghi đè <code>ap_dung_khoa_tu</code> cho riêng Node của Điều đó</td></tr>
+<tr><td><code>ngay_ban_hanh</code>, <code>nhom</code></td><td>chuỗi</td><td>loader</td><td>Đưa vào metadata (và vào prompt)</td></tr>
+<tr><td><code>file_goc</code>, <code>url</code></td><td>chuỗi</td><td>loader</td><td>Truy vết nguồn; không vào embedding/prompt</td></tr>
+</table>
+<div class="box warn"><strong>Định dạng front matter rất "ngây thơ"</strong><code>processed_loader.front_matter()</code> chỉ tách mỗi dòng ở <code>": "</code> đầu tiên rồi bỏ ngoặc kép hai đầu. Không hỗ trợ YAML nhiều dòng; giá trị list/dict phải viết <b>trên một dòng</b> dạng JSON hợp lệ (ngoặc kép, không có dấu phẩy thừa). JSON sai thì <code>danh_sach_so_hieu()</code>/<code>khoa_theo_dieu()</code> lặng lẽ bỏ qua, không báo lỗi.</div>
+
+<!-- ============================================================ -->
+<h2 id="corpus">5. <code>src/corpus.py</code> — văn bản nào được nạp</h2>
+<pre><code>PROCESSED_ROOT = <span class="s">"data/processed"</span>
+CORPUS_DIR = <span class="s">f"{PROCESSED_ROOT}/01_quy_che_dao_tao"</span>   <span class="c"># đọc cả thư mục con</span>
+SGU_HIEU_LUC: dict[str, str] = {
+    <span class="s">"25_quy-che-dao-tao"</span>: <span class="s">"Quy chế đào tạo trình độ đại học SGU 2021"</span>,
+    <span class="s">"QD 3183.2025"</span>: <span class="s">"QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021"</span>,
+    ...   <span class="c"># 20 mục</span>
+}</code></pre>
+<ul>
+  <li><b>Khóa</b> = tiền tố tên file <code>.md</code> (so khớp bằng <code>str.startswith</code>). <b>Giá trị</b> = tên hiển thị, được đưa vào metadata <code>van_ban</code> → vào embedding (qua <code>nguon_trich</code>), vào prompt và vào nhãn trích nguồn.</li>
+  <li>Mỗi tiền tố phải khớp <b>đúng một</b> file trong cả cây thư mục — <code>tests/test_corpus.py::test_moi_tien_to_khop_dung_mot_file</code> kiểm tra. Ví dụ tiền tố <code>"TB"</code> là quá ngắn vì khớp nhiều file.</li>
+  <li>Tiền tố không khớp file nào → <code>FileNotFoundError</code> liệt kê tiền tố thiếu (trong <code>processed_loader.corpus_files()</code>).</li>
+  <li>File tên bắt đầu bằng <code>_</code> (báo cáo của <code>clean_md.py</code>) luôn bị bỏ qua.</li>
+  <li>Thứ tự trong dict <b>không</b> ảnh hưởng thứ tự Node (file được sắp theo tên).</li>
+  <li>Tên hiển thị của văn bản quy đổi tiếng Anh cố ý ghi rõ khóa áp dụng ("khóa tuyển sinh 2022, 2023") để cả vector lẫn LLM phân biệt được.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="config">6. <code>src/config.py</code> — mọi tham số</h2>
+<h3>6.1 Dataclass <code>RAGConfig</code></h3>
+<table>
+<tr><th>Nhóm</th><th>Trường</th><th>Mặc định</th><th>Ảnh hưởng</th></tr>
+<tr><td rowspan="2">Profile</td><td><code>name</code></td><td>—</td><td>Tên thư mục index <code>storage/&lt;name&gt;/…</code></td></tr>
+<tr><td><code>persist_dir</code></td><td>"" → tự tính</td><td><code>__post_init__</code> đặt <code>storage/&lt;name&gt;/&lt;corpus_dir bỏ data/processed&gt;</code></td></tr>
+<tr><td rowspan="2">Embedding</td><td><code>embed_model_name</code></td><td>—</td><td>Đổi → index tự build lại (vì có trong fingerprint)</td></tr>
+<tr><td><code>embed_device</code>, <code>use_fp16</code></td><td>"cuda", False</td><td>Thiết bị; fp16 chỉ có tác dụng khi chạy cuda (để vừa card 4 GB)</td></tr>
+<tr><td rowspan="5">LLM</td><td><code>llm_model_name</code>, <code>ollama_base_url</code></td><td>—</td><td>Model Ollama và địa chỉ</td></tr>
+<tr><td><code>temperature</code></td><td>0.0</td><td>Tất định</td></tr>
+<tr><td><code>seed</code></td><td>42</td><td>Truyền xuống Ollama qua <code>additional_kwargs</code></td></tr>
+<tr><td><code>thinking</code></td><td>False</td><td>Chế độ suy luận của qwen3</td></tr>
+<tr><td><code>request_timeout</code></td><td>180</td><td>Giây chờ Ollama</td></tr>
+<tr><td rowspan="4">Rerank</td><td><code>reranker_model_name</code></td><td>None</td><td>None = profile không có reranker</td></tr>
+<tr><td><code>use_rerank</code></td><td>False (server: True)</td><td>Bật/tắt</td></tr>
+<tr><td><code>reranker_top_n</code></td><td>3</td><td>Số Node cuối cùng đưa vào LLM khi có rerank</td></tr>
+<tr><td><code>reranker_max_length</code></td><td>2048</td><td>Token tối đa mỗi cặp (câu hỏi, Node)</td></tr>
+<tr><td>Lọc phiên bản</td><td><code>loc_phien_ban</code></td><td>True</td><td>Bật <code>LocPhienBan</code> + <code>UuTienSuaDoi</code></td></tr>
+<tr><td>Model server</td><td><code>model_server_url</code></td><td>env <code>MODEL_SERVER_URL</code></td><td>Có → gọi HTTP</td></tr>
+<tr><td rowspan="2">Retriever</td><td><code>similarity_top_k</code></td><td>10</td><td>Số Node vector lấy ra trước khi lọc/rerank</td></tr>
+<tr><td><code>similarity_cutoff</code></td><td>None</td><td>Đặt số (vd 0.5) → bỏ Node có cosine thấp hơn</td></tr>
+<tr><td rowspan="3">Hybrid</td><td><code>use_hybrid</code></td><td>False</td><td>Trộn BM25</td></tr>
+<tr><td><code>bm25_top_k</code>, <code>bm25_k1</code>, <code>bm25_b</code></td><td>10, 1.5, 0.75</td><td>Tham số BM25</td></tr>
+<tr><td><code>fusion_mode</code>, <code>vector_weight</code>, <code>bm25_weight</code></td><td>"reciprocal_rerank", 1, 1</td><td>Cách trộn</td></tr>
+<tr><td rowspan="2">Sinh câu trả lời</td><td><code>response_mode</code></td><td>"compact"</td><td>Tên một <code>ResponseMode</code> của LlamaIndex</td></tr>
+<tr><td><code>streaming</code></td><td>True</td><td>In từng token</td></tr>
+<tr><td rowspan="3">Dữ liệu</td><td><code>corpus_dir</code></td><td><code>CORPUS_DIR</code></td><td>Thư mục đọc</td></tr>
+<tr><td><code>corpus_files</code></td><td>tuple khóa của <code>SGU_HIEU_LUC</code></td><td>Rỗng = nạp hết</td></tr>
+<tr><td><code>ten_van_ban</code></td><td>bản sao <code>SGU_HIEU_LUC</code></td><td>tiền tố → tên hiển thị</td></tr>
+</table>
+
+<h3>6.2 Hai profile</h3>
+<div class="grid2">
+<div class="card"><b>local</b> (máy cá nhân)<br>Embedding <code>bkai-foundation-models/vietnamese-bi-encoder</code> (chỉ 256 token — 63/118 Node bị cắt đuôi)<br>LLM <code>qwen3:4b</code> ở <code>localhost:11434</code><br>Không reranker</div>
+<div class="card"><b>server</b> (cấu hình chốt để đo)<br>Embedding <code>AITeamVN/Vietnamese_Embedding</code>, fp16<br>LLM <code>qwen3:8b</code> ở <code>OLLAMA_BASE_URL</code><br>Reranker <code>AITeamVN/Vietnamese_Reranker</code>, <code>use_rerank=True</code>, đọc 2048 token<br>Lọc phiên bản bật</div>
+</div>
+<p><b>Lưu ý:</b> README và <code>docs/huong_dan_src.md</code> còn ghi "rerank mặc định tắt" — đó là thông tin cũ. Hiện profile <code>server</code> bật rerank (<code>config.py:154</code>).</p>
+
+<h3>6.3 <code>get_config()</code> và <code>theo_moi_truong()</code></h3>
+<pre><code><span class="k">def</span> get_config() -&gt; RAGConfig:
+    profile_name = os.environ.get(<span class="s">"RAG_PROFILE"</span>, <span class="s">"local"</span>)
+    ...
+    <span class="k">return</span> theo_moi_truong(PROFILES[profile_name])   <span class="c"># trả về BẢN SAO</span></code></pre>
+<ul>
+  <li>Trả về bản sao (qua <code>dataclasses.replace</code>), nên viết <code>cfg.streaming = False</code> không làm hỏng profile dùng chung.</li>
+  <li>Biến <code>RAG_*</code> chỉ được áp <b>một lần</b>, ở đây. Đừng chuyển phần này vào <code>__post_init__</code>: <code>dataclasses.replace()</code> gọi lại <code>__post_init__</code>, khi đó mọi cấu hình ablation trong <code>eval/</code> (vd "vector" = tắt rerank) sẽ bị biến môi trường ghi đè lại. Lỗi này đã từng xảy ra; <code>test_corpus.py::test_replace_khong_ap_lai_bien_moi_truong</code> canh lỗi đó.</li>
+  <li>Cách tạo biến thể cấu hình trong code: <code>cfg2 = dataclasses.replace(cfg, use_rerank=False, similarity_top_k=5)</code>.</li>
+</ul>
+<p><code>resolve_device("cuda")</code>: không import được torch hoặc không có CUDA → trả <code>"cpu"</code> và ghi cảnh báo.</p>
+<p><code>mo_ta()</code>: dict tóm tắt cấu hình, được ghi kèm mọi file kết quả đánh giá. <b>Thêm trường mới vào RAGConfig mà trường đó ảnh hưởng kết quả thì thêm luôn vào <code>mo_ta()</code></b> (và <code>test_mo_ta_du_khoa</code> có thể cần cập nhật).</p>
+
+<!-- ============================================================ -->
+<h2 id="loader">7. <code>src/processed_loader.py</code> — Markdown → TextNode</h2>
+<h3>7.1 Hằng số</h3>
+<table>
+<tr><th>Hằng</th><th>Giá trị</th><th>Ý nghĩa</th></tr>
+<tr><td><code>MAX_TU</code></td><td>1024</td><td>Node dài hơn 1024 <b>từ</b> (đếm theo khoảng trắng) thì cắt nhỏ. Lưu ý <code>SentenceSplitter(chunk_size=1024)</code> lại đếm theo <b>token tiktoken</b> — hai đơn vị khác nhau.</td></tr>
+<tr><td><code>MIN_TU_NOI_DUNG</code></td><td>30</td><td>Chữ nằm ngay dưới <code>#</code>/<code>##</code> mà ngắn hơn 30 từ (tiêu đề, trích yếu) thì bỏ</td></tr>
+<tr><td><code>LOADER_VERSION</code></td><td>"processed_loader/3"</td><td><b>Tăng số này mỗi khi đổi logic cắt hoặc schema metadata</b> để index tự build lại</td></tr>
+<tr><td><code>QUAN_HE</code></td><td>sua_doi, bi_sua_doi_boi, thay_the, bi_thay_the_boi</td><td>Khóa quan hệ đọc từ front matter</td></tr>
+<tr><td><code>KHOA_AP_DUNG</code></td><td>ap_dung_khoa_tu, ap_dung_khoa_den</td><td>Khóa áp dụng (số nguyên)</td></tr>
+<tr><td><code>KHONG_LLM</code></td><td>file, file_goc, url, phan + QUAN_HE + KHOA_AP_DUNG</td><td>Không đưa vào prompt</td></tr>
+<tr><td><code>KHONG_EMBED</code></td><td>…</td><td>Hiện <b>không được dùng</b>; thực tế <code>_gan_metadata</code> loại <i>mọi</i> khóa trừ <code>nguon_trich</code></td></tr>
+<tr><td><code>HEADING</code></td><td><code>(?m)^(?=#{1,4} )</code></td><td>Cắt văn bản ngay <i>trước</i> mỗi heading 1–4 dấu <code>#</code> (lookahead nên giữ lại heading)</td></tr>
+</table>
+
+<h3>7.2 <code>load_processed(path, ten_hien_thi)</code> — từng bước</h3>
+<ol class="steps">
+  <li><code>front_matter()</code> tách <code>meta</code> (dict chuỗi) và <code>body</code>.</li>
+  <li><code>ten_van_ban = ten_hien_thi or meta["ten_van_ban"]</code>.</li>
+  <li><code>HEADING.split(body)</code> → các khối, mỗi khối bắt đầu bằng một heading. Biến <code>van_ban</code>, <code>chuong</code> nhớ heading cấp 1, 2 gần nhất.</li>
+  <li>Với mỗi khối: <code>level</code> = số dấu <code>#</code>, <code>title</code> = dòng heading, <code>rest</code> = phần thân.
+    <ul>
+      <li><b>level 1</b>: cập nhật <code>van_ban</code>, xoá <code>chuong</code>. <b>level 2</b>: cập nhật <code>chuong</code>. Với level ≤ 2: nếu thân &lt; 30 từ thì bỏ qua (không thành Node); ngược lại thành Node <code>phan="noi_dung"</code> (văn bản không chia Điều) hoặc <code>"ban_hanh"</code>.</li>
+      <li><b>level 3</b> (Điều): tìm số bằng <code>SO_DIEU</code> → <code>dieu</code>. <code>phan="chinh"</code>, hoặc <code>"ban_hanh"</code> nếu heading cấp 1 hiện tại là <code>"Quyết định ban hành"</code>.</li>
+      <li><b>level 4</b> (mục sửa đổi): số Điều trong heading → <code>sua_doi_dieu</code>, <code>phan="sua_doi"</code>.</li>
+    </ul></li>
+  <li>Dựng <code>node_meta</code>: <code>van_ban</code> (Node ban hành thì ghép "Quyết định ban hành – &lt;tên&gt;"), <code>chuong</code>, <code>dieu</code>, <code>sua_doi_dieu</code>, <code>phan</code>, <code>file</code>, <code>file_goc</code>, <code>url</code>; cộng thêm (nếu có) <code>so_hieu</code>, <code>ngay_ban_hanh</code>, <code>tinh_trang</code>, <code>nhom</code>; các khóa quan hệ (list JSON → chuỗi <code>"a; b"</code>); các khóa áp dụng (chỉ nhận khi là số).</li>
+  <li>Nếu Điều của Node nằm trong <code>ap_dung_khoa_tu_theo_dieu</code> → ghi đè <code>ap_dung_khoa_tu</code>.</li>
+  <li><code>text = title + "\n" + rest</code>. Dài hơn 1024 từ → <code>_splitter.split_text()</code> thành nhiều mảnh, mỗi mảnh thêm <code>phan_doan: 1, 2, …</code>.</li>
+  <li><code>_gan_metadata()</code>: bỏ khóa có giá trị rỗng, thêm <code>nguon_trich</code>, đặt <code>excluded_embed_metadata_keys</code> = mọi khóa trừ <code>nguon_trich</code>; <code>excluded_llm_metadata_keys</code> = các khóa trong <code>KHONG_LLM</code>.</li>
+</ol>
+
+<h3>7.3 Node thật trông như thế nào</h3>
+<p>Node mục sửa đổi Điều 9 của QĐ 3183 (in bằng <code>processed_loader</code>):</p>
+<pre><code>metadata = {
+ <span class="s">'van_ban'</span>: <span class="s">'QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021'</span>,
+ <span class="s">'sua_doi_dieu'</span>: <span class="s">'9'</span>, <span class="s">'phan'</span>: <span class="s">'sua_doi'</span>,
+ <span class="s">'file'</span>: <span class="s">'QD 3183.2025 - Sua doi ....md'</span>, <span class="s">'file_goc'</span>: <span class="s">'...pdf'</span>,
+ <span class="s">'so_hieu'</span>: <span class="s">'3183/QĐ-ĐHSG'</span>, <span class="s">'ngay_ban_hanh'</span>: <span class="s">'2025-04-14'</span>, <span class="s">'tinh_trang'</span>: <span class="s">'con_hieu_luc'</span>,
+ <span class="s">'sua_doi'</span>: <span class="s">'258/QĐ-ĐHSG'</span>,
+ <span class="s">'ap_dung_khoa_tu'</span>: 2025,                          <span class="c"># từ ap_dung_khoa_tu_theo_dieu</span>
+ <span class="s">'nguon_trich'</span>: <span class="s">'Sửa đổi Điều 9 — QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021'</span>}
+
+<span class="c"># Chuỗi đem đi EMBED (chỉ có nguon_trich):</span>
+nguon_trich: Sửa đổi Điều 9 — QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021
+
+3. Sửa đổi, bổ sung điểm a khoản 3 Điều 9: ...
+
+<span class="c"># Chuỗi đưa vào PROMPT LLM (không có file, phan, sua_doi, ap_dung_khoa_tu...):</span>
+van_ban: QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021
+sua_doi_dieu: 9
+so_hieu: 3183/QĐ-ĐHSG
+ngay_ban_hanh: 2025-04-14
+tinh_trang: con_hieu_luc
+nguon_trich: Sửa đổi Điều 9 — ...
+
+3. Sửa đổi, bổ sung ...</code></pre>
+<div class="box"><strong>Vì sao chỉ embed <code>nguon_trich</code>?</strong>Nhờ có tên văn bản, "Điều 9" của QC 2021 và "Điều 9" của một văn bản khác cho ra vector khác nhau; còn các khóa kỹ thuật như tên file, url thì không làm nhiễu vector. Trước đây mọi Node đều mang cả những khóa rỗng (<code>chuong: </code>, <code>dieu: </code>…) và vector bị nhiễu.</div>
+
+<h3>7.4 Các hàm còn lại</h3>
+<ul>
+  <li><code>corpus_files(cfg)</code>: <code>rglob("*.md")</code> trong <code>cfg.corpus_dir</code>, bỏ file <code>_*</code>, lọc theo tiền tố, báo lỗi nếu có tiền tố thiếu.</li>
+  <li><code>ten_hien_thi(cfg, path)</code>: tiền tố đầu tiên khớp → tên hiển thị.</li>
+  <li><code>load_corpus_nodes(cfg)</code>: Node của mọi file. <b>Đây là hàm chính được gọi từ bên ngoài.</b></li>
+  <li><code>thong_ke(nodes)</code>: tổng số Node, số văn bản, số Node không rõ Điều, độ dài trung bình, số Node theo file.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="index">8. <code>src/index_builder.py</code> — build/nạp index</h2>
+<h3>8.1 Chọn model embedding</h3>
+<ul>
+  <li><code>make_local_embedding(cfg)</code>: <code>HuggingFaceEmbedding</code>; fp16 khi chạy cuda, batch 4 (fp16) hoặc 10.</li>
+  <li><code>setup_embedding(cfg)</code>: có <code>model_server_url</code> → <code>check_server()</code> (server phải chạy đúng model) rồi <code>RemoteEmbedding</code>; không có → model tại chỗ. Gán vào <code>Settings.embed_model</code> (biến toàn cục).</li>
+</ul>
+<h3>8.2 Fingerprint — khi nào build lại</h3>
+<pre><code>corpus.json = {
+  <span class="s">"embed_model"</span>: <span class="s">"AITeamVN/Vietnamese_Embedding"</span>,
+  <span class="s">"corpus_dir"</span>: <span class="s">"data/processed/01_quy_che_dao_tao"</span>,
+  <span class="s">"loader"</span>: {<span class="s">"phien_ban"</span>: <span class="s">"processed_loader/3"</span>, <span class="s">"max_tu"</span>: 1024, <span class="s">"min_tu_noi_dung"</span>: 30},
+  <span class="s">"files"</span>: { <span class="s">"1_quy_che_dao_tao_dai_hoc/25_....md"</span>: <span class="s">"&lt;sha256&gt; | &lt;tên hiển thị&gt;"</span>, ... }
+}</code></pre>
+<p><code>build_or_load_index(cfg, rebuild=False)</code>:</p>
+<ol>
+  <li>Gọi <code>setup_embedding</code>.</li>
+  <li>Có <code>docstore.json</code> + <code>corpus.json</code> trùng với fingerprint vừa tính → <code>load_index_from_storage</code> (nhanh, không embedding lại).</li>
+  <li>Không thì: <code>load_corpus_nodes</code> → <code>VectorStoreIndex(nodes)</code> (embedding tất cả) → <code>persist</code> → ghi <code>corpus.json</code>.</li>
+</ol>
+<table>
+<tr><th>Bạn sửa</th><th>Tự build lại?</th></tr>
+<tr><td>Nội dung file tầng 2 (kể cả front matter)</td><td>✔ (sha256 đổi)</td></tr>
+<tr><td>Thêm/bớt văn bản, đổi tên hiển thị trong <code>corpus.py</code></td><td>✔</td></tr>
+<tr><td>Đổi <code>embed_model_name</code>, <code>MAX_TU</code>, <code>MIN_TU_NOI_DUNG</code></td><td>✔</td></tr>
+<tr><td>Đổi <b>logic</b> trong <code>processed_loader.py</code> (cách đặt metadata, cách cắt…)</td><td>✘ — phải tăng <code>LOADER_VERSION</code> hoặc chạy <code>--rebuild</code></td></tr>
+<tr><td>Đổi prompt, top-k, rerank, lọc phiên bản</td><td>Không cần build lại (chỉ ảnh hưởng lúc truy vấn)</td></tr>
+</table>
+<p>Xoá thẳng <code>storage/server/</code> cũng ép build lại. Thư mục <code>storage/</code> không được commit.</p>
+
+<!-- ============================================================ -->
+<h2 id="retriever">9. <code>src/retriever.py</code> — truy hồi</h2>
+<h3>9.1 <code>get_retriever(index, cfg)</code></h3>
+<ul>
+  <li>Mặc định: <code>index.as_retriever(similarity_top_k=10)</code> — cosine giữa vector câu hỏi và vector Node.</li>
+  <li><code>use_hybrid=True</code>: dựng <code>BM25Retriever</code> trên mọi Node trong docstore, trộn với vector bằng <code>QueryFusionRetriever(mode=FUSION_MODES(cfg.fusion_mode), num_queries=1, retriever_weights=[...])</code>.
+    <ul><li><code>num_queries=1</code>: không nhờ LLM sinh thêm câu hỏi phụ (để phép đo tất định).</li>
+    <li>Vẫn phải truyền <code>llm=Ollama(...)</code>: nếu không, thư viện tự tìm LLM mặc định là OpenAI và báo <code>ImportError</code>.</li></ul></li>
+</ul>
+<h3>9.2 <code>get_postprocessors(cfg, index)</code> — thứ tự là then chốt</h3>
+<div class="flow">
+  <div class="step">① <code>SimilarityPostprocessor</code> — chỉ khi <code>similarity_cutoff</code> khác None <i>và</i> không bật hybrid (điểm RRF không cùng thang với cosine)</div>
+  <div class="arrow">↓</div>
+  <div class="step">② <code>LocPhienBan.tu_nodes(index.docstore.docs.values())</code> — bỏ văn bản hết hiệu lực, kéo kèm mục sửa đổi, lọc theo khóa</div>
+  <div class="arrow">↓</div>
+  <div class="step">③ Rerank — <code>RemoteRerank</code> hoặc <code>make_local_reranker</code>. <b>top_n = 1000 nếu có lọc phiên bản</b> (giữ hết), ngược lại <code>reranker_top_n</code> (3)</div>
+  <div class="arrow">↓</div>
+  <div class="step">④ <code>UuTienSuaDoi</code> — đưa bản sửa đổi lên trước bản bị sửa, <b>rồi mới cắt top_n=3</b>. Khi không rerank: <code>UuTienSuaDoi(ti_le_toi_thieu=None)</code>, không cắt.</div>
+</div>
+<p>Vì sao không cắt ở bước ③? Nếu reranker cắt còn 3 trước khi sắp lại, mục sửa đổi xếp thứ 4 sẽ bị mất; <code>UuTienSuaDoi</code> cần nhìn thấy đủ Node để đưa nó lên.</p>
+<p><b>Hệ quả cho người sửa code:</b> không rerank thì LLM nhận <b>tất cả</b> Node còn lại (tới 10, cộng các mục sửa đổi được kéo kèm), không phải 3.</p>
+<h3>9.3 <code>search(index, cfg, question, postprocessors=None, retriever=None)</code></h3>
+<pre><code>nodes = (retriever <span class="k">or</span> get_retriever(index, cfg)).retrieve(question)
+<span class="k">for</span> p <span class="k">in</span> (get_postprocessors(cfg, index) <span class="k">if</span> postprocessors <span class="k">is</span> None <span class="k">else</span> postprocessors):
+    nodes = p.postprocess_nodes(nodes, QueryBundle(question))
+<span class="k">return</span> nodes</code></pre>
+<p>Truyền sẵn <code>retriever</code>/<code>postprocessors</code> khi gọi nhiều lần (vòng lặp đánh giá, app) để không nạp lại reranker cho từng câu.</p>
+<h3>9.4 Tiện ích</h3>
+<ul>
+  <li><code>node_label(n)</code> → <code>"&lt;van_ban&gt; – Điều N"</code> / <code>"– sửa đổi Điều N"</code> / chỉ tên văn bản. Đây là chuỗi "Nguồn:" mà người dùng thấy.</li>
+  <li><code>dat_do_dai_toi_da(cross_encoder, so_token)</code>: <code>SentenceTransformerRerank</code> cứng ở 512 token và không cho truyền tham số. Hàm này gán thẳng <code>max_seq_length</code> (sentence-transformers ≥ 5) hoặc <code>max_length</code>. <b>Đây là nguyên nhân kết luận cũ "rerank làm giảm R@1" bị sai</b>: 28% Node bị cắt mất đúng đoạn cần tìm.</li>
+  <li><code>make_local_reranker</code>: fp16 → nạp trên CPU, <code>.half()</code>, rồi mới <code>.to("cuda")</code>, để bản fp32 không chiếm VRAM cùng lúc với model embedding.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="phien-ban">10. <code>src/phien_ban.py</code> — lọc phiên bản (phần khó nhất)</h2>
+<h3>10.1 Bài toán</h3>
+<p>Theo phân tích lỗi ngày 13/10, <b>46% số câu trượt top-1 là do nhầm phiên bản hoặc nhầm khóa</b>:</p>
+<ul>
+  <li>QC 2021 Điều 7 (bản gốc) đứng trên mục QĐ 3183 sửa Điều 7 (bản đúng).</li>
+  <li>CV 3248/2018 đứng trên QĐ 898/2025 (văn bản mới hơn).</li>
+  <li>Hỏi về khóa 2020 nhưng lại lấy bảng quy đổi của khóa 2022.</li>
+</ul>
+<p>Rerank chỉ chấm mức khớp nội dung nên còn làm lỗi này nặng hơn. Giải pháp: dùng metadata hiệu lực (mục 4.3) trong hai postprocessor.</p>
+
+<h3>10.2 Hàm phụ</h3>
+<table>
+<tr><th>Hàm</th><th>Vào → ra</th><th>Ghi chú</th></tr>
+<tr><td><code>khoa_trong_cau_hoi(q)</code></td><td>"Sinh viên khóa 2020 …" → 2020; "K21" → 2021; "khoá tuyển sinh năm 22" → 2022; không nêu → None</td><td>Regex <code>KHOA</code>; chuẩn hóa NFC trước khi so</td></tr>
+<tr><td><code>so_van_ban(s)</code></td><td>"3183/QĐ-ĐHSG" → "3183"</td><td>Vì các văn bản viết ký hiệu không thống nhất (QĐ/QyĐ/TB)</td></tr>
+<tr><td><code>danh_sach(v)</code></td><td>"2366/TB-ĐHSG; 2626/QyĐ-ĐHSG" → ["2366", "2626"]</td><td></td></tr>
+<tr><td><code>lien_quan(meta)</code></td><td>tập số văn bản của chính Node + mọi văn bản liên quan</td><td></td></tr>
+<tr><td><code>chuoi_van_ban(nodes)</code></td><td>số văn bản → mã chuỗi</td><td>Union-find: hai văn bản có quan hệ thì chung chuỗi. Ví dụ 2366, 2451, 2567, 2626, 2101 là một chuỗi; 258, 3183 là chuỗi khác.</td></tr>
+<tr><td><code>ap_dung_cho_khoa(meta, k)</code></td><td>True nếu <code>tu ≤ k ≤ den</code> (thiếu cận nào thì coi là không giới hạn phía đó)</td><td></td></tr>
+<tr><td><code>khoa_sua_doi(meta)</code></td><td>Node <code>sua_doi_dieu=9</code> của 3183 sửa 258 → "258|9"</td><td>Khóa tra cứu mục sửa đổi</td></tr>
+<tr><td><code>moi_hon(moi, cu)</code></td><td>True nếu Node <code>moi</code> là bản mới hơn của đúng phần mà <code>cu</code> nói tới</td><td>Xem 10.4</td></tr>
+</table>
+
+<h3>10.3 <code>LocPhienBan</code> (chạy TRƯỚC rerank)</h3>
+<p>Dựng một lần bằng <code>LocPhienBan.tu_nodes(mọi Node trong docstore)</code>; khi đó nó nhớ:</p>
+<ul><li><code>muc_sua_doi</code>: "258|9" → [Node sửa đổi Điều 9], …</li><li><code>chuoi</code>: số văn bản → mã chuỗi.</li></ul>
+<p><code>_postprocess_nodes</code> làm 3 việc theo thứ tự:</p>
+<ol>
+  <li><b>Bỏ hết hiệu lực:</b> Node có <code>tinh_trang</code> ∈ {<code>het_hieu_luc</code>, <code>bi_thay_the</code>} bị bỏ.</li>
+  <li><b>Kéo kèm mục sửa đổi (T2):</b> gặp Node <code>phan="chinh"</code> có <code>dieu</code> và <code>so_hieu</code>, tra <code>muc_sua_doi["&lt;số&gt;|&lt;dieu&gt;"]</code>; mục nào chưa có trong danh sách thì chèn <b>ngay trước</b> Điều gốc, với cùng điểm.</li>
+  <li><b>Lọc theo khóa (T1):</b> chỉ khi câu hỏi nêu khóa. Tính <code>hop_le</code> = tập các chuỗi còn ít nhất một Node áp dụng được cho khóa đó. Bỏ Node không áp dụng <b>chỉ khi</b> chuỗi của nó nằm trong <code>hop_le</code>. Nghĩa là: nếu cả chuỗi không còn Node nào áp dụng được thì giữ nguyên, để LLM vẫn có căn cứ.</li>
+</ol>
+<details><summary>Ví dụ chạy tay: "Sinh viên khóa 2020 có IELTS 5.0 được quy đổi thế nào?"</summary>
+<p>Vector trả về theo thứ tự: QyĐ 2626 (khóa 2022–2023), TB 2366 (2020–2021), QyĐ 2101 (từ 2024), TB 2451 (2020–2021).</p>
+<ol>
+<li>Không văn bản nào hết hiệu lực → giữ cả 4.</li>
+<li>Các Node này không có mục sửa đổi theo Điều → không kéo thêm Node nào.</li>
+<li>khóa = 2020. Áp dụng được: 2366, 2451 (cùng chuỗi "tiếng Anh") → <code>hop_le</code> = {chuỗi tiếng Anh}. 2626 và 2101 cùng chuỗi đó nhưng không áp dụng cho 2020 → <b>bị bỏ</b>. Kết quả: [2366, 2451].</li>
+</ol>
+<p>Nếu câu hỏi là "khóa 2019" mà tất cả chỉ áp dụng từ 2020 → <code>hop_le</code> rỗng → không bỏ Node nào.</p>
+</details>
+
+<h3>10.4 <code>UuTienSuaDoi</code> (chạy SAU rerank)</h3>
+<p>Lặp tới khi không đổi nữa: tìm cặp (i &lt; j) mà Node j "mới hơn" Node i <b>và</b> <code>du_lien_quan</code> → đưa j lên đứng ngay trước i. Cuối cùng cắt <code>top_n</code> (nếu khác None).</p>
+<p><code>moi_hon(moi, cu)</code>:</p>
+<ul>
+  <li>Cùng số văn bản, hoặc thiếu <code>so_hieu</code> → False.</li>
+  <li><code>moi</code> là mục sửa đổi Điều X → True chỉ khi nó sửa đúng văn bản của <code>cu</code> <i>và</i> <code>cu</code> là Điều X.</li>
+  <li><code>cu</code> thuộc một Điều cụ thể → False (Điều chỉ bị đẩy xuống bởi đúng mục sửa đổi Điều đó; ví dụ QĐ 3183 Điều 2 "hiệu lực thi hành" không phải bản mới của QC 2021 Điều 13).</li>
+  <li>Ngược lại: True nếu <code>cu</code> ghi <code>bi_sua_doi_boi</code>/<code>bi_thay_the_boi</code> = <code>moi</code>, hoặc <code>moi</code> ghi <code>sua_doi</code>/<code>thay_the</code> = <code>cu</code>.</li>
+</ul>
+<p><code>du_lien_quan(moi, cu)</code>: mục sửa đổi theo Điều → luôn True. Quan hệ sửa đổi cả văn bản → chỉ True khi <code>moi.score ≥ 0.5 × cu.score</code> (điểm rerank). Lý do: TB 2567 chỉ bổ sung PTE nhưng ghi <code>sua_doi</code> 2366 — không có ngưỡng thì nó bị đẩy lên cả khi câu hỏi hỏi về IELTS. Ngưỡng 0,5 lấy từ đo đạc ngày 17/10: các lần đưa lên đúng có tỉ lệ ≥ 0,92, các lần sai đều &lt; 0,35. Khi không rerank (điểm là cosine, sát nhau) thì <code>ti_le_toi_thieu=None</code> → bỏ qua so điểm.</p>
+<div class="box warn"><strong>Khi sửa phien_ban.py</strong>Chạy <code>venv/bin/python -m unittest tests.test_phien_ban -v</code>. File test dựng một "corpus mô phỏng" (QC7, SD9, TB2366, QD2101…) phủ đúng các tình huống ở trên; đọc file test là cách nhanh nhất để hiểu hành vi mong đợi. Có 2 ca biên được đánh dấu <code>expectedFailure</code> (đã biết là chưa xử lý được).</div>
+
+<!-- ============================================================ -->
+<h2 id="bm25">11. <code>src/bm25.py</code> — BM25 thuần Python</h2>
+<ul>
+  <li><code>bo_dau("Điều")</code> → "Dieu": thay đ/Đ, chuẩn hóa NFD, bỏ ký tự dấu (category <code>Mn</code>).</li>
+  <li><code>tach_tu(text)</code>: regex <code>TOKEN</code> lấy chuỗi chữ/số, bỏ dấu, viết thường. <code>bigrams=True</code> thêm cặp âm tiết liền nhau ("hoc_phan").</li>
+  <li>Lớp <code>BM25</code>: lưu tf (Counter) từng tài liệu, độ dài, độ dài trung bình, idf.</li>
+</ul>
+<pre><code>idf(t)     = ln(1 + (N − df(t) + 0.5) / (df(t) + 0.5))          <span class="c"># luôn dương</span>
+score(d,q) = Σ_{t∈q}  idf(t) · f(t,d)·(k1+1) / ( f(t,d) + k1·(1 − b + b·|d|/avgdl) )</code></pre>
+<p><code>BM25Retriever._retrieve</code>: tính điểm mọi Node, sắp giảm dần, lấy <code>similarity_top_k</code>, bỏ Node có điểm 0. Văn bản đem đi tách từ là <code>get_content(MetadataMode.EMBED)</code> (có cả <code>nguon_trich</code>).</p>
+<p>Kết quả đo: hybrid (R@1 76,9%) <b>kém hơn</b> vector thuần (82,4%) trên 91 câu dev, nên mặc định tắt.</p>
+
+<!-- ============================================================ -->
+<h2 id="query">12. <code>src/query_engine.py</code> — prompt + LLM</h2>
+<h3>12.1 <code>QA_PROMPT</code></h3>
+<p>Các yêu cầu, theo đúng thứ tự trong prompt:</p>
+<ol>
+  <li>Bối cảnh: đây là trích đoạn quy chế SGU, mỗi trích đoạn ghi tên văn bản và Điều. <code>{context_str}</code> = nội dung các Node (chuỗi <code>MetadataMode.LLM</code>, cách nhau bởi dòng trống).</li>
+  <li>Chỉ dựa vào trích đoạn; tiếng Việt; ngắn gọn.</li>
+  <li><b>Bắt buộc trích nguyên văn</b> câu quy định, kèm tên văn bản và số Điều.</li>
+  <li>Không suy diễn, không tự quy đổi thang điểm; tra bảng thì chép đúng hàng.</li>
+  <li>Có văn bản sửa đổi thì dùng nội dung đã sửa đổi.</li>
+  <li>Chú giải thang điểm hệ 10 (Điều 9) / hệ 4 (Điều 10). Đây là "kiến thức miền nằm trong prompt" — đã bị thầy nhận xét là giải pháp tạm.</li>
+  <li>Không có thông tin → nói không tìm thấy (đây là cơ chế từ chối duy nhất).</li>
+</ol>
+<p>Sửa prompt là sửa chuỗi này. Giữ nguyên hai chỗ trống <code>{context_str}</code> và <code>{query_str}</code>. Muốn viết dấu ngoặc nhọn thật trong prompt thì gõ <code>{{</code> <code>}}</code>.</p>
+<h3>12.2 <code>make_llm(cfg)</code></h3>
+<pre><code>Ollama(model=cfg.llm_model_name, base_url=cfg.ollama_base_url, request_timeout=cfg.request_timeout,
+       temperature=cfg.temperature, additional_kwargs={<span class="s">"seed"</span>: cfg.seed},
+       thinking=cfg.thinking, context_window=8192)</code></pre>
+<p><code>context_window=8192</code> cho LlamaIndex biết cần chia ngữ cảnh khi nào (chế độ compact).</p>
+<h3>12.3 <code>build_query_engine</code>, <code>ask</code>, <code>format_sources</code></h3>
+<ul>
+  <li><code>RetrieverQueryEngine.from_args(retriever, llm, response_mode, streaming, text_qa_template=QA_PROMPT, node_postprocessors=get_postprocessors(cfg, index))</code>. Đồng thời gán <code>Settings.llm = llm</code>.</li>
+  <li><code>ask()</code>: <code>StreamingResponse</code> → in từng token; <code>Response</code> → in một lần; cuối cùng in <code>Nguồn:</code>.</li>
+  <li><code>format_sources</code>: các <code>node_label</code> của <code>response.source_nodes</code>, bỏ trùng nhưng giữ thứ tự (<code>dict.fromkeys</code>).</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="app">13. <code>src/pipeline.py</code> &amp; <code>app/app.py</code></h2>
+<h3>13.1 pipeline.py</h3>
+<p>22 dòng: <code>get_config → build_or_load_index → build_query_engine</code>, rồi vòng lặp <code>input()</code> gọi <code>ask()</code>; gõ <code>thoat</code> hoặc Ctrl+D để dừng.</p>
+<h3>13.2 app/app.py (Gradio)</h3>
+<p><b>Khác pipeline:</b> app không dùng <code>RetrieverQueryEngine</code> mà tách hai bước — <code>search()</code> để lấy Node, rồi <code>synthesizer.synthesize(question, nodes=nodes)</code>. Nhờ vậy LLM lỗi thì vẫn thấy được các trích đoạn.</p>
+<ul>
+  <li>Biến toàn cục khởi tạo <b>một lần lúc import</b>: <code>cfg</code>, <code>index</code>, <code>llm</code>, <code>synthesizer</code>. <code>_postprocessors</code> là cache theo khóa <code>(rerank, loc_phien_ban)</code>, vì reranker nạp model rất chậm.</li>
+  <li><code>hoi(question, history, top_k, dung_rerank, loc_phien_ban, sinh_tra_loi)</code> là một <b>generator</b>: mỗi <code>yield (history, "", nguon)</code> là một lần cập nhật giao diện (khung chat, xoá ô nhập, cột trích đoạn). Streaming token chính là yield sau mỗi token.</li>
+  <li>Bắt lỗi: <code>httpx.HTTPError</code> khi truy hồi (model server/tunnel chết); <code>httpx.HTTPError</code>, <code>ollama.ResponseError</code> khi sinh câu trả lời.</li>
+  <li><code>ghi_log</code>: mỗi câu hỏi một dòng JSON trong <code>logs/questions_log.jsonl</code> (thư mục này nằm trong .gitignore).</li>
+  <li>Bố cục <code>gr.Blocks</code>: cột trái (3 phần) gồm Chatbot, Textbox, Examples, slider top-k, 3 checkbox, 2 nút; cột phải (2 phần) là Markdown trích đoạn. <code>o_hoi.submit(hoi, inputs=[...], outputs=[chat, o_hoi, nguon])</code> — thứ tự <code>inputs</code> phải khớp đúng thứ tự tham số của <code>hoi</code>, thứ tự <code>outputs</code> phải khớp đúng tuple được yield.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="server">14. <code>model_server.py</code> &amp; <code>remote_models.py</code></h2>
+<p>Mục đích: máy local không có GPU đủ mạnh → chạy embedding + reranker trên Colab hoặc máy thuê, gọi qua HTTP.</p>
+<table>
+<tr><th>Endpoint</th><th>Vào</th><th>Ra</th></tr>
+<tr><td><code>GET /health</code></td><td>—</td><td><code>{embed_model, reranker_model, reranker_max_length, device, fp16}</code></td></tr>
+<tr><td><code>POST /embed</code></td><td><code>{"texts": [...], "kind": "query"|"text"}</code></td><td><code>{"embeddings": [[...], ...]}</code></td></tr>
+<tr><td><code>POST /rerank</code></td><td><code>{"query": "...", "texts": [...]}</code></td><td><code>{"scores": [...]}</code></td></tr>
+</table>
+<ul>
+  <li><code>model_server.py</code> <b>không import gì của dự án</b> (để chép riêng file này lên máy GPU là chạy được). Vì vậy nó chép lại logic nạp model của <code>make_local_embedding</code> / <code>make_local_reranker</code>. <b>Sửa cách nạp model ở một nơi thì sửa luôn nơi kia</b>, và cả bản nhúng trong <code>scripts/setup_server.sh</code> / <code>notebooks/setup_server_v2.sh</code>.</li>
+  <li>Cấu hình qua biến môi trường <code>EMBED_MODEL</code>, <code>RERANK_MODEL</code>, <code>RERANK_MAX_LENGTH</code>, <code>DEVICE</code>, <code>FP16</code>, <code>MODEL_SERVER_TOKEN</code>.</li>
+  <li><code>gpu_lock</code>: endpoint đồng bộ chạy trong threadpool, khóa này đảm bảo mỗi lúc chỉ một request dùng GPU.</li>
+  <li><code>kind="query"</code> và <code>"text"</code> khác nhau: model embedding có thể thêm tiền tố khác nhau cho câu hỏi và tài liệu.</li>
+</ul>
+<p><code>remote_models.py</code>:</p>
+<ul>
+  <li><code>goi_server()</code>: thử lại tối đa 4 lần, chờ 1, 2, 4 giây, khi gặp lỗi mạng hoặc mã 502/503/504/530 (tunnel Cloudflare chập chờn).</li>
+  <li><code>check_server()</code>: server phải chạy đúng model embedding, reranker và <code>reranker_max_length</code> như config; lệch thì báo lỗi ngay (nếu không, vector sẽ lệch với index mà không có dấu hiệu gì).</li>
+  <li><code>RemoteEmbedding</code> (<code>BaseEmbedding</code>), <code>RemoteRerank</code> (<code>BaseNodePostprocessor</code>; gửi chuỗi <code>MetadataMode.EMBED</code>, gán điểm, sắp giảm dần, cắt <code>top_n</code>).</li>
+</ul>
+<p>Dựng server trên Colab: <code>scripts/setup_server_v2.sh</code> (cài Ollama, chạy model server, mở tunnel Cloudflare, in các dòng cần chép vào <code>.env</code>). Lưu ý: bản trong <code>scripts/</code> tải <code>model_server.py</code> từ GitHub, còn bản trong <code>notebooks/</code> nhúng sẵn code server bên trong — hai file này khác nhau.</p>
+
+<!-- ============================================================ -->
+<h2 id="eval">15. Đánh giá (<code>eval/</code>)</h2>
+<h3 id="luat-cham">15.1 <code>luat_cham.py</code> — thế nào là "lấy đúng"</h3>
+<p>Mỗi câu hỏi có nhãn <code>dieu_dung</code>. Mỗi bộ câu hỏi có một hàm <code>ChamDung = (NodeWithScore, nhãn) -&gt; bool</code>:</p>
+<table>
+<tr><th>Hàm</th><th>Bộ</th><th>Nhãn ví dụ</th><th>Node đúng khi</th></tr>
+<tr><td><code>dung_bo_01</code></td><td>test_questions_01 (QC 2021)</td><td>"9", "9;10"</td><td>Node QC 2021 (số 258), <code>phan=chinh</code>, <code>dieu</code> thuộc nhãn; <b>hoặc</b> mục QĐ 3183 sửa đúng Điều đó</td></tr>
+<tr><td><code>dung_bo_02</code></td><td>test_questions_02 (QĐ 3183)</td><td>"9", "2 (QĐ 3183)"</td><td>Chỉ Node của 3183: <code>sua_doi_dieu</code> thuộc nhãn hoặc Điều phần chính thuộc nhãn</td></tr>
+<tr><td><code>dung_bo_dev</code></td><td>dev_questions_dot1..4</td><td><code>"3260-QD-Hoan-thi"</code>, <code>"QD898|7"</code>, <code>"25_quy|bh:2"</code>, <code>"QD 3183|sd:9"</code>, <code>"a;b"</code></td><td>Tên file bắt đầu bằng tiền tố; nếu có <code>|Điều</code> thì: không tiền tố loại → phần chính; <code>bh:</code> → phần ban hành; <code>sd:</code> → mục sửa đổi</td></tr>
+</table>
+<p><code>dieu_dung</code> có thể là chuỗi hoặc list (<code>chuan_hoa_nhan</code> ghép list thành <code>"a;b"</code>). <code>BO_CAU_HOI</code> = tập dev (đã dùng để chỉnh hệ thống); <code>BO_KIEM_CHUNG</code> = tập kiểm chứng (chỉ chạy một lần sau khi đóng băng).</p>
+<p>Định dạng file câu hỏi: <code>[{"question": "...", "dieu_dung": "QD898|7"}, ...]</code> (tập kiểm chứng có thêm trường <code>loai</code>).</p>
+
+<h3 id="metrics">15.2 <code>metrics.py</code> — công thức</h3>
+<p>Đầu vào chung: <code>hang</code> = danh sách hạng (bắt đầu từ 1) của Node đúng <b>đầu tiên</b> cho mỗi câu; <code>None</code> nếu không có Node đúng.</p>
+<table>
+<tr><th>Độ đo</th><th>Công thức</th><th>Đọc như thế nào</th></tr>
+<tr><td>Recall@k</td><td>#(hạng ≤ k) / #câu</td><td>R@1 = tỉ lệ câu có Node đúng đứng đầu (quan trọng nhất)</td></tr>
+<tr><td>MRR</td><td>trung bình 1/hạng (None → 0)</td><td>1 = luôn đứng đầu; 0,5 = trung bình đứng thứ 2</td></tr>
+<tr><td>nDCG@k</td><td>trung bình 1/log₂(hạng+1) khi hạng ≤ k (IDCG = 1)</td><td>Phạt nhẹ hơn MRR khi xếp thấp</td></tr>
+<tr><td>bootstrap_ci</td><td>lấy mẫu lại có hoàn lại 2000 lần, lấy percentile 2,5% và 97,5%</td><td>Khoảng tin cậy 95%; bộ câu hỏi nhỏ thì khoảng này rất rộng</td></tr>
+<tr><td>mcnemar</td><td>b = chỉ A đúng, c = chỉ B đúng; p = 2·Σ_{i≤min(b,c)} C(b+c,i)/2^(b+c)</td><td>p &lt; 0,05 → hai cấu hình khác nhau thật sự</td></tr>
+<tr><td>cohen_kappa</td><td>(p_quan_sát − p_kỳ_vọng)/(1 − p_kỳ_vọng)</td><td>Mức đồng thuận giữa hai người chấm (hoặc người với máy)</td></tr>
+</table>
+
+<h3 id="evaluate">15.3 <code>evaluate.py</code></h3>
+<p>Chạy: <code>RAG_PROFILE=server venv/bin/python eval/evaluate.py --cau-hinh vector,rerank+loc</code></p>
+<ul>
+  <li><code>CAU_HINH</code>: tên cấu hình → các trường cần ghi đè lên config gốc (vector, rerank, rerank-top10, loc, rerank+loc, hybrid, …). Cấu hình nào cũng ghi tường minh <code>use_rerank</code> và <code>loc_phien_ban</code>, vì profile server bật cả hai theo mặc định.</li>
+  <li>Luồng <code>main()</code>: nạp index một lần → với mỗi cấu hình: <code>replace(cfg)</code>, dựng retriever + postprocessor, gọi "khởi động" một lần (không tính thời gian) → <code>danh_gia()</code> cho từng bộ câu hỏi → <code>giai_phong_gpu()</code> → <code>so_sanh_cap()</code> (McNemar) → ghi <code>eval/results/truy-hoi.json</code> và <code>.md</code>.</li>
+  <li><code>danh_gia()</code>: với mỗi câu, đo thời gian, tính hạng Node đúng đầu tiên, đếm văn bản top-1, ghi lại các câu nằm ngoài top-3 (rất có ích khi phân tích lỗi).</li>
+  <li><code>KetQua.to_dict()</code>: R@1/3/5/10 + CI, MRR, MRR@3, nDCG, thời gian trung bình/p95, <code>cau_hinh_chi_tiet = cfg.mo_ta()</code>.</li>
+  <li><code>--doi-chieu-thu-vien</code>: chấm lại bằng <code>RetrieverEvaluator</code> của LlamaIndex (hit_rate so với R@10).</li>
+  <li><code>--tap-kiem-chung</code>: chỉ chạy khi <code>dong_bang.kiem_khop()</code> trả khớp, và chưa từng chạy (trừ khi có <code>--chay-lai-kiem-chung</code>).</li>
+</ul>
+<p>Kết quả chốt ngày 17/10 (91 câu dev): vector 82,4% · rerank 83,5% · loc 84,6% · <b>rerank+loc 91,2%</b> · hybrid 76,9% (R@1). McNemar giữa rerank và rerank+loc: p = 0,016.</p>
+
+<h3 id="eval-khac">15.4 Các script khác</h3>
+<table>
+<tr><th>File</th><th>Dùng khi</th></tr>
+<tr><td><code>baselines.py</code></td><td>Cần mốc so sánh: BM25 thuần, "không xếp hạng" (thứ tự docstore)</td></tr>
+<tr><td><code>dong_bang.py tao | kiem</code></td><td>Trước khi chạy tập kiểm chứng: ghi sha256 của code + corpus + cấu hình + luật chấm vào <code>eval/results/dong-bang.json</code>. Code phải đã commit. So theo nội dung, không theo commit.</td></tr>
+<tr><td><code>kiem_tra_trung.py [--embedding]</code></td><td>Tìm câu kiểm chứng gần trùng câu dev (giống chữ ≥ 0,75; hoặc cùng Node và giống chữ ≥ 0,5 / giống nghĩa ≥ 0,85)</td></tr>
+<tr><td><code>bao_phu.py</code></td><td>Bộ câu hỏi chạm tới bao nhiêu Node/văn bản</td></tr>
+<tr><td><code>tra_loi_dev.py</code></td><td>Sinh câu trả lời để chấm tay: ghi evidence, token (từ Ollama), độ trễ, <code>ket_qua = loi | chua_cham</code>; <code>--chi-cau-loi</code>, <code>--tong-hop</code>. Cấu hình <code>cu</code> = vector top-10, <code>moi</code> = mặc định của server.</td></tr>
+<tr><td><code>cham_tu_dong.py</code></td><td>Chấm phụ: các con số của đáp án có xuất hiện trong câu trả lời không (bỏ qua số hiệu văn bản/Điều); câu trả lời có phải từ chối không</td></tr>
+<tr><td><code>evaluate_answers.py</code></td><td>Faithfulness/Relevancy bằng evaluator của LlamaIndex (LLM tự chấm), tỉ lệ từ chối đúng/sai, chế độ closed-book</td></tr>
+<tr><td><code>so_sanh_langchain.py</code></td><td>Cùng dữ liệu, dựng lại bằng LangChain để so (cần <code>pip install langchain-core</code>)</td></tr>
+<tr><td><code>run_batch_cau_hoi.py</code>, <code>compare_results.py</code></td><td>Script cũ cho 56 câu trong <code>cau-hoi01.md</code></td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="tests">16. Kiểm thử (<code>tests/</code>)</h2>
+<pre><code>make test                                                   <span class="c"># tất cả, offline</span>
+venv/bin/python -m unittest tests.test_phien_ban -v         <span class="c"># một file</span>
+venv/bin/python -m unittest tests.test_phien_ban.TestLocPhienBan.test_bo_van_ban_het_hieu_luc   <span class="c"># một ca</span>
+make test-llm                                               <span class="c"># có gọi Ollama thật</span></code></pre>
+<table>
+<tr><th>File</th><th>Canh giữ điều gì</th></tr>
+<tr><td><code>test_processed_loader</code></td><td>Front matter, số Node, nhãn Điều, metadata rỗng bị loại, chỉ <code>nguon_trich</code> vào embedding</td></tr>
+<tr><td><code>test_corpus</code></td><td>Mỗi tiền tố khớp đúng một file; Node có nguồn trích; profile, <code>mo_ta()</code>, biến môi trường</td></tr>
+<tr><td><code>test_phien_ban</code></td><td>Toàn bộ hành vi lọc phiên bản trên corpus mô phỏng</td></tr>
+<tr><td><code>test_bm25</code></td><td>Bỏ dấu, khớp ký hiệu "B+", câu thiếu dấu, điểm giảm dần</td></tr>
+<tr><td><code>test_metrics</code>, <code>test_luat_cham</code>, <code>test_cham_tu_dong</code></td><td>Công thức độ đo, luật chấm, chấm tự động</td></tr>
+<tr><td><code>test_danh_gia</code></td><td>File câu hỏi tồn tại, không trùng giữa dev và kiểm chứng, mọi nhãn khớp ít nhất một Node thật</td></tr>
+<tr><td><code>test_llm</code></td><td>Câu trả lời thật có chứa các con số bắt buộc (tất định, rút học phần, điểm A hệ 10, từ chối khi hỏi học phí…)</td></tr>
+</table>
+<p><code>tests/__init__.py</code> thêm <code>src/</code>, <code>eval/</code> vào <code>sys.path</code> và cung cấp <code>tmp_dir()</code> (thư mục tạm trong <code>.tmp/</code>). Mẫu viết một test mới:</p>
+<pre><code><span class="k">import</span> unittest
+<span class="k">from</span> llama_index.core.schema <span class="k">import</span> NodeWithScore, QueryBundle, TextNode
+<span class="k">from</span> phien_ban <span class="k">import</span> LocPhienBan
+
+<span class="k">class</span> TestCuaToi(unittest.TestCase):
+    <span class="k">def</span> test_bo_het_hieu_luc(self) -&gt; None:
+        n = TextNode(id_=<span class="s">"x"</span>, text=<span class="s">"x"</span>, metadata={<span class="s">"tinh_trang"</span>: <span class="s">"het_hieu_luc"</span>})
+        ket = LocPhienBan().postprocess_nodes([NodeWithScore(node=n, score=1.0)], QueryBundle(<span class="s">"câu hỏi"</span>))
+        self.assertEqual(ket, [])</code></pre>
+<p>CI (<code>.github/workflows/ci.yml</code>) chỉ cài <code>llama-index-core</code> + <code>python-dotenv</code>. <b>Test offline không được import torch, gradio hay httpx</b> — đó là lý do <code>luat_cham.py</code> được tách khỏi <code>evaluate.py</code>.</p>
+
+<!-- ============================================================ -->
+<h2 id="cong-thuc">17. Công thức sửa code (từng bước)</h2>
+
+<h3>17.1 Thêm một văn bản mới vào hệ thống</h3>
+<ol class="steps">
+  <li>Đặt PDF vào nhóm phù hợp trong <code>data/raw/01_quy_che_dao_tao/&lt;nhóm&gt;/</code>. Nếu muốn bỏ trùng theo sha256 thì thêm một dòng vào <code>data/raw/metadata_manifest.csv</code> (không bắt buộc).</li>
+  <li><code>python scripts/extract_to_md.py "data/raw/01_quy_che_dao_tao/&lt;nhóm&gt;/&lt;file&gt;.pdf"</code></li>
+  <li>Mở <code>data/ocr/.../&lt;file&gt;.md</code>, sửa lỗi OCR, chép bảng thành <code>| a | b |</code>. Giữ nguyên các dòng <code>## Trang N (...)</code>.</li>
+  <li>Thêm một dòng vào <code>data/ocr/.../&lt;nhóm&gt;/_metadata_van_ban.csv</code> (cột <code>file</code> = tên file <code>.md</code>; điền <code>so_hieu</code>, <code>tinh_trang</code>…).</li>
+  <li><code>python scripts/clean_md.py data/ocr/01_quy_che_dao_tao/&lt;nhóm&gt;</code>. <b>Lệnh này sinh lại MỌI file trong thư mục</b> → <code>git diff data/processed</code> và khôi phục metadata phiên bản đã sửa tay của các file khác (xem cảnh báo 4.2).</li>
+  <li>Đọc <code>_bao_cao_kiem_tra.md</code>; có vấn đề thì sửa ở tầng 1 rồi chạy lại.</li>
+  <li>Kiểm tra file tầng 2 mới: các Điều có thành <code>### Điều N.</code> không? Văn bản sửa đổi có <code>####</code> không? Nếu văn bản có quan hệ sửa đổi/khóa áp dụng thì thêm tay <code>sua_doi</code>, <code>ap_dung_khoa_tu</code>… vào front matter (JSON một dòng).</li>
+  <li>Thêm vào <code>SGU_HIEU_LUC</code> trong <code>src/corpus.py</code>: <code>"&lt;tiền tố duy nhất&gt;": "&lt;tên hiển thị rõ ràng&gt;"</code>.</li>
+  <li><code>venv/bin/python src/processed_loader.py</code> → xem văn bản mới có bao nhiêu Node.</li>
+  <li><code>make test</code> (kiểm tra tiền tố khớp đúng một file).</li>
+  <li>Thêm vài câu hỏi vào <code>eval/dev_questions_dot5.json</code> (nhãn dạng <code>"&lt;tiền tố&gt;|&lt;Điều&gt;"</code>), thêm <code>("dev_questions_dot5.json", dung_bo_dev)</code> vào <code>BO_CAU_HOI</code> trong <code>eval/luat_cham.py</code>, rồi chạy <code>make eval</code>.</li>
+</ol>
+
+<h3>17.2 Văn bản có Điều không tách được (OCR đọc "Điều" sai)</h3>
+<p>Sửa ở tầng 1 cho đúng dạng <code>Điều 5. Tên điều</code> trên một dòng riêng; hoặc mở rộng regex <code>DIEU</code> trong <code>clean_md.py</code> (vd thêm biến thể ký tự). Chạy lại <code>clean_md.py</code>, xem cột "Điều=" mà script in ra.</p>
+
+<h3>17.3 Sửa gốc rễ: để metadata phiên bản sống sót qua clean_md.py</h3>
+<ol class="steps">
+  <li>Trong <code>scripts/clean_md.py</code>, thêm vào <code>META_FIELDS</code>: <code>"sua_doi", "thay_the", "bi_thay_the_boi", "ap_dung_khoa_tu", "ap_dung_khoa_den", "ap_dung_khoa_tu_theo_dieu"</code>.</li>
+  <li>Chỗ ghi front matter đang là <code>f"{k}: \"{doc_meta.get(k, '')}\""</code> — bao giá trị trong ngoặc kép. Giá trị JSON (<code>["258/QĐ-ĐHSG"]</code>, <code>{"9": 2025}</code>) không được bao như vậy; cần ghi thô khi giá trị bắt đầu bằng <code>[</code> hoặc <code>{</code>. Số khóa (<code>2021</code>) thì loader vẫn đọc được dù có ngoặc kép, vì <code>front_matter</code> bỏ ngoặc kép.</li>
+  <li>Thêm các cột tương ứng vào mọi file <code>_metadata_van_ban.csv</code> và chép giá trị từ front matter tầng 2 hiện tại sang.</li>
+  <li>Chạy lại <code>clean_md.py</code> cho từng thư mục con, <code>git diff data/processed</code> → front matter phải không còn khác biệt.</li>
+  <li>Phần thân tầng 2 hiện cũng đã khác so với bản sinh lại (có chỉnh tay). Chuyển các chỉnh sửa đó về tầng 1 trước, nếu không chúng sẽ mất.</li>
+</ol>
+
+<h3>17.4 Thêm một trường metadata mới cho Node</h3>
+<ol class="steps">
+  <li>Thêm trường vào front matter tầng 2 (hoặc qua CSV + <code>META_FIELDS</code>).</li>
+  <li>Trong <code>load_processed()</code>, thêm tên trường vào vòng <code>for khoa in ("so_hieu", "ngay_ban_hanh", "tinh_trang", "nhom")</code> (hoặc xử lý riêng nếu là list/số).</li>
+  <li>Quyết định trường có được vào prompt không: nếu không thì thêm vào <code>KHONG_LLM</code>. (Embedding thì mặc định đã loại mọi trường trừ <code>nguon_trich</code>.)</li>
+  <li><b>Tăng <code>LOADER_VERSION</code></b> lên <code>"processed_loader/4"</code>.</li>
+  <li>Viết test trong <code>tests/test_processed_loader.py</code>.</li>
+</ol>
+
+<h3>17.5 Sửa prompt</h3>
+<ol class="steps">
+  <li>Sửa chuỗi <code>QA_PROMPT</code> trong <code>src/query_engine.py</code>. App dùng chung prompt này (<code>from query_engine import QA_PROMPT</code>).</li>
+  <li>Không cần build lại index.</li>
+  <li>Kiểm tra: <code>make test-llm</code>, và sinh lại câu trả lời bằng <code>eval/tra_loi_dev.py --cau-hinh moi --bo dev_questions_dot1.json --nhan &lt;ngày&gt;</code> để so với lần trước.</li>
+</ol>
+
+<h3>17.6 Đổi số Node đưa vào LLM, bật/tắt rerank</h3>
+<ul>
+  <li>Số Node cuối cùng (khi có rerank): <code>reranker_top_n</code> trong <code>RAGConfig</code>.</li>
+  <li>Số Node lấy ra từ vector: <code>similarity_top_k</code>.</li>
+  <li>Thử nhanh không cần sửa code: <code>RAG_RERANK=0 venv/bin/python src/pipeline.py</code>; hoặc trong giao diện app (slider + checkbox).</li>
+  <li>Đổi mặc định của profile: sửa <code>CONFIG_SERVER</code> trong <code>config.py</code>.</li>
+</ul>
+
+<h3>17.7 Từ chối khi không có Node đủ liên quan (similarity_cutoff)</h3>
+<ol class="steps">
+  <li>Chọn ngưỡng bằng đo đạc: <code>eval/evaluate.py --cau-hinh vector --cutoff 0.5</code>, xem R@k giảm bao nhiêu.</li>
+  <li>Đặt <code>similarity_cutoff=0.5</code> trong profile. <code>get_postprocessors</code> sẽ thêm <code>SimilarityPostprocessor</code> ở đầu chuỗi.</li>
+  <li>Khi danh sách Node rỗng, LlamaIndex <b>không gọi LLM</b> mà trả về chuỗi tiếng Anh <code>"Empty Response"</code> (<code>BaseSynthesizer.synthesize</code>; đã kiểm tra trên bản 0.14.24). Muốn trả lời bằng tiếng Việt thì tự kiểm tra danh sách rỗng (xem Đề 1 ở mục 47). Trong <code>app.py</code>, sau <code>search()</code>, thêm:
+<pre><code><span class="k">if not</span> nodes:
+    tra_loi.content = <span class="s">"Không tìm thấy trong các văn bản quy định."</span>
+    <span class="k">yield</span> history, <span class="s">""</span>, nguon
+    <span class="k">return</span></code></pre>
+  Với <code>pipeline.py</code>, tương tự: gọi <code>search()</code> trước, rỗng thì in thông báo, không thì gọi engine.</li>
+  <li><b>Lưu ý:</b> cutoff chạy trên cosine của vector, <b>trước</b> rerank. Muốn cắt theo điểm rerank thì phải tự viết một postprocessor đặt sau rerank (xem 17.8).</li>
+</ol>
+
+<h3>17.8 Viết một postprocessor mới</h3>
+<pre><code><span class="k">from</span> llama_index.core.postprocessor.types <span class="k">import</span> BaseNodePostprocessor
+<span class="k">from</span> llama_index.core.schema <span class="k">import</span> NodeWithScore, QueryBundle
+
+<span class="k">class</span> NguongRerank(BaseNodePostprocessor):
+    nguong: float = 0.1     <span class="c"># thuộc tính Pydantic: khai báo kiểu + mặc định</span>
+
+    @classmethod
+    <span class="k">def</span> class_name(cls) -&gt; str:
+        <span class="k">return</span> <span class="s">"NguongRerank"</span>
+
+    <span class="k">def</span> _postprocess_nodes(
+        self, nodes: list[NodeWithScore], query_bundle: QueryBundle | None = None
+    ) -&gt; list[NodeWithScore]:
+        <span class="k">return</span> [n <span class="k">for</span> n <span class="k">in</span> nodes <span class="k">if</span> (n.score <span class="k">or</span> 0.0) &gt;= self.nguong]</code></pre>
+<p>Gắn vào <code>get_postprocessors()</code> ở đúng vị trí (vd ngay sau rerank). Thêm trường cấu hình vào <code>RAGConfig</code> + <code>mo_ta()</code>, thêm test.</p>
+
+<h3>17.9 Thêm một cấu hình vào bảng ablation</h3>
+<p>Trong <code>eval/evaluate.py</code>, thêm vào <code>CAU_HINH</code>: <code>"rerank5+loc": {"use_rerank": True, "reranker_top_n": 5, "loc_phien_ban": True}</code>. Chạy <code>eval/evaluate.py --cau-hinh rerank+loc,rerank5+loc</code>. Khóa phải là tên trường thật của <code>RAGConfig</code>; viết sai tên thì <code>dataclasses.replace</code> báo <code>TypeError</code>.</p>
+
+<h3>17.10 Thêm một profile mới (đổi model)</h3>
+<pre><code>CONFIG_THU = RAGConfig(
+    name=<span class="s">"thu"</span>,                                  <span class="c"># index riêng: storage/thu/...</span>
+    embed_model_name=<span class="s">"BAAI/bge-m3"</span>,
+    embed_device=os.environ.get(<span class="s">"RAG_EMBED_DEVICE"</span>, <span class="s">"cuda"</span>),
+    llm_model_name=<span class="s">"qwen3:8b"</span>,
+    ollama_base_url=os.environ.get(<span class="s">"OLLAMA_BASE_URL"</span>, <span class="s">"http://localhost:11434"</span>),
+)
+PROFILES = {<span class="s">"local"</span>: CONFIG_LOCAL, <span class="s">"server"</span>: CONFIG_SERVER, <span class="s">"thu"</span>: CONFIG_THU}</code></pre>
+<p>Rồi <code>ollama pull &lt;model&gt;</code> và <code>RAG_PROFILE=thu venv/bin/python src/index_builder.py</code>. <code>test_hai_profile</code> có thể cần sửa vì nó kiểm tra số profile. Nếu dùng model server thì server phải chạy đúng model đó (<code>EMBED_MODEL=...</code>).</p>
+
+<h3>17.11 Hội thoại nhiều lượt (câu hỏi nối tiếp)</h3>
+<p>LlamaIndex có sẵn <code>CondensePlusContextChatEngine</code>: viết lại câu hỏi nối tiếp thành câu độc lập, truy hồi, rồi trả lời.</p>
+<pre><code><span class="k">from</span> llama_index.core.chat_engine <span class="k">import</span> CondensePlusContextChatEngine
+<span class="k">from</span> llama_index.core.memory <span class="k">import</span> ChatMemoryBuffer
+
+chat = CondensePlusContextChatEngine.from_defaults(
+    retriever=get_retriever(index, cfg),
+    llm=make_llm(cfg),
+    node_postprocessors=get_postprocessors(cfg, index),
+    memory=ChatMemoryBuffer.from_defaults(token_limit=3000),
+    context_prompt=<span class="s">"... prompt ngữ cảnh, dùng {context_str} ..."</span>,
+)
+r = chat.chat(<span class="s">"Sinh viên được rút học phần khi nào?"</span>)
+r = chat.chat(<span class="s">"Thế còn khóa 2025?"</span>)     <span class="c"># được viết lại thành câu đầy đủ trước khi truy hồi</span></code></pre>
+<p>Lưu ý: <code>LocPhienBan</code> đọc khóa từ <i>câu hỏi đã được viết lại</i>; nếu bước viết lại làm rơi mất chữ "khóa 2025" thì bộ lọc khóa không hoạt động. In câu viết lại ra để kiểm tra. Trong <code>app.py</code>, đổi <code>hoi()</code> sang dùng <code>chat.stream_chat()</code> và giữ một engine riêng cho mỗi phiên.</p>
+
+<h3>17.12 Lọc bằng MetadataFilters có sẵn (thay cho/so với LocPhienBan)</h3>
+<pre><code><span class="k">from</span> llama_index.core.vector_stores <span class="k">import</span> MetadataFilters, MetadataFilter, FilterOperator
+f = MetadataFilters(filters=[MetadataFilter(key=<span class="s">"tinh_trang"</span>, value=<span class="s">"het_hieu_luc"</span>, operator=FilterOperator.NE)])
+retr = index.as_retriever(similarity_top_k=10, filters=f)</code></pre>
+<p>Khác biệt: filter lọc <i>trước</i> khi tính top-k (nên không mất chỗ trong top-k), nhưng không biết "kéo kèm mục sửa đổi" hay "chỉ bỏ khi cùng chuỗi còn Node áp dụng được". Trường bị lọc phải có trong metadata của Node.</p>
+
+<h3>17.13 Thay đổi giao diện Gradio</h3>
+<ul>
+  <li>Thêm câu hỏi mẫu: sửa <code>CAU_HOI_MAU</code>.</li>
+  <li>Thêm một điều khiển: tạo component trong <code>gr.Blocks</code> → thêm vào <code>inputs=[...]</code> của <code>o_hoi.submit</code> → thêm tham số tương ứng vào <code>hoi()</code> <b>đúng thứ tự</b>.</li>
+  <li>Thêm một vùng hiển thị: tạo component → thêm vào <code>outputs</code> → <b>mọi</b> <code>yield</code> trong <code>hoi()</code> phải trả thêm một giá trị.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="bay">18. Bẫy thường gặp</h2>
+<table>
+<tr><th>#</th><th>Triệu chứng</th><th>Nguyên nhân</th><th>Cách xử lý</th></tr>
+<tr><td>1</td><td>Sau khi chạy <code>clean_md.py</code>, kết quả truy hồi tụt</td><td>Metadata phiên bản sửa tay ở tầng 2 bị ghi đè</td><td>Mục 4.2, 17.3</td></tr>
+<tr><td>2</td><td>Sửa loader nhưng kết quả không đổi</td><td>Index cũ vẫn được nạp (fingerprint không tính đến logic)</td><td>Tăng <code>LOADER_VERSION</code> hoặc <code>--rebuild</code></td></tr>
+<tr><td>3</td><td>Cấu hình "vector" trong eval vẫn chạy rerank</td><td>Áp biến môi trường trong <code>__post_init__</code></td><td>Giữ việc áp env trong <code>theo_moi_truong()</code></td></tr>
+<tr><td>4</td><td>Rerank làm giảm kết quả một cách khó hiểu</td><td>Cross-encoder bị cắt ở 512 token</td><td><code>dat_do_dai_toi_da</code>; server phải trả <code>reranker_max_length=2048</code></td></tr>
+<tr><td>5</td><td>Mục sửa đổi bị mất khỏi top-3</td><td>Reranker cắt trước khi <code>UuTienSuaDoi</code> sắp lại</td><td>Giữ <code>top_n=1000</code> ở reranker khi có lọc phiên bản</td></tr>
+<tr><td>6</td><td>Hybrid báo <code>ImportError ... openai</code></td><td><code>QueryFusionRetriever</code> tự tìm LLM mặc định</td><td>Truyền <code>llm=Ollama(...)</code></td></tr>
+<tr><td>7</td><td>Front matter JSON không có tác dụng</td><td>JSON sai cú pháp → bị bỏ qua mà không báo</td><td>Kiểm tra bằng <code>python -c "import json; json.loads('...')"</code></td></tr>
+<tr><td>8</td><td>Tiền tố mới "ăn" nhầm file khác</td><td><code>startswith</code> khớp nhiều file</td><td>Dùng tiền tố dài hơn; <code>make test</code> sẽ báo</td></tr>
+<tr><td>9</td><td>Tràn VRAM khi đo nhiều cấu hình rerank</td><td>Mỗi cấu hình nạp một CrossEncoder</td><td><code>giai_phong_gpu()</code> + <code>del</code> sau mỗi cấu hình</td></tr>
+<tr><td>10</td><td>CI lỗi <code>LookupError</code> NLTK</td><td>NLTK từ chối thư mục ghi được bởi tài khoản khác</td><td>Bước <code>chmod -R go-w</code> trong ci.yml</td></tr>
+<tr><td>11</td><td>Test offline lỗi trên CI vì thiếu torch</td><td>Test import gián tiếp <code>index_builder</code>/<code>evaluate</code></td><td>Chỉ import module nhẹ (<code>luat_cham</code>, <code>phien_ban</code>, <code>processed_loader</code>)</td></tr>
+<tr><td>12</td><td>Model server trả vector "lạ", kết quả tệ</td><td>Server chạy model khác config</td><td><code>check_server</code> báo lỗi; đặt <code>EMBED_MODEL</code> đúng</td></tr>
+<tr><td>13</td><td>Câu hỏi "khóa 2025" không lọc được</td><td>Regex <code>KHOA</code> không nhận cách viết đó, hoặc chữ "khóa" bị viết lại mất</td><td>Thử <code>khoa_trong_cau_hoi("...")</code> trong Python</td></tr>
+<tr><td>14</td><td>Pylance báo đỏ khắp nơi</td><td>Strict mode</td><td>Ghi kiểu cho mọi tham số; dùng <code>list[str]</code> chứ không viết <code>list</code> trần</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="tra-nhanh">19. Bảng tra nhanh: muốn đổi X → sửa ở đâu</h2>
+<table>
+<tr><th>Muốn</th><th>File</th><th>Chỗ</th></tr>
+<tr><td>Thêm/bớt văn bản, đổi tên hiển thị</td><td><code>src/corpus.py</code></td><td><code>SGU_HIEU_LUC</code></td></tr>
+<tr><td>Đổi model embedding / LLM / reranker</td><td><code>src/config.py</code></td><td><code>CONFIG_LOCAL</code>, <code>CONFIG_SERVER</code></td></tr>
+<tr><td>Đổi top-k, số Node đưa vào LLM</td><td><code>src/config.py</code></td><td><code>similarity_top_k</code>, <code>reranker_top_n</code></td></tr>
+<tr><td>Đổi cách cắt Node, kích thước Node</td><td><code>src/processed_loader.py</code></td><td><code>load_processed</code>, <code>MAX_TU</code> (+ <code>LOADER_VERSION</code>)</td></tr>
+<tr><td>Đổi những gì được embedding / vào prompt</td><td><code>src/processed_loader.py</code></td><td><code>nguon_trich()</code>, <code>_gan_metadata()</code>, <code>KHONG_LLM</code></td></tr>
+<tr><td>Đổi nhãn "Nguồn:"</td><td><code>src/retriever.py</code></td><td><code>node_label()</code></td></tr>
+<tr><td>Đổi thứ tự / thêm bước sau truy hồi</td><td><code>src/retriever.py</code></td><td><code>get_postprocessors()</code></td></tr>
+<tr><td>Đổi luật hiệu lực / khóa / sửa đổi</td><td><code>src/phien_ban.py</code></td><td><code>LocPhienBan</code>, <code>UuTienSuaDoi</code>, <code>moi_hon</code>, <code>KHOA</code></td></tr>
+<tr><td>Đổi prompt</td><td><code>src/query_engine.py</code></td><td><code>QA_PROMPT</code></td></tr>
+<tr><td>Đổi tham số Ollama (timeout, context)</td><td><code>src/query_engine.py</code></td><td><code>make_llm()</code></td></tr>
+<tr><td>Đổi giao diện</td><td><code>app/app.py</code></td><td>khối <code>gr.Blocks</code>, <code>hoi()</code></td></tr>
+<tr><td>Đổi quy tắc làm sạch OCR</td><td><code>scripts/clean_md.py</code></td><td><code>HEADER</code>, <code>SIGN</code>, <code>MARKER</code>, <code>join_lines</code></td></tr>
+<tr><td>Nhận dạng Điều / Chương / mục sửa đổi</td><td><code>scripts/clean_md.py</code></td><td><code>DIEU</code>, <code>CHUONG</code>, <code>SUA_DOI</code></td></tr>
+<tr><td>Thêm bộ câu hỏi đánh giá</td><td><code>eval/*.json</code> + <code>eval/luat_cham.py</code></td><td><code>BO_CAU_HOI</code></td></tr>
+<tr><td>Thêm cấu hình so sánh</td><td><code>eval/evaluate.py</code></td><td><code>CAU_HINH</code></td></tr>
+<tr><td>Thêm độ đo</td><td><code>eval/metrics.py</code> + <code>KetQua</code> trong evaluate.py</td><td></td></tr>
+<tr><td>Đổi cách nạp model trên server</td><td><code>src/model_server.py</code> <b>và</b> <code>index_builder.py</code>/<code>retriever.py</code> <b>và</b> các script setup</td><td></td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="debug">20. Gỡ lỗi — đoạn code dán vào <code>python -i</code></h2>
+<p>Mở <code>venv/bin/python</code> ở thư mục gốc repo (đặt <code>RAG_PROFILE=server</code> nếu cần):</p>
+<pre><code><span class="k">import</span> sys; sys.path.insert(0, <span class="s">"src"</span>)
+<span class="k">from</span> config <span class="k">import</span> get_config
+<span class="k">from</span> processed_loader <span class="k">import</span> load_corpus_nodes
+<span class="k">from</span> llama_index.core.schema <span class="k">import</span> MetadataMode
+cfg = get_config()
+
+<span class="c"># 1) Xem các Node của một văn bản</span>
+ns = load_corpus_nodes(cfg)
+[ (n.metadata.get(<span class="s">"dieu"</span>), n.metadata.get(<span class="s">"sua_doi_dieu"</span>)) <span class="k">for</span> n <span class="k">in</span> ns <span class="k">if</span> n.metadata[<span class="s">"file"</span>].startswith(<span class="s">"QD898"</span>) ]
+print(ns[0].get_content(metadata_mode=MetadataMode.LLM))
+
+<span class="c"># 2) Xem từng bước truy hồi (cần model embedding)</span>
+<span class="k">from</span> index_builder <span class="k">import</span> build_or_load_index
+<span class="k">from</span> retriever <span class="k">import</span> get_retriever, get_postprocessors, node_label
+<span class="k">from</span> llama_index.core.schema <span class="k">import</span> QueryBundle
+index = build_or_load_index(cfg)
+q = <span class="s">"Sinh viên khóa 2020 có IELTS 5.0 được quy đổi thế nào?"</span>
+nodes = get_retriever(index, cfg).retrieve(q)
+<span class="k">for</span> p <span class="k">in</span> get_postprocessors(cfg, index):
+    nodes = p.postprocess_nodes(nodes, QueryBundle(q))
+    print(type(p).__name__, [ (round(n.score <span class="k">or</span> 0, 3), node_label(n)) <span class="k">for</span> n <span class="k">in</span> nodes ])
+
+<span class="c"># 3) Kiểm tra regex khóa</span>
+<span class="k">from</span> phien_ban <span class="k">import</span> khoa_trong_cau_hoi
+khoa_trong_cau_hoi(<span class="s">"K22 cần chứng chỉ gì?"</span>)   <span class="c"># 2022</span></code></pre>
+<p>Đoạn (2) cho thấy Node đi qua từng postprocessor ra sao — gần như mọi lỗi "trả lời sai nguồn" đều tìm ra nguyên nhân bằng cách này: vector không lấy được Node đúng (lỗi embedding/cắt Node), lọc phiên bản bỏ nhầm (metadata), hay rerank xếp sai.</p>
+<div class="box ok"><strong>Quy trình chung mỗi lần sửa</strong>1) Sửa code → 2) chạy test của file liên quan → 3) <code>make test</code> → 4) nếu có ảnh hưởng truy hồi: <code>make eval</code> rồi so với <code>eval/results/logs/2026-10-17_chot-cau-hinh/04_tong_hop.md</code> → 5) nếu ảnh hưởng câu trả lời: <code>make test-llm</code> và <code>eval/tra_loi_dev.py</code> → 6) xem kỹ <code>git diff</code> rồi tự commit.</div>
+
+<!-- ================================================================== -->
+<!-- PHẦN II -->
+<!-- ================================================================== -->
+<header class="hero" style="margin-top:72px">
+  <h1>Phần II — Đọc code từng dòng</h1>
+  <p>Mỗi mục chép nguyên văn các hàm quan trọng (có lược bớt chỗ ghi <code>...</code>), đánh số các dòng chú thích <code>[1] [2] …</code> rồi giải thích bên dưới. Có ví dụ chạy tay với số liệu thật để tự kiểm tra lại cách hiểu.</p>
+</header>
+
+<!-- ============================================================ -->
+<h2 id="python">21. Cú pháp Python hay gặp trong repo</h2>
+<p>Code viết khá "đặc". Dưới đây là các cú pháp xuất hiện nhiều, kèm vị trí và ý nghĩa.</p>
+<table>
+<tr><th>Cú pháp</th><th>Ví dụ trong repo</th><th>Nghĩa</th></tr>
+<tr><td>Walrus <code>:=</code></td><td><code>elif m := DIEU.match(p):</code> (clean_md)</td><td>Gán và kiểm tra cùng lúc: <code>m = DIEU.match(p)</code>, nếu <code>m</code> khác None thì vào nhánh, và dùng được <code>m</code> bên trong.</td></tr>
+<tr><td><code>str.partition</code> / <code>rpartition</code></td><td><code>head, _, rest = block.partition("\n")</code><br><code>loai, _, so = dieu.rpartition(":")</code></td><td>Cắt tại lần xuất hiện đầu (hoặc cuối) của dấu phân cách → bộ 3 (trước, dấu, sau). Không có dấu phân cách thì phần "sau" (partition) hoặc "trước" (rpartition) rỗng. Ví dụ <code>"sd:9".rpartition(":")</code> → <code>("sd", ":", "9")</code>; <code>"7".rpartition(":")</code> → <code>("", "", "7")</code>.</td></tr>
+<tr><td><code>dict.fromkeys(...)</code></td><td><code>"; ".join(dict.fromkeys(node_label(n) for n in ...))</code></td><td>Bỏ phần tử trùng mà vẫn <b>giữ thứ tự</b> (khác <code>set()</code>, vốn không giữ thứ tự).</td></tr>
+<tr><td><code>startswith(tuple)</code></td><td><code>p.name.startswith(cfg.corpus_files)</code></td><td>Truyền tuple thì True nếu khớp <b>bất kỳ</b> tiền tố nào trong tuple.</td></tr>
+<tr><td>Gộp dict <code>|</code></td><td><code>node_meta | ({"phan_doan": j} if ... else {})</code></td><td>Tạo dict mới = dict trái + dict phải (bên phải đè bên trái).</td></tr>
+<tr><td><code>**</code> trong dict, <code>*</code> trong list</td><td><code>{**{f"R@{k}": ... for k in KS}, "MRR": ...}</code><br><code>KHONG_LLM = ["file", *QUAN_HE]</code></td><td>Rải các phần tử của dict / list con vào dict / list lớn.</td></tr>
+<tr><td><code>dataclasses.replace</code></td><td><code>dataclasses.replace(goc, **thay_doi)</code></td><td>Sao chép dataclass và đổi một số trường. <b>Gọi lại <code>__post_init__</code></b>.</td></tr>
+<tr><td><code>field(default_factory=...)</code></td><td><code>ten_van_ban: dict[...] = field(default_factory=lambda: dict(SGU_HIEU_LUC))</code></td><td>Giá trị mặc định có thể thay đổi (dict, list) phải tạo mới cho mỗi đối tượng; không được viết <code>= {}</code>.</td></tr>
+<tr><td>Thuộc tính Pydantic</td><td><code>class UuTienSuaDoi(BaseNodePostprocessor): top_n: int | None = None</code></td><td>Postprocessor của LlamaIndex là model Pydantic: khai báo thuộc tính ở mức class, tạo đối tượng bằng <code>UuTienSuaDoi(top_n=3)</code>. Không viết <code>__init__</code>.</td></tr>
+<tr><td>Lambda bắt biến qua tham số mặc định</td><td><code>tim = lambda q, r=retriever, p=posts: search(...)</code></td><td><code>r=retriever</code> "đóng băng" giá trị tại thời điểm tạo lambda. Viết <code>lambda q: search(..., retriever)</code> thì lambda đọc biến khi được gọi; trong vòng lặp, biến có thể đã đổi sang giá trị của lượt sau.</td></tr>
+<tr><td>Generator <code>yield</code></td><td><code>def hoi(...) -&gt; Iterator[...]: ... yield history, "", nguon</code></td><td>Hàm trả về từng giá trị một; Gradio cập nhật giao diện sau mỗi <code>yield</code>.</td></tr>
+<tr><td>Import muộn trong hàm</td><td><code>if cfg.use_hybrid: from bm25 import BM25Retriever</code></td><td>Chỉ import khi cần. Dùng để test offline/CI không phải cài torch, gradio, Ollama.</td></tr>
+<tr><td><code>if TYPE_CHECKING:</code></td><td>retriever.py</td><td>Import chỉ để Pylance biết kiểu, lúc chạy không import. Vì vậy kiểu trả về được viết trong ngoặc kép <code>-&gt; "SentenceTransformerRerank"</code>.</td></tr>
+<tr><td><code>zip(..., strict=True)</code></td><td><code>for node, score in zip(nodes, scores, strict=True)</code></td><td>Báo lỗi nếu hai dãy dài khác nhau, thay vì lặng lẽ cắt bớt.</td></tr>
+<tr><td><code>Counter</code></td><td><code>Counter(str(n.metadata.get("file")) for n in nodes)</code></td><td>Đếm số lần xuất hiện; <code>.most_common()</code> sắp giảm dần.</td></tr>
+<tr><td><code>!r</code> trong f-string</td><td><code>f"... {cfg.name!r}"</code></td><td>In kèm dấu nháy (<code>repr</code>): dễ thấy chuỗi rỗng hoặc có khoảng trắng thừa.</td></tr>
+<tr><td><code>@contextmanager</code></td><td><code>tests/__init__.py: tmp_dir()</code></td><td>Dùng với <code>with tmp_dir() as d:</code>; phần sau <code>yield</code> luôn chạy (dọn thư mục), kể cả khi có lỗi.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="d-loader">22. <code>processed_loader.load_processed</code> — từng dòng</h2>
+<pre><code><span class="k">def</span> load_processed(path: Path, ten_hien_thi: str = <span class="s">""</span>) -&gt; list[TextNode]:
+    meta, body = front_matter(path.read_text(encoding=<span class="s">"utf-8"</span>))          <span class="c"># [1]</span>
+    ten_van_ban = ten_hien_thi <span class="k">or</span> meta.get(<span class="s">"ten_van_ban"</span>, <span class="s">""</span>)              <span class="c"># [2]</span>
+    nodes: list[TextNode] = []
+    van_ban = chuong = <span class="s">""</span>                                                  <span class="c"># [3]</span>
+    <span class="k">for</span> block <span class="k">in</span> HEADING.split(body):                                       <span class="c"># [4]</span>
+        <span class="k">if not</span> block.strip():
+            <span class="k">continue</span>
+        head, _, rest = block.partition(<span class="s">"\n"</span>)                               <span class="c"># [5]</span>
+        level = len(head) - len(head.lstrip(<span class="s">"#"</span>))                          <span class="c"># [6]</span>
+        title = head.lstrip(<span class="s">"# "</span>).strip()
+        <span class="k">if</span> level == 1:
+            van_ban, chuong = title, <span class="s">""</span>
+        <span class="k">elif</span> level == 2:
+            chuong = title
+        <span class="k">if</span> level &lt;= 2:                                                      <span class="c"># [7]</span>
+            <span class="k">if</span> len(rest.split()) &lt; MIN_TU_NOI_DUNG:
+                <span class="k">continue</span>
+            phan = <span class="s">"ban_hanh"</span> <span class="k">if</span> van_ban == <span class="s">"Quyết định ban hành"</span> <span class="k">else</span> <span class="s">"noi_dung"</span>
+            m = None
+        <span class="k">else</span>:
+            m = SO_DIEU.search(title)                                         <span class="c"># [8]</span>
+            phan = <span class="s">"ban_hanh"</span> <span class="k">if</span> van_ban == <span class="s">"Quyết định ban hành"</span> <span class="k">else</span> (<span class="s">"sua_doi"</span> <span class="k">if</span> level == 4 <span class="k">else</span> <span class="s">"chinh"</span>)
+        node_meta = {
+            <span class="s">"van_ban"</span>: (<span class="s">f"{van_ban} – {ten_van_ban}"</span> <span class="k">if</span> phan == <span class="s">"ban_hanh"</span> <span class="k">else</span> ten_van_ban) <span class="k">if</span> ten_van_ban <span class="k">else</span> van_ban,  <span class="c"># [9]</span>
+            <span class="s">"chuong"</span>: chuong,
+            <span class="s">"dieu"</span>: m[1] <span class="k">if</span> (m <span class="k">and</span> level == 3) <span class="k">else</span> <span class="s">""</span>,                            <span class="c"># [10]</span>
+            <span class="s">"sua_doi_dieu"</span>: m[1] <span class="k">if</span> (m <span class="k">and</span> level == 4) <span class="k">else</span> <span class="s">""</span>,
+            <span class="s">"phan"</span>: phan, <span class="s">"file"</span>: path.name, <span class="s">"file_goc"</span>: ..., <span class="s">"url"</span>: ...,
+        }
+        <span class="k">for</span> khoa <span class="k">in</span> (<span class="s">"so_hieu"</span>, <span class="s">"ngay_ban_hanh"</span>, <span class="s">"tinh_trang"</span>, <span class="s">"nhom"</span>): ...        <span class="c"># [11]</span>
+        <span class="k">for</span> khoa <span class="k">in</span> QUAN_HE: ... danh_sach_so_hieu(meta[khoa])
+        <span class="k">for</span> khoa <span class="k">in</span> KHOA_AP_DUNG:
+            <span class="k">if</span> meta.get(khoa, <span class="s">""</span>).isdigit(): node_meta[khoa] = int(meta[khoa])
+        dieu_node = str(node_meta[<span class="s">"sua_doi_dieu"</span>] <span class="k">or</span> node_meta[<span class="s">"dieu"</span>])            <span class="c"># [12]</span>
+        <span class="k">if</span> dieu_node <span class="k">in</span> khoa_theo_dieu(meta):
+            node_meta[<span class="s">"ap_dung_khoa_tu"</span>] = khoa_theo_dieu(meta)[dieu_node]
+        text = <span class="s">f"{title}\n{rest.strip()}"</span>                                       <span class="c"># [13]</span>
+        chunks = [text] <span class="k">if</span> len(text.split()) &lt;= MAX_TU <span class="k">else</span> _splitter.split_text(text)
+        <span class="k">for</span> j, chunk <span class="k">in</span> enumerate(chunks, start=1):
+            node = TextNode(text=chunk, metadata=node_meta | ({<span class="s">"phan_doan"</span>: j} <span class="k">if</span> len(chunks) &gt; 1 <span class="k">else</span> {}))
+            nodes.append(_gan_metadata(node, node.metadata))                  <span class="c"># [14]</span>
+    <span class="k">return</span> nodes</code></pre>
+<ol>
+  <li><b>[1]</b> <code>front_matter</code> làm <code>text.split("---\n", 2)</code>: phần trước dấu <code>---</code> thứ nhất (rỗng), front matter, rồi thân. File không mở đầu bằng <code>---</code> → lỗi <code>ValueError: not enough values to unpack</code>.</li>
+  <li><b>[2]</b> Tên trong <code>SGU_HIEU_LUC</code> được ưu tiên hơn tên trong front matter.</li>
+  <li><b>[3]</b> Hai biến "trạng thái" giữ heading cấp 1 và cấp 2 gần nhất khi duyệt dần xuống văn bản.</li>
+  <li><b>[4]</b> <code>HEADING = (?m)^(?=#{1,4} )</code>: lookahead nên dấu <code>#</code> không bị cắt mất. Ví dụ thân <code>"# A\nx\n## B\ny\n### Điều 1. C\nz"</code> → <code>["# A\nx\n", "## B\ny\n", "### Điều 1. C\nz"]</code>. Cần <b>dấu cách sau <code>#</code></b>: dòng <code>#hashtag</code> không bị coi là heading. Heading 5 dấu <code>#</code> trở lên không cắt.</li>
+  <li><b>[5]</b> Dòng đầu là heading, phần còn lại là thân. Điều ngắn nằm gọn trên một dòng heading thì <code>rest</code> rỗng nhưng vẫn thành Node.</li>
+  <li><b>[6]</b> Đếm số dấu <code>#</code> ở đầu dòng.</li>
+  <li><b>[7]</b> Heading cấp 1–2 thường chỉ là tiêu đề → bỏ, trừ khi bên dưới có ≥ 30 từ (văn bản không chia Điều, vd quy định một trang).</li>
+  <li><b>[8]</b> <code>SO_DIEU = r"Điều (\d+)"</code> tìm số Điều <b>đầu tiên</b> trong heading. Heading <code>"#### 3. Sửa đổi, bổ sung điểm a khoản 3 Điều 9:"</code> → 9 (số "3" đầu dòng không bị bắt vì không đứng sau chữ "Điều"). Lưu ý: heading <code>"Điều"</code> viết bằng ký tự Unicode khác (Ð Latin) sẽ không khớp.</li>
+  <li><b>[9]</b> Node thuộc "Quyết định ban hành" có tên dạng <code>"Quyết định ban hành – Quy chế đào tạo … 2021"</code>, để không lẫn với Điều 1–3 của văn bản chính.</li>
+  <li><b>[10]</b> <code>m[1]</code> = nhóm bắt thứ nhất của regex (chuỗi số). Số Điều luôn là <b>chuỗi</b> <code>"9"</code>, không phải số 9 — so sánh trong code đều theo chuỗi.</li>
+  <li><b>[11]</b> Chỉ thêm khóa khi front matter có giá trị. Khóa quan hệ chuyển từ list JSON thành chuỗi <code>"a; b"</code> vì metadata của Node nên giữ kiểu đơn giản (chuỗi/số).</li>
+  <li><b>[12]</b> <code>a or b</code>: lấy <code>sua_doi_dieu</code> nếu khác rỗng, không thì <code>dieu</code>.</li>
+  <li><b>[13]</b> Nội dung Node gồm <b>cả dòng tiêu đề Điều</b> (không có dấu <code>#</code>). Khi cắt nhỏ, các mảnh sau không có tiêu đề nhưng vẫn mang cùng metadata.</li>
+  <li><b>[14]</b> <code>_gan_metadata</code> dọn khóa rỗng → thêm <code>nguon_trich</code> → đặt danh sách loại trừ. Node bị cắt nhỏ có thêm <code>phan_doan</code>, và khóa này <i>có</i> vào prompt (không nằm trong <code>KHONG_LLM</code>).</li>
+</ol>
+<details><summary>Ví dụ: một file nhỏ cho ra những Node nào</summary>
+<pre><code>---
+ten_van_ban: "Văn bản thử"
+so_hieu: "99/QĐ-ĐHSG"
+---
+# QUY CHẾ THỬ
+## Chương I. CHUNG
+### Điều 1. Phạm vi
+Quy chế này áp dụng cho sinh viên chính quy ...
+### Điều 2. Học kỳ
+Một năm học có 02 học kì chính.</code></pre>
+<p>Kết quả: 2 Node (heading <code>#</code>, <code>##</code> có thân dưới 30 từ nên bị bỏ).</p>
+<table>
+<tr><th>Node</th><th>text</th><th>metadata chính</th></tr>
+<tr><td>1</td><td><code>"Điều 1. Phạm vi\nQuy chế này ..."</code></td><td>van_ban="Văn bản thử", chuong="Chương I. CHUNG", dieu="1", phan="chinh", so_hieu="99/QĐ-ĐHSG", nguon_trich="Điều 1 — Văn bản thử"</td></tr>
+<tr><td>2</td><td><code>"Điều 2. Học kỳ\nMột năm học ..."</code></td><td>…, dieu="2", nguon_trich="Điều 2 — Văn bản thử"</td></tr>
+</table>
+</details>
+
+<!-- ============================================================ -->
+<h2 id="d-index">23. <code>index_builder.build_or_load_index</code> — từng dòng</h2>
+<pre><code><span class="k">def</span> build_or_load_index(cfg: RAGConfig, rebuild: bool = False) -&gt; VectorStoreIndex:
+    setup_embedding(cfg)                                                   <span class="c"># [1]</span>
+    persist_dir = ROOT / cfg.persist_dir
+    fingerprint = corpus_fingerprint(cfg)                                  <span class="c"># [2]</span>
+    saved = persist_dir / FINGERPRINT
+    <span class="k">if not</span> rebuild <span class="k">and</span> (persist_dir / <span class="s">"docstore.json"</span>).exists():
+        <span class="k">if</span> saved.exists() <span class="k">and</span> json.loads(saved.read_text(...)) == fingerprint:   <span class="c"># [3]</span>
+            index = load_index_from_storage(StorageContext.from_defaults(persist_dir=str(persist_dir)))
+            <span class="k">assert</span> isinstance(index, VectorStoreIndex)                     <span class="c"># [4]</span>
+            <span class="k">return</span> index
+        logger.warning(<span class="s">"... build lại"</span>)
+    nodes = load_corpus_nodes(cfg)
+    index = VectorStoreIndex(nodes, show_progress=True)                    <span class="c"># [5]</span>
+    persist_dir.mkdir(parents=True, exist_ok=True)
+    index.storage_context.persist(persist_dir=str(persist_dir))            <span class="c"># [6]</span>
+    saved.write_text(json.dumps(fingerprint, ensure_ascii=False, indent=1), ...)   <span class="c"># [7]</span>
+    <span class="k">return</span> index</code></pre>
+<ol>
+  <li><b>[1]</b> Phải đặt <code>Settings.embed_model</code> <b>trước</b>, kể cả khi chỉ nạp index: lúc truy vấn, index cần model này để embedding câu hỏi.</li>
+  <li><b>[2]</b> Fingerprint đọc lại sha256 của mọi file mỗi lần khởi động (nhanh vì file nhỏ).</li>
+  <li><b>[3]</b> So sánh dict bằng <code>==</code>: chỉ cần khác một giá trị (một file, tên hiển thị, phiên bản loader) là build lại.</li>
+  <li><b>[4]</b> <code>load_index_from_storage</code> trả kiểu chung <code>BaseIndex</code>; <code>assert isinstance</code> vừa kiểm tra lúc chạy vừa giúp Pylance biết đúng kiểu.</li>
+  <li><b>[5]</b> Bước tốn thời gian: gọi model embedding cho 118 Node. Mỗi Node được embedding theo chuỗi <code>MetadataMode.EMBED</code>.</li>
+  <li><b>[6]</b> Ghi <code>docstore.json</code> (Node), <code>default__vector_store.json</code> (vector), <code>index_store.json</code>… vào thư mục.</li>
+  <li><b>[7]</b> Ghi fingerprint <b>sau cùng</b>: nếu build hỏng giữa chừng thì không có fingerprint, lần sau sẽ build lại.</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="d-retriever">24. <code>retriever.get_postprocessors</code> &amp; <code>search</code> — từng dòng</h2>
+<pre><code><span class="k">def</span> get_postprocessors(cfg, index=None) -&gt; list[BaseNodePostprocessor]:
+    ps = []
+    <span class="k">if</span> cfg.similarity_cutoff <span class="k">is not</span> None:
+        <span class="k">if</span> cfg.use_hybrid: logger.warning(...)                                <span class="c"># [1]</span>
+        <span class="k">else</span>: ps.append(SimilarityPostprocessor(similarity_cutoff=cfg.similarity_cutoff))
+    <span class="k">if</span> cfg.loc_phien_ban:
+        ps.append(LocPhienBan.tu_nodes(index.docstore.docs.values()) <span class="k">if</span> index <span class="k">is not</span> None <span class="k">else</span> LocPhienBan())  <span class="c"># [2]</span>
+    rerank = bool(cfg.use_rerank <span class="k">and</span> cfg.reranker_model_name)               <span class="c"># [3]</span>
+    <span class="k">if</span> rerank:
+        top_n = 1000 <span class="k">if</span> cfg.loc_phien_ban <span class="k">else</span> cfg.reranker_top_n               <span class="c"># [4]</span>
+        ps.append(RemoteRerank(...) <span class="k">if</span> cfg.model_server_url <span class="k">else</span> make_local_reranker(cfg, top_n))
+    <span class="k">if</span> cfg.loc_phien_ban:
+        ps.append(UuTienSuaDoi(top_n=cfg.reranker_top_n) <span class="k">if</span> rerank <span class="k">else</span> UuTienSuaDoi(ti_le_toi_thieu=None))  <span class="c"># [5]</span>
+    <span class="k">return</span> ps</code></pre>
+<ol>
+  <li><b>[1]</b> Điểm sau khi trộn RRF có dạng ~1/(60+hạng) (rất nhỏ), không phải cosine 0–1. Áp ngưỡng cosine lên đó sẽ bỏ hết Node.</li>
+  <li><b>[2]</b> Không có <code>index</code> thì <code>LocPhienBan()</code> rỗng: vẫn bỏ văn bản hết hiệu lực và lọc theo khóa, nhưng không kéo kèm mục sửa đổi được (không có danh sách mục sửa đổi), và không có thông tin chuỗi → <code>ma_chuoi</code> trả None cho mọi Node.</li>
+  <li><b>[3]</b> Profile <code>local</code> có <code>reranker_model_name=None</code> nên đặt <code>use_rerank=True</code> cũng không có tác dụng.</li>
+  <li><b>[4]</b> "1000" chỉ có nghĩa là "không cắt".</li>
+  <li><b>[5]</b> Không có rerank thì <code>UuTienSuaDoi</code> không cắt (<code>top_n=None</code>) → LLM nhận mọi Node còn lại.</li>
+</ol>
+<div class="box"><strong>Minh họa (số điểm là giả định): Node đi qua chuỗi postprocessor (profile server)</strong>
+<pre><code>vector top-10     : [QC2021 Đ7 .71, QC2021 Đ13 .69, QD3183 Đ1 .68, ... ]      (10 Node, điểm cosine)
+LocPhienBan       : [QD3183 sửa đổi Đ7 .71, QC2021 Đ7 .71, QC2021 Đ13 .69, ...] (kéo kèm mục sửa Đ7 → 11 Node)
+Rerank (top_n=1000): sắp lại theo điểm cross-encoder, giữ đủ 11 Node
+UuTienSuaDoi      : đưa mục sửa đổi lên trước Điều gốc nếu cần → cắt còn 3</code></pre>
+Muốn thấy với câu hỏi của bạn: chạy đoạn (2) trong mục 20.</div>
+
+<!-- ============================================================ -->
+<h2 id="d-unionfind">25. <code>chuoi_van_ban</code> — union-find, chạy tay</h2>
+<pre><code><span class="k">def</span> chuoi_van_ban(nodes) -&gt; dict[str, int]:
+    cha: dict[str, str] = {}                                    <span class="c"># [1] mỗi văn bản trỏ tới "cha"</span>
+    <span class="k">def</span> goc(x: str) -&gt; str:                                     <span class="c"># [2] tìm gốc của x</span>
+        <span class="k">while</span> cha.setdefault(x, x) != x:                         <span class="c">#     chưa có thì tự là gốc</span>
+            cha[x] = cha[cha[x]]                                 <span class="c">#     "nén đường đi" cho lần sau nhanh</span>
+            x = cha[x]
+        <span class="k">return</span> x
+    <span class="k">for</span> n <span class="k">in</span> nodes:
+        ds = sorted(lien_quan(n.metadata))                      <span class="c"># [3] {chính nó + văn bản liên quan}</span>
+        <span class="k">for</span> x <span class="k">in</span> ds[1:]:
+            cha[goc(x)] = goc(ds[0])                             <span class="c"># [4] nối mọi phần tử vào cùng gốc</span>
+        <span class="k">if</span> ds: goc(ds[0])
+    ma: dict[str, int] = {}
+    <span class="k">return</span> {x: ma.setdefault(goc(x), len(ma)) <span class="k">for</span> x <span class="k">in</span> cha}       <span class="c"># [5] gốc → mã 0, 1, 2…</span></code></pre>
+<p>Union-find (tập hợp rời nhau) trả lời câu hỏi "hai văn bản có nối với nhau qua một dãy quan hệ không?" mà không cần duyệt đồ thị mỗi lần.</p>
+<p>Chạy tay với dữ liệu thật (đã kiểm tra bằng code):</p>
+<table>
+<tr><th>Node</th><th><code>lien_quan</code></th><th>Sau khi nối</th></tr>
+<tr><td>2366 (bi_sua_doi_boi 2451)</td><td>{2366, 2451}</td><td>2366–2451</td></tr>
+<tr><td>2567 (sua_doi 2366; 2626)</td><td>{2366, 2567, 2626}</td><td>2366–2451–2567–2626</td></tr>
+<tr><td>2101 (thay_the 2626)</td><td>{2101, 2626}</td><td>2101–2366–2451–2567–2626</td></tr>
+<tr><td>258 (bi_sua_doi_boi 3183)</td><td>{258, 3183}</td><td>258–3183</td></tr>
+<tr><td>898 (không quan hệ)</td><td>{898}</td><td>898 đứng riêng</td></tr>
+</table>
+<p>Kết quả: <code>{'2366': 0, '2451': 0, '2567': 0, '2626': 0, '2101': 0, '258': 1, '3183': 1, '898': 2}</code>. Lưu ý: chính TB 2567 (bổ sung PTE cho cả hai nhóm khóa) là cầu nối gom hai nhóm văn bản quy đổi tiếng Anh vào cùng một chuỗi.</p>
+
+<!-- ============================================================ -->
+<h2 id="d-loc">26. <code>LocPhienBan._postprocess_nodes</code> — từng dòng</h2>
+<pre><code><span class="k">def</span> _postprocess_nodes(self, nodes, query_bundle=None):
+    nodes = [n <span class="k">for</span> n <span class="k">in</span> nodes <span class="k">if</span> n.node.metadata.get(<span class="s">"tinh_trang"</span>) <span class="k">not in</span> HET_HIEU_LUC]    <span class="c"># [1]</span>
+    khoa = khoa_trong_cau_hoi(query_bundle.query_str) <span class="k">if</span> query_bundle <span class="k">else</span> None
+
+    co_san = {n.node.node_id <span class="k">for</span> n <span class="k">in</span> nodes}                                      <span class="c"># [2]</span>
+    ket = []
+    <span class="k">for</span> n <span class="k">in</span> nodes:
+        m = n.node.metadata
+        <span class="k">if</span> m.get(<span class="s">"phan"</span>) == <span class="s">"chinh"</span> <span class="k">and</span> m.get(<span class="s">"dieu"</span>) <span class="k">and</span> m.get(<span class="s">"so_hieu"</span>):
+            <span class="k">for</span> sd <span class="k">in</span> self.muc_sua_doi.get(<span class="s">f"{so_van_ban(str(m['so_hieu']))}|{m['dieu']}"</span>, []):   <span class="c"># [3]</span>
+                <span class="k">if</span> sd.node_id <span class="k">not in</span> co_san:
+                    co_san.add(sd.node_id)
+                    ket.append(NodeWithScore(node=sd, score=n.score))                <span class="c"># [4]</span>
+        ket.append(n)
+
+    <span class="k">if</span> khoa <span class="k">is</span> None:
+        <span class="k">return</span> ket
+    hop_le = {self.ma_chuoi(n.node.metadata) <span class="k">for</span> n <span class="k">in</span> ket <span class="k">if</span> ap_dung_cho_khoa(n.node.metadata, khoa)}   <span class="c"># [5]</span>
+    <span class="k">return</span> [n <span class="k">for</span> n <span class="k">in</span> ket
+            <span class="k">if</span> ap_dung_cho_khoa(n.node.metadata, khoa) <span class="k">or</span> self.ma_chuoi(n.node.metadata) <span class="k">not in</span> hop_le]   <span class="c"># [6]</span></code></pre>
+<ol>
+  <li><b>[1]</b> <code>bi_sua_doi</code> (bị sửa một phần, vd QC 2021) <b>không</b> bị bỏ — chỉ hết hẳn hiệu lực hoặc bị thay thế mới bị bỏ.</li>
+  <li><b>[2]</b> Tập id để không chèn trùng một mục sửa đổi đã có sẵn trong kết quả vector.</li>
+  <li><b>[3]</b> Khóa tra cứu, vd <code>"258|7"</code>. <code>muc_sua_doi</code> được dựng sẵn trong <code>tu_nodes()</code> từ toàn bộ docstore → lấy được cả mục sửa đổi mà vector <b>không</b> trả về.</li>
+  <li><b>[4]</b> Mục sửa đổi nhận <b>điểm của Điều gốc</b> và được đặt <b>ngay trước</b> nó. Khi có rerank, điểm này bị chấm lại ngay sau đó.</li>
+  <li><b>[5]</b> Tập các chuỗi còn ít nhất một Node áp dụng được cho khóa. Node không có <code>so_hieu</code> → <code>ma_chuoi</code> = None; None cũng có thể nằm trong tập này.</li>
+  <li><b>[6]</b> Giữ Node khi: áp dụng được cho khóa, <b>hoặc</b> chuỗi của nó không còn Node nào áp dụng được (để không mất hết căn cứ). Node không có khóa áp dụng (<code>ap_dung_khoa_tu/den</code>) luôn được coi là áp dụng được.</li>
+</ol>
+<div class="box warn"><strong>Hai giới hạn đã biết (ghi bằng <code>expectedFailure</code> trong test)</strong>
+<b>(a)</b> Câu hỏi khóa 2023 mà vector chỉ lấy được mục sửa Điều 9 (chỉ áp dụng từ 2025): chuỗi QC 2021–3183 không còn Node nào áp dụng được → giữ nguyên mục sửa đổi (sai khóa), chứ không thay bằng Điều 9 gốc lấy từ docstore. Muốn sửa: ở bước [6], khi bỏ một mục sửa đổi thì tra ngược Điều gốc trong docstore và chèn vào thay thế.
+<br><b>(b)</b> Xem mục 27: QĐ 898 bị đưa lên trước CV 3248 cho mọi câu khi không rerank.</div>
+
+<!-- ============================================================ -->
+<h2 id="d-uutien">27. <code>UuTienSuaDoi</code> &amp; <code>moi_hon</code> — từng dòng</h2>
+<pre><code><span class="k">def</span> _postprocess_nodes(self, nodes, query_bundle=None):
+    ket = list(nodes)
+    <span class="k">for</span> _ <span class="k">in</span> range(len(ket) ** 2 + 1):                                       <span class="c"># [1]</span>
+        doi = False
+        <span class="k">for</span> i, cu <span class="k">in</span> enumerate(ket):
+            <span class="k">for</span> j <span class="k">in</span> range(i + 1, len(ket)):
+                <span class="k">if</span> moi_hon(ket[j].node.metadata, cu.node.metadata) <span class="k">and</span> self.du_lien_quan(ket[j], cu):
+                    ket.insert(i, ket.pop(j))                                  <span class="c"># [2]</span>
+                    doi = True
+                    <span class="k">break</span>
+            <span class="k">if</span> doi: <span class="k">break</span>                                                        <span class="c"># [3]</span>
+        <span class="k">if not</span> doi: <span class="k">break</span>
+    <span class="k">return</span> ket <span class="k">if</span> self.top_n <span class="k">is</span> None <span class="k">else</span> ket[: self.top_n]                   <span class="c"># [4]</span></code></pre>
+<ol>
+  <li><b>[1]</b> Giới hạn số vòng lặp (n² + 1) để chắc chắn dừng, kể cả khi metadata có vòng quan hệ (A sửa B, B sửa A).</li>
+  <li><b>[2]</b> Rút Node j ra và chèn vào vị trí i: bản mới đứng ngay trước bản cũ; các Node ở giữa lùi xuống một bậc.</li>
+  <li><b>[3]</b> Mỗi lần chỉ dời một Node rồi bắt đầu quét lại từ đầu (đơn giản, n ≤ 11 nên không lo tốc độ).</li>
+  <li><b>[4]</b> Cắt top_n <b>sau khi</b> sắp xếp.</li>
+</ol>
+<p>Ví dụ: <code>[QC2021 Đ7 (0.9), QC2021 Đ13 (0.8), QD3183 sửa Đ7 (0.7)]</code> → <code>moi_hon(sửa Đ7, Đ7)</code> = True (mục sửa đổi theo Điều nên luôn "đủ liên quan") → <code>[sửa Đ7, Đ7, Đ13]</code>. Còn <code>moi_hon(sửa Đ7, Đ13)</code> = False vì khác Điều.</p>
+<p>Ví dụ ngưỡng điểm: <code>[TB2366 (rerank 0.80), TB2567 (0.20)]</code>, câu hỏi về IELTS. <code>moi_hon(2567, 2366)</code> = True (2567 ghi sua_doi 2366, Node 2366 không thuộc Điều nào), nhưng 0.20 &lt; 0.5 × 0.80 → không đưa lên. Nếu 2567 có 0.75 → đưa lên.</p>
+<p>Giới hạn (b): khi không rerank thì <code>ti_le_toi_thieu=None</code> → mọi quan hệ sửa đổi cả văn bản đều được đưa lên. Ví dụ QĐ 898 (sửa một phần CV 3248) luôn đứng trên CV 3248, kể cả với câu "khiếu nại điểm quá trình" vốn chỉ CV 3248 trả lời được.</p>
+
+<!-- ============================================================ -->
+<h2 id="d-query">28. Prompt thực tế gửi cho LLM trông như thế nào</h2>
+<p>Ở chế độ <code>compact</code>, LlamaIndex lấy <code>get_content(metadata_mode=MetadataMode.LLM)</code> của từng Node, nối chúng bằng dòng trống, rồi điền vào <code>{context_str}</code>. Với hai Node, prompt có dạng:</p>
+<pre><code>Dưới đây là các trích đoạn từ các văn bản quy chế, quy định đào tạo của Trường Đại học Sài Gòn (mỗi trích đoạn ghi rõ tên văn bản và Điều).
+---------------------
+van_ban: QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021
+sua_doi_dieu: 7
+so_hieu: 3183/QĐ-ĐHSG
+ngay_ban_hanh: 2025-04-14
+tinh_trang: con_hieu_luc
+nguon_trich: Sửa đổi Điều 7 — QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021
+
+2. Sửa đổi, bổ sung khoản 4 Điều 7:
+“4. Việc rút bớt học phần ... trong 03 tuần đầu tiên của học kì ...”
+
+van_ban: Quy chế đào tạo trình độ đại học SGU 2021
+chuong: Chương II. ...
+dieu: 7
+...
+---------------------
+Chỉ dựa vào các trích đoạn trên, trả lời câu hỏi bằng tiếng Việt, ngắn gọn và chính xác.
+... (các yêu cầu khác) ...
+Câu hỏi: Sinh viên được rút học phần trong thời gian nào?
+Trả lời: </code></pre>
+<p>Chính các dòng <code>van_ban:</code>, <code>dieu:</code>, <code>sua_doi_dieu:</code> giúp LLM biết đâu là bản sửa đổi và trích được "tên văn bản + số Điều". Muốn bớt token: thêm khóa vào <code>KHONG_LLM</code> (vd <code>ngay_ban_hanh</code>) — nhớ tăng <code>LOADER_VERSION</code>.</p>
+<p>Muốn xem prompt thật: đặt <code>import logging; logging.basicConfig(level=logging.DEBUG)</code> trước khi hỏi, hoặc in <code>QA_PROMPT.format(context_str="\n\n".join(n.node.get_content(metadata_mode=MetadataMode.LLM) for n in nodes), query_str=q)</code>.</p>
+
+<!-- ============================================================ -->
+<h2 id="d-app">29. <code>app.hoi</code> — generator cập nhật giao diện</h2>
+<pre><code><span class="k">def</span> hoi(question, history, top_k, dung_rerank, loc_phien_ban, sinh_tra_loi):
+    question = question.strip()
+    <span class="k">if not</span> question:
+        <span class="k">yield</span> history, <span class="s">""</span>, <span class="s">""</span>; <span class="k">return</span>
+    history = [*history, gr.ChatMessage(role=<span class="s">"user"</span>, content=question)]      <span class="c"># [1]</span>
+    tra_loi = gr.ChatMessage(role=<span class="s">"assistant"</span>, content=<span class="s">"_Đang truy hồi…_"</span>)
+    history.append(tra_loi)
+    <span class="k">yield</span> history, <span class="s">""</span>, <span class="s">""</span>                                                  <span class="c"># [2]</span>
+
+    c = dataclasses.replace(cfg, similarity_top_k=int(top_k))                   <span class="c"># [3]</span>
+    <span class="k">try</span>:
+        nodes = search(index, c, question, postprocessors(bool(dung_rerank), bool(loc_phien_ban)))
+    <span class="k">except</span> httpx.HTTPError <span class="k">as</span> e:
+        tra_loi.content = <span class="s">"⚠️ Không gọi được model server ..."</span>; <span class="k">yield</span> history, <span class="s">""</span>, <span class="s">""</span>; <span class="k">return</span>
+    nguon = hien_thi_nguon(nodes)
+    <span class="k">if not</span> sinh_tra_loi: ...; <span class="k">return</span>
+
+    tra_loi.content = <span class="s">""</span>
+    <span class="k">try</span>:
+        response = synthesizer.synthesize(question, nodes=nodes)                 <span class="c"># [4]</span>
+        <span class="k">if</span> isinstance(response, StreamingResponse):
+            <span class="k">for</span> token <span class="k">in</span> response.response_gen:
+                tra_loi.content += token                                         <span class="c"># [5]</span>
+                <span class="k">yield</span> history, <span class="s">""</span>, nguon
+    <span class="k">except</span> (httpx.HTTPError, ollama.ResponseError) <span class="k">as</span> e: ...
+    tra_loi.content += <span class="s">f"\n\n**Nguồn:** {nhan}"</span>
+    ghi_log(...)
+    <span class="k">yield</span> history, <span class="s">""</span>, nguon</code></pre>
+<ol>
+  <li><b>[1]</b> Tạo list mới chứ không sửa list cũ của Gradio. <code>tra_loi</code> là một đối tượng; sửa <code>tra_loi.content</code> thì phần tử trong <code>history</code> cũng đổi theo (cùng một đối tượng).</li>
+  <li><b>[2]</b> Mỗi <code>yield</code> trả bộ 3 tương ứng <code>outputs=[chat, o_hoi, nguon]</code>: khung chat, ô nhập (<code>""</code> = xoá), cột trích đoạn.</li>
+  <li><b>[3]</b> top-k thay đổi theo slider; nhưng postprocessor được cache chỉ theo (rerank, lọc) — top-k không ảnh hưởng chúng.</li>
+  <li><b>[4]</b> Gọi thẳng synthesizer với Node đã có (không truy hồi lại).</li>
+  <li><b>[5]</b> Mỗi token một lần yield → chữ hiện dần ra trên màn hình.</li>
+</ol>
+<p>Lưu ý: <code>postprocessors()</code> gọi <code>get_postprocessors(c, index)</code> với <code>c</code> là bản sao của <code>cfg</code> <b>gốc</b> nên <code>reranker_top_n</code> là của profile (3). Muốn có slider top_n thì phải đưa top_n vào khóa cache.</p>
+
+<!-- ============================================================ -->
+<h2 id="d-bm25">30. BM25 — tính tay một ví dụ</h2>
+<p>Hai tài liệu (sau <code>tach_tu</code>, đã bỏ dấu):</p>
+<pre><code>d1 = ['dieu','9','thang','diem','chu','co','b','c','d']                  (9 từ)
+d2 = ['dieu','6','mot','nam','hoc','co','02','hoc','ki','chinh']          (10 từ)   avgdl = 9.5
+q  = tach_tu("dieu 6 may hoc ki") = ['dieu','6','may','hoc','ki']</code></pre>
+<p><b>Nhận xét quan trọng:</b> "B+" thành "b" — dấu "+" bị regex <code>TOKEN</code> bỏ. Vì vậy BM25 <b>không phân biệt được</b> B với B+ (docstring của bm25.py nói BM25 khớp "B+" chính xác — thực tế chỉ khớp chữ "b").</p>
+<p>IDF (N = 2): từ có trong cả hai tài liệu (<code>dieu</code>, <code>co</code>): ln(1 + 0.5/2.5) = 0,182; từ chỉ có trong một tài liệu: ln(1 + 1.5/1.5) = 0,693; từ không có trong tài liệu nào (<code>may</code>): bỏ qua.</p>
+<p>Với d2: hệ số độ dài K = k1·(1 − b + b·10/9.5) = 1,5 × 1,0395 = 1,559.</p>
+<table>
+<tr><th>từ</th><th>idf</th><th>f</th><th>idf·f·2,5/(f+K)</th></tr>
+<tr><td>dieu</td><td>0,182</td><td>1</td><td>0,178</td></tr>
+<tr><td>6</td><td>0,693</td><td>1</td><td>0,677</td></tr>
+<tr><td>hoc</td><td>0,693</td><td>2</td><td>0,974</td></tr>
+<tr><td>ki</td><td>0,693</td><td>1</td><td>0,677</td></tr>
+<tr><td colspan="3"><b>Tổng d2</b></td><td><b>2,506</b></td></tr>
+</table>
+<p>d1 chỉ khớp <code>dieu</code> → 0,187. Code cho đúng <code>[0.187, 2.506]</code>. Nhờ bỏ dấu, câu gõ không dấu "dieu 6 may hoc ki" vẫn khớp đúng Điều 6.</p>
+
+<!-- ============================================================ -->
+<h2 id="d-remote">31. <code>remote_models.goi_server</code> — thử lại khi lỗi</h2>
+<pre><code><span class="k">def</span> goi_server(method, url, timeout, json=None) -&gt; httpx.Response:
+    <span class="k">for</span> lan <span class="k">in</span> range(1, SO_LAN_THU + 1):                     <span class="c"># lần 1..4</span>
+        <span class="k">try</span>:
+            r = httpx.request(method, url, json=json, headers=auth_headers(), timeout=timeout)
+            <span class="k">if</span> r.status_code <span class="k">not in</span> MA_LOI_TAM_THOI <span class="k">or</span> lan == SO_LAN_THU:
+                <span class="k">return</span> r.raise_for_status()                        <span class="c"># [1]</span>
+            loi = <span class="s">f"HTTP {r.status_code}"</span>
+        <span class="k">except</span> httpx.TransportError <span class="k">as</span> e:                         <span class="c"># [2]</span>
+            <span class="k">if</span> lan == SO_LAN_THU: <span class="k">raise</span>
+            loi = ...
+        logger.warning(...)
+        time.sleep(2 ** (lan - 1))                                <span class="c"># [3] 1, 2, 4 giây</span>
+    <span class="k">raise</span> AssertionError(<span class="s">"không tới được"</span>)                       <span class="c"># [4]</span></code></pre>
+<ol>
+  <li><b>[1]</b> <code>raise_for_status()</code> trả lại chính response nếu mã 2xx, ngược lại ném <code>HTTPStatusError</code>. Mã lỗi "vĩnh viễn" (401 sai token, 400…) báo lỗi ngay, không thử lại.</li>
+  <li><b>[2]</b> <code>TransportError</code> = lỗi mạng (mất kết nối, timeout, SSL).</li>
+  <li><b>[3]</b> Chờ tăng dần (exponential backoff).</li>
+  <li><b>[4]</b> Dòng này không bao giờ chạy tới; nó chỉ để Pylance biết hàm luôn trả về hoặc ném lỗi.</li>
+</ol>
+<p>Lưu ý: các phương thức async (<code>_apost</code>) <b>không</b> có cơ chế thử lại; code hiện tại không gọi async.</p>
+
+<!-- ============================================================ -->
+<h2 id="d-clean">32. <code>clean_md</code>: <code>join_lines</code> và <code>split_parts</code></h2>
+<h3>32.1 Quy tắc nối dòng</h3>
+<pre><code>new_para = (
+    (MARKER.match(line) <span class="k">and not</span> starts_lower)                <span class="c"># dòng mở đầu bằng "Điều", "1.", "a)", "-"...</span>
+    <span class="k">or</span> is_caps_title(line) <span class="k">or</span> is_caps_title(prev)            <span class="c"># dòng này / dòng trước là tiêu đề IN HOA (&gt;85% chữ hoa)</span>
+    <span class="k">or</span> (re.search(<span class="s">r"[.;:!?”\"]$"</span>, prev) <span class="k">and not</span> starts_lower) <span class="c"># dòng trước kết thúc câu</span>
+    <span class="k">or</span> (blank_before <span class="k">and not</span> starts_lower)                  <span class="c"># có dòng trống phía trước</span>
+)
+<span class="k">if not</span> new_para: paras[-1] = <span class="s">f"{prev} {line}"</span>               <span class="c"># nối vào đoạn trước</span></code></pre>
+<p>Ví dụ: PDF ngắt <code>"Sinh viên được đăng ký tối đa"</code> / <code>"25 tín chỉ mỗi học kỳ."</code>. Dòng 2 bắt đầu bằng "25 " — không khớp <code>MARKER</code> vì MARKER cần dạng <code>\d{1,2}[.)]\s</code> (vd "25. ") → được nối thành một câu. Nhưng nếu dòng 2 là <code>"3. Sinh viên..."</code> thì thành đoạn mới.</p>
+<p><b>Lỗi hay gặp:</b> câu bị ngắt đúng trước một số có dấu chấm (<code>"... theo khoản"</code> / <code>"2. Điều 9"</code>) sẽ bị tách sai thành đoạn mới. Cách sửa: nối lại ngay ở tầng 1.</p>
+<h3>32.2 Tách Quyết định ban hành</h3>
+<pre><code><span class="k">for</span> p <span class="k">in</span> paras:
+    m = DIEU.match(p)
+    <span class="k">if</span> m <span class="k">and</span> int(m[1]) == 1 <span class="k">and</span> last &gt;= 1:                    <span class="c"># gặp lại "Điều 1" → văn bản mới</span>
+        head = []
+        <span class="k">while</span> current <span class="k">and</span> (is_caps_title(current[-1]) <span class="k">or</span> CHUONG.match(current[-1]) <span class="k">or</span> current[-1].startswith(<span class="s">"("</span>)):
+            head.insert(0, current.pop())                       <span class="c"># tiêu đề "QUY CHẾ ..." chuyển sang văn bản sau</span>
+        parts.append(current); current, last = head, 0</code></pre>
+<p>Rồi trong <code>main()</code>: phần nào <b>không phải phần cuối</b> và có Điều lớn nhất ≤ 5 → tiêu đề "Quyết định ban hành". Đây là lý do <code>processed_loader</code> nhận diện <code>phan="ban_hanh"</code> bằng đúng chuỗi <code>"Quyết định ban hành"</code> — <b>đừng đổi chuỗi này ở một nơi mà quên nơi kia</b>.</p>
+
+<!-- ============================================================ -->
+<h2 id="d-eval">33. <code>evaluate.danh_gia</code> &amp; <code>metrics</code> — từng dòng</h2>
+<pre><code><span class="k">def</span> danh_gia(ten_file, dung, tim, cau_hinh, mo_ta) -&gt; KetQua:
+    questions = doc_cau_hoi(ten_file)                                    <span class="c"># [1]</span>
+    kq = KetQua(ten_file, cau_hinh, mo_ta, len(questions))
+    <span class="k">for</span> q <span class="k">in</span> questions:
+        d = q[<span class="s">"dieu_dung"</span>]
+        t0 = time.perf_counter()
+        res = tim(q[<span class="s">"question"</span>])                                        <span class="c"># [2]</span>
+        kq.thoi_gian_ms.append((time.perf_counter() - t0) * 1000)
+        kq.hang.append(hang_dau_tien(len(res), <span class="k">lambda</span> i: dung(res[i], d))) <span class="c"># [3]</span>
+        <span class="k">if</span> res: kq.top1[node_label(res[0]).split(<span class="s">" – "</span>)[0][:40]] += 1
+        <span class="k">if</span> kq.hang[-1] <span class="k">is</span> None <span class="k">or</span> kq.hang[-1] &gt; 3:
+            kq.ngoai_top3.append((q[<span class="s">"question"</span>], q[<span class="s">"dieu_dung"</span>], [node_label(n) <span class="k">for</span> n <span class="k">in</span> res[:3]]))   <span class="c"># [4]</span>
+    <span class="k">return</span> kq</code></pre>
+<ol>
+  <li><b>[1]</b> Đọc JSON và chuẩn hóa <code>dieu_dung</code> dạng list thành chuỗi <code>"a;b"</code>.</li>
+  <li><b>[2]</b> <code>tim</code> là hàm "câu hỏi → list Node" (đã gói sẵn retriever + postprocessor) → <code>danh_gia</code> không cần biết cấu hình. Baseline BM25 truyền <code>bm25.retrieve</code> vào đúng chỗ này.</li>
+  <li><b>[3]</b> Hạng của Node đúng đầu tiên. Danh sách Node sau rerank chỉ còn 3 → câu có Node đúng ở vị trí 5 của vector cũng thành None. Vì vậy R@5/R@10 của cấu hình rerank top-3 bằng R@3 (cấu hình <code>rerank-top10</code> sinh ra để đo được R@10).</li>
+  <li><b>[4]</b> Danh sách câu trượt top-3 — chỗ nên đọc đầu tiên khi phân tích lỗi.</li>
+</ol>
+<h3>33.1 McNemar — tính tay</h3>
+<p>So "rerank" (A) với "rerank+loc" (B) trên 91 câu: b = số câu chỉ A đúng = 0, c = số câu chỉ B đúng = 7 → n = 7, k = min = 0.</p>
+<pre><code>p = 2 · C(7,0) / 2^7 = 2 · 1 / 128 = 0.0156  →  "p = 0.016" trong bảng kết quả</code></pre>
+<p>Ý nghĩa: nếu hai cấu hình thật ra ngang nhau thì 7 câu "chỉ một bên đúng" phải chia ngẫu nhiên kiểu tung đồng xu; khả năng cả 7 rơi về một phía (tính cả hai chiều) chỉ 1,6% → có ý nghĩa thống kê. Câu cả hai cùng đúng hoặc cùng sai không ảnh hưởng tới p.</p>
+<h3>33.2 Bootstrap — từng bước</h3>
+<pre><code>rng = random.Random(42)                              <span class="c"># seed cố định → chạy lại ra cùng khoảng</span>
+<span class="k">for</span> _ <span class="k">in</span> range(2000):
+    mau = [gia_tri[rng.randrange(n)] <span class="k">for</span> _ <span class="k">in</span> range(n)]   <span class="c"># bốc n câu CÓ HOÀN LẠI</span>
+    tb.append(sum(mau) / n)
+tb.sort()
+lo, hi = tb[49], tb[1950]                            <span class="c"># percentile 2,5% và 97,5% (alpha = 0.05)</span></code></pre>
+<p><code>gia_tri</code> là dãy 0/1 (câu đó trúng hay trượt). Bộ 02 chỉ có 10 câu nên CI rất rộng: cấu hình vector+rerank+loc đạt R@1 = 70% [40%–100%] (<code>eval/results/so-sanh-truy-hoi-2026-10-23-a6e63eb/ket-qua.json</code>). Đó là lý do không kết luận gì từ chênh lệch 1–2 câu.</p>
+
+<!-- ============================================================ -->
+<h2 id="d-eval2">34. Các script đánh giá khác — đọc kỹ</h2>
+<h3>34.1 <code>tra_loi_dev.py</code></h3>
+<ul>
+  <li><b><code>DemLLM(BaseCallbackHandler)</code></b>: LlamaIndex phát sự kiện mỗi khi gọi LLM. Đăng ký bằng <code>Settings.callback_manager = CallbackManager([dem])</code>. Ở <code>on_event_end</code> với <code>CBEventType.LLM</code>, lấy <code>payload[EventPayload.RESPONSE].raw</code> — chính là JSON Ollama trả về, có <code>prompt_eval_count</code> (token vào), <code>eval_count</code> (token ra), <code>eval_duration</code> (ns). Mỗi lượt gọi LLM thêm một phần tử vào <code>dem.luot</code>; nếu compact chia ngữ cảnh làm nhiều lượt thì <code>so_luot_llm &gt; 1</code>.</li>
+  <li><b><code>tra_loi_mot_cau</code></b>: thử tối đa 4 lần (sau lần lỗi thứ k chờ 10·k giây), <code>dem.luot.clear()</code> đầu mỗi lần để chỉ đếm lần thành công. Engine phải tắt streaming (<code>assert isinstance(r, Response)</code>). <code>token_moi_giay = eval_count / (eval_duration/1e9)</code>. Hết 4 lần vẫn lỗi → vẫn ghi câu đó với <code>ket_qua="loi"</code> (lỗi cũng là một kết quả, không bỏ qua).</li>
+  <li><b><code>bang_chung</code></b>: 800 ký tự đầu của từng Node đã đưa vào LLM, kèm điểm — để người chấm biết câu trả lời sai do truy hồi hay do LLM.</li>
+  <li><b><code>--chi-cau-loi</code></b>: đọc file JSON cũ, giữ nguyên mọi câu không phải <code>loi</code> (kể cả các câu đã chấm tay), chỉ hỏi lại các câu lỗi; ghép theo <code>id</code> (không có id thì theo số thứ tự).</li>
+  <li><b><code>--tong-hop</code></b>: sau khi chấm tay (sửa trường <code>ket_qua</code> trong JSON thành một trong <code>dung, mot_phan, sai, tu_choi_dung, tu_choi_sai, bia</code>), đếm lại <code>tom_tat</code>; nhãn sai chính tả thì dừng và báo lỗi.</li>
+  <li>Tên file: <code>tra-loi-&lt;bộ&gt;-&lt;cấu hình&gt;-&lt;nhãn&gt;.json/.md</code>, vd <code>tra-loi-dev-dot2-moi-2026-10-17.json</code>.</li>
+</ul>
+<h3>34.2 <code>dong_bang.py</code></h3>
+<ul>
+  <li><code>trang_thai()</code> chụp lại: profile, <code>cfg.mo_ta()</code>, <code>corpus_fingerprint</code>, sha256 của <code>src/*.py</code> + <code>evaluate.py</code>, <code>luat_cham.py</code>, <code>metrics.py</code>, tên luật chấm từng bộ, sha256 từng file câu hỏi.</li>
+  <li><code>so_sanh(cu, moi)</code> đệ quy trên dict lồng nhau, trả về danh sách đường dẫn khóa khác nhau (<code>"ma_nguon.src/retriever.py"</code>), bỏ qua <code>cau_hinh.embed_device</code> và <code>cau_hinh.persist_dir</code> (phụ thuộc máy chạy).</li>
+  <li><code>tao</code>: từ chối khi còn thay đổi chưa commit trong <code>src</code>, <code>eval</code>, <code>data/processed</code> (trừ <code>eval/results</code>), khi đã có manifest (trừ khi <code>--ghi-de</code>), hoặc khi profile không phải server.</li>
+  <li>Hệ quả: sau khi đóng băng, <b>sửa bất kỳ file nào trong <code>src/</code></b> (kể cả thêm một comment) là <code>--tap-kiem-chung</code> từ chối chạy.</li>
+</ul>
+<h3>34.3 <code>evaluate_answers.py</code></h3>
+<ul>
+  <li><code>tra_loi_rag</code>: engine của dự án với <code>streaming=False</code>. <code>tra_loi_closed_book</code>: gọi thẳng <code>llm.complete()</code> với một prompt không có ngữ cảnh, đóng gói thành <code>Response(source_nodes=[])</code>.</li>
+  <li><code>diem_evaluator</code>: <code>BatchEvalRunner</code> chạy <code>FaithfulnessEvaluator</code> (câu trả lời có bám ngữ cảnh không) và <code>RelevancyEvaluator</code> (có đúng trọng tâm câu hỏi không) — chỉ cho các câu có ngữ cảnh; câu closed-book nhận None. Lấy <code>.passing</code> (True/False).</li>
+  <li>Từ chối: regex <code>TU_CHOI</code> ("không tìm thấy", "không có thông tin"…). <code>tu_choi_dung</code> chỉ tính trên câu <code>pham_vi="ngoai"</code>, <code>tu_choi_sai</code> chỉ tính trên câu <code>pham_vi="trong"</code> — mỗi tỉ lệ có mẫu số riêng.</li>
+  <li>Giám khảo là chính LLM đã sinh câu trả lời → thiên vị; chỉ dùng để tham khảo.</li>
+</ul>
+<h3>34.4 <code>kiem_tra_trung.py</code> &amp; <code>bao_phu.py</code></h3>
+<ul>
+  <li>Mỗi câu hỏi được quy ra <code>frozenset</code> các chỉ số Node mà nhãn của nó trỏ tới (dùng đúng hàm <code>dung_bo_*</code>). "Cùng Node" = hai tập có giao khác rỗng (<code>t.node &amp; d.node</code>).</li>
+  <li>Giống chữ: <code>difflib.SequenceMatcher(...).ratio()</code> sau khi viết thường và bỏ dấu câu. Giống nghĩa: cosine của embedding hai câu.</li>
+  <li><code>bao_phu.py</code>: hợp các tập Node của từng bộ → bao nhiêu Node / văn bản được ít nhất một câu hỏi chạm tới; liệt kê văn bản chưa có câu hỏi nào.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="d-tests">35. Đọc hiểu file test</h2>
+<h3>35.1 <code>test_phien_ban.py</code> — corpus mô phỏng</h3>
+<pre><code><span class="k">def</span> node(ma: str, **meta) -&gt; TextNode:
+    <span class="k">return</span> TextNode(id_=ma, text=ma, metadata=dict(meta))     <span class="c"># id = nội dung = mã ngắn, dễ đọc khi so kết quả</span>
+
+QC7  = node(<span class="s">"qc7"</span>, so_hieu=<span class="s">"258/QĐ-ĐHSG"</span>, phan=<span class="s">"chinh"</span>, dieu=<span class="s">"7"</span>, bi_sua_doi_boi=<span class="s">"3183/QĐ-ĐHSG"</span>, ap_dung_khoa_tu=2021)
+SD9  = node(<span class="s">"sd9"</span>, so_hieu=<span class="s">"3183/QĐ-ĐHSG"</span>, phan=<span class="s">"sua_doi"</span>, sua_doi_dieu=<span class="s">"9"</span>, sua_doi=<span class="s">"258/QĐ-ĐHSG"</span>, ap_dung_khoa_tu=2025)
+...
+<span class="k">def</span> chay(p, cau_hoi, *nodes) -&gt; list[str]:
+    ds = [NodeWithScore(node=n, score=1.0 - i / 100) <span class="k">for</span> i, n <span class="k">in</span> enumerate(nodes)]   <span class="c"># điểm giảm dần theo thứ tự truyền vào</span>
+    <span class="k">return</span> [n.node.node_id <span class="k">for</span> n <span class="k">in</span> p.postprocess_nodes(ds, QueryBundle(cau_hoi))]</code></pre>
+<p>Đọc một test: <code>self.assertEqual(chay(self.loc, "khóa 2022 có IELTS 5.0", TB2366, QD2626), ["2626"])</code> = "đưa vào [2366, 2626] theo thứ tự đó, câu hỏi khóa 2022 → chỉ còn 2626". Muốn thêm tình huống mới: khai báo Node mô phỏng với đúng metadata, rồi viết một dòng <code>assertEqual</code> như vậy.</p>
+<p><code>@unittest.expectedFailure</code>: test mô tả hành vi <i>mong muốn</i> mà code chưa làm được. Test "thất bại" thì báo OK; khi sửa được, test báo "unexpected success" → bỏ decorator đi.</p>
+<h3>35.2 <code>test_llm.py</code></h3>
+<ul>
+  <li><code>@unittest.skipUnless(BAT, ...)</code> với <code>BAT = os.environ.get("RAG_TEST_LLM") == "1"</code> → mặc định cả lớp bị bỏ qua.</li>
+  <li><code>setUpClass</code> kiểm tra Ollama có đúng model chưa; không có thì <code>SkipTest</code> chứ không báo lỗi.</li>
+  <li><code>engine</code> và <code>tra_loi</code> là <code>ClassVar</code>: engine dựng một lần cho cả lớp, mỗi câu hỏi chỉ gọi LLM một lần dù nhiều test dùng chung câu đó.</li>
+  <li>Các khẳng định chỉ kiểm tra con số / cụm từ bắt buộc phải có (<code>assertRegex(tra_loi, r"\b0?3 tuần")</code>), không so nguyên văn, vì câu chữ của LLM có thể khác nhau mà vẫn đúng.</li>
+  <li>Import <code>index_builder</code> <b>bên trong</b> hàm vì nó kéo theo torch — CI không cài torch.</li>
+</ul>
+<h3>35.3 <code>test_danh_gia.py</code> — một test rất đáng giá</h3>
+<p><code>test_moi_nhan_khop_it_nhat_mot_node</code> nạp corpus thật và kiểm tra <b>mọi nhãn</b> <code>dieu_dung</code> của mọi bộ câu hỏi đều khớp ít nhất một Node. Gõ sai nhãn (vd <code>"QD898|17"</code> trong khi không có Điều 17) → test báo ngay, thay vì lặng lẽ làm R@k thấp đi. Chạy <code>make test</code> sau mỗi lần thêm câu hỏi.</p>
+
+<!-- ================================================================== -->
+<!-- PHẦN III -->
+<!-- ================================================================== -->
+<header class="hero" style="margin-top:72px">
+  <h1>Phần III — Lõi LlamaIndex &amp; giải đề của giảng viên</h1>
+  <p>Mục tiêu: hiểu <b>LlamaIndex làm gì bên trong</b> ở từng chỗ dự án gọi tới, để khi giảng viên ra đề kiểu "thêm X", "đổi Y", "so sánh Z" thì biết sửa ở đâu và viết code thế nào.</p>
+  <p>Mọi đoạn code ở mục 47 đã được <b>chạy thử ngày 24/10/2026</b> trên <code>llama-index-core 0.14.24</code> với 118 Node thật của dự án, dùng <code>MockLLM</code> + <code>MockEmbedding</code> (không cần GPU/Ollama). Các phần cần LLM thật để suy luận (agent chạy nhiều bước) chỉ được kiểm tra đến bước dựng đối tượng — có ghi rõ ở từng đề.</p>
+</header>
+
+<!-- ============================================================ -->
+<h2 id="li-ban-do">36. Bản đồ: dự án chạm vào LlamaIndex ở đâu</h2>
+<table>
+<tr><th>Tầng của RAG</th><th>API LlamaIndex</th><th>Dự án dùng ở</th><th>Dự án tự viết thêm gì</th></tr>
+<tr><td>Dữ liệu → Node</td><td><code>TextNode</code>, <code>SentenceSplitter</code>, <code>MetadataMode</code></td><td><code>processed_loader.py</code></td><td>Tự cắt theo heading Điều thay cho node parser có sẵn; tự chọn metadata nào vào embedding/prompt</td></tr>
+<tr><td>Embedding</td><td><code>HuggingFaceEmbedding</code>, <code>BaseEmbedding</code>, <code>Settings.embed_model</code></td><td><code>index_builder.py</code>, <code>remote_models.py</code></td><td><code>RemoteEmbedding</code> gọi HTTP</td></tr>
+<tr><td>Index + lưu trữ</td><td><code>VectorStoreIndex</code>, <code>StorageContext</code>, <code>load_index_from_storage</code></td><td><code>index_builder.py</code></td><td>Fingerprint <code>corpus.json</code> để biết khi nào build lại</td></tr>
+<tr><td>Truy hồi</td><td><code>index.as_retriever</code>, <code>BaseRetriever</code>, <code>QueryFusionRetriever</code></td><td><code>retriever.py</code>, <code>bm25.py</code></td><td><code>BM25Retriever</code> thuần Python</td></tr>
+<tr><td>Hậu xử lý</td><td><code>BaseNodePostprocessor</code>, <code>SimilarityPostprocessor</code>, <code>SentenceTransformerRerank</code></td><td><code>retriever.py</code>, <code>phien_ban.py</code>, <code>remote_models.py</code></td><td><code>LocPhienBan</code>, <code>UuTienSuaDoi</code>, <code>RemoteRerank</code></td></tr>
+<tr><td>Sinh câu trả lời</td><td><code>PromptTemplate</code>, <code>get_response_synthesizer</code>, <code>ResponseMode</code>, <code>RetrieverQueryEngine</code></td><td><code>query_engine.py</code>, <code>app/app.py</code></td><td><code>QA_PROMPT</code> tiếng Việt</td></tr>
+<tr><td>LLM</td><td><code>llama_index.llms.ollama.Ollama</code>, <code>Settings.llm</code></td><td><code>query_engine.make_llm</code></td><td>temperature 0, seed, thinking</td></tr>
+<tr><td>Đánh giá</td><td><code>RetrieverEvaluator</code>, <code>FaithfulnessEvaluator</code>, <code>RelevancyEvaluator</code>, <code>BatchEvalRunner</code></td><td><code>eval/evaluate.py</code>, <code>eval/evaluate_answers.py</code></td><td>Luật chấm theo (văn bản, Điều), McNemar, bootstrap</td></tr>
+<tr><td>Theo dõi</td><td><code>BaseCallbackHandler</code>, <code>CallbackManager</code></td><td><code>eval/tra_loi_dev.py</code></td><td><code>DemLLM</code> lấy số token từ Ollama</td></tr>
+<tr><td><i>Chưa dùng</i></td><td>Chat engine, MetadataFilters, Router, Tool, Agent, CitationQueryEngine, TokenCountingHandler…</td><td>—</td><td>Đây là "vùng ra đề" dễ gặp nhất → mục 44–47</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="li-query">37. Bên trong <code>engine.query("...")</code> — đọc từ mã nguồn thư viện</h2>
+<p>Mã thật trong <code>llama_index/core/query_engine/retriever_query_engine.py</code> (rút gọn):</p>
+<pre><code><span class="k">class</span> RetrieverQueryEngine(BaseQueryEngine):
+    <span class="k">def</span> retrieve(self, query_bundle):
+        nodes = self._retriever.retrieve(query_bundle)                       <span class="c"># ① retriever</span>
+        <span class="k">return</span> self._apply_node_postprocessors(nodes, query_bundle=query_bundle)
+
+    <span class="k">def</span> _apply_node_postprocessors(self, nodes, query_bundle):
+        <span class="k">for</span> node_postprocessor <span class="k">in</span> self._node_postprocessors:              <span class="c"># ② lần lượt, đúng thứ tự list</span>
+            nodes = node_postprocessor.postprocess_nodes(nodes, query_bundle=query_bundle)
+        <span class="k">return</span> nodes
+
+    <span class="k">def</span> _query(self, query_bundle):
+        <span class="k">with</span> self.callback_manager.event(CBEventType.QUERY, ...):
+            nodes = self.retrieve(query_bundle)
+            response = self._response_synthesizer.synthesize(query=query_bundle, nodes=nodes)   <span class="c"># ③</span>
+        <span class="k">return</span> response</code></pre>
+<p>Và <code>BaseSynthesizer.synthesize</code> (<code>response_synthesizers/base.py</code>):</p>
+<pre><code><span class="k">if</span> len(nodes) == 0:
+    <span class="k">return</span> Response(<span class="s">"Empty Response"</span>)            <span class="c"># ④ KHÔNG gọi LLM khi không có Node</span>
+response_str = self.get_response(
+    query_str=query.query_str,
+    text_chunks=[n.node.get_content(metadata_mode=MetadataMode.LLM) <span class="k">for</span> n <span class="k">in</span> nodes])   <span class="c"># ⑤</span>
+<span class="k">return</span> Response(response_str, source_nodes=nodes)</code></pre>
+<p>Với <code>compact</code> (<code>CompactAndRefine.get_response</code>): <code>prompt_helper.repack(...)</code> nối các chuỗi bằng <code>"\n\n"</code> rồi chia lại sao cho mỗi khối vừa <code>context_window</code> trừ phần prompt. Một khối → một lần gọi LLM với <code>text_qa_template</code>. Nhiều khối → khối sau dùng <code>refine_template</code> để "sửa tiếp" câu trả lời trước.</p>
+<div class="box"><strong>Ý nghĩa cho người sửa code</strong>
+① muốn đổi cách tìm → thay <code>retriever</code>. ② muốn lọc/sắp lại → thêm postprocessor (thứ tự trong list quan trọng). ③ muốn đổi cách tạo câu trả lời → thay <code>response_synthesizer</code> hoặc <code>response_mode</code>/prompt. ④ không có Node → "Empty Response". ⑤ LLM thấy metadata theo chế độ LLM → chỉnh qua <code>excluded_llm_metadata_keys</code>.
+<br><code>engine.retrieve(QueryBundle(q))</code> và <code>engine.synthesize(QueryBundle(q), nodes)</code> là public: gọi riêng từng bước được (app.py làm đúng như vậy).</div>
+
+<!-- ============================================================ -->
+<h2 id="li-node">38. Document, Node, Node parser</h2>
+<table>
+<tr><th>Lớp</th><th>Thuộc tính chính</th><th>Ghi chú</th></tr>
+<tr><td><code>Document</code></td><td><code>text</code>, <code>metadata</code>, <code>doc_id</code></td><td>Một văn bản nguyên vẹn, chưa cắt. Dự án <b>không</b> dùng Document trong luồng chính (tạo Node thẳng); pipeline cũ <code>ingestion.py</code> có dùng.</td></tr>
+<tr><td><code>TextNode</code></td><td><code>text</code>, <code>metadata</code>, <code>id_</code>/<code>node_id</code>, <code>excluded_embed_metadata_keys</code>, <code>excluded_llm_metadata_keys</code>, <code>relationships</code>, <code>metadata_template</code> (mặc định <code>"{key}: {value}"</code>), <code>metadata_seperator</code> (mặc định <code>"\n"</code>)</td><td><code>get_content(mode)</code> = các dòng metadata (trừ khóa bị loại) + dòng trống + text</td></tr>
+<tr><td><code>NodeWithScore</code></td><td><code>node</code>, <code>score</code></td><td><code>score</code> có thể None (baseline "không xếp hạng")</td></tr>
+</table>
+<h3>Node parser có sẵn (hay bị hỏi "vì sao không dùng")</h3>
+<table>
+<tr><th>Parser</th><th>Cắt theo</th><th>So với cách của dự án</th></tr>
+<tr><td><code>SentenceSplitter(chunk_size, chunk_overlap)</code></td><td>Số token (tiktoken), cố gắng không cắt giữa câu</td><td>Có thể cắt một Điều thành hai mảnh, hoặc ghép đuôi Điều này với đầu Điều kia → mất ranh giới để trích dẫn. Dự án chỉ dùng nó cho Điều &gt; 1024 từ.</td></tr>
+<tr><td><code>MarkdownNodeParser</code></td><td>Heading Markdown</td><td>Gần giống ý tưởng của dự án, nhưng không tự tạo metadata <code>dieu</code>, <code>sua_doi_dieu</code>, quan hệ hiệu lực; metadata heading của nó là đường dẫn heading (<code>header_path</code>).</td></tr>
+<tr><td><code>SentenceWindowNodeParser</code></td><td>Từng câu, kèm "cửa sổ" câu lân cận trong metadata</td><td>Truy hồi rất mịn; dùng cùng <code>MetadataReplacementPostProcessor</code> để thay câu bằng cửa sổ trước khi đưa LLM.</td></tr>
+<tr><td><code>HierarchicalNodeParser</code> + <code>AutoMergingRetriever</code></td><td>Nhiều cấp kích thước (vd 2048/512/128)</td><td>Lấy được mảnh nhỏ, nếu nhiều mảnh con cùng cha thì gộp lên cha. Tương tự ý tưởng Điều → khoản.</td></tr>
+</table>
+<pre><code><span class="c"># Dùng node parser có sẵn trên một Document</span>
+<span class="k">from</span> llama_index.core <span class="k">import</span> Document
+<span class="k">from</span> llama_index.core.node_parser <span class="k">import</span> SentenceSplitter
+nodes = SentenceSplitter(chunk_size=512, chunk_overlap=50).get_nodes_from_documents([Document(text=..., metadata={...})])
+<span class="c"># Node sinh ra THỪA KẾ metadata và danh sách loại trừ của Document</span></code></pre>
+
+<!-- ============================================================ -->
+<h2 id="li-index">39. Embedding &amp; <code>VectorStoreIndex</code></h2>
+<ul>
+  <li><b><code>Settings</code></b> là cấu hình toàn cục: <code>Settings.embed_model</code>, <code>Settings.llm</code>, <code>Settings.callback_manager</code>, <code>Settings.chunk_size</code>… Các lớp không được truyền tham số riêng sẽ lấy từ đây. Dự án đặt <code>Settings.embed_model</code> trong <code>setup_embedding()</code> và <code>Settings.llm</code> trong <code>build_query_engine()</code>.</li>
+  <li><b>Hai loại embedding:</b> <code>get_query_embedding(câu hỏi)</code> và <code>get_text_embedding(tài liệu)</code>. Một số model thêm tiền tố khác nhau cho hai loại — đó là lý do model server có tham số <code>kind</code>.</li>
+  <li><b><code>VectorStoreIndex(nodes)</code></b>: embedding mọi Node (theo <code>MetadataMode.EMBED</code>), lưu vào vector store mặc định <code>SimpleVectorStore</code> (trong RAM, so cosine bằng numpy, duyệt toàn bộ — đủ nhanh với 118 Node), lưu Node vào <code>docstore</code>.</li>
+  <li><b>Lưu / nạp:</b> <code>index.storage_context.persist(dir)</code> ghi <code>docstore.json</code>, <code>default__vector_store.json</code>, <code>index_store.json</code>… ; <code>load_index_from_storage(StorageContext.from_defaults(persist_dir=dir))</code> đọc lại (cần đặt đúng <code>Settings.embed_model</code> trước để embedding câu hỏi).</li>
+  <li><b>Thêm/xoá Node không cần build lại:</b> <code>index.insert_nodes([node])</code>, <code>index.delete_ref_doc(ref_doc_id)</code>. Dự án chọn build lại toàn bộ cho đơn giản (118 Node, vài chục giây).</li>
+  <li><b>Thay vector store</b> (Chroma, Qdrant, FAISS…): cài gói <code>llama-index-vector-stores-&lt;tên&gt;</code>, tạo <code>StorageContext.from_defaults(vector_store=...)</code>, truyền <code>storage_context=</code> vào <code>VectorStoreIndex(...)</code>. Phần retriever/query engine không đổi. (Không có trong requirements, chưa kiểm tra.)</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="li-retriever">40. Retriever</h2>
+<pre><code>retriever = index.as_retriever(
+    similarity_top_k=10,                    <span class="c"># số Node trả về</span>
+    filters=MetadataFilters(...),           <span class="c"># lọc metadata TRƯỚC khi lấy top-k (mục 47 Đề 2)</span>
+    vector_store_query_mode=<span class="s">"default"</span>,      <span class="c"># "mmr" = đa dạng hóa kết quả</span>
+)
+nodes = retriever.retrieve(<span class="s">"câu hỏi"</span>)      <span class="c"># list[NodeWithScore], score = cosine</span></code></pre>
+<p><b>Viết retriever riêng:</b> kế thừa <code>BaseRetriever</code>, cài <code>_retrieve(self, query_bundle) -&gt; list[NodeWithScore]</code>. Ví dụ đầy đủ là <code>src/bm25.py</code>. Retriever riêng ghép được vào mọi chỗ nhận retriever (query engine, chat engine, fusion).</p>
+<p><b><code>QueryFusionRetriever</code></b> — các <code>mode</code>:</p>
+<table>
+<tr><th>mode</th><th>Cách trộn</th></tr>
+<tr><td><code>reciprocal_rerank</code></td><td>RRF: điểm = Σ 1/(k + hạng), k = 60; không quan tâm điểm gốc, chỉ quan tâm thứ hạng. Dự án dùng mặc định.</td></tr>
+<tr><td><code>relative_score</code></td><td>Chuẩn hóa điểm mỗi retriever về [0, 1] (min-max) rồi cộng có trọng số <code>retriever_weights</code>.</td></tr>
+<tr><td><code>dist_based_score</code></td><td>Như trên nhưng chuẩn hóa theo trung bình ± 3 độ lệch chuẩn.</td></tr>
+<tr><td><code>simple</code></td><td>Gộp, giữ điểm cao nhất của mỗi Node.</td></tr>
+</table>
+<p><code>num_queries &gt; 1</code> → LLM sinh thêm các câu hỏi biến thể rồi truy hồi cho từng câu (query expansion). Dự án đặt 1 để giữ phép đo tất định.</p>
+
+<!-- ============================================================ -->
+<h2 id="li-post">41. Node postprocessor</h2>
+<p>Mọi postprocessor có cùng giao diện <code>postprocess_nodes(nodes, query_bundle) -&gt; nodes</code>. Có sẵn trong <code>llama_index.core.postprocessor</code>:</p>
+<table>
+<tr><th>Lớp</th><th>Làm gì</th><th>Ghi chú</th></tr>
+<tr><td><code>SimilarityPostprocessor(similarity_cutoff)</code></td><td>Bỏ Node có score &lt; ngưỡng</td><td>Dự án có sẵn qua <code>cfg.similarity_cutoff</code></td></tr>
+<tr><td><code>SentenceTransformerRerank(model, top_n)</code></td><td>Cross-encoder chấm lại</td><td>Bị cắt 512 token (xem mục 9)</td></tr>
+<tr><td><code>LLMRerank</code></td><td>Nhờ LLM chấm độ liên quan</td><td>Chậm, tốn token</td></tr>
+<tr><td><code>LongContextReorder</code></td><td>Đặt Node tốt nhất ở <b>đầu và cuối</b> ngữ cảnh</td><td>LLM hay "quên" phần giữa ngữ cảnh dài</td></tr>
+<tr><td><code>KeywordNodePostprocessor(required_keywords, exclude_keywords)</code></td><td>Giữ/bỏ Node theo từ khóa</td><td>Cần cài thêm spaCy</td></tr>
+<tr><td><code>MetadataReplacementPostProcessor(target_metadata_key)</code></td><td>Thay text bằng giá trị một khóa metadata</td><td>Đi cùng SentenceWindowNodeParser</td></tr>
+<tr><td><code>FixedRecencyPostprocessor</code> / <code>TimeWeightedPostprocessor</code></td><td>Ưu tiên Node mới theo ngày trong metadata</td><td>So sánh được với <code>UuTienSuaDoi</code>: các lớp này chỉ dựa vào ngày, không hiểu quan hệ sửa đổi/khóa</td></tr>
+</table>
+<p>Mẫu viết postprocessor riêng: mục 17.8. Quy tắc: thuộc tính khai báo kiểu Pydantic; cài <code>class_name()</code>; chỉ sửa <code>_postprocess_nodes</code>.</p>
+
+<!-- ============================================================ -->
+<h2 id="li-synth">42. Response synthesizer &amp; prompt</h2>
+<table>
+<tr><th><code>response_mode</code></th><th>Gọi LLM</th><th>Dùng khi</th></tr>
+<tr><td><code>compact</code> (dự án)</td><td>Nhồi tối đa Node vào 1 prompt; dư thì refine</td><td>Mặc định tốt: ít lượt gọi</td></tr>
+<tr><td><code>refine</code></td><td>Mỗi Node 1 lượt, lượt sau sửa câu trả lời lượt trước</td><td>Ngữ cảnh rất dài; chậm (n lượt)</td></tr>
+<tr><td><code>tree_summarize</code></td><td>Tóm tắt từng nhóm rồi tóm tắt các tóm tắt</td><td>Câu hỏi tổng hợp/tóm tắt nhiều văn bản</td></tr>
+<tr><td><code>simple_summarize</code></td><td>Cắt bớt cho vừa 1 prompt, gọi 1 lần</td><td>Nhanh nhưng có thể mất ngữ cảnh</td></tr>
+<tr><td><code>accumulate</code></td><td>Mỗi Node 1 câu trả lời riêng, nối lại</td><td>Muốn thấy mỗi văn bản nói gì</td></tr>
+<tr><td><code>no_text</code></td><td>Không gọi LLM</td><td>Chỉ lấy <code>source_nodes</code> (thử truy hồi)</td></tr>
+</table>
+<p><b>Prompt có tên.</b> Mỗi engine có các prompt được đặt tên, xem và thay được lúc chạy:</p>
+<pre><code>engine.get_prompts().keys()
+<span class="c"># ['response_synthesizer:text_qa_template', 'response_synthesizer:refine_template',
+#  'response_synthesizer:chat_content_qa_template', 'response_synthesizer:chat_content_refine_template']</span>
+engine.update_prompts({<span class="s">"response_synthesizer:text_qa_template"</span>: PromptTemplate(<span class="s">"...{context_str}...{query_str}..."</span>)})</code></pre>
+<p>Dự án chỉ thay <code>text_qa_template</code>. Khi ngữ cảnh phải chia nhiều lượt, lượt 2 trở đi dùng <code>refine_template</code> <b>mặc định tiếng Anh</b> của thư viện — một điểm có thể bị hỏi. Cách sửa: truyền thêm <code>refine_template=PromptTemplate("...{query_str}...{existing_answer}...{context_msg}...")</code> vào <code>RetrieverQueryEngine.from_args</code>.</p>
+<p><b>Streaming:</b> <code>streaming=True</code> → <code>StreamingResponse</code>, đọc <code>response.response_gen</code> (generator token). <code>streaming=False</code> → <code>Response</code>, đọc <code>response.response</code> hoặc <code>str(response)</code>. Cả hai đều có <code>source_nodes</code>.</p>
+
+<!-- ============================================================ -->
+<h2 id="li-llm">43. LLM — <code>llama_index.llms.ollama.Ollama</code></h2>
+<pre><code>llm = Ollama(model=<span class="s">"qwen3:8b"</span>, base_url=<span class="s">"http://localhost:11434"</span>, request_timeout=180,
+             temperature=0, additional_kwargs={<span class="s">"seed"</span>: 42}, thinking=False, context_window=8192)
+llm.complete(<span class="s">"Xin chào"</span>).text                                <span class="c"># 1 prompt → 1 câu trả lời</span>
+<span class="k">from</span> llama_index.core.llms <span class="k">import</span> ChatMessage
+llm.chat([ChatMessage(role=<span class="s">"system"</span>, content=<span class="s">"..."</span>), ChatMessage(role=<span class="s">"user"</span>, content=<span class="s">"..."</span>)]).message.content
+<span class="k">for</span> r <span class="k">in</span> llm.stream_complete(<span class="s">"..."</span>): print(r.delta, end=<span class="s">""</span>)</code></pre>
+<ul>
+  <li><code>additional_kwargs</code> được chuyển thẳng vào trường <code>options</code> của API Ollama (seed, num_ctx, top_p…).</li>
+  <li><code>context_window</code> có hai tác dụng: LlamaIndex dùng nó để chia ngữ cảnh, <b>và</b> lớp <code>Ollama</code> gửi nó sang API dưới dạng <code>num_ctx</code> (đọc trong <code>_model_kwargs</code>: <code>{"temperature": ..., "num_ctx": context_window, **additional_kwargs}</code>). Vì vậy <code>context_window=8192</code> của dự án quyết định luôn số token Ollama nạp; đặt <code>num_ctx</code> trong <code>additional_kwargs</code> sẽ ghi đè giá trị đó.</li>
+  <li>Đổi sang LLM khác: cài gói <code>llama-index-llms-&lt;tên&gt;</code>, chỉ sửa <code>make_llm()</code>. Mọi phần khác không đổi.</li>
+  <li>Test không cần LLM thật: <code>from llama_index.core.llms import MockLLM</code> (không đặt <code>max_tokens</code> thì trả lại chính prompt), <code>from llama_index.core.embeddings import MockEmbedding</code>.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="li-chat">44. Chat engine — hội thoại nhiều lượt</h2>
+<table>
+<tr><th>Lớp</th><th>Cách làm</th></tr>
+<tr><td><code>SimpleChatEngine</code></td><td>Chat với LLM, không truy hồi</td></tr>
+<tr><td><code>ContextChatEngine</code></td><td>Mỗi lượt truy hồi theo <b>câu gốc</b> của người dùng, đưa trích đoạn vào system prompt</td></tr>
+<tr><td><code>CondenseQuestionChatEngine</code></td><td>LLM viết lại câu nối tiếp thành câu độc lập → hỏi query engine</td></tr>
+<tr><td><code>CondensePlusContextChatEngine</code></td><td>Viết lại câu hỏi → truy hồi theo câu viết lại → trả lời có lịch sử chat. <b>Phù hợp nhất cho dự án.</b></td></tr>
+</table>
+<p>Đã đọc mã nguồn: <code>CondensePlusContextChatEngine._get_nodes</code> gọi retriever và <b>mọi postprocessor với câu đã viết lại</b> (<code>QueryBundle(condensed_question)</code>). Vì vậy <code>LocPhienBan</code> đọc khóa từ câu viết lại — nếu LLM bỏ mất "khóa 2025" khi viết lại thì lọc khóa không hoạt động. Bật <code>verbose=True</code> để in câu viết lại.</p>
+<p><code>ChatMemoryBuffer.from_defaults(token_limit=3000)</code>: giữ lịch sử tới khi vượt giới hạn token thì bỏ tin cũ nhất. <code>chat.reset()</code> xoá lịch sử. Mỗi người dùng/phiên cần một chat engine (hoặc một memory) riêng.</p>
+
+<!-- ============================================================ -->
+<h2 id="li-tool">45. Tool, Router, Agent</h2>
+<ul>
+  <li><b><code>QueryEngineTool.from_defaults(query_engine, name, description)</code></b>: biến một query engine thành "công cụ". <code>description</code> là thứ LLM đọc để chọn công cụ → viết rõ phạm vi.</li>
+  <li><b><code>FunctionTool.from_defaults(fn=ham)</code></b>: biến hàm Python thành công cụ. Tên = tên hàm, mô tả = docstring, tham số = chữ ký có kiểu (type hint bắt buộc để LLM biết kiểu).</li>
+  <li><b><code>RouterQueryEngine(selector, query_engine_tools)</code></b>: LLM đọc mô tả các tool rồi chọn một (<code>LLMSingleSelector</code>) hoặc nhiều (<code>LLMMultiSelector</code>). Selector yêu cầu LLM trả JSON dạng <code>[{"choice": 2, "reason": "..."}]</code> (số thứ tự bắt đầu từ 1).</li>
+  <li><b><code>SubQuestionQueryEngine</code></b>: tách câu hỏi phức tạp thành nhiều câu con, hỏi từng tool, tổng hợp lại (vd "So sánh quy đổi IELTS của khóa 2021 và khóa 2024").</li>
+  <li><b>Agent</b> (bản 0.14 là dạng workflow, chạy bất đồng bộ): <code>from llama_index.core.agent.workflow import ReActAgent, FunctionAgent</code>. <code>ReActAgent</code> suy luận theo vòng "Thought → Action → Observation" bằng văn bản (LLM nào cũng dùng được); <code>FunctionAgent</code> dùng function calling gốc của LLM (qwen3 qua Ollama hỗ trợ). Chạy: <code>await agent.run(user_msg="...")</code>.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="li-eval">46. Evaluation &amp; callback</h2>
+<table>
+<tr><th>Lớp</th><th>Đo</th><th>Cần</th></tr>
+<tr><td><code>RetrieverEvaluator.from_metric_names(["mrr","hit_rate"], retriever=...)</code></td><td>Truy hồi: có lấy được node_id mong đợi không</td><td>Danh sách <code>expected_ids</code></td></tr>
+<tr><td><code>FaithfulnessEvaluator(llm)</code></td><td>Câu trả lời có bám ngữ cảnh (không bịa)</td><td>LLM làm giám khảo</td></tr>
+<tr><td><code>RelevancyEvaluator(llm)</code></td><td>Câu trả lời + ngữ cảnh có đúng trọng tâm câu hỏi</td><td>LLM</td></tr>
+<tr><td><code>CorrectnessEvaluator(llm)</code></td><td>So với đáp án chuẩn, chấm 1–5</td><td>LLM + đáp án (dự án chưa dùng, chấm tay theo rubric)</td></tr>
+<tr><td><code>SemanticSimilarityEvaluator</code></td><td>Cosine giữa câu trả lời và đáp án</td><td>Embedding</td></tr>
+<tr><td><code>BatchEvalRunner(evaluators, workers)</code></td><td>Chạy nhiều evaluator trên nhiều câu</td><td></td></tr>
+</table>
+<p><b>Callback:</b> <code>Settings.callback_manager = CallbackManager([handler])</code>. Có sẵn <code>TokenCountingHandler</code> (đếm token prompt/completion/embedding, mục 47 Đề 5), <code>LlamaDebugHandler</code> (in cây sự kiện, xem prompt thật). Tự viết: kế thừa <code>BaseCallbackHandler</code> như <code>DemLLM</code> (mục 34.1).</p>
+
+<!-- ============================================================ -->
+<h2 id="de">47. Đề mẫu &amp; lời giải</h2>
+<p>Mỗi đề gồm: yêu cầu → ý tưởng → code (ghi rõ đặt ở đâu) → cách kiểm tra → câu hỏi vấn đáp có thể kèm theo. Mẹo: luôn dựng biến thể bằng <code>dataclasses.replace(cfg, ...)</code> thay vì sửa profile, để so sánh được trước/sau.</p>
+
+<h3>Đề 1. Không có trích đoạn đủ liên quan thì từ chối, không gọi LLM</h3>
+<p><b>Ý tưởng:</b> thêm ngưỡng <code>SimilarityPostprocessor</code>; khi danh sách rỗng LlamaIndex trả <code>"Empty Response"</code> (đã chạy thử) → tự kiểm tra danh sách rỗng để trả lời bằng tiếng Việt.</p>
+<pre><code><span class="c"># src/query_engine.py — thay hàm ask()</span>
+<span class="k">from</span> llama_index.core.schema <span class="k">import</span> QueryBundle
+TU_CHOI = <span class="s">"Không tìm thấy thông tin này trong các văn bản quy định đào tạo của Trường."</span>
+
+<span class="k">def</span> ask(engine: RetrieverQueryEngine, question: str, cfg: RAGConfig) -&gt; None:
+    qb = QueryBundle(question)
+    nodes = engine.retrieve(qb)                 <span class="c"># retriever + mọi postprocessor (kể cả ngưỡng)</span>
+    <span class="k">if not</span> nodes:
+        print(TU_CHOI)
+        <span class="k">return</span>
+    response = engine.synthesize(qb, nodes)
+    ...  <span class="c"># phần in streaming / Response giữ nguyên như cũ</span></code></pre>
+<p>Bật ngưỡng: <code>similarity_cutoff=0.5</code> trong profile (hoặc <code>dataclasses.replace(cfg, similarity_cutoff=0.5)</code>). <b>Chọn ngưỡng bằng đo</b>: <code>eval/evaluate.py --cau-hinh vector --cutoff 0.5</code> (R@k của câu trong phạm vi không được giảm nhiều) và đếm số câu ngoài phạm vi (<code>eval/test_kiem_chung_ngoai.json</code>) bị chặn.</p>
+<p><b>Vấn đáp:</b> Vì sao ngưỡng đặt trên cosine mà không trên điểm rerank? (cutoff chạy trước rerank; muốn theo điểm rerank thì viết postprocessor đặt sau rerank — mục 17.8). Vì sao không đặt ngưỡng khi hybrid? (thang điểm RRF khác).</p>
+
+<h3>Đề 2. Lọc theo metadata bằng <code>MetadataFilters</code> có sẵn</h3>
+<pre><code><span class="k">from</span> llama_index.core.vector_stores <span class="k">import</span> MetadataFilters, MetadataFilter, FilterOperator, FilterCondition
+
+f = MetadataFilters(filters=[
+    MetadataFilter(key=<span class="s">"tinh_trang"</span>, value=<span class="s">"het_hieu_luc"</span>, operator=FilterOperator.NE),
+    MetadataFilter(key=<span class="s">"so_hieu"</span>, value=<span class="s">"3183/QĐ-ĐHSG"</span>, operator=FilterOperator.EQ),
+], condition=FilterCondition.AND)
+retriever = index.as_retriever(similarity_top_k=10, filters=f)
+<span class="c"># Chạy thử: trả về 9 Node, tất cả của QĐ 3183.</span>
+
+<span class="c"># Số nguyên so sánh được: Node áp dụng từ khóa 2024 trở đi</span>
+f2 = MetadataFilters(filters=[MetadataFilter(key=<span class="s">"ap_dung_khoa_tu"</span>, value=2024, operator=FilterOperator.GTE)])
+<span class="c"># Chạy thử: 8 Node, của QyĐ 2101 (2024) và mục sửa đổi QĐ 3183 (2025).</span></code></pre>
+<p>Đưa vào hệ thống: trong <code>retriever.get_retriever()</code> đổi <code>index.as_retriever(similarity_top_k=..., filters=...)</code>; có thể dựng <code>filters</code> từ câu hỏi (vd khóa = <code>khoa_trong_cau_hoi(q)</code> → lọc <code>ap_dung_khoa_tu &lt;= khoa</code>). Vì retriever dựng một lần, filter theo câu hỏi phải dựng retriever mỗi câu.</p>
+<p>Toán tử có: <code>EQ, NE, GT, GTE, LT, LTE, IN, NIN, TEXT_MATCH, CONTAINS, IS_EMPTY…</code>; điều kiện <code>AND / OR</code>; lồng nhau được.</p>
+<p><b>Vấn đáp — so với <code>LocPhienBan</code>:</b> filter lọc <i>trước</i> top-k (không phí chỗ trong top-k) nhưng là luật cứng: Node thiếu khóa <code>ap_dung_khoa_tu</code> bị loại khỏi phép <code>GTE</code>; không "kéo kèm" mục sửa đổi; không có ngoại lệ "giữ lại khi cả chuỗi không còn căn cứ".</p>
+
+<h3>Đề 3. So sánh cắt theo Điều với cắt cố định 512 token</h3>
+<pre><code><span class="c"># eval/so_sanh_chunk.py (file mới)</span>
+<span class="k">import</span> dataclasses, sys
+<span class="k">from</span> pathlib <span class="k">import</span> Path
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / <span class="s">"src"</span>)); sys.path.insert(0, str(ROOT / <span class="s">"eval"</span>))
+<span class="k">from</span> llama_index.core <span class="k">import</span> Document, VectorStoreIndex
+<span class="k">from</span> llama_index.core.node_parser <span class="k">import</span> SentenceSplitter
+<span class="k">from</span> config <span class="k">import</span> get_config
+<span class="k">from</span> index_builder <span class="k">import</span> setup_embedding
+<span class="k">from</span> processed_loader <span class="k">import</span> corpus_files, front_matter, ten_hien_thi
+<span class="k">from</span> evaluate <span class="k">import</span> danh_gia, in_ket_qua
+<span class="k">from</span> luat_cham <span class="k">import</span> dung_bo_dev
+
+cfg = get_config()
+setup_embedding(cfg)
+docs = []
+<span class="k">for</span> p <span class="k">in</span> corpus_files(cfg):
+    _, body = front_matter(p.read_text(encoding=<span class="s">"utf-8"</span>))
+    docs.append(Document(text=body, metadata={<span class="s">"file"</span>: p.name, <span class="s">"van_ban"</span>: ten_hien_thi(cfg, p)},
+                         excluded_embed_metadata_keys=[<span class="s">"file"</span>], excluded_llm_metadata_keys=[<span class="s">"file"</span>]))
+nodes = SentenceSplitter(chunk_size=512, chunk_overlap=50).get_nodes_from_documents(docs)   <span class="c"># chạy thử: 186 Node</span>
+retr = VectorStoreIndex(nodes).as_retriever(similarity_top_k=10)
+<span class="k">for</span> bo <span class="k">in</span> (<span class="s">"dev_questions_dot1.json"</span>, <span class="s">"dev_questions_dot2.json"</span>, <span class="s">"dev_questions_dot3.json"</span>):
+    in_ket_qua(danh_gia(bo, dung_bo_dev, retr.retrieve, <span class="s">"co-dinh-512"</span>, cfg.mo_ta()))</code></pre>
+<p>Chỉ dùng được luật chấm <code>dung_bo_dev</code> với nhãn <b>chỉ có tiền tố file</b>: Node cố định không có metadata <code>dieu</code>/<code>phan</code> nên nhãn <code>"QD898|7"</code> luôn tính sai. Cần nói rõ điều này khi báo cáo, hoặc tự gán <code>dieu</code> cho mảnh bằng cách tìm "Điều N" trong text. So với <code>make eval</code> (cấu hình vector) để thấy chênh lệch.</p>
+<p><b>Vấn đáp:</b> Cắt cố định làm hỏng gì? (ranh giới Điều, trích dẫn, quan hệ sửa đổi theo Điều, lọc phiên bản). Khi nào cắt cố định lại tốt hơn? (văn bản không có cấu trúc Điều, Điều quá dài).</p>
+
+<h3>Đề 4. Hỏi đáp nhiều lượt (câu hỏi nối tiếp)</h3>
+<pre><code><span class="c"># src/chat.py (file mới, chạy như pipeline.py)</span>
+<span class="k">import</span> sys
+<span class="k">from</span> pathlib <span class="k">import</span> Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+<span class="k">from</span> llama_index.core.chat_engine <span class="k">import</span> CondensePlusContextChatEngine
+<span class="k">from</span> llama_index.core.memory <span class="k">import</span> ChatMemoryBuffer
+<span class="k">from</span> config <span class="k">import</span> get_config
+<span class="k">from</span> index_builder <span class="k">import</span> build_or_load_index
+<span class="k">from</span> query_engine <span class="k">import</span> make_llm
+<span class="k">from</span> retriever <span class="k">import</span> get_postprocessors, get_retriever, node_label
+
+cfg = get_config()
+index = build_or_load_index(cfg)
+chat = CondensePlusContextChatEngine.from_defaults(
+    retriever=get_retriever(index, cfg),
+    llm=make_llm(cfg),
+    node_postprocessors=get_postprocessors(cfg, index),
+    memory=ChatMemoryBuffer.from_defaults(token_limit=3000),
+    context_prompt=(
+        <span class="s">"Dưới đây là trích đoạn quy chế đào tạo Trường ĐH Sài Gòn:\n{context_str}\n"</span>
+        <span class="s">"Chỉ dựa vào trích đoạn, trả lời bằng tiếng Việt, trích tên văn bản và số Điều. "</span>
+        <span class="s">"Không có thông tin thì nói không tìm thấy."</span>),
+    verbose=True,                       <span class="c"># in "Condensed question: ..." để kiểm tra</span>
+)
+<span class="k">while</span> (q := input(<span class="s">"\nBạn: "</span>).strip()) != <span class="s">"thoat"</span>:
+    r = chat.chat(q)
+    print(r.response)
+    print(<span class="s">"Nguồn:"</span>, <span class="s">"; "</span>.join(dict.fromkeys(node_label(n) <span class="k">for</span> n <span class="k">in</span> r.source_nodes)))</code></pre>
+<p>Đã chạy thử (MockLLM): lượt 2 vẫn có 5 nguồn, lịch sử 4 tin. Với LLM thật, thử: "Sinh viên được rút học phần khi nào?" → "Thế còn khóa 2021?" và xem câu viết lại có chứa "khóa 2021" không.</p>
+<p><b>Vấn đáp:</b> Vì sao không dùng <code>ContextChatEngine</code>? (truy hồi theo câu gốc "Thế còn khóa 2021?" thiếu chủ đề → lấy sai Node). Rủi ro? (viết lại sai làm truy hồi sai; tốn thêm một lượt gọi LLM mỗi câu).</p>
+
+<h3>Đề 5. Đo số token và chi phí mỗi câu hỏi</h3>
+<pre><code><span class="k">from</span> llama_index.core <span class="k">import</span> Settings
+<span class="k">from</span> llama_index.core.callbacks <span class="k">import</span> CallbackManager, TokenCountingHandler
+
+dem = TokenCountingHandler()             <span class="c"># mặc định đếm bằng tokenizer tiktoken, KHÔNG phải tokenizer của qwen3</span>
+Settings.callback_manager = CallbackManager([dem])     <span class="c"># đặt TRƯỚC khi dựng engine</span>
+engine = build_query_engine(index, cfg)
+engine.query(<span class="s">"Một năm học có bao nhiêu học kỳ?"</span>)
+print(dem.prompt_llm_token_count, dem.completion_llm_token_count, dem.total_embedding_token_count)
+dem.reset_counts()</code></pre>
+<p>Chạy thử: prompt ≈ 3316 token (3 Node + QA_PROMPT, đếm bằng tiktoken). Số token <b>thật</b> của qwen3 lấy từ Ollama — đó là cách <code>eval/tra_loi_dev.py</code> làm (<code>DemLLM</code>, trường <code>prompt_eval_count</code>). Muốn TokenCountingHandler đếm đúng tokenizer khác: <code>TokenCountingHandler(tokenizer=AutoTokenizer.from_pretrained("Qwen/Qwen3-8B").encode)</code>.</p>
+
+<h3>Đề 6. Trích dẫn dạng [1], [2] trong câu trả lời</h3>
+<pre><code><span class="k">from</span> llama_index.core.query_engine <span class="k">import</span> CitationQueryEngine
+ce = CitationQueryEngine.from_args(
+    index, llm=make_llm(cfg), similarity_top_k=5, citation_chunk_size=512,
+    node_postprocessors=get_postprocessors(cfg, index),
+)
+r = ce.query(<span class="s">"Sinh viên được rút học phần khi nào?"</span>)
+print(r.response)                       <span class="c"># "... trong 03 tuần đầu [1] ..."</span>
+<span class="k">for</span> i, n <span class="k">in</span> enumerate(r.source_nodes, 1):
+    print(i, n.node.get_content()[:80]) <span class="c"># text mỗi nguồn bắt đầu bằng "Source i:"</span></code></pre>
+<p>CitationQueryEngine cắt lại Node thành mảnh <code>citation_chunk_size</code> và đánh số "Source N:". Prompt trích dẫn mặc định bằng tiếng Anh → nên truyền <code>citation_qa_template</code> tiếng Việt (phải giữ nguyên ý "dùng [N] để trích dẫn"). Đã chạy thử với MockLLM: nguồn đầu có dạng <code>"Source 1: | Điều 4. ..."</code>.</p>
+<p><b>Vấn đáp:</b> Khác gì cách dự án đang làm? (dự án trích theo nhãn văn bản + Điều ở cuối câu trả lời, nhờ prompt; CitationQueryEngine gắn số vào từng câu, nhưng mảnh bị cắt lại có thể làm mất tiêu đề Điều).</p>
+
+<h3>Đề 7. Định tuyến (Router) giữa các nhóm văn bản</h3>
+<pre><code><span class="k">from</span> llama_index.core <span class="k">import</span> VectorStoreIndex
+<span class="k">from</span> llama_index.core.query_engine <span class="k">import</span> RouterQueryEngine
+<span class="k">from</span> llama_index.core.selectors <span class="k">import</span> LLMSingleSelector
+<span class="k">from</span> llama_index.core.tools <span class="k">import</span> QueryEngineTool
+
+nodes = list(index.docstore.docs.values())
+<span class="k">def</span> engine_theo(tien_to: tuple[str, ...]):
+    con = VectorStoreIndex([n <span class="k">for</span> n <span class="k">in</span> nodes <span class="k">if</span> str(n.metadata[<span class="s">"file"</span>]).startswith(tien_to)])
+    <span class="k">return</span> con.as_query_engine(llm=llm, text_qa_template=QA_PROMPT, similarity_top_k=5)
+
+tool_qc = QueryEngineTool.from_defaults(
+    query_engine=engine_theo((<span class="s">"25_"</span>, <span class="s">"QD 3183"</span>)), name=<span class="s">"quy_che"</span>,
+    description=<span class="s">"Quy chế đào tạo SGU 2021 và QĐ 3183: học kỳ, đăng ký, rút học phần, điểm, xếp loại, tốt nghiệp")</span>
+tool_ta = QueryEngineTool.from_defaults(
+    query_engine=engine_theo((<span class="s">"202111_2366"</span>, <span class="s">"30_TB so 2451"</span>, <span class="s">"CV2626"</span>, <span class="s">"29_2101"</span>, <span class="s">"TB so 2567"</span>)), name=<span class="s">"tieng_anh"</span>,
+    description=<span class="s">"Quy đổi chứng chỉ tiếng Anh (IELTS, TOEIC, VSTEP, PTE) sang điểm học phần tiếng Anh không chuyên"</span>)
+router = RouterQueryEngine(selector=LLMSingleSelector.from_defaults(llm=llm),
+                           query_engine_tools=[tool_qc, tool_ta], llm=llm)
+r = router.query(<span class="s">"IELTS 5.0 quy đổi được bao nhiêu điểm?"</span>)
+print(r.metadata[<span class="s">"selector_result"</span>])   <span class="c"># selections=[SingleSelection(index=1, reason='...')]  (index đếm từ 0)</span></code></pre>
+<p>Đã chạy thử với một LLM giả trả JSON <code>[{"choice": 2, ...}]</code> → router chọn đúng tool thứ 2 (index 1). <code>VectorStoreIndex(con_nodes)</code> embedding lại các Node đó (Node đã có sẵn embedding trong index lớn không được dùng lại).</p>
+<p><b>Vấn đáp:</b> Lợi ích? (thu hẹp không gian tìm kiếm, tránh văn bản nhóm khác lấn át). Rủi ro? (LLM chọn sai tool thì mất hẳn căn cứ; thêm một lượt gọi LLM; câu hỏi liên nhóm cần <code>LLMMultiSelector</code> hoặc SubQuestion).</p>
+
+<h3>Đề 8. Tool tra bảng quy đổi (đưa phép tra bảng ra khỏi LLM) + Agent</h3>
+<p>Ý tưởng theo nhận xét của thầy: tra bảng là việc tất định, không nên để LLM tự đọc bảng. <code>data/bang_quy_doi/*.csv</code> có cột <code>chung_chi, muc_tu, muc_den, hoc_phan, diem, ap_dung_khoa_tu, ap_dung_khoa_den, nguon_trang</code>.</p>
+<pre><code><span class="c"># src/cong_cu.py (file mới)</span>
+<span class="k">import</span> csv
+<span class="k">from</span> pathlib <span class="k">import</span> Path
+<span class="k">from</span> llama_index.core.tools <span class="k">import</span> FunctionTool
+BANG = Path(__file__).resolve().parent.parent / <span class="s">"data"</span> / <span class="s">"bang_quy_doi"</span>
+
+<span class="k">def</span> tra_bang_quy_doi(chung_chi: str, diem_chung_chi: float, khoa: int) -&gt; str:
+    <span class="s">"""Tra bảng quy đổi chứng chỉ tiếng Anh (IELTS, TOEIC Nghe Doc, VSTEP...) sang điểm học phần
+    tiếng Anh không chuyên cho sinh viên khóa tuyển sinh `khoa` (năm 4 chữ số)."""</span>
+    ket: list[str] = []
+    <span class="k">for</span> p <span class="k">in</span> sorted(BANG.glob(<span class="s">"*.csv"</span>)):
+        <span class="k">with</span> p.open(encoding=<span class="s">"utf-8"</span>) <span class="k">as</span> fh:
+            <span class="k">for</span> d <span class="k">in</span> csv.DictReader(fh):
+                <span class="k">if</span> d[<span class="s">"chung_chi"</span>].lower() != chung_chi.lower():
+                    <span class="k">continue</span>
+                tu, den = d.get(<span class="s">"ap_dung_khoa_tu"</span>) <span class="k">or</span> <span class="s">"0"</span>, d.get(<span class="s">"ap_dung_khoa_den"</span>) <span class="k">or</span> <span class="s">"9999"</span>
+                <span class="k">if</span> int(tu) &lt;= khoa &lt;= int(den) <span class="k">and</span> float(d[<span class="s">"muc_tu"</span>]) &lt;= diem_chung_chi &lt;= float(d[<span class="s">"muc_den"</span>]):
+                    ket.append(<span class="s">f"{d['hoc_phan']}: {d['diem']} điểm (nguồn {p.stem})"</span>)
+    <span class="k">return</span> <span class="s">"; "</span>.join(ket) <span class="k">or</span> <span class="s">"Không có dòng nào phù hợp trong bảng quy đổi."</span>
+
+tool_bang = FunctionTool.from_defaults(fn=tra_bang_quy_doi)
+<span class="c"># Chạy thử: tool_bang.call(chung_chi="IELTS", diem_chung_chi=4.0, khoa=2024)
+# → "Tiếng Anh 1: 8 điểm (nguồn 2101_QyD_DHSG); Tiếng Anh 2: 8 điểm ...; Tiếng Anh 3: 8 điểm ..."</span></code></pre>
+<pre><code><span class="c"># Agent dùng cả tool bảng và query engine quy chế</span>
+<span class="k">import</span> asyncio
+<span class="k">from</span> llama_index.core.agent.workflow <span class="k">import</span> ReActAgent
+<span class="k">from</span> llama_index.core.tools <span class="k">import</span> QueryEngineTool
+tool_qc = QueryEngineTool.from_defaults(query_engine=build_query_engine(index, dataclasses.replace(cfg, streaming=False)),
+                                        name=<span class="s">"quy_che"</span>, description=<span class="s">"Tra cứu quy chế, quy định đào tạo SGU"</span>)
+agent = ReActAgent(tools=[tool_bang, tool_qc], llm=make_llm(cfg),
+                   system_prompt=<span class="s">"Trả lời bằng tiếng Việt. Câu hỏi quy đổi điểm tiếng Anh thì dùng tra_bang_quy_doi."</span>)
+<span class="k">async def</span> main() -&gt; None:
+    print(<span class="k">await</span> agent.run(user_msg=<span class="s">"Em khóa 2024 có IELTS 4.0 thì được mấy điểm Tiếng Anh 1?"</span>))
+asyncio.run(main())</code></pre>
+<p><b>Đã kiểm tra:</b> hàm tool trả đúng dòng của QyĐ 2101; agent dựng được. <b>Chưa kiểm tra</b> agent suy luận nhiều bước (cần qwen3 thật). Lưu ý cột <code>muc_tu/muc_den</code> của TOEIC là điểm, của IELTS là band; chứng chỉ có tên như "TOEIC Nghe Doc" — mô tả trong docstring để LLM gọi đúng tên.</p>
+<p><b>Vấn đáp:</b> Vì sao tool tốt hơn để LLM đọc bảng? (tất định, không nhầm hàng, kiểm thử được bằng unittest). Agent tốn gì? (nhiều lượt gọi LLM, khó tái lập, có thể không gọi tool).</p>
+
+<h3>Đề 9. Xem và thay prompt lúc chạy; Việt hóa refine prompt</h3>
+<pre><code>engine = build_query_engine(index, cfg)
+<span class="k">for</span> ten, p <span class="k">in</span> engine.get_prompts().items():
+    print(<span class="s">"==="</span>, ten); print(p.get_template())
+
+REFINE_VI = PromptTemplate(
+    <span class="s">"Câu hỏi: {query_str}\nCâu trả lời hiện có: {existing_answer}\n"</span>
+    <span class="s">"Có thêm trích đoạn dưới đây (chỉ dùng nếu cần):\n------------\n{context_msg}\n------------\n"</span>
+    <span class="s">"Dựa vào trích đoạn mới, sửa lại câu trả lời cho đúng hơn bằng tiếng Việt; nếu trích đoạn không hữu ích thì giữ nguyên câu trả lời.\n"</span>
+    <span class="s">"Câu trả lời đã sửa: "</span>)
+engine.update_prompts({<span class="s">"response_synthesizer:refine_template"</span>: REFINE_VI})</code></pre>
+<p>Hoặc sửa gốc: trong <code>build_query_engine()</code> thêm <code>refine_template=REFINE_VI</code> vào <code>RetrieverQueryEngine.from_args(...)</code>. Biến trong refine template phải đúng tên <code>{query_str}</code>, <code>{existing_answer}</code>, <code>{context_msg}</code>.</p>
+
+<h3>Đề 10. So sánh các <code>response_mode</code></h3>
+<pre><code><span class="k">for</span> mode <span class="k">in</span> (<span class="s">"compact"</span>, <span class="s">"refine"</span>, <span class="s">"tree_summarize"</span>, <span class="s">"simple_summarize"</span>, <span class="s">"accumulate"</span>):
+    c = dataclasses.replace(cfg, response_mode=mode, streaming=False)
+    e = build_query_engine(index, c)
+    t0 = time.perf_counter(); r = e.query(q)
+    print(mode, round(time.perf_counter() - t0, 1), <span class="s">"s |"</span>, str(r)[:200])</code></pre>
+<p>Đo thêm số lượt gọi LLM bằng <code>DemLLM</code> (<code>eval/tra_loi_dev.py</code>) để thấy refine gọi nhiều lần. Đã chạy thử cả 6 mode với MockLLM. Lưu ý <code>tree_summarize</code> dùng <code>summary_template</code> riêng (mặc định tiếng Anh) — truyền <code>summary_template=QA_PROMPT</code> nếu cần.</p>
+
+<h3>Đề 11. Đặt Node tốt nhất ở đầu và cuối ngữ cảnh (LongContextReorder)</h3>
+<pre><code><span class="c"># src/retriever.py, cuối get_postprocessors(), trước return ps:</span>
+<span class="k">if</span> cfg.dao_thu_tu:                    <span class="c"># trường mới trong RAGConfig: dao_thu_tu: bool = False (+ thêm vào mo_ta())</span>
+    <span class="k">from</span> llama_index.core.postprocessor <span class="k">import</span> LongContextReorder
+    ps.append(LongContextReorder())</code></pre>
+<p>Phải đặt <b>sau</b> <code>UuTienSuaDoi</code> (sau khi đã cắt top_n), vì nó xáo thứ tự. Chỉ ảnh hưởng thứ tự đưa vào LLM, không ảnh hưởng R@k (đánh giá truy hồi nên chạy với cờ tắt). Đo bằng câu trả lời (<code>tra_loi_dev.py</code>).</p>
+
+<h3>Đề 12. Đổi model embedding / LLM rồi so sánh</h3>
+<p>Thêm profile (mục 17.10) → <code>RAG_PROFILE=&lt;tên&gt; venv/bin/python src/index_builder.py</code> (index riêng ở <code>storage/&lt;tên&gt;/</code>) → <code>RAG_PROFILE=&lt;tên&gt; venv/bin/python eval/evaluate.py --cau-hinh vector</code>. Lưu ý: model embedding mới cần đủ độ dài (≥ 512 token) — đo bằng tokenizer của model đó; profile local chỉ 256 token nên bị cắt đuôi.</p>
+
+<h3>Đề 13. Thêm một retriever / postprocessor tự viết vào ablation</h3>
+<p>Ví dụ: postprocessor chỉ giữ Node cùng văn bản với Node top-1.</p>
+<pre><code><span class="k">class</span> CungVanBanTop1(BaseNodePostprocessor):
+    @classmethod
+    <span class="k">def</span> class_name(cls) -&gt; str: <span class="k">return</span> <span class="s">"CungVanBanTop1"</span>
+    <span class="k">def</span> _postprocess_nodes(self, nodes, query_bundle=None):
+        <span class="k">if not</span> nodes: <span class="k">return</span> nodes
+        f = nodes[0].node.metadata.get(<span class="s">"file"</span>)
+        <span class="k">return</span> [n <span class="k">for</span> n <span class="k">in</span> nodes <span class="k">if</span> n.node.metadata.get(<span class="s">"file"</span>) == f]</code></pre>
+<p>Gắn vào <code>get_postprocessors</code> qua một cờ mới trong <code>RAGConfig</code>, thêm cấu hình vào <code>CAU_HINH</code> của <code>eval/evaluate.py</code> (vd <code>"vector+top1vb": {"cung_van_ban": True, **_TAT}</code>), chạy <code>eval/evaluate.py --cau-hinh vector,vector+top1vb</code> và đọc dòng McNemar.</p>
+
+<!-- ============================================================ -->
+<h2 id="de-meo">48. Mẹo khi làm đề tại chỗ</h2>
+<ol>
+  <li><b>Xác định tầng:</b> đề chạm vào Node (loader) / tìm kiếm (retriever) / lọc-sắp (postprocessor) / sinh (synthesizer, prompt, LLM) / hội thoại (chat engine) / công cụ (tool, router, agent)? → mục 36 cho biết file.</li>
+  <li><b>Không phá cấu hình chốt:</b> thêm cờ mới vào <code>RAGConfig</code> với mặc định = hành vi cũ; thêm vào <code>mo_ta()</code>; so sánh bằng <code>dataclasses.replace</code>.</li>
+  <li><b>Thử nhanh không cần GPU:</b> <code>Settings.embed_model = MockEmbedding(embed_dim=8)</code>, <code>MockLLM()</code>, dựng <code>VectorStoreIndex(load_corpus_nodes(cfg))</code> — kiểm tra code chạy được trước, rồi mới chạy với model thật.</li>
+  <li><b>Đo, đừng đoán:</b> truy hồi → <code>eval/evaluate.py --cau-hinh a,b</code> (đọc R@1 + McNemar); câu trả lời → <code>eval/tra_loi_dev.py</code> rồi chấm tay theo <code>docs/rubric-cham-tra-loi.md</code>.</li>
+  <li><b>Đổi loader thì tăng <code>LOADER_VERSION</code></b>; đổi model embedding thì index tự build lại.</li>
+  <li><b>Chạy <code>make test</code></b> trước khi trình bày; viết thêm 1 test cho phần mới nếu kịp (mẫu ở mục 16).</li>
+  <li><b>Chuẩn bị câu trả lời "vì sao"</b> cho mỗi lựa chọn: vì sao cắt theo Điều, vì sao rerank 2048, vì sao lọc phiên bản đặt trước rerank, vì sao không bật hybrid — các con số nằm ở <code>eval/results/logs/2026-10-17_chot-cau-hinh/04_tong_hop.md</code>.</li>
+</ol>
+</main>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('themeBtn'), saved=null;
+  try{saved=localStorage.getItem('theme');}catch(e){}
+  if(saved){root.setAttribute('data-theme',saved);}
+  btn.addEventListener('click',function(){
+    var dark=root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var next=dark?'light':'dark'; root.setAttribute('data-theme',next);
+    try{localStorage.setItem('theme',next);}catch(e){}
+  });
+})();
+</script>
+</body>
+</html>

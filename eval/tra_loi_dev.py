@@ -19,6 +19,11 @@ Theo nhận xét tuần 6 (ý 4: "lưu câu trả lời, evidence, rubric, số 
   - chạy được bộ ngoài phạm vi (eval/test_kiem_chung_ngoai.json): ghi kèm `hanh_vi_mong_doi` để chấm từ chối.
     Bộ này thuộc tập kiểm chứng: chỉ chạy sau khi đóng băng (eval/dong_bang.py).
 
+Theo nhận xét tuần 7 (ý 6 "khóa prompt/model/index cùng log từng câu", ý 8 "cách mở đúng đoạn gốc"):
+  - file kết quả ghi `khoa_tai_lap` (sha256 prompt, model + digest Ollama, sha256 fingerprint index, cấu hình) và mỗi
+    câu ghi `ma_khoa`; --chi-cau-loi từ chối chạy bù khi khóa đã đổi;
+  - mỗi evidence ghi `vi_tri` = file tầng 2 + số dòng của Node (không có số trang PDF).
+
     RAG_PROFILE=server venv/bin/python eval/tra_loi_dev.py --cau-hinh cu,moi \\
         --bo dev_questions_dot1.json,dev_questions_dot2.json,dev_questions_dot3.json --nhan 2026-10-16
     ... eval/tra_loi_dev.py --cau-hinh cu --nhan 2026-10-17 --chi-cau-loi     # bổ sung các câu lỗi của lần trước
@@ -47,7 +52,8 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 from config import RAGConfig, get_config
 from index_builder import build_or_load_index
-from query_engine import build_query_engine
+from processed_loader import vi_tri_goc
+from query_engine import build_query_engine, digest_llm, khoa_tai_lap
 from retriever import node_label
 
 CAU_HINH: dict[str, dict[str, object]] = {
@@ -98,10 +104,11 @@ def tong(luot: list[dict[str, Any]], khoa: str) -> int | None:
 
 def tra_loi_mot_cau(
     engine: Any, dem: DemLLM, cau_hoi: str,
-    dung: Callable[[NodeWithScore, str], bool] | None = None, nhan: str | None = None,
+    dung: Callable[[NodeWithScore, str], bool] | None = None, nhan: str | None = None, cfg: RAGConfig | None = None,
 ) -> dict[str, object]:
     """Gọi engine (thử lại khi lỗi mạng/Ollama). Có `dung` + `nhan` (luật chấm eval/luat_cham.py) thì ghi thêm
-    `ngu_canh_co_doan_dung`: ngữ cảnh đưa vào LLM có Node đúng không — để tách lỗi truy hồi khỏi lỗi sinh."""
+    `ngu_canh_co_doan_dung`: ngữ cảnh đưa vào LLM có Node đúng không — để tách lỗi truy hồi khỏi lỗi sinh.
+    Có `cfg` thì mỗi evidence ghi thêm `vi_tri` (file tầng 2 + dòng) để mở đúng đoạn gốc khi chấm nguồn."""
     loi: list[str] = []
     for lan in range(1, SO_LAN_THU + 1):
         dem.luot.clear()
@@ -122,6 +129,7 @@ def tra_loi_mot_cau(
             "tra_loi": str(r).strip(),
             "nguon": list(dict.fromkeys(node_label(n) for n in r.source_nodes)),
             "bang_chung": [{"nguon": node_label(n), "diem": round(n.score, 4) if n.score is not None else None,
+                            **({"vi_tri": vi_tri_goc(cfg, n.node.metadata, n.node.get_content())} if cfg else {}),
                             "doan": n.node.get_content()[:DO_DAI_BANG_CHUNG]} for n in r.source_nodes],
             "thoi_gian_s": round(giay, 2),
             "so_lan_thu": lan,
@@ -222,6 +230,7 @@ def main() -> None:
     for ten in [t.strip() for t in args.cau_hinh.split(",") if t.strip()]:
         cfg: RAGConfig = dataclasses.replace(goc, streaming=False, **CAU_HINH[ten])  # type: ignore[arg-type]
         engine = build_query_engine(index, cfg)
+        khoa = khoa_tai_lap(cfg, digest_llm(cfg))
         k0 = tra_loi_mot_cau(engine, dem, "Một năm học có bao nhiêu học kỳ?")  # khởi động (nạp LLM/reranker), không tính
         if k0["ket_qua"] == "loi":
             print(f"CẢNH BÁO: câu khởi động của cấu hình {ten} lỗi, vẫn chạy tiếp và ghi lỗi từng câu", flush=True)
@@ -233,7 +242,13 @@ def main() -> None:
             if args.chi_cau_loi:
                 if not stem.with_suffix(".json").exists():
                     sys.exit(f"--chi-cau-loi: không thấy {stem.with_suffix('.json')}")
-                cu = {str(k["id"]): k for k in json.loads(stem.with_suffix(".json").read_text(encoding="utf-8"))["chi_tiet"]}
+                truoc = json.loads(stem.with_suffix(".json").read_text(encoding="utf-8"))
+                # Chạy bù câu lỗi bằng prompt/model/index khác thì một file trộn hai cấu hình (nhận xét tuần 7, ý 6)
+                ma_truoc = (truoc.get("khoa_tai_lap") or {}).get("ma")
+                if ma_truoc != khoa["ma"]:
+                    sys.exit(f"--chi-cau-loi: {stem.name} chạy với khóa {ma_truoc}, hiện tại là {khoa['ma']} "
+                             "(prompt/model/index/cấu hình đã đổi) — chạy lại cả bộ với --nhan mới")
+                cu = {str(k["id"]): k for k in truoc["chi_tiet"]}
             ket: list[dict[str, object]] = []
             print(f"=== {ten} | {bo} ({len(cau_hoi)} câu) ===", flush=True)
             for i, q in enumerate(cau_hoi, start=1):
@@ -241,16 +256,17 @@ def main() -> None:
                 if ma in cu and ket_qua_cua(cu[ma]) != "loi":
                     ket.append(cu[ma])  # giữ nguyên câu đã có (và đã chấm) của lần trước
                     continue
-                k = tra_loi_mot_cau(engine, dem, q["question"])
+                k = tra_loi_mot_cau(engine, dem, q["question"], cfg=cfg)
                 ket.append({"id": ma, "question": q["question"], "dieu_dung": q.get("dieu_dung"),
                             "dap_an": q.get("dap_an") or q.get("dap_an_ngan"), "loai": q.get("loai"),
-                            "hanh_vi_mong_doi": q.get("hanh_vi_mong_doi"), **k})
+                            "hanh_vi_mong_doi": q.get("hanh_vi_mong_doi"), "ma_khoa": khoa["ma"], **k})
                 print(f"{i}/{len(cau_hoi)} {k['ket_qua']} ({k['thoi_gian_s']}s, lượt LLM {k.get('so_luot_llm')}, "
                       f"token {k.get('token_vao')}/{k.get('token_ra')})", flush=True)
             tt = tom_tat(ket)
             mo_ta = cfg.mo_ta()
             stem.with_suffix(".json").write_text(json.dumps(
-                {"thoi_diem": time.strftime("%Y-%m-%d %H:%M:%S"), "cau_hinh": mo_ta, "tom_tat": tt, "chi_tiet": ket},
+                {"thoi_diem": time.strftime("%Y-%m-%d %H:%M:%S"), "cau_hinh": mo_ta, "khoa_tai_lap": khoa,
+                 "tom_tat": tt, "chi_tiet": ket},
                 ensure_ascii=False, indent=1), encoding="utf-8")
             ghi_md(stem.with_suffix(".md"),
                    f"Trả lời {bo} — {ten} ({cfg.llm_model_name}, temperature={cfg.temperature}, seed={cfg.seed}, "

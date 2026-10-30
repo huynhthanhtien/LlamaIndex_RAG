@@ -1,0 +1,22 @@
+Số Node: 118  (Node dài nhất: Điều 4 — QĐ 898/2025 ban hành Quy định tổ chức thi học kì)
+
+| Độ dài mỗi Node (văn bản embed) | Trung bình | Trung vị | Lớn nhất |
+|---|---|---|---|
+| Ký tự | 1352 | 1108 | 4641 |
+| Từ (khoảng trắng) | 295 | 238 | 1032 |
+| Token tiktoken cl100k | 651 | 536 | 2128 |
+| Token AITeamVN/Vietnamese_Embedding | 372 | 275 | 1210 |
+| Token vietnamese-bi-encoder | 379 | 285 | 1213 |
+| Token Qwen3-8B | 428 | 335 | 1402 |
+| Token AITeamVN/Vietnamese_Reranker | 372 | 275 | 1210 |
+
+tiktoken/từ: 2.21
+Node > MAX_TU=1024 từ: 1; Node có phan_doan: 19
+Node > 1024 token tiktoken: 23
+Node > 256 token bi-encoder (bị cắt ở profile local): 63/118
+Node > 512 token reranker (bị cắt nếu max_length=512): 35/118
+Node > 2048 token reranker: 0/118
+
+Văn bản LLM nhận/Node: tiktoken TB 738, Qwen TB 514
+10 Node dài nhất cộng lại: tiktoken 17701, Qwen 12461; 10 Node trung bình: tiktoken 7381
+3 Node dài nhất cộng lại (rerank top-3): tiktoken 6226, Qwen 4295

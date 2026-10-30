@@ -1,0 +1,6 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-10-13 14:21:01,607 [WARNING] Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-10-13 14:21:02,104 [INFO] Loading SentenceTransformer model from AITeamVN/Vietnamese_Embedding.
+2026-10-13 14:21:12,919 [WARNING] Corpus, model embedding hoặc loader đã đổi so với index đã lưu — build lại
+2026-10-13 14:21:13,101 [INFO] Build Index mới từ 108 node (17 văn bản)
+Index: storage/server/01_quy_che_dao_tao | số node trong Index: 108 | từ processed_loader: 108 | khớp: True

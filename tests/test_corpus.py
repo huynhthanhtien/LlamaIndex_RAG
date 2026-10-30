@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from config import PROFILES, get_config, resolve_device
-from processed_loader import corpus_files, load_corpus_nodes, thong_ke
+from processed_loader import ROOT as ROOT_LOADER, corpus_files, load_corpus_nodes, thong_ke, vi_tri_goc
 
 ROOT = Path(__file__).resolve().parent.parent
 CO_CORPUS = (ROOT / "data" / "processed" / "01_quy_che_dao_tao" / "1_quy_che_dao_tao_dai_hoc").is_dir()
@@ -31,6 +31,24 @@ class TestCorpusThat(unittest.TestCase):
         tk = thong_ke(self.nodes)
         self.assertEqual(tk["tong_so_node"], len(self.nodes))
         self.assertEqual(tk["so_van_ban"], len(self.cfg.corpus_files))
+
+    def test_trich_dan_mo_dung_doan_goc(self) -> None:
+        """Mapping trích dẫn -> đoạn gốc (nhận xét tuần 7, ý 8): mỗi Node trỏ tới một dòng riêng trong file tầng 2,
+        dòng đó chứa đầu Node, và mọi Node cùng nhãn nguồn "<văn bản> – Điều N" đều nằm trong cùng một file."""
+        vi_tri: dict[str, str] = {}
+        file_cua_nhan: dict[str, set[str]] = {}
+        for n in self.nodes:
+            v = vi_tri_goc(self.cfg, n.metadata, n.text)
+            self.assertIn(":", v, f"không tìm được dòng gốc của Node {n.metadata.get('nguon_trich')}")
+            path, dong = v.rsplit(":", 1)
+            dau = next(x.strip() for x in n.text.splitlines() if x.strip())
+            self.assertIn(dau[:40], (ROOT_LOADER / path).read_text(encoding="utf-8").splitlines()[int(dong) - 1])
+            self.assertNotIn(v, vi_tri, f"hai Node cùng trỏ {v}: {vi_tri.get(v)} và {n.metadata.get('nguon_trich')}")
+            vi_tri[v] = str(n.metadata.get("nguon_trich"))
+            # Cùng khóa với retriever.node_label (không import retriever: kéo theo torch qua index_builder)
+            nhan = "|".join(str(n.metadata.get(k, "")) for k in ("van_ban", "dieu", "sua_doi_dieu"))
+            file_cua_nhan.setdefault(nhan, set()).add(path)
+        self.assertEqual({k: f for k, f in file_cua_nhan.items() if len(f) > 1}, {})
 
 
 class TestConfig(unittest.TestCase):

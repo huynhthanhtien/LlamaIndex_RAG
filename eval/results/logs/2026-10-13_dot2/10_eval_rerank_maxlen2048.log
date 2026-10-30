@@ -1,0 +1,22 @@
+Index: storage/server/01_quy_che_dao_tao | 108 Node | embedding: AITeamVN/Vietnamese_Embedding
+
+=== rerank-top10 ===
+test_questions_01.json | rerank-top10 (31 câu): R@1=87% [74%–97%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.930  MRR@3=0.930  nDCG@1=0.871  thời gian/câu: 530.1 ms (p95 661.3 ms)
+  Văn bản của Node top-1: [('Quy chế đào tạo trình độ đại học SGU 202', 26), ('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 2), ('QĐ 810 về học cùng lúc hai chương trình', 2), ('QĐ 2375/2022 về chuyển chương trình, ngà', 1)]
+
+test_questions_02.json | rerank-top10 (10 câu): R@1=50% [20%–80%]  R@3=90% [70%–100%]  R@5=90% [70%–100%]  R@10=90% [70%–100%]
+  MRR=0.683  MRR@3=0.683  nDCG@1=0.500  thời gian/câu: 648.3 ms (p95 680.7 ms)
+  Văn bản của Node top-1: [('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 8), ('Quy chế đào tạo trình độ đại học SGU 202', 2)]
+  ngoài top-3: Thang điểm chữ bổ sung (B+, C+, D+) và quy đổi điểm mới áp dụng cho khóa tuyển sinh nào? | đúng Điều 2 (QĐ 3183) | top-3: ['QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10', 'QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3']
+
+dev_questions_dot1.json | rerank-top10 (20 câu): R@1=90% [75%–100%]  R@3=100% [100%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.950  MRR@3=0.950  nDCG@1=0.900  thời gian/câu: 546.7 ms (p95 672.8 ms)
+  Văn bản của Node top-1: [('QĐ 3260/2025 về việc hoãn thi', 4), ('QĐ 898/2025 ban hành Quy định tổ chức th', 4), ('Quy định 3248/2018 giải quyết thắc mắc, ', 4), ('Quy chế công tác cố vấn học tập (QĐ 367/', 4), ('Quy định cấp bảng điểm học tập (2018)', 2), ('Quy định cấp bản sao văn bằng, chứng chỉ', 2)]
+
+dev_questions_dot2.json | rerank-top10 (15 câu): R@1=93% [80%–100%]  R@3=93% [80%–100%]  R@5=100% [100%–100%]  R@10=100% [100%–100%]
+  MRR=0.950  MRR@3=0.933  nDCG@1=0.933  thời gian/câu: 633.3 ms (p95 647.6 ms)
+  Văn bản của Node top-1: [('QyĐ 2626/2022 tiếng Anh không chuyên, qu', 6), ('QyĐ 2101/2024 tiếng Anh không chuyên, qu', 5), ('TB 2567/2024 bổ sung chứng chỉ PTE Acade', 2), ('TB 2366/2021 tiếng Anh không chuyên, quy', 1), ('TB 2451/2024 bổ sung chứng chỉ quy đổi t', 1)]
+  ngoài top-3: Sinh viên khóa 2020 có chứng chỉ VSTEP 4.0 được quy đổi mấy điểm tiếng Anh? | đúng Điều 30_TB so 2451 | top-3: ['QyĐ 2101/2024 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh từ 2024) – Điều 2', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3']
+
+Đã ghi eval/results/truy-hoi-rerank2048-dot2.json và eval/results/truy-hoi-rerank2048-dot2.md

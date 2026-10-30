@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 ROOT = Path(__file__).resolve().parent.parent
 FINGERPRINT = "corpus.json"  # lưu cạnh index: index được build từ những file / model / loader nào
 
-
+# nạp model embedding từ huggingface 
 def make_local_embedding(cfg: RAGConfig) -> HuggingFaceEmbedding:
     device = resolve_device(cfg.embed_device)
     fp16 = cfg.use_fp16 and device == "cuda"
@@ -66,25 +66,29 @@ def corpus_fingerprint(cfg: RAGConfig) -> dict[str, object]:
         "files": files,
     }
 
-
+# hàm load dữ liệu từ vectorindex or tạo index 
 def build_or_load_index(cfg: RAGConfig, rebuild: bool = False) -> VectorStoreIndex:
     setup_embedding(cfg)
     persist_dir = ROOT / cfg.persist_dir
     fingerprint = corpus_fingerprint(cfg)
     saved = persist_dir / FINGERPRINT
-
+    # nếu không chọn rebuild sẽ load dữ liêu từ thư mục 
     if not rebuild and (persist_dir / "docstore.json").exists():
+        # kiểm tra vân tay dữ liệu có khớp không
+        # vân tay dữ liệu được tổng hợp từ cac tham số 
         if saved.exists() and json.loads(saved.read_text(encoding="utf-8")) == fingerprint:
             logger.info(f"Load Index từ {persist_dir}")
             index = load_index_from_storage(StorageContext.from_defaults(persist_dir=str(persist_dir)))
             assert isinstance(index, VectorStoreIndex)
             return index
         logger.warning("Corpus, model embedding hoặc loader đã đổi so với index đã lưu — build lại")
-
+    # load model theo file cấu hình 
     nodes = load_corpus_nodes(cfg)
+    # lấy thông tin file dữ liệu để nạp
     files = fingerprint["files"]
     assert isinstance(files, dict)
     logger.info(f"Build Index mới từ {len(nodes)} node ({len(files)} văn bản)")
+    # load index từ vecoterStoreIndex đã lưu từ máy 
     index = VectorStoreIndex(nodes, show_progress=True)
     persist_dir.mkdir(parents=True, exist_ok=True)
     index.storage_context.persist(persist_dir=str(persist_dir))
