@@ -16,6 +16,10 @@ from config import RAGConfig, get_config
 from index_builder import build_or_load_index, corpus_fingerprint
 from retriever import get_postprocessors, get_retriever, node_label
 
+# Câu từ chối duy nhất: prompt yêu cầu LLM dùng đúng câu này, và nơi gọi trả câu này khi không có trích đoạn nào
+# đủ căn cứ (retriever.NguongCanCu) để eval/cham_tu_dong.la_tu_choi nhận ra cả hai trường hợp.
+TU_CHOI = "Không tìm thấy trong các văn bản quy định."
+
 QA_PROMPT = PromptTemplate(
     "Dưới đây là các trích đoạn từ các văn bản quy chế, quy định đào tạo của Trường Đại học Sài Gòn "
     "(mỗi trích đoạn ghi rõ tên văn bản và Điều).\n"
@@ -33,7 +37,11 @@ QA_PROMPT = PromptTemplate(
     "(\"hệ 4\") chỉ để tính điểm trung bình, theo khoản 2 Điều 10. Hỏi về hệ 10 hoặc khoảng điểm thì dùng bảng "
     "Điều 9; hỏi về hệ 4 hoặc quy đổi để tính điểm trung bình thì dùng bảng Điều 10. "
     "Khi tra khoảng điểm, so sánh con số với cả cận dưới và cận trên của từng hàng.\n"
-    "Nếu trích đoạn không có thông tin, hãy nói không tìm thấy trong các văn bản quy định.\n"
+    # Câu ngoài phạm vi dev "báo cáo giáo viên" từng được trả lời bằng trách nhiệm báo cáo của cố vấn học tập:
+    # trích đoạn cùng chữ "báo cáo" nhưng không nói về điều được hỏi.
+    "Chỉ trả lời khi trích đoạn quy định trực tiếp trường hợp được hỏi. Trích đoạn chỉ cùng chủ đề (cùng nói về "
+    "kỷ luật, khiếu nại, chứng chỉ...) mà không nêu đúng trường hợp đó thì coi như không có thông tin.\n"
+    "Nếu trích đoạn không có thông tin, chỉ trả lời đúng một câu: " + TU_CHOI + "\n"
     "Câu hỏi: {query_str}\n"
     "Trả lời: "
 )
@@ -104,6 +112,9 @@ def format_sources(response: RESPONSE_TYPE) -> str:
 
 def ask(engine: RetrieverQueryEngine, question: str, cfg: RAGConfig) -> None:
     response = engine.query(question)
+    if not response.source_nodes:  # NguongCanCu bỏ hết Node: không trích đoạn nào đủ căn cứ, LLM không được gọi
+        print(f"{TU_CHOI} (không có trích đoạn nào đủ căn cứ)")
+        return
     if isinstance(response, StreamingResponse):
         for token in response.response_gen:
             print(token, end="", flush=True)

@@ -1,0 +1,424 @@
+{
+ "thoi_diem": "2026-10-31 04:33:54",
+ "chay_lai": false,
+ "dong_bang": {
+  "thoi_diem": "2026-10-31 04:32:29",
+  "commit": "08bdea5"
+ },
+ "ket_qua": [
+  {
+   "bo_cau_hoi": "test_kiem_chung_qc2021.json",
+   "cau_hinh": "chot-dong-bang",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "reranker_max_length": 2048,
+    "loc_phien_ban": true,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 32,
+   "hang": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    1,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    null,
+    null,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    1432.74,
+    1730.9,
+    1131.06,
+    1263.71,
+    1617.3,
+    1754.91,
+    1134.46,
+    1998.59,
+    1504.87,
+    1825.46,
+    1816.41,
+    1460.12,
+    1760.46,
+    1471.3,
+    1791.22,
+    1347.78,
+    1094.78,
+    1474.46,
+    1470.03,
+    1515.09,
+    1296.19,
+    1494.13,
+    1650.33,
+    1480.76,
+    1474.49,
+    1481.0,
+    1459.17,
+    1473.2,
+    1564.14,
+    1994.34,
+    1285.46,
+    1636.43
+   ],
+   "thoi_gian_trung_binh_ms": 1527.7,
+   "thoi_gian_p95_ms": 1994.3,
+   "top1_van_ban": {
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 14,
+    "Quy chế đào tạo trình độ đại học SGU 202": 11,
+    "QĐ 898/2025 ban hành Quy định tổ chức th": 3,
+    "QĐ 810 về học cùng lúc hai chương trình": 3,
+    "Quy chế công tác cố vấn học tập (QĐ 367/": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Bỏ thi kết thúc học phần mà không xin phép thì bị chấm mấy điểm?",
+     "dung": "9",
+     "top3": [
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 4",
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 5",
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6"
+     ]
+    },
+    {
+     "cau_hoi": "Những lý do gì khiến sinh viên đạt loại Giỏi hoặc Xuất sắc nhưng bị hạ một bậc xếp loại tốt nghiệp?",
+     "dung": "14",
+     "top3": [
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10",
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6"
+     ]
+    },
+    {
+     "cau_hoi": "Hành vi đi thi hộ hoặc nhờ người thi hộ bị nhà trường kỷ luật thế nào?",
+     "dung": "20",
+     "top3": [
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 19",
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 9",
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 8"
+     ]
+    },
+    {
+     "cau_hoi": "Thời gian xin nghỉ học tạm thời vì việc cá nhân có bị tính vào thời gian học tối đa toàn khóa không?",
+     "dung": "15",
+     "top3": [
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 14",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 2",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9"
+     ]
+    },
+    {
+     "cau_hoi": "Sinh viên sang trường khác học trao đổi thì được tích lũy tối đa bao nhiêu phần trăm tín chỉ?",
+     "dung": "17",
+     "top3": [
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 16",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 12",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 2"
+     ]
+    },
+    {
+     "cau_hoi": "Đang học năm mấy thì sinh viên không được phép làm thủ tục chuyển ngành?",
+     "dung": "16",
+     "top3": [
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 15",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 3",
+      "QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1"
+     ]
+    },
+    {
+     "cau_hoi": "Dùng chứng chỉ giả để làm hồ sơ đầu vào thì sinh viên chịu hình thức xử lý gì?",
+     "dung": "20",
+     "top3": [
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 19",
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 8",
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 9"
+     ]
+    },
+    {
+     "cau_hoi": "rot mon tu chon co bat buoc phai hoc lai dung mon do ko hay doi mon khac",
+     "dung": "3",
+     "top3": [
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 4",
+      "HD 1181/2022 thực hiện quy trình phúc khảo bài thi kết thúc học phần",
+      "Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6"
+     ]
+    },
+    {
+     "cau_hoi": "diem F tinh vao he 4 la bn z",
+     "dung": "10",
+     "top3": [
+      "QĐ 810 về học cùng lúc hai chương trình – Điều 9",
+      "Quy định thời gian tiết học, ca học và mã phòng học",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9"
+     ]
+    },
+    {
+     "cau_hoi": "no bao nhieu tin chi thi bi canh bao hoc vu v ad",
+     "dung": "11",
+     "top3": [
+      "Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 7",
+      "Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 12",
+      "Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 9"
+     ]
+    },
+    {
+     "cau_hoi": "hoc song song 2 nganh thi sv nam may moi duoc dang ky vay",
+     "dung": "18",
+     "top3": [
+      "QĐ 810 về học cùng lúc hai chương trình – Điều 2",
+      "QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3",
+      "QĐ 810 về học cùng lúc hai chương trình – Điều 3"
+     ]
+    },
+    {
+     "cau_hoi": "khi nao thi truong cap bang tot nghiep cho sinh vien",
+     "dung": "14",
+     "top3": [
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6",
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 7",
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3"
+     ]
+    },
+    {
+     "cau_hoi": "Em bị tai nạn giao thông phải nằm viện điều trị dài ngày thì có được xin nghỉ học tạm thời không ạ?",
+     "dung": "15",
+     "top3": [
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 14",
+      "QĐ 3260/2025 về việc hoãn thi",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 13"
+     ]
+    },
+    {
+     "cau_hoi": "Hết thời gian tối đa nhưng chưa đạt chuẩn tin học đầu ra thì em có được gia hạn để thi bù không?",
+     "dung": "14",
+     "top3": [
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 7",
+      "QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3"
+     ]
+    },
+    {
+     "cau_hoi": "Nếu đang học ngành thứ hai mà điểm ngành chính bị rớt xuống diện cảnh báo thì em có phải dừng học ngành 2 không?",
+     "dung": "18",
+     "top3": [
+      "QĐ 810 về học cùng lúc hai chương trình – Điều 4",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 17",
+      "QĐ 810 về học cùng lúc hai chương trình – Điều 3"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.5,
+    "R@3": 0.5312,
+    "R@5": 0.5312,
+    "R@10": 0.5312,
+    "R@1_ci95": [
+     0.5,
+     0.3125,
+     0.6875
+    ],
+    "R@3_ci95": [
+     0.5312,
+     0.3438,
+     0.7188
+    ],
+    "R@5_ci95": [
+     0.5312,
+     0.3438,
+     0.7188
+    ],
+    "R@10_ci95": [
+     0.5312,
+     0.3438,
+     0.7188
+    ],
+    "MRR": 0.5104,
+    "MRR@3": 0.5104,
+    "nDCG@1": 0.5,
+    "nDCG@3": 0.5156,
+    "nDCG@10": 0.5156
+   }
+  },
+  {
+   "bo_cau_hoi": "test_kiem_chung_3183.json",
+   "cau_hinh": "chot-dong-bang",
+   "cau_hinh_chi_tiet": {
+    "profile": "server",
+    "embed_model": "AITeamVN/Vietnamese_Embedding",
+    "embed_device": "cuda",
+    "llm_model": "qwen3:8b",
+    "temperature": 0.0,
+    "seed": 42,
+    "thinking": false,
+    "similarity_top_k": 10,
+    "similarity_cutoff": null,
+    "use_rerank": true,
+    "reranker_model": "AITeamVN/Vietnamese_Reranker",
+    "reranker_top_n": 3,
+    "reranker_max_length": 2048,
+    "loc_phien_ban": true,
+    "use_hybrid": false,
+    "bm25_top_k": null,
+    "fusion_mode": null,
+    "response_mode": "compact",
+    "corpus_dir": "data/processed/01_quy_che_dao_tao",
+    "persist_dir": "storage/server/01_quy_che_dao_tao"
+   },
+   "so_cau": 8,
+   "hang": [
+    1,
+    3,
+    1,
+    1,
+    null,
+    null,
+    1,
+    1
+   ],
+   "thoi_gian_ms": [
+    1468.48,
+    1462.17,
+    1551.93,
+    1486.19,
+    1884.84,
+    1480.21,
+    1486.56,
+    1484.45
+   ],
+   "thoi_gian_trung_binh_ms": 1538.1,
+   "thoi_gian_p95_ms": 1884.8,
+   "top1_van_ban": {
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU": 7,
+    "QĐ 898/2025 ban hành Quy định tổ chức th": 1
+   },
+   "ngoai_top3": [
+    {
+     "cau_hoi": "Các quy định về thang điểm chữ phân mức mới như B+, C+, D+ áp dụng bắt đầu từ khóa sinh viên năm nào?",
+     "dung": "2 (QĐ 3183)",
+     "top3": [
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10"
+     ]
+    },
+    {
+     "cau_hoi": "Sinh viên khóa mới xin rút môn học thành công thì trên bảng điểm sẽ hiện ký hiệu chữ gì?",
+     "dung": "9",
+     "top3": [
+      "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6",
+      "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 7",
+      "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 7"
+     ]
+    }
+   ],
+   "chi_so": {
+    "R@1": 0.625,
+    "R@3": 0.75,
+    "R@5": 0.75,
+    "R@10": 0.75,
+    "R@1_ci95": [
+     0.625,
+     0.25,
+     0.875
+    ],
+    "R@3_ci95": [
+     0.75,
+     0.375,
+     1.0
+    ],
+    "R@5_ci95": [
+     0.75,
+     0.375,
+     1.0
+    ],
+    "R@10_ci95": [
+     0.75,
+     0.375,
+     1.0
+    ],
+    "MRR": 0.6667,
+    "MRR@3": 0.6667,
+    "nDCG@1": 0.625,
+    "nDCG@3": 0.6875,
+    "nDCG@10": 0.6875
+   }
+  }
+ ],
+ "theo_loai": {
+  "thang": {
+   "so_cau": 7,
+   "R@1": 0.8571,
+   "R@3": 1.0,
+   "MRR": 0.9048
+  },
+  "dong_nghia": {
+   "so_cau": 8,
+   "R@1": 0.125,
+   "R@3": 0.125,
+   "MRR": 0.125
+  },
+  "khau_ngu": {
+   "so_cau": 5,
+   "R@1": 0.0,
+   "R@3": 0.0,
+   "MRR": 0.0
+  },
+  "tinh_huong": {
+   "so_cau": 6,
+   "R@1": 0.5,
+   "R@3": 0.5,
+   "MRR": 0.5
+  },
+  "bang_so": {
+   "so_cau": 6,
+   "R@1": 1.0,
+   "R@3": 1.0,
+   "MRR": 1.0
+  },
+  "sua_doi": {
+   "so_cau": 8,
+   "R@1": 0.625,
+   "R@3": 0.75,
+   "MRR": 0.6667
+  }
+ }
+}

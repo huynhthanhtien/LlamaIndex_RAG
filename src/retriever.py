@@ -87,7 +87,15 @@ def get_postprocessors(cfg: RAGConfig, index: VectorStoreIndex | None = None) ->
 
         # Không rerank thì điểm là cosine, không cùng thang với ngưỡng tỉ lệ (hiệu chỉnh trên điểm reranker)
         ps.append(UuTienSuaDoi(top_n=cfg.reranker_top_n) if rerank else UuTienSuaDoi(ti_le_toi_thieu=None))
+    if cfg.nguong_can_cu is not None:
+        if rerank:
+            from can_cu import NguongCanCu
+
+            ps.append(NguongCanCu(nguong=cfg.nguong_can_cu))
+        else:
+            logger.warning("Bỏ qua nguong_can_cu vì không rerank (ngưỡng hiệu chỉnh trên điểm reranker)")
     return ps
+
 
 
 def search(

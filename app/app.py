@@ -29,7 +29,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from config import get_config
 from index_builder import build_or_load_index
 from processed_loader import vi_tri_goc
-from query_engine import QA_PROMPT, make_llm
+from query_engine import QA_PROMPT, TU_CHOI, make_llm
 from retriever import get_postprocessors, node_label, search
 
 Message = MessageDict | gr.ChatMessage  # Chatbot trả history dạng dict, ta thêm ChatMessage
@@ -125,6 +125,13 @@ def hoi(
         yield history, "", ""
         return
     nguon = hien_thi_nguon(nodes)
+    if not nodes and sinh_tra_loi:  # bước kiểm căn cứ (NguongCanCu) bỏ hết trích đoạn: từ chối, không gọi LLM
+        tra_loi.content = f"{TU_CHOI}\n\n_Không có trích đoạn nào đủ căn cứ (điểm rerank dưới ngưỡng)._"
+        ghi_log(question, nodes, str(tra_loi.content), {"profile": cfg.name, "top_k": int(top_k),
+                                                  "rerank": bool(dung_rerank), "loc_phien_ban": bool(loc_phien_ban),
+                                                  "sinh_tra_loi": True, "tu_choi_truoc_llm": True})
+        yield history, "", nguon
+        return
     if not sinh_tra_loi:
         tra_loi.content = f"_Chỉ truy hồi: {len(nodes)} trích đoạn, xem cột bên phải._"
         yield history, "", nguon

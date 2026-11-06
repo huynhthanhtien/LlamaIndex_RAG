@@ -53,7 +53,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from config import RAGConfig, get_config
 from index_builder import build_or_load_index
 from processed_loader import vi_tri_goc
-from query_engine import build_query_engine, digest_llm, khoa_tai_lap
+from query_engine import TU_CHOI, build_query_engine, digest_llm, khoa_tai_lap
 from retriever import node_label
 
 CAU_HINH: dict[str, dict[str, object]] = {
@@ -126,7 +126,8 @@ def tra_loi_mot_cau(
         so_token_ra = tong(dem.luot, "eval_count")
         return {
             "ket_qua": "chua_cham",
-            "tra_loi": str(r).strip(),
+            # 0 Node = bước kiểm căn cứ đã từ chối trước khi gọi LLM (engine trả "Empty Response")
+            "tra_loi": str(r).strip() if r.source_nodes else TU_CHOI,
             "nguon": list(dict.fromkeys(node_label(n) for n in r.source_nodes)),
             "bang_chung": [{"nguon": node_label(n), "diem": round(n.score, 4) if n.score is not None else None,
                             **({"vi_tri": vi_tri_goc(cfg, n.node.metadata, n.node.get_content())} if cfg else {}),

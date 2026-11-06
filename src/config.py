@@ -76,6 +76,10 @@ class RAGConfig:
     # --- Retriever ---
     similarity_top_k: int = 10
     similarity_cutoff: float | None = None  # None = tắt; đặt >0 để bỏ Node dưới ngưỡng (K4)
+    # Ngưỡng căn cứ trên điểm rerank cao nhất của các trích đoạn cuối cùng: dưới ngưỡng thì từ chối, không gọi LLM.
+    # 0,001 chọn trên tập dev (31/10): 0/99 câu trong phạm vi bị chặn, 8/15 câu ngoài phạm vi bị từ chối.
+    # Chỉ áp khi có rerank (điểm cosine không cùng thang). None = tắt.
+    nguong_can_cu: float | None = None
 
     # --- Hybrid search: BM25 + vector, trộn bằng QueryFusionRetriever (K7) ---
     use_hybrid: bool = False
@@ -117,6 +121,7 @@ class RAGConfig:
             "thinking": self.thinking,
             "similarity_top_k": self.similarity_top_k,
             "similarity_cutoff": self.similarity_cutoff,
+            "nguong_can_cu": self.nguong_can_cu if self.use_rerank and self.reranker_model_name else None,
             "use_rerank": bool(self.use_rerank and self.reranker_model_name),
             "reranker_model": self.reranker_model_name if self.use_rerank else None,
             "reranker_top_n": self.reranker_top_n,
@@ -151,6 +156,7 @@ CONFIG_SERVER = RAGConfig(
     ollama_base_url=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434"),
     reranker_model_name="AITeamVN/Vietnamese_Reranker",
     use_rerank=True,
+    nguong_can_cu=0.001,
 )
 
 PROFILES: dict[str, RAGConfig] = {
@@ -179,6 +185,8 @@ def theo_moi_truong(cfg: RAGConfig) -> RAGConfig:
         thay["use_rerank"] = os.environ["RAG_RERANK"] == "1"
     if os.environ.get("RAG_LOC_PHIEN_BAN"):
         thay["loc_phien_ban"] = os.environ["RAG_LOC_PHIEN_BAN"] == "1"
+    if os.environ.get("RAG_NGUONG_CAN_CU"):  # "0" = tắt bước kiểm căn cứ (so với cấu hình trước 31/10)
+        thay["nguong_can_cu"] = float(os.environ["RAG_NGUONG_CAN_CU"]) or None
     return dataclasses.replace(cfg, **thay)
 
 

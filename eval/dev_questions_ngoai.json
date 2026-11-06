@@ -121,5 +121,13 @@
     "hanh_vi_mong_doi": "Từ chối: nói không có thông tin trong các văn bản quy định, không bịa",
     "nguon_cau": "eval/results/cau-hoi01.md #56",
     "nguoi_gan_pham_vi": "Trần Hà Thanh Thùy (K2)"
+  },
+  {
+    "id": "ngoai_16",
+    "question": "Nếu giảng viên đòi tiền để nâng điểm thì sinh viên tố cáo ở đâu và được bảo vệ thế nào?",
+    "pham_vi": "ngoai",
+    "hanh_vi_mong_doi": "Từ chối: corpus không có quy trình sinh viên tố cáo giảng viên; không lấy quy trình phúc khảo (HD 1181) hay khiếu nại điểm để trả lời thay",
+    "nguon_cau": "tự đặt 31/10/2026 để kiểm bước từ chối (chữ \"tiêu cực\" chỉ có trong HD 1181, ở phần cán bộ chấm phúc khảo báo cáo)",
+    "nguoi_gan_pham_vi": "Nhóm 08 (kiểm bằng grep trên data/processed)"
   }
 ]

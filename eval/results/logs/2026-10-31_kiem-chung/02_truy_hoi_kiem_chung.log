@@ -1,0 +1,45 @@
+# commit 08bdea5 | 2026-10-31 04:32:45
+test_kiem_chung_qc2021.json | chot-dong-bang (32 câu): R@1=50% [31%–69%]  R@3=53% [34%–72%]  R@5=53% [34%–72%]  R@10=53% [34%–72%]
+  MRR=0.510  MRR@3=0.510  nDCG@1=0.500  thời gian/câu: 1527.7 ms (p95 1994.3 ms)
+  Văn bản của Node top-1: [('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 14), ('Quy chế đào tạo trình độ đại học SGU 202', 11), ('QĐ 898/2025 ban hành Quy định tổ chức th', 3), ('QĐ 810 về học cùng lúc hai chương trình', 3), ('Quy chế công tác cố vấn học tập (QĐ 367/', 1)]
+  ngoài top-3: Bỏ thi kết thúc học phần mà không xin phép thì bị chấm mấy điểm? | đúng Điều 9 | top-3: ['QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 4', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 5', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6']
+  ngoài top-3: Những lý do gì khiến sinh viên đạt loại Giỏi hoặc Xuất sắc nhưng bị hạ một bậc xếp loại tốt nghiệp? | đúng Điều 14 | top-3: ['QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6']
+  ngoài top-3: Hành vi đi thi hộ hoặc nhờ người thi hộ bị nhà trường kỷ luật thế nào? | đúng Điều 20 | top-3: ['Quy chế đào tạo trình độ đại học SGU 2021 – Điều 19', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 9', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 8']
+  ngoài top-3: Thời gian xin nghỉ học tạm thời vì việc cá nhân có bị tính vào thời gian học tối đa toàn khóa không? | đúng Điều 15 | top-3: ['Quy chế đào tạo trình độ đại học SGU 2021 – Điều 14', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 2', 'QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9']
+  ngoài top-3: Sinh viên sang trường khác học trao đổi thì được tích lũy tối đa bao nhiêu phần trăm tín chỉ? | đúng Điều 17 | top-3: ['Quy chế đào tạo trình độ đại học SGU 2021 – Điều 16', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 12', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 2']
+  ngoài top-3: Đang học năm mấy thì sinh viên không được phép làm thủ tục chuyển ngành? | đúng Điều 16 | top-3: ['Quy chế đào tạo trình độ đại học SGU 2021 – Điều 15', 'QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 3', 'QĐ 2375/2022 về chuyển chương trình, ngành đào tạo – Điều 1']
+  ngoài top-3: Dùng chứng chỉ giả để làm hồ sơ đầu vào thì sinh viên chịu hình thức xử lý gì? | đúng Điều 20 | top-3: ['Quy chế đào tạo trình độ đại học SGU 2021 – Điều 19', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 8', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 9']
+  ngoài top-3: rot mon tu chon co bat buoc phai hoc lai dung mon do ko hay doi mon khac | đúng Điều 3 | top-3: ['QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 4', 'HD 1181/2022 thực hiện quy trình phúc khảo bài thi kết thúc học phần', 'Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 6']
+  ngoài top-3: diem F tinh vao he 4 la bn z | đúng Điều 10 | top-3: ['QĐ 810 về học cùng lúc hai chương trình – Điều 9', 'Quy định thời gian tiết học, ca học và mã phòng học', 'QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9']
+  ngoài top-3: no bao nhieu tin chi thi bi canh bao hoc vu v ad | đúng Điều 11 | top-3: ['Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 7', 'Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 12', 'Quy chế công tác cố vấn học tập (QĐ 367/2019) – Điều 9']
+  ngoài top-3: hoc song song 2 nganh thi sv nam may moi duoc dang ky vay | đúng Điều 18 | top-3: ['QĐ 810 về học cùng lúc hai chương trình – Điều 2', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3', 'QĐ 810 về học cùng lúc hai chương trình – Điều 3']
+  ngoài top-3: khi nao thi truong cap bang tot nghiep cho sinh vien | đúng Điều 14 | top-3: ['QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 7', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 3']
+  ngoài top-3: Em bị tai nạn giao thông phải nằm viện điều trị dài ngày thì có được xin nghỉ học tạm thời không ạ? | đúng Điều 15 | top-3: ['Quy chế đào tạo trình độ đại học SGU 2021 – Điều 14', 'QĐ 3260/2025 về việc hoãn thi', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 13']
+  ngoài top-3: Hết thời gian tối đa nhưng chưa đạt chuẩn tin học đầu ra thì em có được gia hạn để thi bù không? | đúng Điều 14 | top-3: ['QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9', 'QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 7', 'QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3']
+  ngoài top-3: Nếu đang học ngành thứ hai mà điểm ngành chính bị rớt xuống diện cảnh báo thì em có phải dừng học ngành 2 không? | đúng Điều 18 | top-3: ['QĐ 810 về học cùng lúc hai chương trình – Điều 4', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 17', 'QĐ 810 về học cùng lúc hai chương trình – Điều 3']
+
+test_kiem_chung_3183.json | chot-dong-bang (8 câu): R@1=62% [25%–88%]  R@3=75% [38%–100%]  R@5=75% [38%–100%]  R@10=75% [38%–100%]
+  MRR=0.667  MRR@3=0.667  nDCG@1=0.625  thời gian/câu: 1538.1 ms (p95 1884.8 ms)
+  Văn bản của Node top-1: [('QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU', 7), ('QĐ 898/2025 ban hành Quy định tổ chức th', 1)]
+  ngoài top-3: Các quy định về thang điểm chữ phân mức mới như B+, C+, D+ áp dụng bắt đầu từ khóa sinh viên năm nào? | đúng Điều 2 (QĐ 3183) | top-3: ['QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9', 'QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10']
+  ngoài top-3: Sinh viên khóa mới xin rút môn học thành công thì trên bảng điểm sẽ hiện ký hiệu chữ gì? | đúng Điều 9 | top-3: ['QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6', 'QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 7', 'Quy chế đào tạo trình độ đại học SGU 2021 – Điều 7']
+
+# Tập kiểm chứng — cấu hình đóng băng 2026-10-31 04:32:29 (commit 08bdea5)
+
+| Bộ câu hỏi | Cấu hình | R@1 | R@3 | R@10 | MRR | nDCG@3 | ms/câu |
+|---|---|---|---|---|---|---|---|
+| test_kiem_chung_qc2021.json | chot-dong-bang | 50.0% | 53.1% | 53.1% | 0.510 | 0.516 | 1528 |
+| test_kiem_chung_3183.json | chot-dong-bang | 62.5% | 75.0% | 75.0% | 0.667 | 0.688 | 1538 |
+
+### Theo loại câu
+
+| Loại câu | Số câu | R@1 | R@3 | MRR |
+|---|---|---|---|---|
+| bang_so | 6 | 100.0% | 100.0% | 1.000 |
+| dong_nghia | 8 | 12.5% | 12.5% | 0.125 |
+| khau_ngu | 5 | 0.0% | 0.0% | 0.000 |
+| sua_doi | 8 | 62.5% | 75.0% | 0.667 |
+| thang | 7 | 85.7% | 100.0% | 0.905 |
+| tinh_huong | 6 | 50.0% | 50.0% | 0.500 |
+
+Đã ghi eval/results/truy-hoi-kiem-chung.json và .md

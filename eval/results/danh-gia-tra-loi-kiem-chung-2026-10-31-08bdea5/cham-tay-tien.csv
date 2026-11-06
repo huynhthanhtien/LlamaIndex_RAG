@@ -1,0 +1,187 @@
+﻿bo,id,question,pham_vi,dap_an,tra_loi,ket_qua,trich_dan_sai,ly_do,nguoi_cham,cham_khi_thay_ai
+test_kiem_chung_qc2021.json,KC-QC-001,Thời gian tối đa để học xong toàn khóa là bao nhiêu năm vậy ạ?,trong,Không quá 2 lần thời gian chuẩn toàn khóa.,"Theo Điều 4.5 của Quy chế đào tạo trình độ đại học SGU 2021 (số 258/QĐ-ĐHSG, ngày 2022-02-22), thời gian tối đa để người học hoàn thành khoá học không vượt quá 02 lần thời gian theo kế hoạch học tập chuẩn toàn khóa. 
+
+Trả lời: Thời gian tối đa để học xong toàn khóa là 02 lần thời gian theo kế hoạch học tập chuẩn toàn khóa.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-002,Khi học tập trung dồn tiến độ thì một ngày được học tối đa mấy tiếng?,trong,Tối đa 4 giờ/ngày.,"Theo khoản 4 Điều 6 của Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi theo QĐ 3183/2025), việc xếp lịch học tập trung thời gian, số giờ giảng đối với một học phần bất kỳ không vượt quá 15 giờ/tuần và 4 giờ/ngày.
+
+**Trả lời:** Một ngày được học tối đa 4 tiếng.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-003,Tổng số tuần lên lớp tối thiểu cho các học kỳ chính trong một năm học là bao nhiêu?,trong,Tối thiểu 30 tuần lên lớp.,"Theo Điều 6, khoản 2 của Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi theo QĐ 3183/2025), tổng số tuần lên lớp tối thiểu cho các học kỳ chính trong một năm học là:
+
+**""mỗi năm học có 02 đến 03 học kì chính với tổng số tối thiểu 30 tuần lên lớp""**.
+
+Trả lời: Tổng số tuần lên lớp tối thiểu cho các học kỳ chính trong một năm học là **30 tuần**.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-004,Trường cho phép học trực tuyến tối đa bao nhiêu phần trăm tổng số tín chỉ của chương trình?,trong,Tối đa 30% tổng khối lượng chương trình.,"Theo Điều 8, khoản 2, điểm a, văn bản **Quy chế đào tạo trình độ đại học SGU 2021** (số 258/QĐ-ĐHSG):
+
+> ""Tối đa 30% tổng khối lượng của chương trình đào tạo được thực hiện bằng lớp học trực tuyến.""
+
+**Trả lời:** Trường Đại học Sài Gòn cho phép học trực tuyến tối đa **30%** tổng số tín chỉ của chương trình.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-005,Thi cử và đánh giá bằng hình thức trực tuyến thì được tính tối đa bao nhiêu phần trăm điểm môn học?,trong,Không quá 50% trọng số điểm học phần.,"Theo khoản 1 Điều 9 Quy chế đào tạo trình độ đại học SGU 2021, hình thức đánh giá trực tuyến được áp dụng khi đảm bảo trung thực, công bằng, khách quan như đánh giá trực tiếp và **đóng góp không quá 50% trọng số điểm học phần**.
+
+**Trả lời:** Hình thức thi cử và đánh giá bằng hình thức trực tuyến được tính tối đa **50%** điểm môn học.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-006,Nhà trường xét công nhận và chuyển đổi tín chỉ cũ tối đa bao nhiêu phần trăm chương trình?,trong,Không vượt quá 50% khối lượng học tập tối thiểu.,"Theo Điều 12, khoản 1 của Quy chế đào tạo trình độ đại học SGU 2021, khối lượng tín chỉ tối đa được công nhận, chuyển đổi không vượt quá 50% khối lượng học tập tối thiểu của chương trình đào tạo.
+
+Trả lời: Nhà trường xét công nhận và chuyển đổi tín chỉ cũ tối đa 50% chương trình.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-007,Một năm học chính quy bắt buộc phải có tối thiểu bao nhiêu tuần lên lớp?,trong,Tối thiểu 30 tuần lên lớp.,"Theo Điều 6, khoản 2 của Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi theo QĐ 3183/2025), mỗi năm học có 02 đến 03 học kì chính với tổng số tối thiểu 30 tuần lên lớp.
+
+Trả lời: Một năm học chính quy bắt buộc phải có tối thiểu 30 tuần lên lớp.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-008,Bỏ thi kết thúc học phần mà không xin phép thì bị chấm mấy điểm?,trong,Nhận điểm 0.,Không tìm thấy trong các văn bản quy định.,sai,co,,tien,
+test_kiem_chung_qc2021.json,KC-QC-009,Những lý do gì khiến sinh viên đạt loại Giỏi hoặc Xuất sắc nhưng bị hạ một bậc xếp loại tốt nghiệp?,trong,Học lại quá 5% tổng tín chỉ hoặc bị kỷ luật từ mức cảnh cáo trở lên.,"Theo khoản 4 Điều 10 Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi), sinh viên được xếp loại học lực theo điểm trung bình học kỳ, điểm trung bình năm học hoặc điểm trung bình tích lũy như sau:
+
+- Từ 3,6 đến 4,0: Xuất sắc;
+- Từ 3,2 đến cận 3,6: Giỏi;
+
+Do đó, sinh viên đạt loại Giỏi hoặc Xuất sắc không bị hạ một bậc xếp loại tốt nghiệp theo quy định này. Không tìm thấy trong các văn bản quy định lý do khiến sinh viên đạt loại Giỏi hoặc Xuất sắc nhưng bị hạ một bậc xếp loại tốt nghiệp.",sai,co,,tien,
+test_kiem_chung_qc2021.json,KC-QC-010,Hành vi đi thi hộ hoặc nhờ người thi hộ bị nhà trường kỷ luật thế nào?,trong,Đình chỉ học tập 1 năm (lần 1) và buộc thôi học (lần 2).,"Theo Điều 19, khoản 2 — Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi):
+
+> ""Người học thi hộ hoặc nhờ người thi hộ đều bị kỷ luật ở mức đình chỉ học tập 01 năm đối với trường hợp vi phạm lần thứ nhất và buộc thôi học đối với trường hợp vi phạm lần thứ hai.""
+
+**Trả lời:** Hành vi đi thi hộ hoặc nhờ người thi hộ bị nhà trường kỷ luật bằng hình thức **đình chỉ học tập 01 năm** đối với trường hợp vi phạm lần thứ nhất và **buộc thôi học** đối với trường hợp vi phạm lần thứ hai.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-011,Thời gian xin nghỉ học tạm thời vì việc cá nhân có bị tính vào thời gian học tối đa toàn khóa không?,trong,Có tính vào thời gian học chính thức.,"Theo Điều 2 khoản 2 Điều 14 - Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi theo QĐ 3183/2025):
+
+""Thời gian nghỉ học tạm thời vì nhu cầu cá nhân phải được tính vào thời gian học chính thức quy định tại khoản 5 Điều 2 của Quy chế này.""
+
+**Trả lời:** Có, thời gian xin nghỉ học tạm thời vì việc cá nhân bị tính vào thời gian học tối đa toàn khóa.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-012,Sinh viên sang trường khác học trao đổi thì được tích lũy tối đa bao nhiêu phần trăm tín chỉ?,trong,Không vượt quá 25% tổng khối lượng chương trình.,"Theo Điều 16, khoản 2 — Quy chế đào tạo trình độ đại học SGU 2021:  
+""Người học được đăng kí học một số học phần tại cơ sở đào tạo khác với số lượng tín chỉ tích lũy không vượt quá 25% tổng khối lượng của chương trình đào tạo.""
+
+**Trả lời:** Sinh viên sang trường khác học trao đổi thì được tích lũy tối đa **25%** tín chỉ.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-013,Đang học năm mấy thì sinh viên không được phép làm thủ tục chuyển ngành?,trong,Năm thứ nhất hoặc năm cuối khóa.,"Theo Điều 15, khoản 1, Điều 1 của Quy chế đào tạo trình độ đại học SGU 2021 (số 258/QĐ-ĐHSG, ngày 22/02/2022), sinh viên không được phép làm thủ tục chuyển ngành nếu đang là người học trình độ năm thứ nhất hoặc năm cuối khóa.
+
+Trích nguyên văn:  
+""1. Người học được xem xét chuyển sang học một chương trình đào tạo, một ngành đào tạo khác... khi có đủ các điều kiện sau: a) Không đang là người học trình độ năm thứ nhất hoặc năm cuối khóa...""
+
+Kết luận: Sinh viên đang học năm thứ nhất hoặc năm cuối khóa không được phép làm thủ tục chuyển ngành.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-014,Dùng chứng chỉ giả để làm hồ sơ đầu vào thì sinh viên chịu hình thức xử lý gì?,trong,Buộc thôi học và thu hồi bằng nếu đã cấp.,"Theo Điều 19, khoản 3 của Quy chế đào tạo trình độ đại học SGU 2021 (số 258/QĐ-ĐHSG, ngày 2022-02-22), sinh viên sử dụng hồ sơ, văn bằng, chứng chỉ giả làm điều kiện trúng tuyển hoặc điều kiện tốt nghiệp sẽ bị **buộc thôi học**; văn bằng tốt nghiệp nếu đã được cấp sẽ bị **thu hồi, hủy bỏ**.
+
+Trả lời: Sinh viên sử dụng chứng chỉ giả để làm hồ sơ đầu vào sẽ bị **buộc thôi học** theo Điều 19, khoản 3 của Quy chế đào tạo trình độ đại học SGU 2021.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-015,rot mon tu chon co bat buoc phai hoc lai dung mon do ko hay doi mon khac,trong,Có thể học lại môn đó hoặc chọn học phần tự chọn khác.,Không tìm thấy trong các văn bản quy định.,sai,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-016,diem F tinh vao he 4 la bn z,trong,Quy đổi thành 0.,"Theo khoản 3 Điều 9 (sửa đổi) của QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021, điểm chữ ""F"" không được quy định. Do đó, không tìm thấy thông tin về điểm ""F"" trong các văn bản quy định.",sai,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-017,no bao nhieu tin chi thi bi canh bao hoc vu v ad,trong,Nợ đọng quá 24 tín chỉ từ đầu khóa.,Không tìm thấy trong các văn bản quy định.,sai,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-018,hoc song song 2 nganh thi sv nam may moi duoc dang ky vay,trong,Sớm nhất từ năm thứ hai.,"Theo Điều 3 — QĐ 810 về học cùng lúc hai chương trình:
+
+""1. Sinh viên được đăng ký học chương trình thứ hai (trừ các chương trình đào tạo giáo viên) sớm nhất khi đã được xếp trình độ năm thứ hai của chương trình thứ nhất.""
+
+**Trả lời:** Sinh viên phải ở năm thứ hai của chương trình thứ nhất mới được đăng ký học chương trình thứ hai.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-019,khi nao thi truong cap bang tot nghiep cho sinh vien,trong,Trong thời hạn 03 tháng.,Không tìm thấy trong các văn bản quy định.,sai,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-020,Em bị tai nạn giao thông phải nằm viện điều trị dài ngày thì có được xin nghỉ học tạm thời không ạ?,trong,Được xin nghỉ học tạm thời và bảo lưu kết quả.,"Theo Điều 14, khoản 1, điểm c, Quy chế đào tạo trình độ đại học SGU 2021 (số 258/QĐ-ĐHSG):
+
+""c) Bị ốm, thai sản hoặc tai nạn phải điều trị thời gian dài có chứng nhận của cơ sở khám bệnh, chữa bệnh có thẩm quyền theo quy định của Bộ Y tế: d) Vì lý do cá nhân khác nhưng đã phải học tối thiểu 01 học kì ở cơ sở đào tạo và NN không thuộc các trường hợp bị xem xét buộc thôi học hoặc xem xét kỷ luật.""
+
+Do đó, em bị tai nạn giao thông phải nằm viện điều trị dài ngày thì **có được xin nghỉ học tạm thời**.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-021,Học kỳ đầu năm nhất mà điểm trung bình của em dưới 0.8 thì có bị cảnh báo học tập không?,trong,"Có, bị cảnh báo học tập.","Theo Điều 11 — Quy chế đào tạo trình độ đại học SGU 2021:
+
+""1. Cuối mỗi học kì chính, người học bị cảnh báo kết quả học tập trong trường hợp: có điểm trung bình học kì đạt dưới 0,80 đối với học kì đầu của khóa học...""
+
+**Trả lời:** Có, học kỳ đầu năm nhất mà điểm trung bình của em dưới 0,8 thì sẽ bị cảnh báo học tập.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-022,Hết thời gian tối đa nhưng chưa đạt chuẩn tin học đầu ra thì em có được gia hạn để thi bù không?,trong,Được hoàn thiện trong thời hạn 03 năm.,Không tìm thấy trong các văn bản quy định.,sai,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-023,Nếu đang học ngành thứ hai mà điểm ngành chính bị rớt xuống diện cảnh báo thì em có phải dừng học ngành 2 không?,trong,Phải dừng học chương trình thứ hai.,"Theo Điều 3, khoản 2 của QĐ 810/QĐ-ĐHSG, sinh viên học cùng lúc hai chương trình phải dừng học chương trình thứ hai nếu điểm trung bình tích lũy của chương trình thứ nhất đạt dưới điểm trung bình hoặc thuộc diện cảnh báo kết quả học tập.
+
+Trích nguyên văn: *""Trong quá trình sinh viên học cùng lúc hai chương trình, nếu điểm trung bình tích lũy của chương trình thứ nhất đạt dưới điểm trung bình hoặc thuộc diện cảnh báo kết quả học tập thì sinh viên phải dừng học chương trình thứ hai ở học kì tiếp theo và bị loại khỏi danh sách đã đăng ký học chương trình thứ hai.""* (Điều 4 — QĐ 810 về học cùng lúc hai chương trình).
+
+Vậy, nếu đang học ngành thứ hai mà điểm ngành chính bị rớt xuống diện cảnh báo thì em phải dừng học ngành 2.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-024,Thi lại điểm thành phần để cải thiện điểm rớt thì điểm học phần tối đa chỉ được tính ở mức nào?,trong,Giới hạn ở mức điểm D hoặc điểm C.,"Theo khoản 4 Điều 9 Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi bởi QĐ 3183/2025), điểm học phần được tính là điểm cao nhất giữa các lần học. Trong trường hợp thi lại để cải thiện điểm rớt, điểm học phần tối đa chỉ được tính ở mức **B** (từ 7,0 đến 7,7). 
+
+**Căn cứ:**  
+""4. Học lại, thi và học cải thiện điểm:  
+a) Người học có điểm học phần không đạt phải đăng ký học lại theo quy định tại khoản 2 Điều 3 của Quy chế này; điểm lần học cuối là điểm chính thức của học phần;  
+b) Người học đã có điểm học phần đạt được đăng ký học lại đề cải thiện điểm; điểm chính thức của học phần là điểm cao nhất giữa các lần học.""  
+**Văn bản:** Quy chế đào tạo trình độ đại học SGU 2021 (Điều 9).",sai,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-025,Sinh viên được phép hoãn thi có lý do chính đáng thì trên bảng điểm ghi nhận ký hiệu chữ gì?,trong,Ký hiệu điểm I.,"Theo quy định tại khoản 3 Điều 9 QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021, các điểm chưa hoàn thiện do được phép hoãn thi sẽ được ghi nhận với ký hiệu **""H""**.
+
+Trả lời: **H** (theo quy định tại khoản 3 Điều 9 — QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021).",sai,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-026,"Điểm tổng kết học phần từ 7,0 đến 8,4 được xếp vào điểm chữ gì?",trong,Điểm chữ B.,"Theo khoản 3 Điều 9 của Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi bởi QĐ 3183/2025), điểm tổng kết học phần từ 7,0 đến 8,4 được xếp vào điểm chữ **B**.
+
+Trích nguyên văn:  
+“B: từ 7,0 đến 7,7;”  
+“B+: từ 7,8 đến 8,4.”  
+
+Tuy nhiên, theo quy định hiện hành sau sửa đổi, điểm từ 7,0 đến 8,4 được xếp vào **B** và **B+**. Tuy nhiên, trong trích đoạn hiện có, chỉ có khoản 3 Điều 9 (sửa đổi) quy định rõ:  
+“B: từ 7,0 đến 7,7;  
+B+: từ 7,8 đến 8,4.”  
+
+Do đó, điểm từ 7,0 đến 8,4 được xếp vào **B** và **B+**. Tuy nhiên, nếu chỉ xét khoảng từ 7,0 đến 8,4, thì theo quy định hiện hành, điểm từ 7,0 đến 7,7 là **B**, điểm từ 7,8 đến 8,4 là **B+**.  
+
+Vì vậy, câu trả lời chính xác là:  
+**Điểm tổng kết học phần từ 7,0 đến 8,4 được xếp vào điểm chữ B và B+**.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-027,Điểm chữ C tương ứng với mấy điểm khi quy đổi sang hệ 4?,trong,Quy đổi thành 2.0.,"Theo khoản 2 Điều 10 của Quy chế đào tạo trình độ đại học SGU 2021 (số 258/QĐ-ĐHSG), điểm chữ **C** quy đổi thành **2,0** trên thang điểm 4.  
+
+**Trích nguyên văn:**  
+“C quy đổi thành 2,0”.  
+
+**Tên văn bản và Điều:** Quy chế đào tạo trình độ đại học SGU 2021, Điều 10.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-028,"Điểm trung bình tích lũy hệ 4 đạt từ 3,2 đến dưới 3,6 được xếp loại học lực gì?",trong,Xếp loại Giỏi.,"Theo khoản 4 Điều 10 Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi), điểm trung bình tích lũy hệ 4 đạt từ 3,2 đến cận 3,6 được xếp loại học lực là **Giỏi**.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-029,Số tín chỉ tích lũy đạt từ 2M đến dưới 3M thì sinh viên được xếp vào trình độ năm thứ mấy?,trong,Trình độ năm thứ ba.,"Theo khoản 5 Điều 10 Quy chế đào tạo trình độ đại học SGU 2021, sinh viên được xếp vào trình độ năm thứ ba khi số tín chỉ tích lũy đạt từ 2M đến dưới 3M.
+
+Trả lời: Sinh viên được xếp vào trình độ năm thứ ba.",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-030,Điểm tổng kết môn học phải đạt từ bao nhiêu trở lên thì được tính là đạt không phân mức (điểm P)?,trong,"Từ 5,0 điểm trở lên.","Theo khoản 3 Điều 9 Quy chế đào tạo trình độ đại học SGU 2021:  
+""b) Loại đạt không phân mức, áp dụng cho các học phần chỉ yêu cầu đạt và không tính vào điểm trung bình học tập:  
+P: từ 5,0 trở lên.""
+
+**Trả lời:** Điểm tổng kết môn học phải đạt từ **5,0 trở lên** thì được tính là đạt không phân mức (điểm P).",dung,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-031,Sinh viên năm hai học theo tín chỉ bị buộc thôi học nếu điểm trung bình tích lũy dưới mức bao nhiêu?,trong,Dưới 1.4.,"Theo khoản 2 Điều 10 (sửa đổi bởi QĐ 3183/2025) của Quy chế đào tạo trình độ đại học SGU 2021:
+
+""Điểm trung bình tích lũy được tính theo điểm chính thức của từng học phần với trọng số là số tín chỉ của mỗi học phần.""
+
+Tuy nhiên, văn bản không quy định cụ thể mức điểm trung bình tích lũy để sinh viên năm hai bị buộc thôi học. Do đó, **không tìm thấy trong các văn bản quy định**.",sai,,,tien,
+test_kiem_chung_qc2021.json,KC-QC-032,Hình thức đánh giá bảo vệ đồ án trực tuyến cần tối thiểu bao nhiêu thành viên trong hội đồng chuyên môn?,trong,Ít nhất 3 thành viên.,"Theo khoản 1 Điều 9 của Quy chế đào tạo trình độ đại học SGU 2021, hình thức đánh giá bảo vệ và đánh giá đồ án, khóa luận tốt nghiệp bằng hình thức trực tuyến được thực hiện với trọng số cao hơn khi đáp ứng thêm các điều kiện sau đây: **a) Việc đánh giá được thực hiện thông qua một hội đồng chuyên môn gồm ít nhất 03 thành viên**.
+
+Trả lời: **Ít nhất 03 thành viên** trong hội đồng chuyên môn.",dung,,,tien,
+test_kiem_chung_3183.json,KC-3183-001,"Điểm tổng kết môn học từ 7,8 đến 8,4 được quy đổi sang điểm chữ mới nào?",trong,Điểm chữ B+.,"Theo khoản 3 Điều 9 QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021:  
+“a) Loại đạt có phân mức, áp dụng cho các học phần được tính vào điểm trung bình học tập, bao gồm:  
+B+: từ 7,8 đến 8,4;”
+
+**Trả lời:** Điểm tổng kết môn học từ 7,8 đến 8,4 được quy đổi sang điểm chữ mới là **B+**.",dung,,,tien,
+test_kiem_chung_3183.json,KC-3183-002,Quy chế mới bổ sung thêm những mức điểm chữ cộng nào vào bảng điểm?,trong,"B+, C+, D+.","Theo khoản 3 Điều 9 được sửa đổi bởi QĐ 3183/2025, quy chế mới bổ sung thêm mức điểm chữ **C+**, **D+**, và **D** vào bảng điểm.  
+
+**Căn cứ:**  
+- **QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021, Điều 9**  
+  “a) Loại đạt có phân mức, áp dụng cho các học phần được tính vào điểm trung bình học tập, bao gồm:  
+  A: từ 8,5 đến 10.0;  
+  B+: từ 7,8 đến 8,4;  
+  B: từ 7,0 đến 7,7;  
+  C+: từ 6,3 đến 6,9;  
+  C: từ 5,5 đến 6,2;  
+  D+: từ 4,8 đến 5,4;  
+  D: từ 4,0 đến 4,7.”",dung,,,tien,
+test_kiem_chung_3183.json,KC-3183-003,Ký hiệu điểm chữ nào dùng để đánh dấu học phần do sinh viên tự xin rút?,trong,Ký hiệu R.,"Trích nguyên văn: ""R: Điểm học phần do sinh viên rút học phần."" (Điều 9 — QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021).
+
+Trả lời: Ký hiệu điểm chữ dùng để đánh dấu học phần do sinh viên tự xin rút là **R**.",dung,,,tien,
+test_kiem_chung_3183.json,KC-3183-004,Điểm chữ B+ được quy đổi tương ứng bằng mấy điểm trong hệ thống thang điểm 4?,trong,Quy đổi thành 3.5.,"Theo khoản 2 Điều 10 của Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi bởi QĐ 3183/2025), điểm chữ B+ được quy đổi thành 3,5 trong hệ thống thang điểm 4.
+
+Trả lời: **3,5** (theo khoản 2 Điều 10 — Quy chế đào tạo trình độ đại học SGU 2021).",dung,,,tien,
+test_kiem_chung_3183.json,KC-3183-005,"Các quy định về thang điểm chữ phân mức mới như B+, C+, D+ áp dụng bắt đầu từ khóa sinh viên năm nào?",trong,Các khóa tuyển sinh từ năm 2025 trở đi.,Không tìm thấy trong các văn bản quy định.,sai,,,tien,
+test_kiem_chung_3183.json,KC-3183-006,Sinh viên khóa mới xin rút môn học thành công thì trên bảng điểm sẽ hiện ký hiệu chữ gì?,trong,Ký hiệu R.,Không tìm thấy trong các văn bản quy định.,sai,,,tien,
+test_kiem_chung_3183.json,KC-3183-007,Điểm chữ C+ được quy đổi tương ứng với mấy điểm trong thang điểm 4 theo quy định mới?,trong,"Quy đổi thành 2,5.","Theo quy định mới, điểm chữ C+ được quy đổi thành 2,5 điểm trong thang điểm 4.  
+
+**Căn cứ:**  
+- **Điều 10, QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021**:  
+  “C+ quy đổi thành 2,5”.",dung,,,tien,
+test_kiem_chung_3183.json,KC-3183-008,Điểm chữ chưa hoàn thiện do được phép hoãn thi theo quy định sửa đổi được ký hiệu bằng chữ gì?,trong,Ký hiệu H.,"Theo quy định sửa đổi, điểm chữ chưa hoàn thiện do được phép hoãn thi được ký hiệu bằng chữ **H**.
+
+Căn cứ: **Điều 9 — QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021**.",dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-001,Mức học phí cho một tín chỉ đối với sinh viên chính quy năm nay là bao nhiêu tiền?,ngoai,"Hệ thống cần từ chối trả lời vì học phí thuộc quy định tài chính, không có trong quy chế đào tạo.",Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-002,Thủ tục đăng ký ở ký túc xá Đại học Sài Gòn đối với tân sinh viên như thế nào?,ngoai,"Hệ thống cần từ chối trả lời vì thông tin KTX thuộc ban quản lý, không nằm trong quy chế.",Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-003,Giá vé giữ xe máy theo tháng tại cơ sở An Dương Vương của trường là bao nhiêu?,ngoai,Hệ thống cần từ chối trả lời vì đây là quy định cơ sở vật chất.,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-004,Làm cách nào để kết nối mạng wifi nội bộ của trường dành riêng cho sinh viên?,ngoai,Hệ thống cần từ chối trả lời vì đây là hướng dẫn của TT CNTT.,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-005,Hạn chót đóng tiền bảo hiểm y tế bắt buộc của sinh viên năm học này là ngày nào?,ngoai,Hệ thống cần từ chối trả lời vì BHYT thuộc mảng Công tác sinh viên.,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-006,Mỗi sinh viên được mượn tối đa mấy quyển sách tại thư viện trường trong bao lâu?,ngoai,Hệ thống cần từ chối trả lời vì thuộc Nội quy Thư viện.,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-007,Sinh viên đạt bao nhiêu điểm rèn luyện trong một học kỳ thì được xếp loại xuất sắc?,ngoai,Hệ thống cần từ chối trả lời vì Điểm rèn luyện thuộc Quy chế đánh giá CTSV chưa được nạp.,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-008,Tiêu chuẩn về điểm học tập và điểm rèn luyện để được nhận học bổng khuyến khích học tập là gì?,ngoai,Hệ thống cần từ chối trả lời vì Quy định xét học bổng chưa được nạp.,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-009,Sinh viên bị xếp loại rèn luyện yếu có bị đình chỉ học tập hoặc xử lý học vụ không?,ngoai,Hệ thống cần từ chối trả lời hoặc phân định rõ phần học vụ (có) và phần rèn luyện (không có dữ liệu).,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-010,Hồ sơ xin miễn giảm học phí diện chính sách gồm những giấy tờ gì và nộp về phòng nào?,ngoai,Hệ thống cần từ chối trả lời vì thuộc chế độ chính sách sinh viên.,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-011,Mỗi năm sinh viên bắt buộc phải tham gia tối thiểu bao nhiêu ngày công tác xã hội để đủ điều kiện tốt nghiệp?,ngoai,Hệ thống cần từ chối trả lời vì thuộc quy định Đoàn - Hội chưa nạp.,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-012,Thủ tục xin cấp giấy xác nhận sinh viên để vay vốn ngân hàng chính sách xã hội thực hiện ở đâu?,ngoai,Hệ thống cần từ chối trả lời vì thuộc thủ tục hành chính CTSV.,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-013,Mức tiền thưởng dành cho sinh viên đạt danh hiệu Sinh viên 5 tốt cấp trường là bao nhiêu tiền?,ngoai,Hệ thống cần từ chối trả lời vì thuộc phong trào Hội Sinh viên.,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-014,Chuẩn đầu ra tin học đối với sinh viên không chuyên ngành CNTT theo thông báo mới nhất yêu cầu chứng chỉ gì?,ngoai,Hệ thống cần từ chối trả lời vì văn bản quy định chuẩn đầu ra riêng biệt chưa được nạp.,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-015,Điều 45 Quy chế đào tạo đại học năm 2021 quy định về vấn đề gì?,ngoai,Hệ thống cần chỉ ra rằng Quy chế 2021 không có Điều 45 (chỉ có 22 Điều).,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-016,"Theo Quyết định 3183, sinh viên được rút bớt học phần trong vòng 8 tuần đầu của học kỳ đúng không?",ngoai,"Hệ thống cần đính chính lại thông tin sai trong câu hỏi: theo QĐ 3183 chỉ được rút trong 3 tuần đầu, không phải 8 tuần.","Theo Điều 7, khoản 4 của Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi bởi QĐ 3183/2025), việc rút bớt học phần trong khối lượng học tập đã đăng ký được thực hiện trong 03 tuần đầu tiên của học kỳ. 
+
+Trả lời: Không đúng. Theo quy định, sinh viên chỉ được rút học phần trong 03 tuần đầu tiên của học kỳ, không phải 8 tuần.",tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-017,Quy định đào tạo trình độ thạc sĩ và tiến sĩ của Trường Đại học Sài Gòn quy định thời gian đào tạo bao lâu?,ngoai,Hệ thống cần từ chối trả lời vì tài liệu hiện tại chỉ áp dụng cho trình độ Đại học.,Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-018,Khoản 10 Điều 9 Quy chế đào tạo 2021 quy định mức phạt tiền đối với sinh viên thi hộ là bao nhiêu?,ngoai,"Hệ thống cần đính chính: Điều 9 không có khoản 10, xử lý thi hộ nằm ở Điều 20 và không có quy định phạt tiền.",Không tìm thấy trong các văn bản quy định.,tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-019,Quy định về trang phục và đồng phục thể dục của Đại học Sài Gòn được nêu ở Điều nào trong Quy chế 2021?,ngoai,Hệ thống cần từ chối vì Quy chế 2021 không quy định về trang phục.,"Trong các trích đoạn cung cấp, không tìm thấy thông tin về quy định trang phục và đồng phục thể dục của Đại học Sài Gòn.",tu_choi_dung,,,tien,
+test_kiem_chung_ngoai.json,KC-NG-020,Điểm trung bình tích lũy đạt 2.4 hệ 4 có được xét tốt nghiệp loại Giỏi theo Quy chế 2021 không?,ngoai,"Hệ thống cần đính chính: 2.4 chỉ xếp loại Trung bình, không đủ điều kiện loại Giỏi.","Theo khoản 4 Điều 10 của Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi), người học được xếp loại học lực theo điểm trung bình tích lũy như sau:
+
+- Từ 3,2 đến cận 3,6: Giỏi.
+
+Điểm trung bình tích lũy đạt 2.4 hệ 4 không thuộc khoảng điểm ""Từ 3,2 đến cận 3,6"", do đó **không được xét tốt nghiệp loại Giỏi** theo Quy chế 2021.",tu_choi_dung,,,tien,

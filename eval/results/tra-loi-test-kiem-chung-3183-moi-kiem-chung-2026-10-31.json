@@ -1,0 +1,412 @@
+{
+ "thoi_diem": "2026-10-31 04:43:46",
+ "cau_hinh": {
+  "profile": "server",
+  "embed_model": "AITeamVN/Vietnamese_Embedding",
+  "embed_device": "cuda",
+  "llm_model": "qwen3:8b",
+  "temperature": 0.0,
+  "seed": 42,
+  "thinking": false,
+  "similarity_top_k": 10,
+  "similarity_cutoff": null,
+  "use_rerank": true,
+  "reranker_model": "AITeamVN/Vietnamese_Reranker",
+  "reranker_top_n": 3,
+  "reranker_max_length": 2048,
+  "loc_phien_ban": true,
+  "use_hybrid": false,
+  "bm25_top_k": null,
+  "fusion_mode": null,
+  "response_mode": "compact",
+  "corpus_dir": "data/processed/01_quy_che_dao_tao",
+  "persist_dir": "storage/server/01_quy_che_dao_tao"
+ },
+ "khoa_tai_lap": {
+  "ma": "ee63d08de604",
+  "prompt_sha256": "d449cde93053d317aacd2730edfa96e9222ff4a25ddf6b61e4e5fe65d27e43a1",
+  "llm": "qwen3:8b",
+  "llm_digest": "500a1f067a9f782620b40bee6f7b0c89e17ae61f686b92c24933e4ca4b2b8b41",
+  "index_sha256": "65f82cd8567856b3196376706d6d0c1e78378b74a85ab3e0bc9c27791fa45483",
+  "cau_hinh": {
+   "profile": "server",
+   "embed_model": "AITeamVN/Vietnamese_Embedding",
+   "llm_model": "qwen3:8b",
+   "temperature": 0.0,
+   "seed": 42,
+   "thinking": false,
+   "similarity_top_k": 10,
+   "similarity_cutoff": null,
+   "use_rerank": true,
+   "reranker_model": "AITeamVN/Vietnamese_Reranker",
+   "reranker_top_n": 3,
+   "reranker_max_length": 2048,
+   "loc_phien_ban": true,
+   "use_hybrid": false,
+   "bm25_top_k": null,
+   "fusion_mode": null,
+   "response_mode": "compact",
+   "corpus_dir": "data/processed/01_quy_che_dao_tao"
+  }
+ },
+ "tom_tat": {
+  "so_cau": 8,
+  "ket_qua": {
+   "chua_cham": 8
+  },
+  "so_cau_loi": 0,
+  "so_cau_phai_thu_lai": 0,
+  "thoi_gian_trung_vi_s": 6.19,
+  "thoi_gian_p90_s": 7.6,
+  "token_vao_tb": 1650,
+  "token_ra_tb": 87,
+  "token_moi_giay_tb": 29.3,
+  "so_luot_llm_toi_da": 1,
+  "so_cau_nhieu_luot_llm": 0
+ },
+ "chi_tiet": [
+  {
+   "id": "KC-3183-001",
+   "question": "Điểm tổng kết môn học từ 7,8 đến 8,4 được quy đổi sang điểm chữ mới nào?",
+   "dieu_dung": "9",
+   "dap_an": "Điểm chữ B+.",
+   "loai": "sua_doi",
+   "hanh_vi_mong_doi": null,
+   "ma_khoa": "ee63d08de604",
+   "ket_qua": "chua_cham",
+   "tra_loi": "Theo khoản 3 Điều 9 QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021:  \n“a) Loại đạt có phân mức, áp dụng cho các học phần được tính vào điểm trung bình học tập, bao gồm:  \nB+: từ 7,8 đến 8,4;”\n\n**Trả lời:** Điểm tổng kết môn học từ 7,8 đến 8,4 được quy đổi sang điểm chữ mới là **B+**.",
+   "nguon": [
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+    "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10"
+   ],
+   "bang_chung": [
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+     "diem": 0.2533,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:47",
+     "doan": "3. Sửa đổi, bồ sung điểm a khoản 3 Điều 9: |\n“a) Loại đạt có phân mức, áp dụng cho các học phần được tính vào điểm trung bình học tập, bao gồm:\n\nA: từ 8,5 đến 10.0;\n\nB+: từ 7,8 đến 8,4;\n\nB: từ 7,0 đến 7,7;\n\nC+: từ 6,3 đến 6,9;\n\nC: từ 5,5 đến 6,2;\n\nD+: từ 4,8 đến 5,4.\n\nD: từ 4,0 đến 4,7.”"
+    },
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+     "diem": 0.0083,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:77",
+     "doan": "5. Sửa đồi, bổ sung khoản 2 Điều 10:\n“2. Để tính điểm trung bình, điểm chữ của học phần phải được quy đổi về điểm số như dưới đây:\n\nA quy đồi thành 4,0;\n\nB+ quy đổi thành 3,5;\n\nB quy đổi thành 3,0;\n\nC+ quy đồi thành 2,5;\n\nC quy đồi thành 2,0;\n\nD+ quy đồi thành 1,5;\n\nD quy đồi thành 1,0;\n\nF quy đổi thành 0”. |"
+    },
+    {
+     "nguon": "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10",
+     "diem": 0.0392,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/25_quy-che-dao-tao-trinh-do-dai-hoc-tai-truong-dai-hoc-sai-gon.md:179",
+     "doan": "Điều 10. Đánh giá kết quả học tập theo học kì, năm học\n1. Dựa trên kết quả đánh giá các học phần của chương trình đào tạo mà người học đã học và có điểm, kết quả học tập của người học được đánh giá sau từng học kì hoặc từng năm học theo các tiêu chí dưới đây: a) Tổng số tín chỉ của những học phần mà người học không đạt trong một học kì, trong một năm học, hoặc nợ đọng từ đầu khóa học; b) Tổng số tín chỉ của những học phần mà người học đã đạt từ đầu khóa học (số _ tín chỉ tích lũy), tính cả các học phần được miễn học và được công nhận số tín chỉ; c) Điểm trung bình của những học phần mà người học đã học trong một học kì (điểm trung bình học kì), trong một năm học (điểm trung bình năm học) hoặc tính từ đầu khóa học (điểm trung bình tích lũy) được tính theo điểm chính thức của từng học phần v"
+    }
+   ],
+   "thoi_gian_s": 7.6,
+   "so_lan_thu": 1,
+   "loi": [],
+   "so_luot_llm": 1,
+   "token_vao": 1644,
+   "token_ra": 115,
+   "token_moi_giay": 28.0
+  },
+  {
+   "id": "KC-3183-002",
+   "question": "Quy chế mới bổ sung thêm những mức điểm chữ cộng nào vào bảng điểm?",
+   "dieu_dung": "9",
+   "dap_an": "B+, C+, D+.",
+   "loai": "sua_doi",
+   "hanh_vi_mong_doi": null,
+   "ma_khoa": "ee63d08de604",
+   "ket_qua": "chua_cham",
+   "tra_loi": "Theo khoản 3 Điều 9 được sửa đổi bởi QĐ 3183/2025, quy chế mới bổ sung thêm mức điểm chữ **C+**, **D+**, và **D** vào bảng điểm.  \n\n**Căn cứ:**  \n- **QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021, Điều 9**  \n  “a) Loại đạt có phân mức, áp dụng cho các học phần được tính vào điểm trung bình học tập, bao gồm:  \n  A: từ 8,5 đến 10.0;  \n  B+: từ 7,8 đến 8,4;  \n  B: từ 7,0 đến 7,7;  \n  C+: từ 6,3 đến 6,9;  \n  C: từ 5,5 đến 6,2;  \n  D+: từ 4,8 đến 5,4;  \n  D: từ 4,0 đến 4,7.”",
+   "nguon": [
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+    "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10",
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9"
+   ],
+   "bang_chung": [
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+     "diem": 0.0025,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:77",
+     "doan": "5. Sửa đồi, bổ sung khoản 2 Điều 10:\n“2. Để tính điểm trung bình, điểm chữ của học phần phải được quy đổi về điểm số như dưới đây:\n\nA quy đồi thành 4,0;\n\nB+ quy đổi thành 3,5;\n\nB quy đổi thành 3,0;\n\nC+ quy đồi thành 2,5;\n\nC quy đồi thành 2,0;\n\nD+ quy đồi thành 1,5;\n\nD quy đồi thành 1,0;\n\nF quy đổi thành 0”. |"
+    },
+    {
+     "nguon": "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10",
+     "diem": 0.0059,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/25_quy-che-dao-tao-trinh-do-dai-hoc-tai-truong-dai-hoc-sai-gon.md:179",
+     "doan": "Điều 10. Đánh giá kết quả học tập theo học kì, năm học\n1. Dựa trên kết quả đánh giá các học phần của chương trình đào tạo mà người học đã học và có điểm, kết quả học tập của người học được đánh giá sau từng học kì hoặc từng năm học theo các tiêu chí dưới đây: a) Tổng số tín chỉ của những học phần mà người học không đạt trong một học kì, trong một năm học, hoặc nợ đọng từ đầu khóa học; b) Tổng số tín chỉ của những học phần mà người học đã đạt từ đầu khóa học (số _ tín chỉ tích lũy), tính cả các học phần được miễn học và được công nhận số tín chỉ; c) Điểm trung bình của những học phần mà người học đã học trong một học kì (điểm trung bình học kì), trong một năm học (điểm trung bình năm học) hoặc tính từ đầu khóa học (điểm trung bình tích lũy) được tính theo điểm chính thức của từng học phần v"
+    },
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+     "diem": 0.0053,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:47",
+     "doan": "3. Sửa đổi, bồ sung điểm a khoản 3 Điều 9: |\n“a) Loại đạt có phân mức, áp dụng cho các học phần được tính vào điểm trung bình học tập, bao gồm:\n\nA: từ 8,5 đến 10.0;\n\nB+: từ 7,8 đến 8,4;\n\nB: từ 7,0 đến 7,7;\n\nC+: từ 6,3 đến 6,9;\n\nC: từ 5,5 đến 6,2;\n\nD+: từ 4,8 đến 5,4.\n\nD: từ 4,0 đến 4,7.”"
+    }
+   ],
+   "thoi_gian_s": 10.88,
+   "so_lan_thu": 1,
+   "loi": [],
+   "so_luot_llm": 1,
+   "token_vao": 1637,
+   "token_ra": 229,
+   "token_moi_giay": 27.8
+  },
+  {
+   "id": "KC-3183-003",
+   "question": "Ký hiệu điểm chữ nào dùng để đánh dấu học phần do sinh viên tự xin rút?",
+   "dieu_dung": "9",
+   "dap_an": "Ký hiệu R.",
+   "loai": "sua_doi",
+   "hanh_vi_mong_doi": null,
+   "ma_khoa": "ee63d08de604",
+   "ket_qua": "chua_cham",
+   "tra_loi": "Trích nguyên văn: \"R: Điểm học phần do sinh viên rút học phần.\" (Điều 9 — QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021).\n\nTrả lời: Ký hiệu điểm chữ dùng để đánh dấu học phần do sinh viên tự xin rút là **R**.",
+   "nguon": [
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+    "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6"
+   ],
+   "bang_chung": [
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+     "diem": 0.3253,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:65",
+     "doan": "4. Sửa đổi, bồ sung điểm d khoản 3 Điều 9:\n“d, Một số trường hợp đặc biệt sử dụng các điểm chữ đề xếp loại và không được tính vào điểm trung bình học tập:\n\nH: Điểm chưa hoàn thiện do được phép hoãn thi, kiểm tra;\n\n_X: Điểm chưa hoàn thiện do chưa đủ dữ liệu;\n\nM: Điểm học phần được miễn học và công nhận tín chỉ;\n\nR: Điểm học phần do sinh viên rút học phần.”"
+    },
+    {
+     "nguon": "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6",
+     "diem": 0.0167,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/3_cong_tac_thi_ket_thuc_hoc_phan/QD898BanHanhQuyDinhToChucThiHocKi.md:172",
+     "doan": "Điều 6. Quản lí kết quả học tập của sinh viên\n1. Đối với điểm quá trình a) Giảng viên công bố điểm đánh giá quá trình cho sinh viên tại buổi học cuối cùng trước khi kết thúc mỗi học phần. b) Trong tuần đầu của đợt thi, giảng viên nộp cho khoa (qua trợ lý đào tạo) Bảng ghi điểm quá trình đã được tính điểm làm tròn đến một chữ số thập phân. Các khoa photocopy 02 bản (01 bản để thông báo cho sinh viên, 01 bản lưu tại khoa) và nộp bản gốc về Phòng Đào tạo trước 17g00 thứ Sáu tuần thứ nhất của đợt thi. c) Điểm quá trình do giảng viên giảng dạy chịu trách nhiệm. Khi có sai sót cần điều chỉnh điểm quá trình, giảng viên phải làm tờ trình nêu rõ lí do và đề xuất phương án xử lí.\n\nTờ trình phải được lãnh đạo khoa xem xét, xác nhận và chuyền về Phòng Đào tạo cùng hồ sơ liên quan khác (đơn khiếu nại c"
+    },
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+     "diem": 0.0088,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:47",
+     "doan": "3. Sửa đổi, bồ sung điểm a khoản 3 Điều 9: |\n“a) Loại đạt có phân mức, áp dụng cho các học phần được tính vào điểm trung bình học tập, bao gồm:\n\nA: từ 8,5 đến 10.0;\n\nB+: từ 7,8 đến 8,4;\n\nB: từ 7,0 đến 7,7;\n\nC+: từ 6,3 đến 6,9;\n\nC: từ 5,5 đến 6,2;\n\nD+: từ 4,8 đến 5,4.\n\nD: từ 4,0 đến 4,7.”"
+    }
+   ],
+   "thoi_gian_s": 6.49,
+   "so_lan_thu": 1,
+   "loi": [],
+   "so_luot_llm": 1,
+   "token_vao": 1448,
+   "token_ra": 80,
+   "token_moi_giay": 28.7
+  },
+  {
+   "id": "KC-3183-004",
+   "question": "Điểm chữ B+ được quy đổi tương ứng bằng mấy điểm trong hệ thống thang điểm 4?",
+   "dieu_dung": "10",
+   "dap_an": "Quy đổi thành 3.5.",
+   "loai": "sua_doi",
+   "hanh_vi_mong_doi": null,
+   "ma_khoa": "ee63d08de604",
+   "ket_qua": "chua_cham",
+   "tra_loi": "Theo khoản 2 Điều 10 của Quy chế đào tạo trình độ đại học SGU 2021 (sửa đổi bởi QĐ 3183/2025), điểm chữ B+ được quy đổi thành 3,5 trong hệ thống thang điểm 4.\n\nTrả lời: **3,5** (theo khoản 2 Điều 10 — Quy chế đào tạo trình độ đại học SGU 2021).",
+   "nguon": [
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+    "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10"
+   ],
+   "bang_chung": [
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+     "diem": 0.1456,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:77",
+     "doan": "5. Sửa đồi, bổ sung khoản 2 Điều 10:\n“2. Để tính điểm trung bình, điểm chữ của học phần phải được quy đổi về điểm số như dưới đây:\n\nA quy đồi thành 4,0;\n\nB+ quy đổi thành 3,5;\n\nB quy đổi thành 3,0;\n\nC+ quy đồi thành 2,5;\n\nC quy đồi thành 2,0;\n\nD+ quy đồi thành 1,5;\n\nD quy đồi thành 1,0;\n\nF quy đổi thành 0”. |"
+    },
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+     "diem": 0.0989,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:47",
+     "doan": "3. Sửa đổi, bồ sung điểm a khoản 3 Điều 9: |\n“a) Loại đạt có phân mức, áp dụng cho các học phần được tính vào điểm trung bình học tập, bao gồm:\n\nA: từ 8,5 đến 10.0;\n\nB+: từ 7,8 đến 8,4;\n\nB: từ 7,0 đến 7,7;\n\nC+: từ 6,3 đến 6,9;\n\nC: từ 5,5 đến 6,2;\n\nD+: từ 4,8 đến 5,4.\n\nD: từ 4,0 đến 4,7.”"
+    },
+    {
+     "nguon": "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10",
+     "diem": 0.086,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/25_quy-che-dao-tao-trinh-do-dai-hoc-tai-truong-dai-hoc-sai-gon.md:179",
+     "doan": "Điều 10. Đánh giá kết quả học tập theo học kì, năm học\n1. Dựa trên kết quả đánh giá các học phần của chương trình đào tạo mà người học đã học và có điểm, kết quả học tập của người học được đánh giá sau từng học kì hoặc từng năm học theo các tiêu chí dưới đây: a) Tổng số tín chỉ của những học phần mà người học không đạt trong một học kì, trong một năm học, hoặc nợ đọng từ đầu khóa học; b) Tổng số tín chỉ của những học phần mà người học đã đạt từ đầu khóa học (số _ tín chỉ tích lũy), tính cả các học phần được miễn học và được công nhận số tín chỉ; c) Điểm trung bình của những học phần mà người học đã học trong một học kì (điểm trung bình học kì), trong một năm học (điểm trung bình năm học) hoặc tính từ đầu khóa học (điểm trung bình tích lũy) được tính theo điểm chính thức của từng học phần v"
+    }
+   ],
+   "thoi_gian_s": 7.34,
+   "so_lan_thu": 1,
+   "loi": [],
+   "so_luot_llm": 1,
+   "token_vao": 1641,
+   "token_ra": 103,
+   "token_moi_giay": 28.3
+  },
+  {
+   "id": "KC-3183-005",
+   "question": "Các quy định về thang điểm chữ phân mức mới như B+, C+, D+ áp dụng bắt đầu từ khóa sinh viên năm nào?",
+   "dieu_dung": "2 (QĐ 3183)",
+   "dap_an": "Các khóa tuyển sinh từ năm 2025 trở đi.",
+   "loai": "sua_doi",
+   "hanh_vi_mong_doi": null,
+   "ma_khoa": "ee63d08de604",
+   "ket_qua": "chua_cham",
+   "tra_loi": "Không tìm thấy trong các văn bản quy định.",
+   "nguon": [
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+    "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10"
+   ],
+   "bang_chung": [
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+     "diem": 0.0079,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:47",
+     "doan": "3. Sửa đổi, bồ sung điểm a khoản 3 Điều 9: |\n“a) Loại đạt có phân mức, áp dụng cho các học phần được tính vào điểm trung bình học tập, bao gồm:\n\nA: từ 8,5 đến 10.0;\n\nB+: từ 7,8 đến 8,4;\n\nB: từ 7,0 đến 7,7;\n\nC+: từ 6,3 đến 6,9;\n\nC: từ 5,5 đến 6,2;\n\nD+: từ 4,8 đến 5,4.\n\nD: từ 4,0 đến 4,7.”"
+    },
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+     "diem": 0.0019,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:77",
+     "doan": "5. Sửa đồi, bổ sung khoản 2 Điều 10:\n“2. Để tính điểm trung bình, điểm chữ của học phần phải được quy đổi về điểm số như dưới đây:\n\nA quy đồi thành 4,0;\n\nB+ quy đổi thành 3,5;\n\nB quy đổi thành 3,0;\n\nC+ quy đồi thành 2,5;\n\nC quy đồi thành 2,0;\n\nD+ quy đồi thành 1,5;\n\nD quy đồi thành 1,0;\n\nF quy đổi thành 0”. |"
+    },
+    {
+     "nguon": "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10",
+     "diem": 0.0007,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/25_quy-che-dao-tao-trinh-do-dai-hoc-tai-truong-dai-hoc-sai-gon.md:179",
+     "doan": "Điều 10. Đánh giá kết quả học tập theo học kì, năm học\n1. Dựa trên kết quả đánh giá các học phần của chương trình đào tạo mà người học đã học và có điểm, kết quả học tập của người học được đánh giá sau từng học kì hoặc từng năm học theo các tiêu chí dưới đây: a) Tổng số tín chỉ của những học phần mà người học không đạt trong một học kì, trong một năm học, hoặc nợ đọng từ đầu khóa học; b) Tổng số tín chỉ của những học phần mà người học đã đạt từ đầu khóa học (số _ tín chỉ tích lũy), tính cả các học phần được miễn học và được công nhận số tín chỉ; c) Điểm trung bình của những học phần mà người học đã học trong một học kì (điểm trung bình học kì), trong một năm học (điểm trung bình năm học) hoặc tính từ đầu khóa học (điểm trung bình tích lũy) được tính theo điểm chính thức của từng học phần v"
+    }
+   ],
+   "thoi_gian_s": 2.57,
+   "so_lan_thu": 1,
+   "loi": [],
+   "so_luot_llm": 1,
+   "token_vao": 1649,
+   "token_ra": 11,
+   "token_moi_giay": 31.6
+  },
+  {
+   "id": "KC-3183-006",
+   "question": "Sinh viên khóa mới xin rút môn học thành công thì trên bảng điểm sẽ hiện ký hiệu chữ gì?",
+   "dieu_dung": "9",
+   "dap_an": "Ký hiệu R.",
+   "loai": "sua_doi",
+   "hanh_vi_mong_doi": null,
+   "ma_khoa": "ee63d08de604",
+   "ket_qua": "chua_cham",
+   "tra_loi": "Không tìm thấy trong các văn bản quy định.",
+   "nguon": [
+    "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6",
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 7",
+    "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 7"
+   ],
+   "bang_chung": [
+    {
+     "nguon": "QĐ 898/2025 ban hành Quy định tổ chức thi học kì – Điều 6",
+     "diem": 0.0027,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/3_cong_tac_thi_ket_thuc_hoc_phan/QD898BanHanhQuyDinhToChucThiHocKi.md:172",
+     "doan": "Điều 6. Quản lí kết quả học tập của sinh viên\n1. Đối với điểm quá trình a) Giảng viên công bố điểm đánh giá quá trình cho sinh viên tại buổi học cuối cùng trước khi kết thúc mỗi học phần. b) Trong tuần đầu của đợt thi, giảng viên nộp cho khoa (qua trợ lý đào tạo) Bảng ghi điểm quá trình đã được tính điểm làm tròn đến một chữ số thập phân. Các khoa photocopy 02 bản (01 bản để thông báo cho sinh viên, 01 bản lưu tại khoa) và nộp bản gốc về Phòng Đào tạo trước 17g00 thứ Sáu tuần thứ nhất của đợt thi. c) Điểm quá trình do giảng viên giảng dạy chịu trách nhiệm. Khi có sai sót cần điều chỉnh điểm quá trình, giảng viên phải làm tờ trình nêu rõ lí do và đề xuất phương án xử lí.\n\nTờ trình phải được lãnh đạo khoa xem xét, xác nhận và chuyền về Phòng Đào tạo cùng hồ sơ liên quan khác (đơn khiếu nại c"
+    },
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 7",
+     "diem": 0.0012,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:43",
+     "doan": "2. Sửa đồi, bồ sung khoản 4 Điều 7:\n“4. Việc rút bớt học phần trong khối lượng học tập đã đăng ký được thực hiện trong 03 tuần đầu tiên của học kì. Để được rút học phần đã đăng ký, người học phải tự viết đơn có sự chấp thuận của cố vấn học tập, gửi về Phòng Đào tạo trong thời hạn đã quy định và không vi phạm khoản 3 điều này. Người học chỉ được phép bỏ lớp học phần đồi với học phần xin rút sau khi Nhà trường đã ban hành danh sách sinh viên rút môn học.”"
+    },
+    {
+     "nguon": "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 7",
+     "diem": 0.0004,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/25_quy-che-dao-tao-trinh-do-dai-hoc-tai-truong-dai-hoc-sai-gon.md:123",
+     "doan": "Điều 7. Tổ chức đăng ký học tập\n1. Trước khi bắt đầu mỗi học kì, Phòng Đào tạo thông báo lịch đăng kí và hướng dẫn cho người học đăng ký học tập trên hệ thống đăng ký trực tuyến của Nhà trường.\n\n2. Người học phải đăng ký lớp của các học phần dự định học trong học kì, gồm những học phần mới, một số học phần chưa đạt để học lại và một số học phần đã đạt nhưng để cải thiện điểm (nếu có) căn cứ vào danh sách học phần được mở cùng điều kiện đăng ký của mỗi học phần.\n\n3. Khối lượng học tập cho mỗi học kì chính mà người học phải đăng ký tối thiêu bằng 2/3 và tối đa không vượt quá 3/2 khối lượng trung bình một học kì theo kế hoạch học tập chuẩn.\n\n4. Việc rút bớt học phần trong khối lượng học tập đã đăng ký được thực hiện sau 02 tuần kể từ đầu học kì chính và sau 01 tuần kế từ đầu học kì phụ, nhưng"
+    }
+   ],
+   "thoi_gian_s": 3.85,
+   "so_lan_thu": 1,
+   "loi": [],
+   "so_luot_llm": 1,
+   "token_vao": 1690,
+   "token_ra": 11,
+   "token_moi_giay": 32.2
+  },
+  {
+   "id": "KC-3183-007",
+   "question": "Điểm chữ C+ được quy đổi tương ứng với mấy điểm trong thang điểm 4 theo quy định mới?",
+   "dieu_dung": "10",
+   "dap_an": "Quy đổi thành 2,5.",
+   "loai": "sua_doi",
+   "hanh_vi_mong_doi": null,
+   "ma_khoa": "ee63d08de604",
+   "ket_qua": "chua_cham",
+   "tra_loi": "Theo quy định mới, điểm chữ C+ được quy đổi thành 2,5 điểm trong thang điểm 4.  \n\n**Căn cứ:**  \n- **Điều 10, QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021**:  \n  “C+ quy đổi thành 2,5”.",
+   "nguon": [
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+    "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10",
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9"
+   ],
+   "bang_chung": [
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+     "diem": 0.0789,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:77",
+     "doan": "5. Sửa đồi, bổ sung khoản 2 Điều 10:\n“2. Để tính điểm trung bình, điểm chữ của học phần phải được quy đổi về điểm số như dưới đây:\n\nA quy đồi thành 4,0;\n\nB+ quy đổi thành 3,5;\n\nB quy đổi thành 3,0;\n\nC+ quy đồi thành 2,5;\n\nC quy đồi thành 2,0;\n\nD+ quy đồi thành 1,5;\n\nD quy đồi thành 1,0;\n\nF quy đổi thành 0”. |"
+    },
+    {
+     "nguon": "Quy chế đào tạo trình độ đại học SGU 2021 – Điều 10",
+     "diem": 0.0535,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/25_quy-che-dao-tao-trinh-do-dai-hoc-tai-truong-dai-hoc-sai-gon.md:179",
+     "doan": "Điều 10. Đánh giá kết quả học tập theo học kì, năm học\n1. Dựa trên kết quả đánh giá các học phần của chương trình đào tạo mà người học đã học và có điểm, kết quả học tập của người học được đánh giá sau từng học kì hoặc từng năm học theo các tiêu chí dưới đây: a) Tổng số tín chỉ của những học phần mà người học không đạt trong một học kì, trong một năm học, hoặc nợ đọng từ đầu khóa học; b) Tổng số tín chỉ của những học phần mà người học đã đạt từ đầu khóa học (số _ tín chỉ tích lũy), tính cả các học phần được miễn học và được công nhận số tín chỉ; c) Điểm trung bình của những học phần mà người học đã học trong một học kì (điểm trung bình học kì), trong một năm học (điểm trung bình năm học) hoặc tính từ đầu khóa học (điểm trung bình tích lũy) được tính theo điểm chính thức của từng học phần v"
+    },
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+     "diem": 0.0332,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:47",
+     "doan": "3. Sửa đổi, bồ sung điểm a khoản 3 Điều 9: |\n“a) Loại đạt có phân mức, áp dụng cho các học phần được tính vào điểm trung bình học tập, bao gồm:\n\nA: từ 8,5 đến 10.0;\n\nB+: từ 7,8 đến 8,4;\n\nB: từ 7,0 đến 7,7;\n\nC+: từ 6,3 đến 6,9;\n\nC: từ 5,5 đến 6,2;\n\nD+: từ 4,8 đến 5,4.\n\nD: từ 4,0 đến 4,7.”"
+    }
+   ],
+   "thoi_gian_s": 4.95,
+   "so_lan_thu": 1,
+   "loi": [],
+   "so_luot_llm": 1,
+   "token_vao": 1644,
+   "token_ra": 83,
+   "token_moi_giay": 28.8
+  },
+  {
+   "id": "KC-3183-008",
+   "question": "Điểm chữ chưa hoàn thiện do được phép hoãn thi theo quy định sửa đổi được ký hiệu bằng chữ gì?",
+   "dieu_dung": "9",
+   "dap_an": "Ký hiệu H.",
+   "loai": "sua_doi",
+   "hanh_vi_mong_doi": null,
+   "ma_khoa": "ee63d08de604",
+   "ket_qua": "chua_cham",
+   "tra_loi": "Theo quy định sửa đổi, điểm chữ chưa hoàn thiện do được phép hoãn thi được ký hiệu bằng chữ **H**.\n\nCăn cứ: **Điều 9 — QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021**.",
+   "nguon": [
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+    "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+    "QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3"
+   ],
+   "bang_chung": [
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 9",
+     "diem": 0.1842,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:65",
+     "doan": "4. Sửa đổi, bồ sung điểm d khoản 3 Điều 9:\n“d, Một số trường hợp đặc biệt sử dụng các điểm chữ đề xếp loại và không được tính vào điểm trung bình học tập:\n\nH: Điểm chưa hoàn thiện do được phép hoãn thi, kiểm tra;\n\n_X: Điểm chưa hoàn thiện do chưa đủ dữ liệu;\n\nM: Điểm học phần được miễn học và công nhận tín chỉ;\n\nR: Điểm học phần do sinh viên rút học phần.”"
+    },
+    {
+     "nguon": "QĐ 3183/2025 sửa đổi Quy chế đào tạo SGU 2021 – sửa đổi Điều 10",
+     "diem": 0.0085,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/1_quy_che_dao_tao_dai_hoc/QD 3183.2025 - Sua doi Quy che Dao tao trinh do DH_LienQuanRutMonHoc.md:77",
+     "doan": "5. Sửa đồi, bổ sung khoản 2 Điều 10:\n“2. Để tính điểm trung bình, điểm chữ của học phần phải được quy đổi về điểm số như dưới đây:\n\nA quy đồi thành 4,0;\n\nB+ quy đổi thành 3,5;\n\nB quy đổi thành 3,0;\n\nC+ quy đồi thành 2,5;\n\nC quy đồi thành 2,0;\n\nD+ quy đồi thành 1,5;\n\nD quy đồi thành 1,0;\n\nF quy đổi thành 0”. |"
+    },
+    {
+     "nguon": "QyĐ 2626/2022 tiếng Anh không chuyên, quy đổi chứng chỉ (khóa tuyển sinh 2022, 2023) – Điều 3",
+     "diem": 0.0004,
+     "vi_tri": "data/processed/01_quy_che_dao_tao/2_quy_doi_tieng_anh/CV2626ToChucDayHocCacHPTAKoChuyenTheoChuongTrinhApDungMoiChoCacKhoaTSTuNam2022TroDi.md:60",
+     "doan": "3. Miễn học, miễn thi và quy đổi thành điểm học tập các học phần\n\nMiễn học, miễn thi và quy đổi thành điểm học tập các học phần Tiếng Anh 1, 2, 3 đối với SV có chứng chỉ tiếng Anh còn trong thời hạn sử dụng theo bảng dưới đây (QyĐ 2626/2022, khóa tuyển sinh từ 2022 trở đi):\n\n| TT | Điểm chứng chỉ tiếng Anh (khóa tuyển sinh từ 2022) | Tiếng Anh 1 | Tiếng Anh 2 | Tiếng Anh 3 |\n|---|---|---|---|---|\n| 1 | IELTS = 4.0 do IDP Education hoặc British Council tổ chức; TOEIC 4 kỹ năng: Nghe và Đọc từ 450 - 500; Nói: từ 91 - 100; Viết: từ 91 - 100 do ETS cấp; TOEFL iBT từ 30 - 35 do ETS cấp; TOEFL ITP từ 450 - 475 do ETS cấp; Linguaskill: từ 140 - 149 do Cambridge cấp; VSTEP = 4.0 do các trường được Bộ GD-ĐT công nhận cấp; PET: từ 140 - 152 do Cambridge cấp | 8 | 8 | 8 |\n| 2 | IELTS = 4.5 do IDP Edu"
+    }
+   ],
+   "thoi_gian_s": 5.88,
+   "so_lan_thu": 1,
+   "loi": [],
+   "so_luot_llm": 1,
+   "token_vao": 1849,
+   "token_ra": 67,
+   "token_moi_giay": 28.9
+  }
+ ]
+}

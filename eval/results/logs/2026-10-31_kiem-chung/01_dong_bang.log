@@ -1,3 +1,2 @@
-# commit 5581941 | 2026-10-31 04:29:19
-Code/dữ liệu đo còn thay đổi chưa commit — commit trước khi đóng băng:
-?? eval/cham_tay.html
+# commit 08bdea5 | 2026-10-31 04:32:23
+Đã ghi eval/results/dong-bang.json (commit 08bdea5). Commit file này rồi mới chạy `evaluate.py --tap-kiem-chung` (đúng một lần).
